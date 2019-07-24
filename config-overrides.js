@@ -1,5 +1,5 @@
 const {
-  override, addWebpackAlias, addWebpackExternals, addBabelPlugin,
+  override, addWebpackAlias, addWebpackExternals, addBabelPlugins,
 } = require('customize-cra')
 const path = require('path')
 
@@ -10,5 +10,8 @@ module.exports = override(
   addWebpackExternals({
     BMap: 'BMap',
   }),
-  addBabelPlugin(['@babel/plugin-proposal-decorators', { legacy: true }]),
+  ...addBabelPlugins(
+    ['@babel/plugin-proposal-decorators', { legacy: true }],
+    ['import', { libraryName: 'antd-mobile', style: 'css' }],
+  ),
 )
