@@ -1,0 +1,27 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  // 使用airbnb校验规则
+  "extends": "airbnb",
+  "rules": {
+    // 结尾不允许使用分号
+    "semi": [2, "never"],
+    // 箭头函数直接返回的时候不需要 大括号 {}
+    "arrow-body-style": [2, "as-needed"],
+    // 允许windows开发环境
+    "linebreak-style": [0, "error", "windows"],
+    // 限制单行的表达式数量
+    "react/jsx-one-expression-per-line": 0,
+    // 引用时候根据根目录基础
+    "import/no-unresolved": 0,
+    // 限制可使用jsx的文件扩展名
+    "react/jsx-filename-extension": [
+      2,
+      { "extensions": [".js", ".jsx", ".tsx"] }
+    ],
+    // 允许使用全局变量
+    "global-require": 0
+  }
+}
