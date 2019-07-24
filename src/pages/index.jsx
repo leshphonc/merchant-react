@@ -1,6 +1,10 @@
 import React from 'react'
 import { TabBar } from 'antd-mobile'
 import TabBarContainer from '@/global'
+import Home from '@/pages/home'
+import Order from '@/pages/order'
+import Marketing from '@/pages/marketing'
+import Mine from '@/pages/mine'
 
 export default () => {
   const [cur, setCur] = React.useState('Home')
@@ -40,7 +44,7 @@ export default () => {
           onPress={() => setCur('Home')}
           data-seed="logId"
         >
-          <div style={{ background: 'red', height: 1280 }}>123</div>
+          <Home />
         </TabBar.Item>
         <TabBar.Item
           icon={(
@@ -69,7 +73,7 @@ export default () => {
           onPress={() => setCur('order')}
           data-seed="logId1"
         >
-          2
+          <Order />
         </TabBar.Item>
         <TabBar.Item
           icon={(
@@ -97,7 +101,7 @@ export default () => {
           selected={cur === 'marketing'}
           onPress={() => setCur('marketing')}
         >
-          3
+          <Marketing />
         </TabBar.Item>
         <TabBar.Item
           icon={{ uri: 'https://zos.alipayobjects.com/rmsportal/asJMfBrNqpMMlVpeInPQ.svg' }}
@@ -107,7 +111,7 @@ export default () => {
           selected={cur === 'mine'}
           onPress={() => setCur('mine')}
         >
-          4
+          <Mine />
         </TabBar.Item>
       </TabBar>
     </TabBarContainer>
