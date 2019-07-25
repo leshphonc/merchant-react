@@ -1,6 +1,6 @@
 import React from 'react'
 import { TabBar } from 'antd-mobile'
-import TabBarContainer from '@/global'
+import { TabBarContainer } from '@/global'
 import Home from '@/pages/home'
 import Order from '@/pages/order'
 import Marketing from '@/pages/marketing'
