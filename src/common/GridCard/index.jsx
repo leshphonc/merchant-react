@@ -19,7 +19,7 @@ export default (props) => {
   return (
     <React.Fragment>
       {title ? <Title>{title}</Title> : ''}
-      <Grid data={data.list} columnNum={col} renderItem={mapGrid} hasLine={false} />
+      <Grid data={data.list} columnNum={col} renderItem={mapGrid} hasLine={false} square={false} />
     </React.Fragment>
   )
 }

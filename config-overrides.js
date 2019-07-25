@@ -1,7 +1,12 @@
 const {
-  override, addWebpackAlias, addWebpackExternals, addBabelPlugins,
+  override,
+  addWebpackAlias,
+  addWebpackExternals,
+  addBabelPlugins,
+  addLessLoader,
 } = require('customize-cra')
 const path = require('path')
+const { theme } = require('./package.json')
 
 module.exports = override(
   addWebpackAlias({
@@ -14,4 +19,8 @@ module.exports = override(
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     ['import', { libraryName: 'antd-mobile', style: 'css' }],
   ),
+  addLessLoader({
+    javascriptEnabled: true,
+    modifyVars: theme,
+  }),
 )

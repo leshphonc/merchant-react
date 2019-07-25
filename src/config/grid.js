@@ -116,7 +116,7 @@ const SettingGrid = {
   list: [
     {
       name: '基本信息',
-      path: '/settings/basicinformation',
+      path: '/setting/basicInformation',
       enable: require('../assets/image/jbxx.png'),
       disable: require('../assets/image/jbxx_gray.png'),
     },

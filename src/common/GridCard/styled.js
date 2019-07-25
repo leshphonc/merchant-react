@@ -18,7 +18,7 @@ export const LinkBox = styled.div`
     text-decoration: none;
   }
   a:hover {
-    color: #ff0000;
+    color: #888;
   }
   img {
     width: 35px;
