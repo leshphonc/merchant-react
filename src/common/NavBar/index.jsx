@@ -3,7 +3,7 @@ import { NavBar } from 'antd-mobile'
 import { withRouter } from 'react-router-dom'
 import Placeholder from './styled'
 
-export default withRouter((props) => {
+export default withRouter(props => {
   const { title, goBack, right } = props
   const handler = () => {
     if (goBack) {

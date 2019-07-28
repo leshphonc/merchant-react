@@ -14,6 +14,8 @@
     "linebreak-style": [0, "error", "windows"],
     // 限制单行的表达式数量
     "react/jsx-one-expression-per-line": 0,
+    // 多行jsx需要写在（）中
+    "react/jsx-wrap-multilines": [2, "as-needed"],
     // 引用时候根据根目录基础
     "import/no-unresolved": 0,
     // 限制可使用jsx的文件扩展名
@@ -22,6 +24,8 @@
       { "extensions": [".js", ".jsx", ".tsx"] }
     ],
     // 允许使用全局变量
-    "global-require": 0
+    "global-require": 0,
+    // 允许在只有一个参数时省略parens
+    "arrow-parens": [2, "as-needed"]
   }
 }
