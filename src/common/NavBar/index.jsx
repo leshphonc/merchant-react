@@ -25,6 +25,7 @@ export default withRouter((props) => {
           left: 0,
           right: 0,
           height: 54,
+          zIndex: 99,
         }}
       >
         {title}

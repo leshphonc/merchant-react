@@ -1,99 +1,119 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import {
-  List, InputItem, Switch, Stepper, Range, Button,
-} from 'antd-mobile'
-import { createForm } from 'rc-form'
+import { List, Switch, Tag, WhiteSpace } from 'antd-mobile'
+import { CustomizeList, ListTitle, ListContent } from '@/global'
+import Tooltip from 'rc-tooltip'
+import 'rc-tooltip/assets/bootstrap.css'
 
 const { Item } = List
-export default createForm((props) => {
-  const onSubmit = () => {
-    props.form.validateFields({ force: true }, (error) => {
-      if (!error) {
-        console.log(props.form.getFieldsValue())
-      } else {
-        alert('Validation failed')
-      }
-    })
-  }
-  const onReset = () => {
-    props.form.resetFields()
-  }
-  const validateAccount = (rule, value, callback) => {
-    if (value && value.length > 4) {
-      callback()
-    } else {
-      callback(new Error('At least four characters for account'))
-    }
-  }
 
-  const { getFieldProps, getFieldError } = props.form
+export default props => {
   return (
     <React.Fragment>
       <NavBar title="基本信息" goBack />
       <form>
-        <List
-          renderHeader={() => 'Form Validation'}
-          renderFooter={() => getFieldError('account') && getFieldError('account').join(',')}
-        >
-          <InputItem
-            {...getFieldProps('account', {
-              // initialValue: 'little ant',
-              rules: [
-                { required: true, message: 'Please input account' },
-                { validator: validateAccount },
-              ],
-            })}
-            clear
-            error={!!getFieldError('account')}
-            onErrorClick={() => {
-              alert(getFieldError('account').join('、'))
-            }}
-            placeholder="please input account"
-          >
-            Account
-          </InputItem>
-          <InputItem
-            {...getFieldProps('password')}
-            placeholder="please input password"
-            type="password"
-          >
-            Password
-          </InputItem>
+        <List renderHeader="基本信息">
+          <Item arrow="empty">
+            <CustomizeList>
+              <ListTitle>商户账号</ListTitle>
+              <ListContent>18033661270</ListContent>
+            </CustomizeList>
+          </Item>
+          <Item arrow="empty">
+            <CustomizeList>
+              <ListTitle>商户名称</ListTitle>
+              <ListContent>cc</ListContent>
+            </CustomizeList>
+          </Item>
+          <Item arrow="horizontal" onClick={() => {}}>
+            <CustomizeList>
+              <ListTitle>联系电话</ListTitle>
+              <ListContent>18033661270</ListContent>
+            </CustomizeList>
+          </Item>
+          <Item arrow="horizontal" onClick={() => {}}>
+            <CustomizeList>
+              <ListTitle>商家邮箱</ListTitle>
+              <ListContent>102075776@qq.com</ListContent>
+            </CustomizeList>
+          </Item>
+          <Item arrow="horizontal" onClick={() => {}}>
+            <CustomizeList>
+              <ListTitle>
+                超时时间
+                <Tooltip
+                  trigger="click"
+                  placement="topLeft"
+                  overlay="团购快递收货超时时间，0为永不超时，1为一天后超时并确认消费。（店员发货后开始计时）"
+                >
+                  <i
+                    className="iconfont"
+                    style={{ marginLeft: 10, color: '#bbb' }}
+                  >
+                    &#xe628;
+                  </i>
+                </Tooltip>
+              </ListTitle>
+              <ListContent>0</ListContent>
+            </CustomizeList>
+          </Item>
+          <Item extra={<Switch />}>线下支付权限</Item>
+          <Item arrow="horizontal" onClick={() => {}}>
+            <CustomizeList>
+              <ListTitle>微官网点击量</ListTitle>
+              <ListContent>0</ListContent>
+            </CustomizeList>
+          </Item>
           <Item
+            arrow="empty"
             extra={
-              <Switch {...getFieldProps('1', { initialValue: true, valuePropName: 'checked' })} />
+              <React.Fragment>
+                <Tag small style={{ marginRight: 5 }}>
+                  上门服务
+                </Tag>
+                <Tag small>按摩</Tag>
+              </React.Fragment>
             }
           >
-            Confirm Infomation
-          </Item>
-          <Item>
-            <div style={{ padding: 7 }}>
-              <Range defaultValue={[20, 80]} />
-            </div>
-          </Item>
-          <Item
-            extra={(
-              <Stepper
-                style={{ width: '100%', minWidth: '100px' }}
-                showNumber
-                size="small"
-                defaultValue={20}
-              />
-)}
-          >
-            Number of Subscribers
-          </Item>
-          <Item>
-            <Button type="primary" size="small" inline onClick={onSubmit}>
-              Submit
-            </Button>
-            <Button size="small" inline style={{ marginLeft: '2.5px' }} onClick={onReset}>
-              Reset
-            </Button>
+            商户所属分类
           </Item>
         </List>
+        <List renderHeader="商家描述">
+          <Item arrow="horizontal" onClick={() => {}}>
+            <CustomizeList>
+              <ListTitle>商户描述</ListTitle>
+              <ListContent className="wrap">
+                我是商户描述你信吗？我是商户描述你信吗？我是商户描述你信吗？我是商户描述你信吗？
+              </ListContent>
+            </CustomizeList>
+          </Item>
+          <Item arrow="horizontal" onClick={() => {}}>
+            <CustomizeList>
+              <ListTitle>商户图片</ListTitle>
+              <ListContent>
+                <img
+                  src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike180%2C5%2C5%2C180%2C60/sign=2c156b13a3345982d187edc06d9d5ac8/ae51f3deb48f8c542f263a4834292df5e1fe7fe4.jpg"
+                  alt=""
+                />
+              </ListContent>
+            </CustomizeList>
+          </Item>
+          <Item arrow="horizontal" onClick={() => {}}>
+            <CustomizeList>
+              <ListTitle>商户详情</ListTitle>
+              <ListContent className="wrap">
+                我是商户详情你信吗？我是商户详情你信吗？我是商户详情你信吗？我是商户详情你信吗？我是商户详情你信吗？
+              </ListContent>
+            </CustomizeList>
+          </Item>
+        </List>
+        <List renderHeader="绑定微信">
+          <Item arrow="horizontal" onClick={() => {}}>
+            绑定微信
+          </Item>
+        </List>
+        <WhiteSpace />
       </form>
     </React.Fragment>
   )
-})
+}

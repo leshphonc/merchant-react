@@ -7,12 +7,12 @@ export default createGlobalStyle`
   
   @font-face {
     font-family: 'iconfont';  /* project id 1315086 */
-    src: url('//at.alicdn.com/t/font_1315086_1jggd0hfhux.eot');
-    src: url('//at.alicdn.com/t/font_1315086_1jggd0hfhux.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_1315086_1jggd0hfhux.woff2') format('woff2'),
-    url('//at.alicdn.com/t/font_1315086_1jggd0hfhux.woff') format('woff'),
-    url('//at.alicdn.com/t/font_1315086_1jggd0hfhux.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_1315086_1jggd0hfhux.svg#iconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_1315086_4t70y48yg9l.eot');
+    src: url('//at.alicdn.com/t/font_1315086_4t70y48yg9l.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_1315086_4t70y48yg9l.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1315086_4t70y48yg9l.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1315086_4t70y48yg9l.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1315086_4t70y48yg9l.svg#iconfont') format('svg');
   }
 
   .iconfont {
