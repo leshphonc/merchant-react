@@ -17,7 +17,7 @@ module.exports = override(
   }),
   ...addBabelPlugins(
     ['@babel/plugin-proposal-decorators', { legacy: true }],
-    ['import', { libraryName: 'antd-mobile', style: 'css' }],
+    ['import', { libraryName: 'antd-mobile', style: true }],
   ),
   addLessLoader({
     javascriptEnabled: true,

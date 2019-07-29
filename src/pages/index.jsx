@@ -20,7 +20,7 @@ export default () => {
         <TabBar.Item
           title="首页"
           key="Home"
-          icon={(
+          icon={
             <div
               style={{
                 width: '22px',
@@ -29,8 +29,8 @@ export default () => {
                   'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  21px 21px no-repeat',
               }}
             />
-)}
-          selectedIcon={(
+          }
+          selectedIcon={
             <div
               style={{
                 width: '22px',
@@ -39,7 +39,7 @@ export default () => {
                   'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  21px 21px no-repeat',
               }}
             />
-)}
+          }
           selected={cur === 'Home'}
           onPress={() => setCur('Home')}
           data-seed="logId"
@@ -47,7 +47,7 @@ export default () => {
           <Home />
         </TabBar.Item>
         <TabBar.Item
-          icon={(
+          icon={
             <div
               style={{
                 width: '22px',
@@ -56,8 +56,8 @@ export default () => {
                   'url(https://gw.alipayobjects.com/zos/rmsportal/BTSsmHkPsQSPTktcXyTV.svg) center center /  21px 21px no-repeat',
               }}
             />
-)}
-          selectedIcon={(
+          }
+          selectedIcon={
             <div
               style={{
                 width: '22px',
@@ -66,7 +66,7 @@ export default () => {
                   'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat',
               }}
             />
-)}
+          }
           title="订单"
           key="order"
           selected={cur === 'order'}
@@ -75,8 +75,9 @@ export default () => {
         >
           <Order />
         </TabBar.Item>
+        <div>123</div>
         <TabBar.Item
-          icon={(
+          icon={
             <div
               style={{
                 width: '22px',
@@ -85,8 +86,8 @@ export default () => {
                   'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  21px 21px no-repeat',
               }}
             />
-)}
-          selectedIcon={(
+          }
+          selectedIcon={
             <div
               style={{
                 width: '22px',
@@ -95,7 +96,7 @@ export default () => {
                   'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  21px 21px no-repeat',
               }}
             />
-)}
+          }
           title="营销活动"
           key="marketing"
           selected={cur === 'marketing'}
@@ -104,8 +105,14 @@ export default () => {
           <Marketing />
         </TabBar.Item>
         <TabBar.Item
-          icon={{ uri: 'https://zos.alipayobjects.com/rmsportal/asJMfBrNqpMMlVpeInPQ.svg' }}
-          selectedIcon={{ uri: 'https://zos.alipayobjects.com/rmsportal/gjpzzcrPMkhfEqgbYvmN.svg' }}
+          icon={{
+            uri:
+              'https://zos.alipayobjects.com/rmsportal/asJMfBrNqpMMlVpeInPQ.svg',
+          }}
+          selectedIcon={{
+            uri:
+              'https://zos.alipayobjects.com/rmsportal/gjpzzcrPMkhfEqgbYvmN.svg',
+          }}
           title="我的"
           key="mine"
           selected={cur === 'mine'}

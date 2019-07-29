@@ -21,6 +21,7 @@ export const Paper = styled.div`
 // 列表样式组件
 export const CustomizeList = styled.div`
   display: flex;
+  align-items: center;
 `
 
 export const ListTitle = styled.div`
@@ -32,6 +33,7 @@ export const ListContent = styled.div`
   color: #888;
   &.wrap {
     white-space: normal;
+    padding: 10px 0;
   }
   & > img {
     width: 200px !important;

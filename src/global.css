@@ -1,3 +1,24 @@
+/* antd-mobile组件样式覆盖 */
+.am-list-item .am-list-line .am-list-content {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.77)
+}
+
+.am-list-item .am-input-label {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.77)
+}
+
+.am-list-item .am-input-control {
+  font-size: 14px;
+}
+
+.am-list-item .am-input-control input {
+  font-size: 14px;
+  color: #888;
+}
+
+/* 定义menu位置在navbar下面 */
 .menu-position {
   position: absolute;
   top: 54px;

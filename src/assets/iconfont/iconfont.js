@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle`
   body {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif;
   }
   
   @font-face {
