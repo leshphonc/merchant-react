@@ -1,4 +1,5 @@
 import React from 'react'
+import { configure } from 'mobx'
 import { Provider } from 'mobx-react'
 import store from '@/pages/store'
 import { BrowserRouter, Route } from 'react-router-dom'
@@ -9,6 +10,8 @@ import StoreFront from '@/pages/management/storeFront'
 import ManagementCategory from '@/pages/management/storeFront/managementCategory'
 import CategoryPanel from '@/pages/management/storeFront/categoryPanel'
 import BasicInformation from '@/pages/setting/basicInformation'
+
+configure({ enforceActions: 'always' })
 
 export default () => (
   <Provider {...store}>

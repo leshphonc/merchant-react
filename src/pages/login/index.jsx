@@ -11,8 +11,12 @@ class Login extends React.Component {
     console.log(action)
     return (
       <div>
-        <Button>btn</Button>
-        login
+        <Button
+          onClick={() => this.props.login.addList({ name: 'obb', id: 32 })}
+        >
+          btn
+        </Button>
+        {JSON.stringify(this.props.login.list)}
       </div>
     )
   }
