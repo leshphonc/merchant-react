@@ -1,6 +1,6 @@
 import React from 'react'
 import { WingBlank, WhiteSpace } from 'antd-mobile'
-import { ListItem, ItemTop, TopContent } from '@/global'
+import { ListItem, ItemTop, TopContent } from '@/styled'
 
 export default props => {
   const mapList = () =>
