@@ -8,7 +8,7 @@ const ManagementGrid = {
     },
     {
       name: '商品管理',
-      path: '2',
+      path: '/management/commodity',
       enable: require('../assets/image/spgl.png'),
       disable: require('../assets/image/spgl_gray.png'),
     },
@@ -74,7 +74,7 @@ const PopularizeGrid = {
     },
     {
       name: '店员推广',
-      path: '/promotion/shopAssistant',
+      path: '/popularize/shopAssistant',
       enable: require('../assets/image/dytg.png'),
       disable: require('../assets/image/dytg_gray.png'),
     },
