@@ -66,8 +66,8 @@ export const ItemTop = styled.div`
   position: relative;
 
   & > img {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     border-radius: 4px;
     margin-right: 10px;
   }
@@ -75,6 +75,7 @@ export const ItemTop = styled.div`
 
 export const TopContent = styled.div`
   flex: 1;
+  position: relative;
   & > .top-title {
     font-size: 16px;
     font-weight: 600;
@@ -103,7 +104,8 @@ export const TopContent = styled.div`
   }
   & > .top-features {
     display: inline-block;
-    margin-top: 10px;
+    position: absolute;
+    bottom: 0px;
     margin-right: 10px;
     color: #606060;
     font-size: 13px;

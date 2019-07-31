@@ -1,6 +1,13 @@
 import React from 'react'
-import { WingBlank, WhiteSpace, DatePicker, List, Switch, Calendar } from 'antd-mobile'
-import { ListItem, ItemTop, TopContent } from '@/global'
+import {
+  WingBlank,
+  WhiteSpace,
+  DatePicker,
+  List,
+  Switch,
+  Calendar,
+} from 'antd-mobile'
+import { ListItem, ItemTop, TopContent } from '@/styled'
 import enUs from 'antd-mobile/lib/date-picker/locale/en_US'
 
 // const nowTimeStamp = Date.now()
@@ -19,8 +26,10 @@ import enUs from 'antd-mobile/lib/date-picker/locale/en_US'
 export default props => {
   function formatDate(date) {
     /* eslint no-confusing-arrow: 0 */
-    const pad = n => n < 10 ? `0${n}` : n
-    const dateStr = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+    const pad = n => (n < 10 ? `0${n}` : n)
+    const dateStr = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+      date.getDate()
+    )}`
     const timeStr = `${pad(date.getHours())}:${pad(date.getMinutes())}`
     return `${dateStr} ${timeStr}`
   }

@@ -14,17 +14,20 @@ export default props => {
               <div className="top-title">{item.title}</div>
               <WhiteSpace />
               <div className="top-tag">
-                <Link to="/management/storefront/managementCategory">分类管理</Link>
+                <Link to="/management/storefront/managementCategory">
+                  分类管理
+                </Link>
               </div>
               <div className="top-tag">
-                <Link to="/management/storefront/managementCategory">店铺优惠</Link>
+                <Link to="/management/storefront/managementCategory">
+                  店铺优惠
+                </Link>
               </div>
-              <WhiteSpace />
-              <div className="top-features">
+              <div className="top-features" style={{ left: 0 }}>
                 <i className="iconfont">&#xe645;</i>
                 编辑店铺
               </div>
-              <div className="top-features">
+              <div className="top-features" style={{ left: 80 }}>
                 <i className="iconfont">&#xe61e;</i>
                 添加分类
               </div>
