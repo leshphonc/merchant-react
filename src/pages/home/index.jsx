@@ -1,7 +1,7 @@
 import React from 'react'
 import UserCard from '@/common/UserCard'
 import GridCard from '@/common/GridCard'
-import { Paper } from '@/global'
+import { Paper } from '@/styled'
 import { ManagementGrid, PopularizeGrid, AllianceGrid } from '@/config/grid'
 import { WingBlank, WhiteSpace } from 'antd-mobile'
 

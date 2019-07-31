@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { Tabs, Badge, Menu, Icon } from 'antd-mobile'
-import { MenuMask } from '@/global'
+import { MenuMask } from '@/styled'
 import CardList from '@/common/StoreList'
 import { StoreList } from '@/config/list'
 

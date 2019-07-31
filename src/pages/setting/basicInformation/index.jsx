@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { List, Switch, Tag, WhiteSpace } from 'antd-mobile'
-import { CustomizeList, ListTitle, ListContent } from '@/global'
+import { CustomizeList, ListTitle, ListContent } from '@/styled'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 
