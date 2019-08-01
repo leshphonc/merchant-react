@@ -10,6 +10,9 @@ import Wallet from '@/pages/wallet'
 import WalletDetail from '@/pages/wallet/detail'
 import StoreFront from '@/pages/management/storeFront'
 import Member from '@/pages/management/member'
+import MiniProgram from '@/pages/management/member/miniProgram'
+import PublicMember from '@/pages/management/member/publicMember'
+import Coupon from '@/pages/management/member/coupon'
 import Commodity from '@/pages/management/commodity'
 import Group from '@/pages/management/commodity/group'
 import ManagementCategory from '@/pages/management/storeFront/managementCategory'
@@ -33,7 +36,10 @@ export default () => (
       <Route path="/management/storefront" exact component={StoreFront} />
       <Route path="/management/storefront/managementCategory" component={ManagementCategory} />
       <Route path="/management/storefront/categoryPanel" component={CategoryPanel} />
-      <Route path="/management/member" component={Member} />
+      <Route path="/management/member" exact component={Member} />
+      <Route path="/management/member/miniProgram" component={MiniProgram} />
+      <Route path="/management/member/publicMember" component={PublicMember} />
+      <Route path="/management/member/coupon" component={Coupon} />
       <Route path="/management/commodity" exact component={Commodity} />
       <Route path="/management/commodity/group" component={Group} />
       {/* 基本信息 -> setting */}

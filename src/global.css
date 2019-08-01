@@ -4,6 +4,10 @@
   color: rgba(0, 0, 0, 0.77)
 }
 
+.am-list-item .am-list-line .am-list-extra {
+  font-size: 14px;
+}
+
 .am-list-item .am-input-label {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.77)
