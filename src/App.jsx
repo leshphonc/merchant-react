@@ -13,6 +13,8 @@ import ManagementCategory from '@/pages/management/storeFront/managementCategory
 import CategoryPanel from '@/pages/management/storeFront/categoryPanel'
 import BasicInformation from '@/pages/setting/basicInformation'
 import ShopAssistant from '@/pages/popularize/shopAssistant'
+import List from '@/pages/popularize/shopAssistant/list'
+import ScanList from '@/pages/popularize/shopAssistant/scanList'
 
 configure({ enforceActions: 'always' })
 
@@ -32,7 +34,9 @@ export default () => (
       {/* 基本信息 -> setting */}
       <Route path="/setting/basicInformation" component={BasicInformation} />
       {/* 商家推广 ->  popularize */}
-      <Route path="/popularize/shopAssistant" component={ShopAssistant} />
+      <Route path="/popularize/shopAssistant" exact component={ShopAssistant} />
+      <Route path="/popularize/shopAssistant/list" component={List} />
+      <Route path="/popularize/shopAssistant/scanList" component={ScanList} />
     </BrowserRouter>
   </Provider>
 )
