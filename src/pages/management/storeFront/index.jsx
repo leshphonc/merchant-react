@@ -37,7 +37,7 @@ export default () => {
         goBack
         right={<Icon onClick={() => setMenu(!menu)} type="ellipsis" />}
       />
-      <Tabs tabs={tabs} initialPage={1}>
+      <Tabs tabs={tabs} initialPage={0}>
         <CardList list={StoreList} />
         <CardList list={StoreList} />
         <CardList list={StoreList} />
