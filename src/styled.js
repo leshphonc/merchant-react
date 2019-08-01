@@ -96,6 +96,17 @@ export const TopContent = styled.div`
       color: #fff;
     }
   }
+  & > .top-tags{
+    display: inline-block;
+    background: #ffb000;
+    width: 30vw;
+    height: 8vw;
+    text-align: center;
+    line-height: 8vw;
+    & > a {
+      color: #333;
+    }
+  }
   & > .top-extra {
     position: absolute;
     top: 0;
@@ -116,3 +127,17 @@ export const TopContent = styled.div`
     }
   }
 `
+export const List = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  span{
+    display: inline-block;
+    text-align: center;
+    & > img {
+      width: 10vw;
+      height: 10vw;
+      border-radius: 50%;
+    }
+  }
+  `

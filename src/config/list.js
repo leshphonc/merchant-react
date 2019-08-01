@@ -79,35 +79,147 @@ export const CategoryList = [
   },
 ]
 
-export const AssistantList = [
+export const GeneralizeList = [
   {
-    scan_totalNum: '111',
-    fans_totalNum: '652',
-    purchase_totalNum: '1235',
-    sale_commission: '154',
-    generalize_commission: '569',
-    start_time: '2015-02-21',
-    end_time: '2019-02-21',
-    lists: [
-      {
-        title: '同城百商联盟',
-      },
-      {
-        title: '配送测试',
-      },
-      {
-        title: '餐饮测试',
-      },
-      {
-        title: '团购测试',
-      },
-      {
-        title: '预定测试',
-      },
-      {
-        title: '同城百商联盟',
-      },
-    ],
+    title: '店员名称1',
+    img: avatar,
+    gener_money: '12',
+    market_money: '22',
+  },
+  {
+    title: '店员名称2',
+    img: avatar,
+    gener_money: '5',
+    market_money: '42',
+  },
+  {
+    title: '店员名称3',
+    img: avatar,
+    gener_money: '52',
+    market_money: '2',
+  },
+  {
+    title: '店员名称4',
+    img: avatar,
+    gener_money: '1',
+    market_money: '52',
+  },
+  {
+    title: '店员名称',
+    img: avatar,
+    gener_money: '12',
+    market_money: '22',
+  },
+  {
+    title: '店员名称',
+    img: avatar,
+    gener_money: '12',
+    market_money: '22',
+  },
+]
+
+export const ScanList = [
+  {
+    img: avatar,
+    name: 'madedf',
+    scan_time: '2019-02-06',
+  },
+  {
+    img: avatar,
+    name: 'Limmy',
+    scan_time: '2019-03-06',
+  },
+  {
+    img: avatar,
+    name: '意志坚定',
+    scan_time: '2019-04-06',
+  },
+  {
+    img: avatar,
+    name: '一念永恒',
+    scan_time: '2019-05-06',
+  },
+  {
+    img: avatar,
+    name: '同城',
+    scan_time: '2019-06-06',
+  },
+  {
+    img: avatar,
+    name: '服务',
+    scan_time: '2019-07-06',
+  },
+]
+
+export const FansList = [
+  {
+    img: avatar,
+    name: 'madedf',
+    fans_time: '2019-02-06',
+  },
+  {
+    img: avatar,
+    name: 'Limmy',
+    fans_time: '2019-03-06',
+  },
+  {
+    img: avatar,
+    name: '意志坚定',
+    fans_time: '2019-04-06',
+  },
+  {
+    img: avatar,
+    name: '一念永恒',
+    fans_time: '2019-05-06',
+  },
+  {
+    img: avatar,
+    name: '同城',
+    fans_time: '2019-06-06',
+  },
+  {
+    img: avatar,
+    name: '服务',
+    fans_time: '2019-07-06',
+  },
+]
+
+export const SaleList = [
+  {
+    img: avatar,
+    name: 'madedf',
+    sale_time: '2019-02-06',
+    consum_money: '2',
+  },
+  {
+    img: avatar,
+    name: 'Limmy',
+    sale_time: '2019-03-06',
+    consum_money: '3',
+  },
+  {
+    img: avatar,
+    name: '意志坚定',
+    sale_time: '2019-04-06',
+    consum_money: '4',
+  },
+  {
+    img: avatar,
+    name: '一念永恒',
+    sale_time: '2019-05-06',
+    consum_money: '5',
+  },
+  {
+    img: avatar,
+    name: '同城',
+    sale_time: '2019-06-06',
+    consum_money: '6',
+  },
+  {
+    img: avatar,
+    name: '服务',
+    sale_time: '2019-07-06',
+    consum_money: '7',
   },
 ]
 
