@@ -5,8 +5,8 @@ import NavBar from '@/common/NavBar'
 import { Button, List, DatePicker, WingBlank } from 'antd-mobile'
 import CardList from './components/SaleList'
 import { SaleList } from '@/config/list'
+import './index.module.css'
 
-require('./index.css')
 
 class ShopAssistant extends React.Component {
   state = {
@@ -60,7 +60,7 @@ class ShopAssistant extends React.Component {
             <Button className="btn-a" type="primary">查询</Button>
           </div>
         </WingBlank>
-        <List className="top bg" style={{ width: '96%', margin: '0 auto', textAlign: 'center', marginBottom: '10px' }}>
+        <List className="top bg" style={{ width: '95%', margin: '0 auto', textAlign: 'center', marginBottom: '10px' }}>
             当前记录
         </List>
         <List className="info">

@@ -3,9 +3,10 @@ import NavBar from '@/common/NavBar'
 // import CardList from '@/common/ScanList'
 // import { ScanList } from '@/config/list'
 import { Button, List, DatePicker, WingBlank } from 'antd-mobile'
-import CardList from './components/ScanList'
-import { ScanList } from '@/config/list'
+import CardList from './components/FansList'
+import { FansList } from '@/config/list'
 import './index.module.css'
+
 
 class ShopAssistant extends React.Component {
   state = {
@@ -19,7 +20,7 @@ class ShopAssistant extends React.Component {
     return (
       <React.Fragment>
         <NavBar
-          title="扫码记录"
+          title="绑粉记录"
           goBack
         />
         {/* <CardList list={AssistantList} /> */}
@@ -65,10 +66,9 @@ class ShopAssistant extends React.Component {
         <List className="info">
           <span style={{ width: '16vw', textAlign: 'center' }}>头像</span>
           <span style={{ width: '20vw', textAlign: 'center' }}>昵称</span>
-          <span style={{ width: '28vw', textAlign: 'center' }}>扫码时间</span>
-          <span style={{ width: '25vw', textAlign: 'center' }}>推广内容</span>
+          <span style={{ width: '28vw', textAlign: 'center' }}>绑定时间</span>
         </List>
-        <CardList list={ScanList} />
+        <CardList className="sfsd" list={FansList} />
       </React.Fragment>
     )
   }

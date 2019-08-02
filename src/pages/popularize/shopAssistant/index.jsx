@@ -6,7 +6,7 @@ import { observer, inject } from 'mobx-react'
 import { Button, List, DatePicker, Picker, WingBlank } from 'antd-mobile'
 import { Link } from 'react-router-dom'
 
-require('./index.css')
+import './index.module.css'
 
 const seasons = [
   [
@@ -47,7 +47,7 @@ class ShopAssistant extends React.Component {
         {/* <CardList list={AssistantList} /> */}
         <WingBlank size="md">
           <div id="box">
-            <List className="date-picker-list top">
+            <List className="top">
               <Picker
                 data={seasons}
                 cascade={false}

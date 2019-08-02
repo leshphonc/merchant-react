@@ -8,11 +8,10 @@ export default props => {
     props.list.map((item, index) => (
       <React.Fragment key={index}>
         <div style={{ background: '#fff' }}>
-          <List key={index} className="list" style={{ borderBottom: '1px solid #aaa', padding: '4px 0' }}>
+          <List key={index} className="list" style={{ borderBottom: '1px solid #aaa', padding: '4px 20px' }}>
             <span className="pic" style={{ width: '16vw' }}>{item.img ? <img src={item.img} alt="" /> : null}</span>
             <span style={{ width: '20vw' }}>{item.name}</span>
-            <span style={{ width: '28vw' }}>{item.sale_time}</span>
-            <span style={{ width: '25vw' }}>{item.consum_money}</span>
+            <span style={{ width: '28vw' }}>{item.fans_time}</span>
           </List>
         </div>
       </React.Fragment>
