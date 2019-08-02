@@ -3,7 +3,7 @@ import NavBar from '@/common/NavBar'
 // import { AssistantList } from '@/config/list'
 // import CardList from '@/common/Generalize'
 import { observer, inject } from 'mobx-react'
-import { Button, List, DatePicker, Picker } from 'antd-mobile'
+import { Button, List, DatePicker, Picker, WingBlank } from 'antd-mobile'
 import { Link } from 'react-router-dom'
 
 require('./index.css')
@@ -45,52 +45,54 @@ class ShopAssistant extends React.Component {
           goBack
         />
         {/* <CardList list={AssistantList} /> */}
-        <div id="box">
-          <List className="date-picker-list top">
-            <Picker
-              data={seasons}
-              cascade={false}
-              extra="全部店铺"
-              value={selectValue}
-              onChange={v => {
-                this.setState({
-                  selectValue: v,
-                })
-              }}
-            >
-              <List.Item arrow="horizontal"></List.Item>
-            </Picker>
-          </List>
-          <List className="date-picker-list top">
-            <DatePicker
-              mode="date"
-              // title="Select Date"
-              value={startdate}
-              onChange={v => {
-                this.setState({
-                  startdate: v,
-                })
-              }}
-            >
-              <List.Item arrow=""></List.Item>
-            </DatePicker>
-          </List>
-          <List className="date-picker-list top">
-            <DatePicker
-              mode="date"
-              // title="Select Date"
-              value={enddate}
-              onChange={v => {
-                this.setState({
-                  enddate: v,
-                })
-              }}
-            >
-              <List.Item arrow=""></List.Item>
-            </DatePicker>
-          </List>
-          <Button className="btn-a" type="primary">查询</Button>
-        </div>
+        <WingBlank size="md">
+          <div id="box">
+            <List className="date-picker-list top">
+              <Picker
+                data={seasons}
+                cascade={false}
+                extra="全部店铺"
+                value={selectValue}
+                onChange={v => {
+                  this.setState({
+                    selectValue: v,
+                  })
+                }}
+              >
+                <List.Item arrow="horizontal"></List.Item>
+              </Picker>
+            </List>
+            <List className="date-picker-list top">
+              <DatePicker
+                mode="date"
+                // title="Select Date"
+                value={startdate}
+                onChange={v => {
+                  this.setState({
+                    startdate: v,
+                  })
+                }}
+              >
+                <List.Item arrow=""></List.Item>
+              </DatePicker>
+            </List>
+            <List className="date-picker-list top">
+              <DatePicker
+                mode="date"
+                // title="Select Date"
+                value={enddate}
+                onChange={v => {
+                  this.setState({
+                    enddate: v,
+                  })
+                }}
+              >
+                <List.Item arrow=""></List.Item>
+              </DatePicker>
+            </List>
+            <Button className="btn-a" type="primary">查询</Button>
+          </div>
+        </WingBlank>
         <List className="top" style={{ width: '96%', margin: '0 auto', textAlign: 'center', marginBottom: '10px' }}>
             当前记录
         </List>

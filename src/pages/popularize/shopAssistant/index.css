@@ -9,7 +9,7 @@
 }
 .top{
   background-color: #ffb000;
-  width: 24vw;
+  width: 23vw;
   height: 10vw;
   line-height: 10vw;
 }
@@ -23,14 +23,19 @@
 .bg > .am-list-body{
   background-color: #ddd;
 }
-.am-list-item{
+.top .am-list-item{
   background-color: #ffb000;
+  padding-left:0;
 }
-.am-list-arrow{
+.top .am-list-line{
+  padding-right:0;
+  justify-content: center;
+}
+.top .am-list-arrow{
   position: absolute;
   right:5px;
 }
-.am-list-extra{
+.top .am-list-extra{
   overflow: initial !important;
   text-overflow: inherit !important;
 }
@@ -43,10 +48,10 @@
   border-radius: 0;
   line-height: 10vw;
 }
-.am-list-extra{
+.top .am-list-extra{
   color:#333 !important;
 }
-.am-list-item-middle{
+.top .am-list-item-middle{
   min-height: 40px !important;
 }
 #nav .am-list-body{
@@ -66,7 +71,7 @@
   position: absolute;
   bottom: 0;
 }
-.list-top > .am-list-body{
+.info > .am-list-body{
   display: flex;
   justify-content: space-around;
   padding:10px 0;
