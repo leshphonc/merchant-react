@@ -24,7 +24,7 @@ import ScanList from '@/pages/popularize/shopAssistant/scanList'
 import SaleList from '@/pages/popularize/shopAssistant/saleList'
 import FansList from '@/pages/popularize/shopAssistant/fansList'
 
-
+// mobx严格模式 生产环境使用observed 开发使用always
 configure({ enforceActions: 'always' })
 
 export default () => (
