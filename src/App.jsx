@@ -21,6 +21,8 @@ import BasicInformation from '@/pages/setting/basicInformation'
 import ShopAssistant from '@/pages/popularize/shopAssistant'
 import List from '@/pages/popularize/shopAssistant/list'
 import ScanList from '@/pages/popularize/shopAssistant/scanList'
+import SaleList from '@/pages/popularize/shopAssistant/saleList'
+
 
 configure({ enforceActions: 'always' })
 
@@ -50,6 +52,7 @@ export default () => (
       <Route path="/popularize/shopAssistant" exact component={ShopAssistant} />
       <Route path="/popularize/shopAssistant/list" component={List} />
       <Route path="/popularize/shopAssistant/scanList" component={ScanList} />
+      <Route path="/popularize/shopAssistant/saleList" component={SaleList} />
     </BrowserRouter>
   </Provider>
 )

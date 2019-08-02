@@ -1,6 +1,6 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import CardList from '@/common/Generalize'
+import CardList from './components/Generalize'
 import { GeneralizeList } from '@/config/list'
 
 export default () => {

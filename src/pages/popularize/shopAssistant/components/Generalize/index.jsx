@@ -13,10 +13,11 @@ export default props => {
             <TopContent>
               <div className="top-title" style={{ fontSize: '15px' }}>{item.title}</div>
               <WhiteSpace />
-              <div className="top-features" style={{ display: 'block', fontSize: '14px', marginTop: '5px' }}>
+              <div className="top-features" style={{ position: 'initial', fontSize: '14px', margin: '14px 0' }}>
                 推广佣金: {item.gener_money}
               </div>
-              <div className="top-features" style={{ display: 'block', fontSize: '14px' }}>
+              <WhiteSpace />
+              <div className="top-features" style={{ position: 'initial', display: 'block', fontSize: '14px' }}>
                 销售佣金: {item.market_money}
               </div>
             </TopContent>
