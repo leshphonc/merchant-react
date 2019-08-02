@@ -96,7 +96,7 @@ export const TopContent = styled.div`
       color: #fff;
     }
   }
-  & > .top-tags{
+  & > .top-tags {
     display: inline-block;
     background: #ffb000;
     width: 30vw;
@@ -131,7 +131,7 @@ export const List = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  span{
+  span {
     display: inline-block;
     text-align: center;
     & > img {
@@ -140,4 +140,13 @@ export const List = styled.div`
       border-radius: 50%;
     }
   }
-  `
+`
+
+export const PrimaryTag = styled.div`
+  background: #fff;
+  color: #ffb000;
+  border: 1px solid #ffb000;
+  height: 22px;
+  text-align: center;
+  border-radius: 4px;
+`

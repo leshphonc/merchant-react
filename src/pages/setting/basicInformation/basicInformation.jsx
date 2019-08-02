@@ -1,8 +1,8 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
-import { List, Switch, Picker, Tag, WhiteSpace } from 'antd-mobile'
-import { CustomizeList, ListTitle, ListContent } from '@/styled'
+import { List, Switch, Picker, WhiteSpace } from 'antd-mobile'
+import { CustomizeList, ListTitle, ListContent, PrimaryTag } from '@/styled'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 
@@ -74,18 +74,12 @@ export default withRouter(props => {
           <Item extra={<Switch />} arrow="empty">
             线下支付权限
           </Item>
-          <Item extra="0" arrow="empty" onClick={() => {}}>
-            微官网点击量
-          </Item>
           <Item
             arrow="empty"
             extra={
-              <React.Fragment>
-                <Tag selected style={{ marginRight: 5 }}>
-                  上门服务
-                </Tag>
-                <Tag selected>按摩</Tag>
-              </React.Fragment>
+              <PrimaryTag style={{ width: '50%', float: 'right' }}>
+                上门服务
+              </PrimaryTag>
             }
           >
             商户所属分类
