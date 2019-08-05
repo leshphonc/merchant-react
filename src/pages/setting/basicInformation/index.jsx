@@ -4,7 +4,7 @@ import BasicInformation from './basicInformation'
 import ModifyPhone from './modify/phone'
 import ModifyEmail from './modify/email'
 import ModifyDescription from './modify/description'
-import CropperImg from '@/common/CropperImg'
+import ModifyPicture from './modify/picture'
 import ModifyDetail from './modify/detail'
 
 export default () => (
@@ -13,7 +13,7 @@ export default () => (
     <Route path="/setting/basicInformation/modifyPhone" component={ModifyPhone} />
     <Route path="/setting/basicInformation/modifyEmail" component={ModifyEmail} />
     <Route path="/setting/basicInformation/modifyDescription" component={ModifyDescription} />
-    <Route path="/setting/basicInformation/modifyPicture" component={CropperImg} />
+    <Route path="/setting/basicInformation/modifyPicture" component={ModifyPicture} />
     <Route path="/setting/basicInformation/modifyDetail" component={ModifyDetail} />
   </React.Fragment>
 )

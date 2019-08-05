@@ -1,8 +1,7 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
 import {
-  List, Switch, Picker, WhiteSpace, Menu,
+  List, Switch, Picker, WhiteSpace, Menu, Flex, Toast,
 } from 'antd-mobile'
 import {
   CustomizeList, ListTitle, ListContent, PrimaryTag, MenuMask,
@@ -14,7 +13,6 @@ import 'rc-tooltip/assets/bootstrap.css'
 
 const { Item } = List
 
-@withRouter
 @inject('basicInformation')
 @observer
 class BasicInformation extends React.Component {
@@ -24,8 +22,68 @@ class BasicInformation extends React.Component {
 
   componentDidMount() {
     const { basicInformation } = this.props
-    basicInformation.fetchBasicInfo()
     basicInformation.fetchCategory()
+    basicInformation.fetchBasicInfo()
+  }
+
+  getMenuList = () => {
+    const { basicInformation } = this.props
+    const basicInfo = toJS(basicInformation.basicInfo)
+    const categoryOption = toJS(basicInformation.categoryOption)
+    const cateGoryLabel = []
+    categoryOption.forEach(item => {
+      if (item.value === basicInfo.cat_fid) {
+        cateGoryLabel.push(item.label)
+        if (item.children.length) {
+          item.children.forEach(child => {
+            if (child.value === basicInfo.cat_id) {
+              cateGoryLabel.push(child.label)
+            }
+          })
+        }
+      }
+    })
+    return (
+      <Flex justify="end">
+        {cateGoryLabel.map((item, index) => (
+          <PrimaryTag
+            key={index}
+            style={{ marginLeft: 2 }}
+            onClick={() => this.setState({ menu: true })}
+          >
+            {item}
+          </PrimaryTag>
+        ))}
+      </Flex>
+    )
+  }
+
+  changeTimeout = val => {
+    const { basicInformation } = this.props
+    basicInformation.modifyTimeout(val[0])
+  }
+
+  changePermission = bool => {
+    const { basicInformation } = this.props
+    basicInformation.modifyPermission(bool ? '1' : '0')
+  }
+
+  changeCategory = async arr => {
+    const { basicInformation } = this.props
+    await basicInformation.modifyCategory(arr)
+    this.setState({ menu: false })
+  }
+
+  wxBind = async () => {
+    const ua = window.navigator.userAgent.toLowerCase()
+    /* eslint eqeqeq: 0 */
+    if (!(ua.match(/micromessenger/i) == 'micromessenger')) {
+      Toast.info('请在微信环境下进行绑定')
+    } else {
+      const { basicInformation } = this.props
+      console.log(basicInformation.wxConfig)
+      await basicInformation.getWxConfig()
+    }
   }
 
   render() {
@@ -37,7 +95,8 @@ class BasicInformation extends React.Component {
       <Menu
         className="menu-position"
         data={categoryOption}
-        onChange={() => this.setState({ menu: false })}
+        value={[basicInfo.cat_fid, basicInfo.cat_id]}
+        onChange={this.changeCategory}
       />
     )
     return (
@@ -55,7 +114,12 @@ class BasicInformation extends React.Component {
               extra={basicInfo.phone}
               arrow="horizontal"
               onClick={() => {
-                history.push('/setting/basicInformation/modifyPhone')
+                history.push({
+                  pathname: '/setting/basicInformation/modifyPhone',
+                  state: {
+                    value: basicInfo.phone,
+                  },
+                })
               }}
             >
               联系电话
@@ -64,7 +128,12 @@ class BasicInformation extends React.Component {
               extra={basicInfo.email}
               arrow="horizontal"
               onClick={() => {
-                history.push('/setting/basicInformation/modifyEmail')
+                history.push({
+                  pathname: '/setting/basicInformation/modifyEmail',
+                  state: {
+                    value: basicInfo.email,
+                  },
+                })
               }}
             >
               商家邮箱
@@ -82,6 +151,7 @@ class BasicInformation extends React.Component {
               ]}
               value={[basicInfo.group_express_outtime]}
               cols={1}
+              onChange={this.changeTimeout}
             >
               <Item arrow="horizontal" onClick={() => {}}>
                 超时时间
@@ -99,20 +169,15 @@ class BasicInformation extends React.Component {
                 </Tooltip>
               </Item>
             </Picker>
-            <Item extra={<Switch />} arrow="empty">
+            <Item
+              extra={
+                <Switch checked={basicInfo.is_offline === '1'} onChange={this.changePermission} />
+              }
+              arrow="empty"
+            >
               线下支付权限
             </Item>
-            <Item
-              arrow="empty"
-              extra={
-                <PrimaryTag
-                  style={{ width: '50%', float: 'right' }}
-                  onClick={() => this.setState({ menu: true })}
-                >
-                  上门服务
-                </PrimaryTag>
-              }
-            >
+            <Item arrow="empty" extra={this.getMenuList()}>
               商户所属分类
             </Item>
           </List>
@@ -121,7 +186,12 @@ class BasicInformation extends React.Component {
               extra={basicInfo.txt_info}
               arrow="horizontal"
               onClick={() => {
-                history.push('/setting/basicInformation/modifyDescription')
+                history.push({
+                  pathname: '/setting/basicInformation/modifyDescription',
+                  state: {
+                    value: basicInfo.txt_info,
+                  },
+                })
               }}
             >
               商户描述
@@ -129,16 +199,38 @@ class BasicInformation extends React.Component {
             <Item
               arrow="horizontal"
               onClick={() => {
-                history.push('/setting/basicInformation/modifyPicture')
+                history.push({
+                  pathname: '/setting/basicInformation/modifyPicture',
+                  state: {
+                    action: 'modifyLogoUrl',
+                    aspectratio: 1 / 1,
+                  },
+                })
+              }}
+            >
+              <CustomizeList>
+                <ListTitle>商户LOGO</ListTitle>
+                <ListContent>
+                  <img src={basicInfo.service_ico} alt="" />
+                </ListContent>
+              </CustomizeList>
+            </Item>
+            <Item
+              arrow="horizontal"
+              onClick={() => {
+                history.push({
+                  pathname: '/setting/basicInformation/modifyPicture',
+                  state: {
+                    action: 'modifyImgUrl',
+                    aspectratio: 2 / 1,
+                  },
+                })
               }}
             >
               <CustomizeList>
                 <ListTitle>商户图片</ListTitle>
                 <ListContent>
-                  <img
-                    src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike180%2C5%2C5%2C180%2C60/sign=2c156b13a3345982d187edc06d9d5ac8/ae51f3deb48f8c542f263a4834292df5e1fe7fe4.jpg"
-                    alt=""
-                  />
+                  <img src={basicInfo.pic_info} alt="" />
                 </ListContent>
               </CustomizeList>
             </Item>
@@ -146,14 +238,19 @@ class BasicInformation extends React.Component {
               extra="前往修改"
               arrow="horizontal"
               onClick={() => {
-                history.push('/setting/basicInformation/modifyDetail')
+                history.push({
+                  pathname: '/setting/basicInformation/modifyDetail',
+                  state: {
+                    value: basicInfo.content,
+                  },
+                })
               }}
             >
               商户详情
             </Item>
           </List>
           <List renderHeader="绑定微信">
-            <Item arrow="horizontal" onClick={() => {}}>
+            <Item arrow="horizontal" onClick={this.wxBind}>
               绑定微信
             </Item>
           </List>

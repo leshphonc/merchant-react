@@ -36,8 +36,8 @@ export const ListContent = styled.div`
     padding: 10px 0;
   }
   & > img {
-    width: 200px !important;
-    height: 200px !important;
+    width: 100% !important;
+    height: auto !important;
   }
 `
 
@@ -149,4 +149,5 @@ export const PrimaryTag = styled.div`
   height: 22px;
   text-align: center;
   border-radius: 4px;
+  padding: 0 5px;
 `

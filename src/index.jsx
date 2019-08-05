@@ -10,7 +10,7 @@ import './global.css'
 // 请求拦截器
 axios.interceptors.request.use(
   config => {
-    Toast.loading('Loading...')
+    Toast.loading('Loading...', 0)
     config.data = qs.stringify(config.data) // 转为formdata数据格式
     return config
   },
@@ -19,6 +19,12 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(config => {
   Toast.hide()
+  if (config.data.errorCode !== 0) {
+    if (config.data.errorCode === '20044013') {
+      window.location.href = '/login'
+    }
+    Toast.fail(config.data.errorMsg, 2)
+  }
   return config
 })
 
