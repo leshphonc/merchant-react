@@ -12,3 +12,66 @@ export const ColorCard = styled.div`
 export const CardLeft = styled.div`
   color: #fff;
 `
+
+export const ListItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-bottom: 1px solid rgb(0, 0, 0, 0.12);
+  margin-bottom: 4px;
+  color: #444;
+`
+
+export const ItemTop = styled.div`
+  display: flex;
+  flex: 1;
+  padding: 10px;
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+  }
+
+  .top-content {
+    display: flex;
+    padding-left: 12px;
+    justify-content: space-around;
+    flex: 1;
+    .content-left {
+      display: flex;
+      flex: 2;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+      div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .content-right {
+      display: flex;
+      flex: 3;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+      div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .hide {
+        visibility: hidden;
+      }
+    }
+  }
+`
+
+export const ItemBottom = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #eee;
+  padding: 10px;
+  font-size: 12px;
+`

@@ -6,6 +6,7 @@ import qs from 'qs'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import './global.css'
+import ErrorCode from '@/config/ErrorCode'
 
 // 请求拦截器
 axios.interceptors.request.use(
@@ -19,8 +20,8 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(config => {
   Toast.hide()
-  if (config.data.errorCode !== 0) {
-    if (config.data.errorCode === '20044013') {
+  if (config.data.errorCode !== ErrorCode.SUCCESS) {
+    if (config.data.errorCode === ErrorCode.NOTICKET) {
       window.location.href = '/login'
     }
     Toast.fail(config.data.errorMsg, 2)

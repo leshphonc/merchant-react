@@ -21,18 +21,33 @@ export const ItemTop = styled.div`
 
   .top-content {
     display: flex;
+    padding-left: 12px;
     justify-content: space-around;
     flex: 1;
     .content-left {
       display: flex;
+      flex: 2;
       flex-direction: column;
       justify-content: space-between;
+      min-width: 0;
+      div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
-    
+
     .content-right {
       display: flex;
+      flex: 3;
       flex-direction: column;
       justify-content: space-between;
+      min-width: 0;
+      div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
       .hide {
         visibility: hidden;
       }

@@ -81,8 +81,7 @@ class BasicInformation extends React.Component {
       Toast.info('请在微信环境下进行绑定')
     } else {
       const { basicInformation } = this.props
-      console.log(basicInformation.wxConfig)
-      await basicInformation.getWxConfig()
+      await basicInformation.getWxCode()
     }
   }
 
