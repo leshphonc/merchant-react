@@ -30,16 +30,15 @@ export const ItemTop = styled.div`
     width: 80px;
     height: 80px;
     border-radius: 4px;
+    padding-right: 12px;
   }
 
   .top-content {
     display: flex;
-    padding-left: 12px;
     justify-content: space-around;
     flex: 1;
     .content-left {
       display: flex;
-      flex: 2;
       flex-direction: column;
       justify-content: space-between;
       min-width: 0;
@@ -52,7 +51,6 @@ export const ItemTop = styled.div`
 
     .content-right {
       display: flex;
-      flex: 3;
       flex-direction: column;
       justify-content: space-between;
       min-width: 0;
@@ -74,4 +72,12 @@ export const ItemBottom = styled.div`
   border-top: 1px solid #eee;
   padding: 10px;
   font-size: 12px;
+  .bottom-feature {
+    display: flex;
+    justify-content: space-between;
+
+    & > a {
+      flex-basis: 48%;
+    }
+  }
 `

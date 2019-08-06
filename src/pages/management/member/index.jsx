@@ -24,10 +24,12 @@ export default () => (
         </ColorCard>
       </Link>
       <WhiteSpace />
-      <ColorCard style={{ background: 'rgb(255, 174, 108)' }}>
-        <CardLeft>会员卡分组</CardLeft>
-        <Icon type="right" color="#fff" />
-      </ColorCard>
+      <Link to="/management/member/cardGroup">
+        <ColorCard style={{ background: 'rgb(255, 174, 108)' }}>
+          <CardLeft>会员卡分组</CardLeft>
+          <Icon type="right" color="#fff" />
+        </ColorCard>
+      </Link>
       <WhiteSpace />
       <Link to="/management/member/coupon">
         <ColorCard style={{ background: 'rgb(255, 130, 131)' }}>

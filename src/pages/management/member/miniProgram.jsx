@@ -6,9 +6,6 @@ import NavBar from '@/common/NavBar'
 import moment from 'moment'
 import { ListItem, ItemTop } from './styled'
 
-// import FansList from './components/FansList'
-// import { MiniFansList } from '@/config/list'
-
 @inject('member')
 @observer
 class MiniProgram extends React.Component {
@@ -40,12 +37,12 @@ class MiniProgram extends React.Component {
         <ItemTop>
           <img className="avatar" src={item.avatar} alt="" />
           <div className="top-content">
-            <div className="content-left">
+            <div className="content-left" style={{ flex: 2 }}>
               <div>编号：{item.id}</div>
               <div>电话号码：{item.mobile || '暂无'}</div>
               <div>性别：{item.gender === '1' ? '男' : '女'}</div>
             </div>
-            <div className="content-right">
+            <div className="content-right" style={{ flex: 3 }}>
               <div>昵称：{item.nickname}</div>
               <div className="hide">hide</div>
               <div>注册时间：{moment(item.register_time * 1000).format('YYYY-MM-DD')}</div>
