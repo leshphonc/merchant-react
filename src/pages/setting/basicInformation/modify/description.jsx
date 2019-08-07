@@ -2,45 +2,43 @@ import React from 'react'
 import { observer, inject } from 'mobx-react'
 import NavBar from '@/common/NavBar'
 import {
-  WhiteSpace, List, InputItem, Button,
+  WhiteSpace, List, TextareaItem, Button,
 } from 'antd-mobile'
 
 @inject('basicInformation')
 @observer
-class ModifyPhone extends React.Component {
+class ModifyDescription extends React.Component {
   state = {
-    phone: null,
+    desc: null,
   }
 
   componentDidMount() {
     const { history } = this.props
     this.setState({
-      phone: history.location.state.value,
+      desc: history.location.state.value,
     })
   }
 
   submit = async () => {
     const { history, basicInformation } = this.props
-    const { phone } = this.state
-    await basicInformation.modifyPhone(phone)
+    const { desc } = this.state
+    await basicInformation.modifyDescription(desc)
     history.goBack()
   }
 
   render() {
-    const { phone } = this.state
+    const { desc } = this.state
     return (
       <React.Fragment>
-        <NavBar title="联系电话" goBack />
+        <NavBar title="商户描述" goBack />
         <WhiteSpace />
-        <List renderFooter="一个手机号只能作为一个账号的登录名，一个手机号最多可以被6个账号绑定">
-          <InputItem
-            placeholder="请输入您的手机号"
-            type="phone"
-            value={phone}
-            onChange={val => this.setState({ phone: val })}
-          >
-            手机号
-          </InputItem>
+        <List renderFooter="简要描述您的经营类型、范围等">
+          <TextareaItem
+            placeholder="请输入商户描述"
+            rows={6}
+            value={desc}
+            onChange={val => this.setState({ desc: val })}
+          />
         </List>
         <Button
           type="primary"
@@ -59,4 +57,4 @@ class ModifyPhone extends React.Component {
   }
 }
 
-export default ModifyPhone
+export default ModifyDescription

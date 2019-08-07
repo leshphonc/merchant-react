@@ -13,8 +13,8 @@ export const TabBarContainer = styled.div`
 export const Paper = styled.div`
   padding: 15px;
   background: #fff;
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+    0px 2px 1px -1px rgba(0, 0, 0, 0.12);
   border-radius: 4px;
 `
 
@@ -36,14 +36,14 @@ export const ListContent = styled.div`
     padding: 10px 0;
   }
   & > img {
-    width: 200px !important;
-    height: 200px !important;
+    width: 100% !important;
+    height: auto !important;
   }
 `
 
 // Menu遮罩组件
 export const MenuMask = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100%;
   height: 100%;
@@ -142,6 +142,7 @@ export const List = styled.div`
   }
 `
 
+// 自定义样式tag
 export const PrimaryTag = styled.div`
   background: #fff;
   color: #ffb000;
@@ -149,4 +150,5 @@ export const PrimaryTag = styled.div`
   height: 22px;
   text-align: center;
   border-radius: 4px;
+  padding: 0 5px;
 `

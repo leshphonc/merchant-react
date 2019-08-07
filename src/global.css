@@ -1,7 +1,7 @@
 /* antd-mobile组件样式覆盖 */
 .am-list-item .am-list-line .am-list-content {
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.77)
+  color: rgba(0, 0, 0, 0.77);
 }
 
 .am-list-item .am-list-line .am-list-extra {
@@ -10,7 +10,7 @@
 
 .am-list-item .am-input-label {
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.77)
+  color: rgba(0, 0, 0, 0.77);
 }
 
 .am-list-item .am-input-control {
@@ -22,11 +22,29 @@
   color: #888;
 }
 
+.am-list-footer {
+  font-size: 12px;
+}
+
 /* 定义menu位置在navbar下面 */
 .menu-position {
-  position: absolute;
+  position: fixed;
   top: 54px;
   left: 0;
   right: 0;
   z-index: 90;
+}
+
+/* 富文本工具栏换行 */
+.w-e-toolbar {
+  flex-wrap: wrap;
+}
+
+.w-e-text-container {
+  height: 60vh !important;
+}
+.w-e-text-container .w-e-panel-container {
+  width: 100% !important;
+  margin-left: 0 !important;
+  left: 0;
 }

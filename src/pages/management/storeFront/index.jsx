@@ -14,7 +14,7 @@ export default () => {
   ]
   const menuEl = (
     <Menu
-      className="menu-position "
+      className="menu-position"
       data={[
         {
           value: '1',

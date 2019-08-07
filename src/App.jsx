@@ -12,6 +12,7 @@ import StoreFront from '@/pages/management/storeFront'
 import Member from '@/pages/management/member'
 import MiniProgram from '@/pages/management/member/miniProgram'
 import PublicMember from '@/pages/management/member/publicMember'
+import CardGroup from '@/pages/management/member/cardGroup'
 import Coupon from '@/pages/management/member/coupon'
 import Commodity from '@/pages/management/commodity'
 import Group from '@/pages/management/commodity/group'
@@ -28,7 +29,7 @@ import ScanList from '@/pages/popularize/shopAssistant/scanList'
 import SaleList from '@/pages/popularize/shopAssistant/saleList'
 import FansList from '@/pages/popularize/shopAssistant/fansList'
 
-
+// mobx严格模式 生产环境使用observed 开发使用always
 configure({ enforceActions: 'always' })
 
 export default () => (
@@ -48,6 +49,7 @@ export default () => (
       <Route path="/management/member" exact component={Member} />
       <Route path="/management/member/miniProgram" component={MiniProgram} />
       <Route path="/management/member/publicMember" component={PublicMember} />
+      <Route path="/management/member/cardGroup" component={CardGroup} />
       <Route path="/management/member/coupon" component={Coupon} />
       <Route path="/management/commodity" exact component={Commodity} />
       <Route path="/management/commodity/group" component={Group} />
