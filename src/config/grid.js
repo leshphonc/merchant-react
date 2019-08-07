@@ -86,7 +86,7 @@ const AllianceGrid = {
   list: [
     {
       name: '联盟活动',
-      path: '1',
+      path: 'http://cs.7youke.com/wap.php?g=Wap&c=Wapactivity&a=activity_list',
       enable: require('../assets/image/lmhd.png'),
       disable: require('../assets/image/lmhd_gray.png'),
     },

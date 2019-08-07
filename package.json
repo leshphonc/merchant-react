@@ -52,7 +52,8 @@
     "react-app-rewired": "^2.1.3"
   },
   "theme": {
-    "brand-primary": "#ffb000"
+    "brand-primary": "#ffb000",
+    "brand-primary-tap": "#ff8811"
   },
   "proxy": "http://cs.7youke.com"
 }

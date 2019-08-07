@@ -4,7 +4,9 @@ import { Grid } from 'antd-mobile'
 import { Title, LinkBox } from './styled'
 
 export default props => {
-  const { data, col, imgSize, style } = props
+  const {
+    data, col, imgSize, style,
+  } = props
   const { title } = data
   const mapGrid = item => (
     <LinkBox style={style}>
@@ -17,13 +19,7 @@ export default props => {
   return (
     <React.Fragment>
       {title ? <Title>{title}</Title> : ''}
-      <Grid
-        data={data.list}
-        columnNum={col}
-        renderItem={mapGrid}
-        hasLine={false}
-        square={false}
-      />
+      <Grid data={data.list} columnNum={col} renderItem={mapGrid} hasLine={false} square={false} />
     </React.Fragment>
   )
 }

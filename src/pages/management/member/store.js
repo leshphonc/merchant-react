@@ -112,6 +112,42 @@ class MemberStore {
   }
 
   @action
+  operatingCardGroup = async (groupname, comment, discount, id) => {
+    if (id) {
+      await services.modifyCardGroup(groupname, comment, discount, id)
+    } else {
+      await services.insertCardGroup(groupname, comment, discount)
+    }
+  }
+
+  @action fetchCardGroupUsers = async id => {
+    let hasMore = true
+    if (this.cardGroupUsersListTotal !== null) {
+      hasMore = this.cardGroupUsersListPage * this.cardGroupUsersListSize < this.cardGroupUsersListTotal
+      if (hasMore) {
+        this.cardGroupUsersListPage += 1
+      }
+    }
+    const response = await services.fetchCardGroupUsers(
+      this.cardGroupUsersListPage,
+      this.cardGroupUsersListSize,
+      id,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      if (hasMore) {
+        runInAction(() => {
+          const arr = this.cardGroupUsersList
+          arr.push(...response.data.result.lists)
+          this.cardGroupUsersList = arr
+          this.cardGroupUsersListTotal = response.data.result.total - 0
+          this.couponCategory = response.data.result.category
+          this.couponPlatform = response.data.result.platform
+        })
+      }
+    }
+  }
+
+  @action
   fetchCouponList = async () => {
     let hasMore = true
     if (this.couponListTotal !== null) {
@@ -150,6 +186,11 @@ class MemberStore {
     this.cardGroupListPage = 1
     this.cardGroupListSize = 10
     this.cardGroupListTotal = null
+
+    this.cardGroupUsersList = []
+    this.cardGroupUsersListPage = 1
+    this.cardGroupUsersListSize = 10
+    this.cardGroupUsersListTotal = null
 
     this.couponList = []
     this.couponListPage = 1

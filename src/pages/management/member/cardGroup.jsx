@@ -6,6 +6,7 @@ import NavBar from '@/common/NavBar'
 import { WhiteSpace, Button, PullToRefresh } from 'antd-mobile'
 import { ListItem, ItemTop } from './styled'
 import ModifyCardGroup from './modify/group'
+import CardGroupUsers from './cardGroupUsers'
 
 @inject('member')
 @observer
@@ -31,7 +32,7 @@ class CardGroup extends React.Component {
   }
 
   mapList = () => {
-    const { member } = this.props
+    const { member, history } = this.props
     const { cardGroupList } = member
     return cardGroupList.map(item => (
       <ListItem key={item.id}>
@@ -44,7 +45,22 @@ class CardGroup extends React.Component {
               <WhiteSpace />
               <div>分组折扣：{item.discount}</div>
               <WhiteSpace />
-              <Button type="primary" size="small" style={{ width: 120 }}>
+              <Button
+                type="primary"
+                size="small"
+                style={{ width: 120 }}
+                onClick={() => history.push({
+                  pathname: '/management/member/cardGroup/modifyCardGroup',
+                  state: {
+                    type: '编辑',
+                    id: item.id,
+                    name: item.name,
+                    comment: item.des,
+                    discount: item.discount,
+                  },
+                })
+                }
+              >
                 编辑
               </Button>
             </div>
@@ -55,7 +71,16 @@ class CardGroup extends React.Component {
               <WhiteSpace />
               <div>分组用户数量：{item.user_count}</div>
               <WhiteSpace />
-              <Button type="primary" size="small" style={{ width: 120 }}>
+              <Button
+                type="primary"
+                size="small"
+                style={{ width: 120 }}
+                onClick={() => {
+                  history.push({
+                    pathname: '/management/member/cardGroup/cardGroupUsers',
+                  })
+                }}
+              >
                 查看分组用户
               </Button>
             </div>
@@ -118,5 +143,6 @@ export default () => (
   <React.Fragment>
     <Route path="/management/member/cardGroup" exact component={CardGroup} />
     <Route path="/management/member/cardGroup/modifyCardGroup" component={ModifyCardGroup} />
+    <Route path="/management/member/cardGroup/cardGroupUsers" component={CardGroupUsers} />
   </React.Fragment>
 )
