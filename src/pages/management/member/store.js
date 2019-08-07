@@ -3,41 +3,51 @@ import * as services from './services'
 import ErrorCode from '@/config/ErrorCode'
 
 class MemberStore {
-  @observable miniProgramList
+  @observable miniProgramList = []
 
-  @observable miniProgramListPage
+  @observable miniProgramListPage = 1
 
-  @observable miniProgramListSize
+  @observable miniProgramListSize = 10
 
-  @observable miniProgramListTotal
+  @observable miniProgramListTotal = null
 
-  @observable publicList
+  @observable publicList = []
 
-  @observable publicListPage
+  @observable publicListPage = 1
 
-  @observable publicListSize
+  @observable publicListSize = 10
 
-  @observable publicListTotal
+  @observable publicListTotal = null
 
-  @observable cardGroupList
+  @observable cardGroupList = []
 
-  @observable cardGroupListPage
+  @observable cardGroupListPage = 1
 
-  @observable cardGroupListSize
+  @observable cardGroupListSize = 10
 
-  @observable cardGroupListTotal
+  @observable cardGroupListTotal = null
 
-  @observable couponList
+  @observable cardGroupUsersList = []
 
-  @observable couponListPage
+  @observable cardGroupUsersListPage = 1
 
-  @observable couponListSize
+  @observable cardGroupUsersListSize = 10
 
-  @observable couponListTotal
+  @observable cardGroupUsersListTotal = null
 
-  @observable couponCategory
+  @observable cardGroupUserInfo = {}
 
-  @observable couponPlatform
+  @observable couponList = []
+
+  @observable couponListPage = 1
+
+  @observable couponListSize = 10
+
+  @observable couponListTotal = null
+
+  @observable couponCategory = {}
+
+  @observable couponPlatform = {}
 
   @action
   fetchMiniProgramList = async () => {
@@ -120,7 +130,8 @@ class MemberStore {
     }
   }
 
-  @action fetchCardGroupUsers = async id => {
+  @action
+  fetchCardGroupUsers = async id => {
     let hasMore = true
     if (this.cardGroupUsersListTotal !== null) {
       hasMore = this.cardGroupUsersListPage * this.cardGroupUsersListSize < this.cardGroupUsersListTotal
@@ -148,6 +159,16 @@ class MemberStore {
   }
 
   @action
+  fetchCardGroupUserInfo = async id => {
+    const response = await services.fetchCardGroupUserInfo(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.cardGroupUserInfo = response.data.result
+      })
+    }
+  }
+
+  @action
   fetchCouponList = async () => {
     let hasMore = true
     if (this.couponListTotal !== null) {
@@ -169,35 +190,6 @@ class MemberStore {
         })
       }
     }
-  }
-
-  constructor() {
-    this.miniProgramList = []
-    this.miniProgramListPage = 1
-    this.miniProgramListSize = 10
-    this.miniProgramListTotal = null
-
-    this.publicList = []
-    this.publicListPage = 1
-    this.publicListSize = 10
-    this.publicListTotal = null
-
-    this.cardGroupList = []
-    this.cardGroupListPage = 1
-    this.cardGroupListSize = 10
-    this.cardGroupListTotal = null
-
-    this.cardGroupUsersList = []
-    this.cardGroupUsersListPage = 1
-    this.cardGroupUsersListSize = 10
-    this.cardGroupUsersListTotal = null
-
-    this.couponList = []
-    this.couponListPage = 1
-    this.couponListSize = 10
-    this.couponListTotal = null
-    this.couponCategory = {}
-    this.couponPlatform = {}
   }
 }
 

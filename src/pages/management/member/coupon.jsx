@@ -33,7 +33,7 @@ class Coupon extends React.Component {
     const { member } = this.props
     const { couponPlatform } = member
     if (platform) {
-      return platform.map(item => couponPlatform[item])
+      return platform.map(item => `${couponPlatform[item]} `)
     }
     return '暂无'
   }
@@ -45,17 +45,16 @@ class Coupon extends React.Component {
       <ListItem key={item.coupon_id}>
         <ItemTop>
           <img className="avatar" src={item.img} alt="" />
-          <div className="top-content">
-            <div className="content-left" style={{ flex: 1 }}>
+          <div className="top-content" style={{ flexDirection: 'column' }}>
+            <div className="content-line" style={{ flex: 1 }}>
               <div>id：{item.coupon_id}</div>
               <div>使用类别：{couponCategory[item.cate_name]}</div>
-              <div>使用系统：{this.mapPlatform(item.platform)}</div>
             </div>
-            <div className="content-right" style={{ flex: 1 }}>
+            <div className="content-line" style={{ flex: 1 }}>
               <div>名称：{item.name}</div>
               <div>使用分类：{item.cate_id}</div>
-              <div className="hide">hide</div>
             </div>
+            <div>使用系统：{this.mapPlatform(item.platform)}</div>
           </div>
         </ItemTop>
         <ItemBottom>

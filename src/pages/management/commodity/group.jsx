@@ -1,6 +1,8 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import { WhiteSpace, List, InputItem, Picker } from 'antd-mobile'
+import {
+  WhiteSpace, List, InputItem, Picker,
+} from 'antd-mobile'
 import { createForm } from 'rc-form'
 import Tooltip from 'rc-tooltip'
 
@@ -23,12 +25,13 @@ class CateGoryPanel extends React.Component {
   state = {
     sValue: ['2013'],
   }
+
   render() {
     const { location, form } = this.props
     const { getFieldProps, getFieldError } = form
     return (
       <React.Fragment>
-        <NavBar title={location.state + '分类'} goBack />
+        <NavBar title={`${location.state}分类`} goBack />
         <WhiteSpace />
         <form>
           <List>
@@ -70,10 +73,7 @@ class CateGoryPanel extends React.Component {
                 placement="topLeft"
                 overlay="默认添加顺序排序！数值越大，排序越前"
               >
-                <i
-                  className="iconfont"
-                  style={{ marginLeft: 5, color: '#bbb' }}
-                >
+                <i className="iconfont" style={{ marginLeft: 5, color: '#bbb' }}>
                   &#xe628;
                 </i>
               </Tooltip>

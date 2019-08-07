@@ -32,7 +32,13 @@ export const modifyCardGroup = (name, des, discount, id) => axios.post('/appapi.
   ticket: localStorage.getItem('ticket'),
 })
 
-export const fetchCardGroupUsers = (page, size, id) => axios.post(`/appapi.php?c=Merchantapp&a=card_new_coupon&page=${page}&size=${size}`, {
-  id,
+export const fetchCardGroupUsers = (page, size, id) => axios.post(
+  `/appapi.php?c=Merchantapp&a=card_group_user_list&page=${page}&size=${size}&gid=${id}`,
+  {
+    ticket: localStorage.getItem('ticket'),
+  },
+)
+
+export const fetchCardGroupUserInfo = id => axios.post(`/appapi.php?c=Merchantapp&a=card_group_detail&gid=${id}`, {
   ticket: localStorage.getItem('ticket'),
 })

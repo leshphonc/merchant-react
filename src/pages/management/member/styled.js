@@ -37,6 +37,19 @@ export const ItemTop = styled.div`
     display: flex;
     justify-content: space-around;
     flex: 1;
+    font-size: 12px;
+    .content-line {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      min-width: 0;
+      div {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
     .content-left {
       display: flex;
       flex-direction: column;

@@ -5,8 +5,10 @@ import { Route, Link } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
 import { WhiteSpace, Button, PullToRefresh } from 'antd-mobile'
 import { ListItem, ItemTop } from './styled'
-import ModifyCardGroup from './modify/group'
+import ModifyCardGroup from './modify/cardGroup'
 import CardGroupUsers from './cardGroupUsers'
+import ModifyCardGroupUsers from './modify/cardGroupUsers'
+import ExpensesRecord from './expensesRecord'
 
 @inject('member')
 @observer
@@ -78,6 +80,9 @@ class CardGroup extends React.Component {
                 onClick={() => {
                   history.push({
                     pathname: '/management/member/cardGroup/cardGroupUsers',
+                    state: {
+                      id: item.id,
+                    },
                   })
                 }}
               >
@@ -144,5 +149,10 @@ export default () => (
     <Route path="/management/member/cardGroup" exact component={CardGroup} />
     <Route path="/management/member/cardGroup/modifyCardGroup" component={ModifyCardGroup} />
     <Route path="/management/member/cardGroup/cardGroupUsers" component={CardGroupUsers} />
+    <Route
+      path="/management/member/cardGroup/modifyCardGroupUsers"
+      component={ModifyCardGroupUsers}
+    />
+    <Route path="/management/member/cardGroup/expensesRecord" component={ExpensesRecord} />
   </React.Fragment>
 )
