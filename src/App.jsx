@@ -16,6 +16,10 @@ import CardGroup from '@/pages/management/member/cardGroup'
 import Coupon from '@/pages/management/member/coupon'
 import Commodity from '@/pages/management/commodity'
 import Group from '@/pages/management/commodity/group'
+import Reserve from '@/pages/management/commodity/reserve'
+import Catering from '@/pages/management/commodity/catering'
+import Retail from '@/pages/management/commodity/retail'
+import RetailAdd from '@/pages/management/commodity/retailAdd'
 import ManagementCategory from '@/pages/management/storeFront/managementCategory'
 import CategoryPanel from '@/pages/management/storeFront/categoryPanel'
 import BasicInformation from '@/pages/setting/basicInformation'
@@ -49,6 +53,10 @@ export default () => (
       <Route path="/management/member/coupon" component={Coupon} />
       <Route path="/management/commodity" exact component={Commodity} />
       <Route path="/management/commodity/group" component={Group} />
+      <Route path="/management/commodity/reserve" component={Reserve} />
+      <Route path="/management/commodity/catering" component={Catering} />
+      <Route path="/management/commodity/retail" component={Retail} />
+      <Route path="/management/commodity/retailAdd" component={RetailAdd} />
       {/* 基本信息 -> setting */}
       <Route path="/setting/basicInformation" component={BasicInformation} />
       {/* 商家推广 ->  popularize */}
