@@ -223,6 +223,92 @@ export const SaleList = [
   },
 ]
 
+export const Group = [
+  {
+    img: avatar,
+    name: 'madedf',
+    new_money: '45',
+    sold: '12',
+  },
+  {
+    img: avatar,
+    name: 'Limmy',
+    new_money: '45',
+    sold: '8',
+  },
+  {
+    img: avatar,
+    name: '意志坚定',
+    new_money: '45',
+    sold: '36',
+  },
+  {
+    img: avatar,
+    name: '一念永恒',
+    new_money: '45',
+    sold: '0',
+  },
+  {
+    img: avatar,
+    name: '同城',
+    new_money: '45',
+    sold: '78',
+  },
+  {
+    img: avatar,
+    name: '服务',
+    new_money: '45',
+    sold: '57',
+  },
+]
+
+export const Reserve = [
+  {
+    img: avatar,
+    name: 'Limmy',
+    ding_money: '45',
+    way: '到店',
+    reserve: '8',
+  },
+  {
+    img: avatar,
+    name: '意志坚定',
+    ding_money: '45',
+    way: '到店',
+    reserve: '36',
+  },
+  {
+    img: avatar,
+    name: '一念永恒',
+    ding_money: '45',
+    way: '到店',
+    reserve: '0',
+  },
+]
+
+export const CateringList = [
+  {
+    img: avatar,
+    name: 'Limmy',
+    price: '45',
+    state: '在售',
+    sold: '8',
+  },
+  {
+    img: avatar,
+    name: '意志坚定',
+    price: '45',
+    state: '在售',
+    sold: '36',
+  },
+  {
+    img: avatar,
+    name: '一念永恒',
+    ding_money: '45',
+    state: '在售',
+    sold: '0',
+  },
+]
 export const MiniFansList = [
   {
     id: 1,

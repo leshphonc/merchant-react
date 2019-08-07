@@ -1,17 +1,22 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-// import CardList from '@/common/ScanList'
-// import { ScanList } from '@/config/list'
-import { Button, List, DatePicker, WingBlank } from 'antd-mobile'
+import {
+  Button, List, DatePicker, WingBlank, Pagination, Flex,
+} from 'antd-mobile'
 import CardList from './components/ScanList'
 import { ScanList } from '@/config/list'
-import './index.module.css'
+import { ColorBox, Pages, Info } from './styled'
+import styles from './index.module.css'
 
 class ShopAssistant extends React.Component {
   state = {
     startdate: '',
     enddate: '',
+  }
 
+  locale = {
+    prevText: 'Prev',
+    nextText: 'Next',
   }
 
   render() {
@@ -22,53 +27,67 @@ class ShopAssistant extends React.Component {
           title="扫码记录"
           goBack
         />
-        {/* <CardList list={AssistantList} /> */}
-        <WingBlank size="md">
-          <div id="box">
-            <List className="top" style={{ textAlign: 'center' }}>
+        <WingBlank size="md" style={{ marginTop: '10px' }}>
+          <Flex>
+            <Flex.Item className={styles.tops} style={{ textAlign: 'center', background: '#ffb000' }}>
               今日推广
-            </List>
-            <List className="top">
-              <DatePicker
-                mode="date"
-                // title="Select Date"
-                value={startdate}
-                onChange={v => {
-                  this.setState({
-                    startdate: v,
-                  })
-                }}
-              >
-                <List.Item arrow=""></List.Item>
-              </DatePicker>
-            </List>
-            <List className="top">
-              <DatePicker
-                mode="date"
-                // title="Select Date"
-                value={enddate}
-                onChange={v => {
-                  this.setState({
-                    enddate: v,
-                  })
-                }}
-              >
-                <List.Item arrow=""></List.Item>
-              </DatePicker>
-            </List>
-            <Button className="btn-a" type="primary">查询</Button>
-          </div>
+            </Flex.Item>
+            <Flex.Item>
+              <ColorBox>
+                <DatePicker
+                  mode="date"
+                  value={startdate}
+                  onChange={v => {
+                    this.setState({
+                      startdate: v,
+                    })
+                  }}
+                >
+                  <List.Item arrow="" className={styles.top} />
+                </DatePicker>
+              </ColorBox>
+            </Flex.Item>
+            <Flex.Item>
+              <ColorBox>
+                <DatePicker
+                  mode="date"
+                  value={enddate}
+                  onChange={v => {
+                    this.setState({
+                      enddate: v,
+                    })
+                  }}
+                >
+                  <List.Item arrow="" className={styles.top} />
+                </DatePicker>
+              </ColorBox>
+            </Flex.Item>
+            <Flex.Item>
+              <Button className={styles.btna} type="primary">
+                查询
+              </Button>
+            </Flex.Item>
+          </Flex>
         </WingBlank>
-        <List className="top bg" style={{ width: '95%', margin: '0 auto', textAlign: 'center', marginBottom: '10px' }}>
-            当前记录
-        </List>
-        <List className="info">
-          <span style={{ width: '16vw', textAlign: 'center' }}>头像</span>
-          <span style={{ width: '20vw', textAlign: 'center' }}>昵称</span>
-          <span style={{ width: '28vw', textAlign: 'center' }}>扫码时间</span>
-          <span style={{ width: '25vw', textAlign: 'center' }}>推广内容</span>
-        </List>
-        <CardList list={ScanList} />
+        <WingBlank
+          size="md"
+          className={styles.bg}
+          style={{ width: '96%', margin: '10px auto', textAlign: 'center' }}
+        >
+          当前记录
+        </WingBlank>
+        <Info>
+          <List className="info">
+            <span style={{ width: '16vw', textAlign: 'center' }}>头像</span>
+            <span style={{ width: '20vw', textAlign: 'center' }}>昵称</span>
+            <span style={{ width: '28vw', textAlign: 'center' }}>扫码时间</span>
+            <span style={{ width: '25vw', textAlign: 'center' }}>推广内容</span>
+          </List>
+        </Info>
+        <Pages>
+          <CardList list={ScanList} />
+          <Pagination total={5} current={1} locale="locale" className="pages" />
+        </Pages>
       </React.Fragment>
     )
   }

@@ -1,4 +1,4 @@
-#box{
+.box{
   display: flex;
   justify-content: space-around;
   margin:6px 0;
@@ -7,39 +7,22 @@
   display: flex;
   justify-content: space-between;
 }
-.top{
+.top {
+  background-color: #ffb000;
+}
+.tops{
   background-color: #ffb000;
   width: 23vw;
   height: 10vw;
   line-height: 10vw;
 }
-.top >.am-list-body{
-  background-color: #ffb000;
-}
 .bg{
-  margin: 0px auto;
-  background: none;
-}
-.bg > .am-list-body{
+  width: 23vw;
+  height: 10vw;
+  line-height: 10vw;
   background-color: #ddd;
 }
-.top .am-list-item{
-  background-color: #ffb000;
-  padding-left:0;
-}
-.top .am-list-line{
-  padding-right:0;
-  justify-content: center;
-}
-.top .am-list-arrow{
-  position: absolute;
-  right:5px;
-}
-.top .am-list-extra{
-  overflow: initial !important;
-  text-overflow: inherit !important;
-}
-.btn-a{
+.btna{
   background-color: #ffb000;
   width: 24vw;
   height: 10vw;
@@ -48,19 +31,7 @@
   border-radius: 0;
   line-height: 10vw;
 }
-.top .am-list-extra{
-  color:#333 !important;
-}
-.top .am-list-item-middle{
-  min-height: 40px !important;
-}
-#nav .am-list-body{
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 24px 16px 10px;
-  border-bottom: 1px solid #aaa;
-}
-#foot{
+.foot{
   background: #ffb000;
   text-align: center;
   font-size: 16px;
@@ -70,9 +41,4 @@
   width: 100%;
   position: absolute;
   bottom: 0;
-}
-.info > .am-list-body{
-  display: flex;
-  justify-content: space-around;
-  padding:10px 0;
 }

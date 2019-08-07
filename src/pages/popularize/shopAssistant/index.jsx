@@ -1,13 +1,15 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-// import { AssistantList } from '@/config/list'
-// import CardList from '@/common/Generalize'
 import { observer, inject } from 'mobx-react'
-import { Button, List, DatePicker, Picker, WingBlank } from 'antd-mobile'
+import {
+  Button, Flex, List, DatePicker, Picker, WingBlank,
+} from 'antd-mobile'
 import { Link } from 'react-router-dom'
+import { ColorBox } from './styled'
 
-import './index.module.css'
+import styles from './index.module.css'
 
+const { Item } = List
 const seasons = [
   [
     {
@@ -21,7 +23,6 @@ const seasons = [
   ],
 ]
 
-// import enUs from 'antd-mobile/lib/date-picker/locale/en_US'
 @inject('shopAssistant')
 @observer
 class ShopAssistant extends React.Component {
@@ -45,75 +46,83 @@ class ShopAssistant extends React.Component {
           goBack
         />
         {/* <CardList list={AssistantList} /> */}
-        <WingBlank size="md">
-          <div id="box">
-            <List className="top">
-              <Picker
-                data={seasons}
-                cascade={false}
-                extra="全部店铺"
-                value={selectValue}
-                onChange={v => {
-                  this.setState({
-                    selectValue: v,
-                  })
-                }}
-              >
-                <List.Item arrow="horizontal"></List.Item>
-              </Picker>
-            </List>
-            <List className="date-picker-list top">
-              <DatePicker
-                mode="date"
-                // title="Select Date"
-                value={startdate}
-                onChange={v => {
-                  this.setState({
-                    startdate: v,
-                  })
-                }}
-              >
-                <List.Item arrow=""></List.Item>
-              </DatePicker>
-            </List>
-            <List className="date-picker-list top">
-              <DatePicker
-                mode="date"
-                // title="Select Date"
-                value={enddate}
-                onChange={v => {
-                  this.setState({
-                    enddate: v,
-                  })
-                }}
-              >
-                <List.Item arrow=""></List.Item>
-              </DatePicker>
-            </List>
-            <Button className="btn-a" type="primary">查询</Button>
-          </div>
+        <WingBlank size="md" style={{ marginTop: '10px' }}>
+          <Flex>
+            <Flex.Item>
+              <ColorBox>
+                <Picker
+                  data={seasons}
+                  cascade={false}
+                  extra="全部店铺"
+                  value={selectValue}
+                  onChange={v => {
+                    this.setState({
+                      selectValue: v,
+                    })
+                  }}
+                >
+                  <List.Item arrow="horizontal" className={styles.top}></List.Item>
+                </Picker>
+              </ColorBox>
+            </Flex.Item>
+            <Flex.Item>
+              <ColorBox>
+                <DatePicker
+                  mode="date"
+                  // title="Select Date"
+                  value={startdate}
+                  onChange={v => {
+                    this.setState({
+                      startdate: v,
+                    })
+                  }}
+                >
+                  <List.Item arrow="" className={styles.top}></List.Item>
+                </DatePicker>
+              </ColorBox>
+            </Flex.Item>
+            <Flex.Item>
+              <ColorBox>
+                <DatePicker
+                  mode="date"
+                  // title="Select Date"
+                  value={enddate}
+                  onChange={v => {
+                    this.setState({
+                      enddate: v,
+                    })
+                  }}
+                >
+                  <List.Item arrow="" className={styles.top}></List.Item>
+                </DatePicker>
+              </ColorBox>
+            </Flex.Item>
+            <Flex.Item>
+              <Button className={styles.btna} type="primary">查询</Button>
+            </Flex.Item>
+          </Flex>
         </WingBlank>
-        <List className="top" style={{ width: '96%', margin: '0 auto', textAlign: 'center', marginBottom: '10px' }}>
-            当前记录
-        </List>
-        <div id="nav">
-          <List>
-            <span>扫码总人数</span><span>11111</span>
+        <WingBlank size="md" className={styles.tops} style={{ width: '96%', margin: '10px auto', textAlign: 'center' }}>
+          当前记录
+        </WingBlank>
+        <div className={styles.nav}>
+          <List className="my-list">
+            <Item extra="7652">扫码总人数</Item>
           </List>
-          <List>
-            <span>绑粉总人数</span><span>5253</span>
+          <List className="my-list">
+            <Item extra="11">绑粉总人数</Item>
           </List>
-          <List>
-            <span>购买总人数</span><span>85531</span>
+          <List className="my-list">
+            <Item extra="6511">购买总人数</Item>
           </List>
-          <List>
-            <span>销售佣金</span><span>1585</span>
+          <List className="my-list">
+            <Item extra="4541">销售佣金</Item>
           </List>
-          <List>
-            <span>推广佣金</span><span>656563</span>
+          <List className="my-list">
+            <Item extra="11486">推广佣金</Item>
           </List>
         </div>
-        <div id="foot">
+        <div className={styles.foot}>
           <Link
             to={{
               pathname: '/popularize/shopAssistant/list',

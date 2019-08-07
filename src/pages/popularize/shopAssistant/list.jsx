@@ -4,7 +4,6 @@ import CardList from './components/Generalize'
 import { GeneralizeList } from '@/config/list'
 
 export default () => {
-  // const [menu, setMenu] = React.useState(false)
   return (
     <React.Fragment>
       <NavBar
