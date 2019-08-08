@@ -70,6 +70,17 @@ class MemberStore {
           this.miniProgramList = arr
           this.miniProgramListTotal = response.data.result.total - 0
         })
+      } else {
+        const remainder = this.miniProgramListTotal % this.miniProgramListSize
+        if (remainder) {
+          runInAction(() => {
+            this.miniProgramList.splice(this.miniProgramListTotal - remainder, remainder)
+            const arr = this.miniProgramList
+            arr.push(...response.data.result.lists)
+            this.miniProgramList = arr
+            this.miniProgramListTotal = response.data.result.total - 0
+          })
+        }
       }
     }
   }
@@ -92,6 +103,17 @@ class MemberStore {
           this.publicList = arr
           this.publicListTotal = response.data.result.total - 0
         })
+      } else {
+        const remainder = this.publicListTotal % this.publicListSize
+        if (remainder) {
+          runInAction(() => {
+            this.publicList.splice(this.publicListTotal - remainder, remainder)
+            const arr = this.publicList
+            arr.push(...response.data.result.lists)
+            this.publicList = arr
+            this.publicListTotal = response.data.result.total - 0
+          })
+        }
       }
     }
   }
@@ -117,6 +139,17 @@ class MemberStore {
           this.cardGroupList = arr
           this.cardGroupListTotal = response.data.result.total - 0
         })
+      } else {
+        const remainder = this.cardGroupListTotal % this.cardGroupListSize
+        if (remainder) {
+          runInAction(() => {
+            this.cardGroupList.splice(this.cardGroupListTotal - remainder, remainder)
+            const arr = this.cardGroupList
+            arr.push(...response.data.result.lists)
+            this.cardGroupList = arr
+            this.cardGroupListTotal = response.data.result.total - 0
+          })
+        }
       }
     }
   }
@@ -124,7 +157,18 @@ class MemberStore {
   @action
   operatingCardGroup = async (groupname, comment, discount, id) => {
     if (id) {
-      await services.modifyCardGroup(groupname, comment, discount, id)
+      const response = await services.modifyCardGroup(groupname, comment, discount, id)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        this.cardGroupList.forEach((item, index) => {
+          if (item.id === id) {
+            runInAction(() => {
+              this.cardGroupList[index].name = groupname
+              this.cardGroupList[index].des = comment
+              this.cardGroupList[index].discount = discount
+            })
+          }
+        })
+      }
     } else {
       await services.insertCardGroup(groupname, comment, discount)
     }
@@ -151,9 +195,18 @@ class MemberStore {
           arr.push(...response.data.result.lists)
           this.cardGroupUsersList = arr
           this.cardGroupUsersListTotal = response.data.result.total - 0
-          this.couponCategory = response.data.result.category
-          this.couponPlatform = response.data.result.platform
         })
+      } else {
+        const remainder = this.cardGroupUsersListTotal % this.cardGroupUsersListSize
+        if (remainder) {
+          runInAction(() => {
+            this.cardGroupUsersList.splice(this.cardGroupUsersListTotal - remainder, remainder)
+            const arr = this.cardGroupUsersList
+            arr.push(...response.data.result.lists)
+            this.cardGroupUsersList = arr
+            this.cardGroupUsersListTotal = response.data.result.total - 0
+          })
+        }
       }
     }
   }
@@ -188,6 +241,19 @@ class MemberStore {
           this.couponCategory = response.data.result.category
           this.couponPlatform = response.data.result.platform
         })
+      } else {
+        const remainder = this.couponListTotal % this.couponListSize
+        if (remainder) {
+          runInAction(() => {
+            this.couponList.splice(this.couponListTotal - remainder, remainder)
+            const arr = this.couponList
+            arr.push(...response.data.result.lists)
+            this.couponList = arr
+            this.couponListTotal = response.data.result.total - 0
+            this.couponCategory = response.data.result.category
+            this.couponPlatform = response.data.result.platform
+          })
+        }
       }
     }
   }

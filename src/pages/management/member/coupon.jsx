@@ -20,8 +20,9 @@ class Coupon extends React.Component {
 
   componentDidMount() {
     const { member } = this.props
+    const { couponListTotal } = member
     const { height } = this.state
-    member.fetchCouponList()
+    if (!couponListTotal) member.fetchCouponList()
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({

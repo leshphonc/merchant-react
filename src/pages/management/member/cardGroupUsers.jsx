@@ -20,8 +20,9 @@ class CardGroupUsers extends React.Component {
 
   componentDidMount() {
     const { member, location } = this.props
+    const { cardGroupUsersListTotal } = member
     const { height } = this.state
-    member.fetchCardGroupUsers(location.state.id)
+    if (!cardGroupUsersListTotal) member.fetchCardGroupUsers(location.state.id)
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({

@@ -28,7 +28,11 @@ class ModifyGroup extends React.Component {
   submit = async () => {
     const { location, history, member } = this.props
     const { groupname, comment, discount } = this.state
-    await member.operatingCardGroup(groupname, comment, discount, location.state.id)
+    if (location.state.type === '编辑') {
+      await member.operatingCardGroup(groupname, comment, discount, location.state.id)
+    } else {
+      await member.operatingCardGroup(groupname, comment, discount)
+    }
     history.goBack()
   }
 

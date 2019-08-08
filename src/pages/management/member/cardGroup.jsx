@@ -10,6 +10,7 @@ import CardGroupUsers from './cardGroupUsers'
 import ModifyCardGroupUsers from './modify/cardGroupUsers'
 import ExpensesRecord from './expensesRecord'
 
+let defaultScrollTop = 0
 @inject('member')
 @observer
 class CardGroup extends React.Component {
@@ -24,13 +25,25 @@ class CardGroup extends React.Component {
 
   componentDidMount() {
     const { member } = this.props
+    const { cardGroupListTotal } = member
     const { height } = this.state
-    member.fetchCardGroupList()
+    if (!cardGroupListTotal) member.fetchCardGroupList()
     /* eslint react/no-find-dom-node: 0 */
-    const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
-    this.setState({
-      height: hei,
-    })
+    const dom = ReactDOM.findDOMNode(this.refresh.current)
+    const hei = height - dom.offsetTop
+    this.setState(
+      {
+        height: hei,
+      },
+      () => {
+        dom.scrollTop = defaultScrollTop
+      },
+    )
+  }
+
+  componentWillUnmount() {
+    const dom = ReactDOM.findDOMNode(this.refresh.current)
+    defaultScrollTop = dom.scrollTop
   }
 
   mapList = () => {

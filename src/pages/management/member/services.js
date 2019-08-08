@@ -17,18 +17,18 @@ export const fetchCouponList = (page, size) => axios.post(`/appapi.php?c=Merchan
 })
 
 // 没有
-export const insertCardGroup = (name, des, discount) => axios.post('/appapi.php?c=Merchantapp&a=card_new_coupon', {
+export const insertCardGroup = (name, des, discount) => axios.post('/appapi.php?c=Merchantapp&a=add_card_group', {
   name,
   des,
   discount,
   ticket: localStorage.getItem('ticket'),
 })
 
-export const modifyCardGroup = (name, des, discount, id) => axios.post('/appapi.php?c=Merchantapp&a=card_new_coupon', {
+export const modifyCardGroup = (name, des, discount, gid) => axios.post('/appapi.php?c=Merchantapp&a=edit_card_group', {
   name,
   des,
   discount,
-  id,
+  gid,
   ticket: localStorage.getItem('ticket'),
 })
 
