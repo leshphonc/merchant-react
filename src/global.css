@@ -57,3 +57,25 @@
   margin-left: 0 !important;
   left: 0;
 }
+
+/* switch自定义样式 */
+.am-switch .checkbox {
+  width: 40px;
+  height: 14px;
+}
+
+.am-switch .checkbox:before {
+  width: 37px;
+  height: 12px;
+}
+
+.am-switch .checkbox:after{
+  width: 20px;
+  height: 20px;
+  top: -3px;
+  left: 0;
+}
+
+.am-switch input[type='checkbox']:checked + .checkbox:after {
+  transform: translateX(19px);
+}

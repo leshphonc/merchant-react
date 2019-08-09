@@ -62,6 +62,11 @@ class BasicInformationSotre {
   }
 
   @action
+  modifyCoordinate = async (lng, lat, address) => {
+    await services.modifyCoordinate(lng, lat, address)
+  }
+
+  @action
   modifyCategory = async arr => {
     if (!(arr[0] === this.basicInfo.cat_fid)) {
       const response = await services.updateInfo('cat_fid', arr[0])

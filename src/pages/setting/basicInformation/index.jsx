@@ -11,6 +11,7 @@ import ModifyEmail from './modify/email'
 import ModifyDescription from './modify/description'
 import ModifyPicture from './modify/picture'
 import ModifyDetail from './modify/detail'
+import ModifyCoordinate from './modify/coordinate'
 import NavBar from '@/common/NavBar'
 import {
   CustomizeList, ListTitle, ListContent, PrimaryTag, MenuMask,
@@ -189,6 +190,22 @@ class BasicInformation extends React.Component {
             >
               线下支付权限
             </Item>
+            <Item
+              arrow="horizontal"
+              extra={`${basicInfo.long || 0}, ${basicInfo.lat || 0}`}
+              onClick={() => {
+                history.push({
+                  pathname: '/setting/basicInformation/modifyCoordinate',
+                  state: {
+                    lng: basicInfo.long,
+                    lat: basicInfo.lat,
+                    address: basicInfo.adress,
+                  },
+                })
+              }}
+            >
+              商户经纬度
+            </Item>
             <Item arrow="empty" extra={this.getMenuList()}>
               商户所属分类
             </Item>
@@ -283,5 +300,6 @@ export default () => (
     <Route path="/setting/basicInformation/modifyDescription" component={ModifyDescription} />
     <Route path="/setting/basicInformation/modifyPicture" component={ModifyPicture} />
     <Route path="/setting/basicInformation/modifyDetail" component={ModifyDetail} />
+    <Route path="/setting/basicInformation/modifyCoordinate" component={ModifyCoordinate} />
   </React.Fragment>
 )
