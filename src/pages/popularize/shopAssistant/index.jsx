@@ -5,53 +5,56 @@ import {
   Button, Flex, List, DatePicker, Picker, WingBlank,
 } from 'antd-mobile'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
 import { ColorBox } from './styled'
-
 import styles from './index.module.css'
 
 const { Item } = List
-const seasons = [
-  [
-    {
-      label: '2013',
-      value: '2013',
-    },
-    {
-      label: '2014',
-      value: '2014',
-    },
-  ],
-]
-
+// const seasons = [selectValues]
+// console.log(seasons)
 @inject('shopAssistant')
 @observer
 class ShopAssistant extends React.Component {
-  state = {
-    selectValue: '',
+  constructor(props) {
+    super(props)
+    this.state = {
+      selectValue: '',
+      startdate: '',
+      enddate: '',
+    }
+    this.refresh = React.createRef()
   }
 
-  timedate = {
-    startdate: '',
-    enddate: '',
+  componentDidMount() {
+    const { shopAssistant } = this.props
+    shopAssistant.fetchStatisticsInfo()
+    shopAssistant.fetchSelectValues()
+  }
 
+  search = () => {
+    const { startdate, enddate, selectValue } = this.state
+    const { shopAssistant } = this.props
+    // const { selectValues } = shopAssistant
+    const searchStartDate = moment(startdate).format('YYYY-MM-DD')
+    const searchEndDate = moment(enddate).format('YYYY-MM-DD')
+    console.log(searchStartDate)
+    console.log(searchEndDate)
+    shopAssistant.fetchStatisticsInfo(selectValue[0], searchStartDate, searchEndDate)
   }
 
   render() {
-    const { selectValue } = this.state
-    const { startdate, enddate } = this.state
+    const { selectValue, startdate, enddate } = this.state
+    const { shopAssistant } = this.props
+    const { statisticsInfo, selectValues } = shopAssistant
     return (
       <React.Fragment>
-        <NavBar
-          title="推广统计"
-          goBack
-        />
-        {/* <CardList list={AssistantList} /> */}
+        <NavBar title="推广统计" goBack />
         <WingBlank size="md" style={{ marginTop: '10px' }}>
           <Flex>
             <Flex.Item>
               <ColorBox>
                 <Picker
-                  data={seasons}
+                  data={[selectValues]}
                   cascade={false}
                   extra="全部店铺"
                   value={selectValue}
@@ -59,9 +62,10 @@ class ShopAssistant extends React.Component {
                     this.setState({
                       selectValue: v,
                     })
+                    shopAssistant.fetchStatisticsInfo(v[0])
                   }}
                 >
-                  <List.Item arrow="horizontal" className={styles.top}></List.Item>
+                  <List.Item className={styles.top} />
                 </Picker>
               </ColorBox>
             </Flex.Item>
@@ -69,7 +73,7 @@ class ShopAssistant extends React.Component {
               <ColorBox>
                 <DatePicker
                   mode="date"
-                  // title="Select Date"
+                  extra="选择时间"
                   value={startdate}
                   onChange={v => {
                     this.setState({
@@ -77,7 +81,7 @@ class ShopAssistant extends React.Component {
                     })
                   }}
                 >
-                  <List.Item arrow="" className={styles.top}></List.Item>
+                  <List.Item className={styles.top} />
                 </DatePicker>
               </ColorBox>
             </Flex.Item>
@@ -85,7 +89,7 @@ class ShopAssistant extends React.Component {
               <ColorBox>
                 <DatePicker
                   mode="date"
-                  // title="Select Date"
+                  extra="选择时间"
                   value={enddate}
                   onChange={v => {
                     this.setState({
@@ -93,45 +97,58 @@ class ShopAssistant extends React.Component {
                     })
                   }}
                 >
-                  <List.Item arrow="" className={styles.top}></List.Item>
+                  <List.Item className={styles.top} />
                 </DatePicker>
               </ColorBox>
             </Flex.Item>
             <Flex.Item>
-              <Button className={styles.btna} type="primary">查询</Button>
+              <Button className={styles.btna} type="primary" onClick={this.search}>
+                查询
+              </Button>
             </Flex.Item>
           </Flex>
         </WingBlank>
-        <WingBlank size="md" className={styles.tops} style={{ width: '96%', margin: '10px auto', textAlign: 'center' }}>
+        <WingBlank
+          size="md"
+          className={styles.tops}
+          style={{ width: '96%', margin: '10px auto', textAlign: 'center' }}
+        >
           当前记录
         </WingBlank>
         <div className={styles.nav}>
           <List className="my-list">
-            <Item extra="7652">扫码总人数</Item>
+            <Item extra={statisticsInfo.scan || 0}>扫码总人数</Item>
           </List>
           <List className="my-list">
-            <Item extra="11">绑粉总人数</Item>
+            <Item extra={statisticsInfo.fans || 0}>绑粉总人数</Item>
           </List>
           <List className="my-list">
-            <Item extra="6511">购买总人数</Item>
+            <Item extra={statisticsInfo.sale || 0}>购买总人数</Item>
           </List>
           <List className="my-list">
-            <Item extra="4541">销售佣金</Item>
+            <Item extra={statisticsInfo.sale_money || 0}>销售佣金</Item>
           </List>
           <List className="my-list">
-            <Item extra="11486">推广佣金</Item>
+            <Item extra={statisticsInfo.spread_money || 0}>推广佣金</Item>
           </List>
         </div>
-        <div className={styles.foot}>
-          <Link
-            to={{
-              pathname: '/popularize/shopAssistant/list',
-            }}
-            style={{ color: '#333' }}
-          >
+        {selectValue ? (
+          <div className={styles.foot}>
+            <Link
+              to={{
+                pathname: '/popularize/shopAssistant/list',
+                state: {
+                  id: selectValue[0],
+                },
+              }}
+              style={{ color: '#333' }}
+            >
               查看推广详情
-          </Link>
-        </div>
+            </Link>
+          </div>
+        ) : (
+          ''
+        )}
       </React.Fragment>
     )
   }

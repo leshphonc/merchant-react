@@ -11,7 +11,9 @@ export const ColorBox = styled.div`
       right:0px;
     }
     .am-list-extra{
-      overflow: initial !important;
+      flex-basis: 96%;
+      overflow: hidden;
+      text-align:center;
       text-overflow: inherit !important;
       color:#333 !important;
       font-size: 15px !important;
