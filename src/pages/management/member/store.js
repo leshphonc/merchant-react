@@ -380,9 +380,17 @@ class MemberStore {
   }
 
   @action
-  checkCouponCode = async code => {
-    const response = await services.checkCouponCode(code)
-    console.log(response)
+  checkCouponCode = async (id, code) => {
+    const response = await services.checkCouponCode(id, code)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      this.couponCheckList.forEach((item, index) => {
+        if (item.id === id) {
+          runInAction(() => {
+            this.couponCheckList[index].is_use = '1'
+          })
+        }
+      })
+    }
   }
 }
 

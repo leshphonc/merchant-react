@@ -1,7 +1,11 @@
 import React from 'react'
-import { InputItem, Button, Toast } from 'antd-mobile'
+import {
+  Flex, InputItem, Button, Toast, WingBlank, Checkbox,
+} from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
-import { Container, Box } from './styled'
+import {
+  Container, Box, Avatar, InputBox,
+} from './styled'
 
 @inject('login')
 @observer
@@ -14,29 +18,51 @@ class Login extends React.Component {
   submit = () => {
     const { login, history } = this.props
     const { account, password } = this.state
-    login.login(account, password).then(() => {
-      history.push('/')
-      Toast.success('欢迎回来', 2, null, false)
-    })
+    login
+      .login(account, password)
+      .then(() => {
+        history.push('/')
+        Toast.success('欢迎回来', 2, null, false)
+      })
+      .catch(val => {
+        console.log(val)
+      })
   }
 
   render() {
     const { login } = this.props
     const { account, password } = this.state
-    console.log(login)
     return (
       <Container>
         <Box>
-          <InputItem
-            value={account}
-            onChange={val => this.setState({ account: val })}
-          />
-          <InputItem
-            type="password"
-            value={password}
-            onChange={val => this.setState({ password: val })}
-          />
-          <Button onClick={this.submit}>btn</Button>
+          <Avatar>
+            <img src={require('@/assets/image/logo.jpg')} alt="" />
+          </Avatar>
+          <InputBox>
+            <i className="iconfont">&#xe640;</i>
+            <InputItem
+              value={account}
+              placeholder="用户名/手机号/邮箱"
+              onChange={val => this.setState({ account: val })}
+            />
+          </InputBox>
+          <InputBox>
+            <i className="iconfont">&#xe62a;</i>
+            <InputItem
+              type="password"
+              placeholder="密码"
+              value={password}
+              onChange={val => this.setState({ password: val })}
+            />
+          </InputBox>
+          <WingBlank>
+            <Flex justify="end" style={{ marginBottom: '15vh' }}>
+              <span style={{ color: '#ffb000', fontSize: 13 }}>找回密码？</span>
+            </Flex>
+          </WingBlank>
+          <Button onClick={this.submit} type="primary">
+            登录
+          </Button>
           {JSON.stringify(login.list)}
         </Box>
       </Container>

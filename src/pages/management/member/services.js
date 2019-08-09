@@ -81,7 +81,7 @@ export const changeCouponStatus = (id, status) => axios.post('/appapi.php?c=Merc
   status,
 })
 
-export const checkCouponCode = code => axios.post('/appapi.php?c=Merchantapp&a=use_couponcode', {
+export const checkCouponCode = (id, code) => axios.post('/appapi.php?c=Merchantapp&a=use_couponcode', {
   ticket: localStorage.getItem('ticket'),
-  code,
+  code: `${id}d${code}`,
 })
