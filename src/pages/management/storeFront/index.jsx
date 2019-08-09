@@ -31,7 +31,7 @@ export default () => {
     />
   )
   return (
-    <div>
+    <React.Fragment>
       <NavBar
         title="店铺管理"
         goBack
@@ -44,6 +44,6 @@ export default () => {
       </Tabs>
       {menu ? menuEl : null}
       {menu ? <MenuMask onClick={() => setMenu(false)} /> : null}
-    </div>
+    </React.Fragment>
   )
 }

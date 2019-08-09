@@ -152,3 +152,47 @@ export const PrimaryTag = styled.div`
   border-radius: 4px;
   padding: 0 5px;
 `
+
+// 导航栏中间加号
+
+export const AddBtnBox = styled.div`
+  position: relative;
+  z-index: 1;
+  margin-bottom: 40px;
+  .text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -9px;
+    font-size: 12px;
+    z-index: 2;
+  }
+  .mask {
+    background: #fff;
+    position: absolute;
+    width: 116%;
+    left: -8%;
+    height: 50px;
+    bottom: -17px;
+    z-index: 1;
+  }
+`
+export const AddBtn = styled.div`
+  width: 58px;
+  height: 58px;
+  border-radius: 60px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 5px 2px #ccc;
+  div {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    line-height: 40px;
+    color: #fff;
+    background: #ffb000;
+    z-index: 2;
+  }
+`

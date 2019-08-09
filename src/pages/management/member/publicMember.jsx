@@ -20,8 +20,9 @@ class PublicMember extends React.Component {
 
   componentDidMount() {
     const { member } = this.props
+    const { publicList } = member
     const { height } = this.state
-    member.fetchPublicList()
+    if (!publicList.length) member.fetchPublicList()
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
@@ -34,30 +35,33 @@ class PublicMember extends React.Component {
     const { publicList } = member
 
     return publicList.map(item => (
-      <ListItem key={item.uid}>
-        <ItemTop>
-          <img className="avatar" src={item.avatar} alt="" />
-          <div className="top-content">
-            <div className="content-left">
-              <div>编号：{item.id}</div>
-              <div>电话号码：{item.mobile || '暂无'}</div>
-              <div>性别：{item.gender === '1' ? '男' : '女'}</div>
+      <React.Fragment key={item.uid}>
+        <ListItem>
+          <ItemTop>
+            <img className="avatar" src={item.avatar} alt="" />
+            <div className="top-content">
+              <div className="content-left">
+                <div>编号：{item.id}</div>
+                <div>电话号码：{item.mobile || '暂无'}</div>
+                <div>性别：{item.gender === '1' ? '男' : '女'}</div>
+              </div>
+              <div className="content-right">
+                <div>昵称：{item.nickname}</div>
+                <div className="hide">hide</div>
+                <div>注册时间：{moment(item.register_time * 1000).format('YYYY-MM-DD')}</div>
+              </div>
             </div>
-            <div className="content-right">
-              <div>昵称：{item.nickname}</div>
-              <div className="hide">hide</div>
-              <div>注册时间：{moment(item.register_time * 1000).format('YYYY-MM-DD')}</div>
-            </div>
-          </div>
-        </ItemTop>
-        <ItemBottom>
-          <div>关注时间：{moment(item.dateline * 1000).format('YYYY-MM-DD')}</div>
-          <WhiteSpace />
-          <div>最后登录：{item.lasted}</div>
-          <WhiteSpace />
-          <div>获取渠道：{item.type}</div>
-        </ItemBottom>
-      </ListItem>
+          </ItemTop>
+          <ItemBottom>
+            <div>关注时间：{moment(item.dateline * 1000).format('YYYY-MM-DD')}</div>
+            <WhiteSpace />
+            <div>最后登录：{item.lasted}</div>
+            <WhiteSpace />
+            <div>获取渠道：{item.type}</div>
+          </ItemBottom>
+        </ListItem>
+        <WhiteSpace />
+      </React.Fragment>
     ))
   }
 
@@ -75,7 +79,6 @@ class PublicMember extends React.Component {
     return (
       <React.Fragment>
         <NavBar title="公众号粉丝" goBack />
-        <WhiteSpace />
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}
@@ -87,6 +90,7 @@ class PublicMember extends React.Component {
           direction="up"
           onRefresh={this.loadMore}
         >
+          <WhiteSpace />
           {this.mapList()}
         </PullToRefresh>
       </React.Fragment>

@@ -35,6 +35,11 @@
   z-index: 90;
 }
 
+/* 导航栏阴影 */
+.am-tab-bar-bar {
+  box-shadow: 0 0 10px 1px #ccc;
+}
+
 /* 富文本工具栏换行 */
 .w-e-toolbar {
   flex-wrap: wrap;

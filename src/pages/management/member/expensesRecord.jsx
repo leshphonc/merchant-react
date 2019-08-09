@@ -1,17 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
-import NavBar from '@/common/NavBar'
 import {
-  WingBlank, WhiteSpace, Card, PullToRefresh, Flex, Button, Modal,
+  Card, WingBlank, WhiteSpace, Flex, PullToRefresh,
 } from 'antd-mobile'
+import NavBar from '@/common/NavBar'
 import moment from 'moment'
-
-const { prompt } = Modal
 
 @inject('member')
 @observer
-class CouponCheck extends React.Component {
+class ExpensesRecord extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -23,9 +21,9 @@ class CouponCheck extends React.Component {
 
   componentDidMount() {
     const { member, location } = this.props
-    const { couponCheckList } = member
+    const { expensesRecordList } = member
     const { height } = this.state
-    if (!couponCheckList.length) member.fetchCouponCheckList(location.state.id)
+    if (!expensesRecordList.length) member.fetchExpensesRecordList(location.state.id)
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
@@ -35,57 +33,31 @@ class CouponCheck extends React.Component {
 
   mapList = () => {
     const { member } = this.props
-    const { couponCheckList } = member
-    return couponCheckList.map(item => (
+    const { expensesRecordList } = member
+    return expensesRecordList.map(item => (
       <React.Fragment key={item.id}>
         <Card>
-          <Card.Header
-            thumb={item.avatar}
-            thumbStyle={{ width: 50, height: 50 }}
-            title={item.name}
-          />
+          <Card.Header title={item.desc} style={{ fontSize: 16 }} />
           <Card.Body style={{ fontSize: 11 }}>
             <Flex>
               <Flex.Item>
-                <div>用户昵称：{item.nickname || '暂无'}</div>
+                <div>金额增加(元): {item.money_add}</div>
                 <WhiteSpace />
-                <div>用户手机：{item.phone || '暂无'}</div>
+                <div>积分增加(元): {item.score_add}</div>
                 <WhiteSpace />
-                <div>
-                  领取时间：{moment(item.receive_time * 1000).format('YYYY-MM-DD') || '暂无'}
-                </div>
+                <div>优惠券增加(元): {item.coupon_add}</div>
               </Flex.Item>
               <Flex.Item>
-                <div>id：{item.id || '暂无'}</div>
+                <div>金额减少(元): {item.money_use}</div>
                 <WhiteSpace />
-                <div>领取数量：{item.num || '暂无'}</div>
+                <div>积分减少(元): {item.score_use}</div>
                 <WhiteSpace />
-                <div style={{ visibility: 'hidden' }} />
+                <div>优惠券减少(元): {item.coupon_use}</div>
               </Flex.Item>
             </Flex>
           </Card.Body>
           <WhiteSpace />
-          <Card.Footer
-            style={{ alignItems: 'center' }}
-            content={item.is_use === '0' ? '未使用' : '已使用'}
-            extra={
-              item.is_use === '0' ? (
-                <Button
-                  type="primary"
-                  size="small"
-                  onClick={() => {
-                    prompt('核销', '输入核销码进行核销', [
-                      { text: '取消' },
-                      { text: '确定', onPress: code => member.checkCouponCode(code) },
-                    ])
-                  }}
-                >
-                  核销
-                </Button>
-              ) : null
-            }
-          />
-          <WhiteSpace />
+          <Card.Footer extra={moment(item.time * 1000).format('YYYY-MM-DD hh:mm:ss')} />
         </Card>
         <WhiteSpace />
       </React.Fragment>
@@ -95,7 +67,7 @@ class CouponCheck extends React.Component {
   loadMore = async () => {
     const { member, location } = this.props
     this.setState({ refreshing: true })
-    await member.fetchCouponCheckList(location.state.id)
+    await member.fetchExpensesRecordList(location.state.id)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
@@ -105,7 +77,7 @@ class CouponCheck extends React.Component {
     const { height, refreshing } = this.state
     return (
       <React.Fragment>
-        <NavBar title="优惠券领用列表" goBack />
+        <NavBar title="会员消费记录" goBack />
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}
@@ -125,4 +97,4 @@ class CouponCheck extends React.Component {
   }
 }
 
-export default CouponCheck
+export default ExpensesRecord

@@ -20,8 +20,9 @@ class MiniProgram extends React.Component {
 
   componentDidMount() {
     const { member } = this.props
+    const { miniProgramList } = member
     const { height } = this.state
-    member.fetchMiniProgramList()
+    if (!miniProgramList.length) member.fetchMiniProgramList()
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
@@ -33,23 +34,26 @@ class MiniProgram extends React.Component {
     const { member } = this.props
     const { miniProgramList } = member
     return miniProgramList.map(item => (
-      <ListItem key={item.id}>
-        <ItemTop>
-          <img className="avatar" src={item.avatar} alt="" />
-          <div className="top-content">
-            <div className="content-left" style={{ flex: 2 }}>
-              <div>编号：{item.id}</div>
-              <div>电话号码：{item.mobile || '暂无'}</div>
-              <div>性别：{item.gender === '1' ? '男' : '女'}</div>
+      <React.Fragment key={item.id}>
+        <ListItem>
+          <ItemTop>
+            <img className="avatar" src={item.avatar} alt="" />
+            <div className="top-content">
+              <div className="content-left" style={{ flex: 2 }}>
+                <div>编号：{item.id}</div>
+                <div>电话号码：{item.mobile || '暂无'}</div>
+                <div>性别：{item.gender === '1' ? '男' : '女'}</div>
+              </div>
+              <div className="content-right" style={{ flex: 3 }}>
+                <div>昵称：{item.nickname}</div>
+                <div className="hide">hide</div>
+                <div>注册时间：{moment(item.register_time * 1000).format('YYYY-MM-DD')}</div>
+              </div>
             </div>
-            <div className="content-right" style={{ flex: 3 }}>
-              <div>昵称：{item.nickname}</div>
-              <div className="hide">hide</div>
-              <div>注册时间：{moment(item.register_time * 1000).format('YYYY-MM-DD')}</div>
-            </div>
-          </div>
-        </ItemTop>
-      </ListItem>
+          </ItemTop>
+        </ListItem>
+        <WhiteSpace />
+      </React.Fragment>
     ))
   }
 
@@ -67,7 +71,6 @@ class MiniProgram extends React.Component {
     return (
       <React.Fragment>
         <NavBar title="小程序粉丝" goBack />
-        <WhiteSpace />
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}
@@ -79,6 +82,7 @@ class MiniProgram extends React.Component {
           direction="up"
           onRefresh={this.loadMore}
         >
+          <WhiteSpace />
           {this.mapList()}
         </PullToRefresh>
       </React.Fragment>
