@@ -15,7 +15,6 @@ export default () => (
           <Icon type="right" color="#fff" />
         </ColorCard>
       </Link>
-
       <WhiteSpace />
       <Link to="/management/member/publicMember">
         <ColorCard style={{ background: 'rgb(124, 214, 222)' }}>

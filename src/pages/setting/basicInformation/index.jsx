@@ -16,6 +16,7 @@ import {
   CustomizeList, ListTitle, ListContent, PrimaryTag, MenuMask,
 } from '@/styled'
 import 'rc-tooltip/assets/bootstrap.css'
+import utils from '@/utils'
 
 const { Item } = List
 
@@ -27,9 +28,12 @@ class BasicInformation extends React.Component {
   }
 
   componentDidMount() {
-    const { basicInformation } = this.props
+    const { basicInformation, history } = this.props
     basicInformation.fetchCategory()
     basicInformation.fetchBasicInfo()
+    if (history.location.search) {
+      basicInformation.wxBind(utils.getUrlParam('openid'))
+    }
   }
 
   getMenuList = () => {

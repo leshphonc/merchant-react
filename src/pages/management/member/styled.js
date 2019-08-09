@@ -18,7 +18,6 @@ export const ListItem = styled.div`
   flex-direction: column;
   background: #fff;
   border-bottom: 1px solid rgb(0, 0, 0, 0.12);
-  margin-bottom: 4px;
   color: #444;
 `
 

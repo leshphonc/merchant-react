@@ -37,6 +37,16 @@ class MemberStore {
 
   @observable cardGroupUserInfo = {}
 
+  @observable cardGroupUserInfoSelect = []
+
+  @observable expensesRecordList = []
+
+  @observable expensesRecordListPage = 1
+
+  @observable expensesRecordListSize = 10
+
+  @observable expensesRecordListTotal = null
+
   @observable couponList = []
 
   @observable couponListPage = 1
@@ -48,6 +58,14 @@ class MemberStore {
   @observable couponCategory = {}
 
   @observable couponPlatform = {}
+
+  @observable couponCheckList = []
+
+  @observable couponCheckListPage = 1
+
+  @observable couponCheckListSize = 10
+
+  @observable couponCheckListTotal = null
 
   @action
   fetchMiniProgramList = async () => {
@@ -222,6 +240,58 @@ class MemberStore {
   }
 
   @action
+  fetchCardGroupUserInfoSelect = async () => {
+    const response = await services.fetchCardGroupUserInfoSelect()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.cardGroupUserInfoSelect = response.data.result
+      })
+    }
+  }
+
+  @action
+  modifyCardGroupUserInfo = async payload => {
+    await services.modifyCardGroupUserInfo(payload)
+  }
+
+  @action
+  fetchExpensesRecordList = async id => {
+    let hasMore = true
+    if (this.expensesRecordListTotal !== null) {
+      hasMore = this.expensesRecordListPage * this.expensesRecordListSize < this.expensesRecordListTotal
+      if (hasMore) {
+        this.expensesRecordListPage += 1
+      }
+    }
+    const response = await services.fetchExpensesRecordList(
+      this.expensesRecordListPage,
+      this.expensesRecordListSize,
+      id,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      if (hasMore) {
+        runInAction(() => {
+          const arr = this.expensesRecordList
+          arr.push(...response.data.result.lists)
+          this.expensesRecordList = arr
+          this.expensesRecordListTotal = response.data.result.total - 0
+        })
+      } else {
+        const remainder = this.expensesRecordListTotal % this.expensesRecordListSize
+        if (remainder) {
+          runInAction(() => {
+            this.expensesRecordList.splice(this.expensesRecordListTotal - remainder, remainder)
+            const arr = this.expensesRecordList
+            arr.push(...response.data.result.lists)
+            this.expensesRecordList = arr
+            this.expensesRecordListTotal = response.data.result.total - 0
+          })
+        }
+      }
+    }
+  }
+
+  @action
   fetchCouponList = async () => {
     let hasMore = true
     if (this.couponListTotal !== null) {
@@ -256,6 +326,63 @@ class MemberStore {
         }
       }
     }
+  }
+
+  @action
+  fetchCouponCheckList = async id => {
+    let hasMore = true
+    if (this.couponCheckListTotal !== null) {
+      hasMore = this.couponCheckListPage * this.couponCheckListSize < this.couponCheckListTotal
+      if (hasMore) {
+        this.couponCheckListPage += 1
+      }
+    }
+    const response = await services.fetchCouponCheckList(
+      this.couponCheckListPage,
+      this.couponCheckListSize,
+      id,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      if (hasMore) {
+        runInAction(() => {
+          const arr = this.couponCheckList
+          arr.push(...response.data.result.lists)
+          this.couponCheckList = arr
+          this.couponCheckListTotal = response.data.result.total - 0
+        })
+      } else {
+        const remainder = this.couponCheckListTotal % this.couponCheckListSize
+        if (remainder) {
+          runInAction(() => {
+            this.couponCheckList.splice(this.couponCheckListTotal - remainder, remainder)
+            const arr = this.couponCheckList
+            arr.push(...response.data.result.lists)
+            this.couponCheckList = arr
+            this.couponCheckListTotal = response.data.result.total - 0
+          })
+        }
+      }
+    }
+  }
+
+  @action
+  changeCouponStatus = async (id, status) => {
+    const response = await services.changeCouponStatus(id, status)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      this.couponList.forEach((item, index) => {
+        if (item.coupon_id === id) {
+          runInAction(() => {
+            this.couponList[index].status = status !== '0' ? '1' : '0'
+          })
+        }
+      })
+    }
+  }
+
+  @action
+  checkCouponCode = async code => {
+    const response = await services.checkCouponCode(code)
+    console.log(response)
   }
 }
 

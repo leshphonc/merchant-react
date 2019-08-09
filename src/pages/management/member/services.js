@@ -12,11 +12,6 @@ export const fetchCardGroupList = (page, size) => axios.post(`/appapi.php?c=Merc
   ticket: localStorage.getItem('ticket'),
 })
 
-export const fetchCouponList = (page, size) => axios.post(`/appapi.php?c=Merchantapp&a=card_new_coupon&page=${page}&size=${size}`, {
-  ticket: localStorage.getItem('ticket'),
-})
-
-// 没有
 export const insertCardGroup = (name, des, discount) => axios.post('/appapi.php?c=Merchantapp&a=add_card_group', {
   name,
   des,
@@ -39,6 +34,54 @@ export const fetchCardGroupUsers = (page, size, id) => axios.post(
   },
 )
 
-export const fetchCardGroupUserInfo = id => axios.post(`/appapi.php?c=Merchantapp&a=card_group_detail&gid=${id}`, {
+export const fetchCardGroupUserInfo = id => axios.post(`/appapi.php?c=Merchantapp&a=card_detail&id=${id}`, {
   ticket: localStorage.getItem('ticket'),
+})
+
+export const fetchCardGroupUserInfoSelect = () => axios.post('/appapi.php?c=Merchantapp&a=card_group_all', {
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const modifyCardGroupUserInfo = payload => {
+  const {
+    id, uid, cardNo, group, status, balance, balanceNum, integral, integralNum,
+  } = payload
+  return axios.post('/appapi.php?c=Merchantapp&a=edit_card_detail', {
+    ticket: localStorage.getItem('ticket'),
+    id,
+    uid,
+    physical_id: cardNo,
+    gid: group,
+    status,
+    set_money_type: balance,
+    set_score_type: integral,
+    set_money: balanceNum,
+    set_score: integralNum,
+  })
+}
+
+export const fetchExpensesRecordList = (page, size, id) => axios.post(`/appapi.php?c=Merchantapp&a=consume_record&page=${page}&size=${size}&id=${id}`, {
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const fetchCouponList = (page, size) => axios.post(`/appapi.php?c=Merchantapp&a=card_new_coupon&page=${page}&size=${size}`, {
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const fetchCouponCheckList = (page, size, id) => axios.post(
+  `/appapi.php?c=Merchantapp&a=card_new_coupon_handpull&page=${page}&size=${size}&coupon_id=${id}`,
+  {
+    ticket: localStorage.getItem('ticket'),
+  },
+)
+
+export const changeCouponStatus = (id, status) => axios.post('/appapi.php?c=Merchantapp&a=edit_coupon', {
+  ticket: localStorage.getItem('ticket'),
+  coupon_id: id,
+  status,
+})
+
+export const checkCouponCode = code => axios.post('/appapi.php?c=Merchantapp&a=use_couponcode', {
+  ticket: localStorage.getItem('ticket'),
+  code,
 })

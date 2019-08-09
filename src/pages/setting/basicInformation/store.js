@@ -110,6 +110,12 @@ class BasicInformationSotre {
     // const response = await services.getWxCode(this.wxConfig.appId)
   }
 
+  @action
+  wxBind = async openid => {
+    const response = await services.wxBind(openid)
+    console.log(response)
+  }
+
   constructor() {
     this.basicInfo = {}
     this.categoryOption = []

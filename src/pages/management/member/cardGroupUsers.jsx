@@ -20,9 +20,9 @@ class CardGroupUsers extends React.Component {
 
   componentDidMount() {
     const { member, location } = this.props
-    const { cardGroupUsersListTotal } = member
+    const { cardGroupUsersList } = member
     const { height } = this.state
-    if (!cardGroupUsersListTotal) member.fetchCardGroupUsers(location.state.id)
+    if (!cardGroupUsersList.length) member.fetchCardGroupUsers(location.state.id)
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
@@ -34,27 +34,30 @@ class CardGroupUsers extends React.Component {
     const { member } = this.props
     const { cardGroupUsersList } = member
     return cardGroupUsersList.map(item => (
-      <ListItem key={item.id}>
-        <ItemTop>
-          <img className="avatar" src={item.avatar} alt="" />
-          <div className="top-content">
-            <div className="content-left" style={{ flex: 1 }}>
-              <div>会员ID：{item.id}</div>
-              <div>会员昵称：{item.nickname || '暂无'}</div>
-              <Link
-                to={{
-                  pathname: '/management/member/cardGroup/modifyCardGroupUsers',
-                  state: {
-                    id: item.gid,
-                  },
-                }}
-              >
-                查看详情
-              </Link>
+      <React.Fragment key={item.id}>
+        <ListItem>
+          <ItemTop>
+            <img className="avatar" src={item.avatar} alt="" />
+            <div className="top-content">
+              <div className="content-left" style={{ flex: 1 }}>
+                <div>会员ID：{item.id}</div>
+                <div>会员昵称：{item.nickname || '暂无'}</div>
+                <Link
+                  to={{
+                    pathname: '/management/member/cardGroup/modifyCardGroupUsers',
+                    state: {
+                      id: item.id,
+                    },
+                  }}
+                >
+                  查看详情
+                </Link>
+              </div>
             </div>
-          </div>
-        </ItemTop>
-      </ListItem>
+          </ItemTop>
+        </ListItem>
+        <WhiteSpace />
+      </React.Fragment>
     ))
   }
 
@@ -72,7 +75,6 @@ class CardGroupUsers extends React.Component {
     return (
       <React.Fragment>
         <NavBar title="分组用户" goBack />
-        <WhiteSpace />
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}
@@ -84,6 +86,7 @@ class CardGroupUsers extends React.Component {
           direction="up"
           onRefresh={this.loadMore}
         >
+          <WhiteSpace />
           {this.mapList()}
         </PullToRefresh>
       </React.Fragment>

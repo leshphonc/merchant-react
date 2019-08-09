@@ -28,6 +28,7 @@ import List from '@/pages/popularize/shopAssistant/list'
 import ScanList from '@/pages/popularize/shopAssistant/scanList'
 import SaleList from '@/pages/popularize/shopAssistant/saleList'
 import FansList from '@/pages/popularize/shopAssistant/fansList'
+import RedEnvelope from '@/pages/popularize/redEnvelope'
 
 // mobx严格模式 生产环境使用observed 开发使用always
 configure({ enforceActions: 'always' })
@@ -65,6 +66,7 @@ export default () => (
       <Route path="/popularize/shopAssistant/scanList" component={ScanList} />
       <Route path="/popularize/shopAssistant/saleList" component={SaleList} />
       <Route path="/popularize/shopAssistant/fansList" component={FansList} />
+      <Route path="/popularize/redEnvelope" component={RedEnvelope} />
     </BrowserRouter>
   </Provider>
 )

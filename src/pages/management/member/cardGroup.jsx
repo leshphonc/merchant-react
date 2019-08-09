@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { runInAction } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { Route, Link } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
@@ -25,9 +26,9 @@ class CardGroup extends React.Component {
 
   componentDidMount() {
     const { member } = this.props
-    const { cardGroupListTotal } = member
+    const { cardGroupList } = member
     const { height } = this.state
-    if (!cardGroupListTotal) member.fetchCardGroupList()
+    if (!cardGroupList.length) member.fetchCardGroupList()
     /* eslint react/no-find-dom-node: 0 */
     const dom = ReactDOM.findDOMNode(this.refresh.current)
     const hei = height - dom.offsetTop
@@ -50,61 +51,70 @@ class CardGroup extends React.Component {
     const { member, history } = this.props
     const { cardGroupList } = member
     return cardGroupList.map(item => (
-      <ListItem key={item.id}>
-        <ItemTop>
-          <div className="top-content">
-            <div className="content-left">
-              <div>分组ID：{item.id}</div>
-              <WhiteSpace />
-              <div>分组注释：{item.des}</div>
-              <WhiteSpace />
-              <div>分组折扣：{item.discount}</div>
-              <WhiteSpace />
-              <Button
-                type="primary"
-                size="small"
-                style={{ width: 120 }}
-                onClick={() => history.push({
-                  pathname: '/management/member/cardGroup/modifyCardGroup',
-                  state: {
-                    type: '编辑',
-                    id: item.id,
-                    name: item.name,
-                    comment: item.des,
-                    discount: item.discount,
-                  },
-                })
-                }
-              >
-                编辑
-              </Button>
-            </div>
-            <div className="content-right">
-              <div>分组名称：{item.name}</div>
-              <WhiteSpace />
-              <div style={{ visibility: 'hidden' }}>empty</div>
-              <WhiteSpace />
-              <div>分组用户数量：{item.user_count}</div>
-              <WhiteSpace />
-              <Button
-                type="primary"
-                size="small"
-                style={{ width: 120 }}
-                onClick={() => {
-                  history.push({
-                    pathname: '/management/member/cardGroup/cardGroupUsers',
+      <React.Fragment key={item.id}>
+        <ListItem>
+          <ItemTop>
+            <div className="top-content">
+              <div className="content-left">
+                <div>分组ID：{item.id}</div>
+                <WhiteSpace />
+                <div>分组注释：{item.des}</div>
+                <WhiteSpace />
+                <div>分组折扣：{item.discount}</div>
+                <WhiteSpace />
+                <Button
+                  type="primary"
+                  size="small"
+                  style={{ width: 120 }}
+                  onClick={() => history.push({
+                    pathname: '/management/member/cardGroup/modifyCardGroup',
                     state: {
+                      type: '编辑',
                       id: item.id,
+                      name: item.name,
+                      comment: item.des,
+                      discount: item.discount,
                     },
                   })
-                }}
-              >
-                查看分组用户
-              </Button>
+                  }
+                >
+                  编辑
+                </Button>
+              </div>
+              <div className="content-right">
+                <div>分组名称：{item.name}</div>
+                <WhiteSpace />
+                <div style={{ visibility: 'hidden' }}>empty</div>
+                <WhiteSpace />
+                <div>分组用户数量：{item.user_count}</div>
+                <WhiteSpace />
+                <Button
+                  type="primary"
+                  size="small"
+                  style={{ width: 120 }}
+                  onClick={() => {
+                    runInAction(() => {
+                      member.cardGroupUsersList = []
+                      member.cardGroupUsersListPage = 1
+                      member.cardGroupUsersListSize = 10
+                      member.cardGroupUsersListTotal = null
+                    })
+                    history.push({
+                      pathname: '/management/member/cardGroup/cardGroupUsers',
+                      state: {
+                        id: item.id,
+                      },
+                    })
+                  }}
+                >
+                  查看分组用户
+                </Button>
+              </div>
             </div>
-          </div>
-        </ItemTop>
-      </ListItem>
+          </ItemTop>
+        </ListItem>
+        <WhiteSpace />
+      </React.Fragment>
     ))
   }
 
@@ -138,7 +148,6 @@ class CardGroup extends React.Component {
             </Link>
           }
         />
-        <WhiteSpace />
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}
@@ -150,6 +159,7 @@ class CardGroup extends React.Component {
           direction="up"
           onRefresh={this.loadMore}
         >
+          <WhiteSpace />
           {this.mapList()}
         </PullToRefresh>
       </React.Fragment>

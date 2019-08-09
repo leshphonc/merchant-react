@@ -56,7 +56,7 @@ const PopularizeGrid = {
     },
     {
       name: '红包推广',
-      path: '/promotion/redEnvelope',
+      path: '/popularize/redEnvelope',
       enable: require('../assets/image/hbtg.png'),
       disable: require('../assets/image/hbtg_gray.png'),
     },
