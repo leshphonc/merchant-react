@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  Flex, InputItem, Button, Toast, WingBlank, Checkbox,
+  Flex, InputItem, Button, Toast, WingBlank,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import {
