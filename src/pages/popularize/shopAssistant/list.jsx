@@ -17,7 +17,7 @@ class ShopAssistant extends React.Component {
 
   componentDidMount() {
     const { shopAssistant, location } = this.props
-    console.log(location)
+    // console.log(location)
     shopAssistant.fetchStaffList(location.state.id)
   }
 

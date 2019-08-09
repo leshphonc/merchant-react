@@ -87,6 +87,17 @@ class MastSotre {
           this.scanList = arr
           this.scanListTotal = response.data.result.total - 0
         })
+      } else {
+        const remainder = this.scanListTotal % this.scanListSize
+        if (remainder) {
+          runInAction(() => {
+            this.scanList.splice(this.scanListTotal - remainder, remainder)
+            const arr = this.scanList
+            arr.push(...response.data.result.lists)
+            this.scanList = arr
+            this.scanListTotal = response.data.result.total - 0
+          })
+        }
       }
     }
   }
@@ -115,6 +126,17 @@ class MastSotre {
           this.saleList = arr
           this.saleListTotal = response.data.result.total - 0
         })
+      } else {
+        const remainder = this.saleListTotal % this.saleListSize
+        if (remainder) {
+          runInAction(() => {
+            this.saleList.splice(this.saleListTotal - remainder, remainder)
+            const arr = this.saleList
+            arr.push(...response.data.result.lists)
+            this.saleList = arr
+            this.saleListTotal = response.data.result.total - 0
+          })
+        }
       }
     }
   }
@@ -143,6 +165,17 @@ class MastSotre {
           this.fansList = arr
           this.fansListTotal = response.data.result.total - 0
         })
+      } else {
+        const remainder = this.fansListTotal % this.fansListPage
+        if (remainder) {
+          runInAction(() => {
+            this.fansList.splice(this.fansListTotal - remainder, remainder)
+            const arr = this.fansList
+            arr.push(...response.data.result.lists)
+            this.fansList = arr
+            this.fansListTotal = response.data.result.total - 0
+          })
+        }
       }
     }
   }

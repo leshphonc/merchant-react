@@ -34,12 +34,12 @@ class ShopAssistant extends React.Component {
   search = () => {
     const { startdate, enddate, selectValue } = this.state
     const { shopAssistant } = this.props
-    // const { selectValues } = shopAssistant
     const searchStartDate = moment(startdate).format('YYYY-MM-DD')
     const searchEndDate = moment(enddate).format('YYYY-MM-DD')
-    console.log(searchStartDate)
-    console.log(searchEndDate)
+    // console.log(searchStartDate)
+    // console.log(searchEndDate)
     shopAssistant.fetchStatisticsInfo(selectValue[0], searchStartDate, searchEndDate)
+    this.setState({ selectValue: '', startdate: '', enddate: '' })
   }
 
   render() {

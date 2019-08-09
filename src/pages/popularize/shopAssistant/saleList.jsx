@@ -43,8 +43,6 @@ class ShopAssistant extends React.Component {
     const { shopAssistant, history } = this.props
     const searchStartDate = moment(startdate).format('YYYY-MM-DD')
     const searchEndDate = moment(enddate).format('YYYY-MM-DD')
-    console.log(searchStartDate)
-    console.log(searchEndDate)
     shopAssistant.fetchScanList(history.location.state.id, searchStartDate, searchEndDate)
   }
 
