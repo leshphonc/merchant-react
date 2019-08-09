@@ -85,13 +85,16 @@ class BasicInformation extends React.Component {
   }
 
   wxBind = async () => {
+    const { basicInformation } = this.props
+    const { basicInfo } = basicInformation
     const ua = window.navigator.userAgent.toLowerCase()
     /* eslint eqeqeq: 0 */
     if (!(ua.match(/micromessenger/i) == 'micromessenger')) {
       Toast.info('请在微信环境下进行绑定')
-    } else {
-      const { basicInformation } = this.props
+    } else if (!basicInfo.uid) {
       await basicInformation.getWxCode()
+    } else {
+      Toast.info('已绑定微信，无需重复绑定')
     }
   }
 
@@ -110,7 +113,7 @@ class BasicInformation extends React.Component {
     )
     return (
       <React.Fragment>
-        <NavBar title="基本信息" goBack />
+        <NavBar title="基本信息" goBack="/" />
         <form>
           <List renderHeader="基本信息">
             <Item extra={basicInfo.account} arrow="empty">
@@ -259,7 +262,7 @@ class BasicInformation extends React.Component {
             </Item>
           </List>
           <List renderHeader="绑定微信">
-            <Item arrow="horizontal" onClick={this.wxBind}>
+            <Item arrow="horizontal" onClick={this.wxBind} extra={basicInfo.uid ? '已绑定' : ''}>
               绑定微信
             </Item>
           </List>

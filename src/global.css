@@ -40,6 +40,10 @@
   box-shadow: 0 0 10px 1px #ccc;
 }
 
+.am-tabs-horizontal .am-tabs-pane-wrap-inactive {
+  z-index: -1;
+}
+
 /* 富文本工具栏换行 */
 .w-e-toolbar {
   flex-wrap: wrap;

@@ -6,7 +6,7 @@ import Placeholder from './styled'
 export default withRouter(props => {
   const { title, goBack, right } = props
   const handler = () => {
-    if (goBack) {
+    if (goBack === true) {
       props.history.goBack()
     } else {
       props.history.push(props.goBack)

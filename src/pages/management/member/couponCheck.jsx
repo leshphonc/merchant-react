@@ -76,7 +76,7 @@ class CouponCheck extends React.Component {
                   onClick={() => {
                     prompt('核销', '输入核销码进行核销', [
                       { text: '取消' },
-                      { text: '确定', onPress: code => member.checkCouponCode(code) },
+                      { text: '确定', onPress: code => member.checkCouponCode(item.id, code) },
                     ])
                   }}
                 >
