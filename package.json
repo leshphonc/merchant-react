@@ -2,6 +2,7 @@
   "name": "merchant-center",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "antd-mobile": "^2.2.14",
     "axios": "^0.19.0",
@@ -56,5 +57,5 @@
     "brand-primary-tap": "#ff8811",
     "switch-fill": "rgba(255, 176, 0, 0.5)"
   },
-  "proxy": "http://cs.7youke.com"
+  "proxy": "https://www.9youke.com"
 }

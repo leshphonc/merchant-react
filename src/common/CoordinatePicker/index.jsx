@@ -19,7 +19,6 @@ class CoordinatePicker extends React.Component {
     lng: 0,
     lat: 0,
     address: '',
-    hidePoint: false,
     mapHeight: 0,
   }
 
@@ -112,22 +111,10 @@ class CoordinatePicker extends React.Component {
     }
   }
 
-  hidePoint = () => {
-    this.setState({
-      hidePoint: true,
-    })
-  }
-
-  showPoint = () => {
-    this.setState({
-      hidePoint: false,
-    })
-  }
-
   render() {
     const { callback } = this.props
     const {
-      mapHeight, hidePoint, lng, lat, address,
+      mapHeight, lng, lat, address,
     } = this.state
     return (
       <React.Fragment>
@@ -145,21 +132,19 @@ class CoordinatePicker extends React.Component {
               height: mapHeight,
             }}
           />
-          {!hidePoint ? (
-            <i
-              className="iconfont"
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                color: '#ffb000',
-                fontSize: 24,
-                transform: 'translate(-12px, -27px)',
-              }}
-            >
-              &#xe61f;
-            </i>
-          ) : null}
+          <i
+            className="iconfont"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              color: '#ffb000',
+              fontSize: 24,
+              transform: 'translate(-12px, -27px)',
+            }}
+          >
+            &#xe61f;
+          </i>
         </div>
         <Button type="primary" onClick={() => callback(lng, lat, address)}>
           确定

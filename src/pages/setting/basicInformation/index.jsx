@@ -17,7 +17,6 @@ import {
   CustomizeList, ListTitle, ListContent, PrimaryTag, MenuMask,
 } from '@/styled'
 import 'rc-tooltip/assets/bootstrap.css'
-import utils from '@/utils'
 
 const { Item } = List
 
@@ -29,12 +28,9 @@ class BasicInformation extends React.Component {
   }
 
   componentDidMount() {
-    const { basicInformation, history } = this.props
+    const { basicInformation } = this.props
     basicInformation.fetchCategory()
     basicInformation.fetchBasicInfo()
-    if (history.location.search) {
-      basicInformation.wxBind(utils.getUrlParam('openid'))
-    }
   }
 
   getMenuList = () => {
@@ -93,7 +89,9 @@ class BasicInformation extends React.Component {
     if (!(ua.match(/micromessenger/i) == 'micromessenger')) {
       Toast.info('请在微信环境下进行绑定')
     } else if (!basicInfo.uid) {
-      await basicInformation.getWxCode()
+      const openid = sessionStorage.getItem('openid')
+      basicInformation.wxBind(openid)
+      // await basicInformation.getWxCode()
     } else {
       Toast.info('已绑定微信，无需重复绑定')
     }

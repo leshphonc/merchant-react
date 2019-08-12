@@ -2,12 +2,11 @@ import React from 'react'
 import { configure } from 'mobx'
 import { Provider } from 'mobx-react'
 import store from '@/pages/store'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { HashRouter, Route } from 'react-router-dom'
 import IconFont from '@/assets/iconfont/iconfont'
 import Index from '@/pages'
 import Login from '@/pages/login'
 import Wallet from '@/pages/wallet'
-import WalletDetail from '@/pages/wallet/detail'
 import StoreFront from '@/pages/management/storeFront'
 import Member from '@/pages/management/member'
 import MiniProgram from '@/pages/management/member/miniProgram'
@@ -35,14 +34,13 @@ configure({ enforceActions: 'always' })
 
 export default () => (
   <Provider {...store}>
-    <BrowserRouter>
+    <HashRouter>
       <IconFont />
       <Route path="/" exact component={Index} />
       {/* 登录页面 */}
       <Route path="/login" component={Login} />
       {/* 钱包页面 -> wallet */}
-      <Route path="/wallet" exact component={Wallet} />
-      <Route path="/wallet/detail" component={WalletDetail} />
+      <Route path="/wallet" component={Wallet} />
       {/* 管理页面 -> management */}
       <Route path="/management/storefront" exact component={StoreFront} />
       <Route path="/management/storefront/managementCategory" component={ManagementCategory} />
@@ -67,6 +65,6 @@ export default () => (
       <Route path="/popularize/shopAssistant/saleList" component={SaleList} />
       <Route path="/popularize/shopAssistant/fansList" component={FansList} />
       <Route path="/popularize/redEnvelope" component={RedEnvelope} />
-    </BrowserRouter>
+    </HashRouter>
   </Provider>
 )

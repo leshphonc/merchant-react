@@ -109,13 +109,6 @@ class BasicInformationSotre {
   }
 
   @action
-  getWxCode = async () => {
-    const URL = decodeURIComponent(window.location.href)
-    window.location.href = `http://cs.7youke.com/wap.php?c=Packapp&a=bind&referer=${URL}`
-    // const response = await services.getWxCode(this.wxConfig.appId)
-  }
-
-  @action
   wxBind = async openid => {
     const response = await services.wxBind(openid)
     console.log(response)

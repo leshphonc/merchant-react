@@ -11,6 +11,30 @@ export default {
     if (result !== null) return decodeURIComponent(result[2])
     return ''
   },
+  // 生成随机数
+  createNonceStr() {
+    return Math.random()
+      .toString(36)
+      .substr(2, 15)
+  },
+  // 生成时间戳
+  createTimeStamp() {
+    return `${new Date().getTime() / 1000}`
+  },
+  // Object转换成json并排序
+  raw(args) {
+    const keys = Object.keys(args).sort()
+    const obj = {}
+    keys.forEach(key => {
+      obj[key] = args[key]
+    })
+    // 将对象转为&分割的参数
+    let val = ''
+    for (const k in obj) {
+      val += `&${k}=${obj[k]}`
+    }
+    return val.substr(1)
+  },
   initShareInfo(wx) {
     const shareInfo = {
       title: '分享标题', // 分享标题
