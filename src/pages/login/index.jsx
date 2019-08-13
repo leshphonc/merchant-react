@@ -21,7 +21,7 @@ class Login extends React.Component {
     login
       .login(account, password)
       .then(() => {
-        history.push('/')
+        history.replace('/')
         Toast.success('欢迎回来', 2, null, false)
       })
       .catch(val => {
@@ -30,7 +30,6 @@ class Login extends React.Component {
   }
 
   render() {
-    const { login } = this.props
     const { account, password } = this.state
     return (
       <Container>
@@ -63,7 +62,6 @@ class Login extends React.Component {
           <Button onClick={this.submit} type="primary">
             登录
           </Button>
-          {JSON.stringify(login.list)}
         </Box>
       </Container>
     )
