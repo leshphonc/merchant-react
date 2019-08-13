@@ -1,12 +1,16 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
+// import { Route } from 'react-router-dom'
 import {
-  Picker, List, InputItem, ImagePicker, WingBlank,
+  Picker, List, InputItem, WingBlank, Button, ImagePicker,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
+import E from 'wangeditor'
 import 'rc-tooltip/assets/bootstrap.css'
-import { Title } from './styled'
+import { Title, Editor } from './styled'
+// import { CustomizeList, ListTitle, ListContent } from '@/styled'
 
+const { Item } = List
 const seasons = [
   [
     {
@@ -19,27 +23,130 @@ const seasons = [
     },
   ],
 ]
-const data = [
+const category = [
+  [
+    {
+      label: '实体商品',
+      value: '2013',
+    },
+    {
+      label: '虚拟商品',
+      value: '2014',
+    },
+    {
+      label: '虚拟商品(需配送)',
+      value: '2015',
+    },
+  ],
+]
+const store = [
+  [
+    {
+      label: '可是劳动纠纷',
+      value: '2013',
+    },
+    {
+      label: '是法国首都了',
+      value: '2014',
+    },
+  ],
+]
+const classify = [
+  [
+    {
+      label: '水果',
+      value: '2013',
+    },
+    {
+      label: '蔬菜',
+      value: '2014',
+    },
+    {
+      label: '鲜肉',
+      value: '2015',
+    },
+  ],
+]
+const datas = [
+  {
+    url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
+    id: '2121',
+  },
   {
     url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
     id: '2122',
   },
 ]
 class RetailAdd extends React.Component {
-  state = {
-    selectValue: ['2013'],
-    files: data,
+  constructor(props) {
+    super(props)
+    this.state = {
+      selectValue: ['2013'],
+      categoryValue: '',
+      storeValue: '',
+      classifyValue: '',
+      files: datas,
+      editorContent: '',
+    }
+    this.editor = React.createRef()
   }
 
-  onChange = (files, type, index) => {
-    console.log(files, type, index)
+  componentDidMount() {
+    // const { history } = this.props
+    // this.setState({
+    //   editorContent: history.location.state.value,
+    // })
+    const editor = new E(this.editor.current)
+    // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
+    editor.customConfig.onchange = html => {
+      this.setState({
+        editorContent: html,
+      })
+    }
+    editor.customConfig.uploadImgShowBase64 = true
+    editor.customConfig.menus = [
+      'head', // 标题
+      'bold', // 粗体
+      'fontSize', // 字号
+      'fontName', // 字体
+      'italic', // 斜体
+      'underline', // 下划线
+      'strikeThrough', // 删除线
+      'foreColor', // 文字颜色
+      'backColor', // 背景颜色
+      'link', // 插入链接
+      'list', // 列表
+      'justify', // 对齐方式
+      'quote', // 引用
+      'emoticon', // 表情
+      'image', // 插入图片
+      'table', // 表格
+      'video', // 插入视频
+      'undo', // 撤销
+      'redo', // 重复
+    ]
+    editor.create()
+    // editor.txt.html(history.location.state.value)
+  }
+
+  submit = async () => {
+    // const { history } = this.props
+    const { editorContent } = this.state
+    console.log(editorContent)
+  }
+
+  onChange = (files, index) => {
+    console.log(files, index)
     this.setState({
       files,
     })
   }
 
   render() {
-    const { selectValue } = this.state
+    const {
+      selectValue, categoryValue, storeValue, classifyValue,
+    } = this.state
+    // const { history } = this.props
     const { files } = this.state
     return (
       <React.Fragment>
@@ -144,39 +251,39 @@ class RetailAdd extends React.Component {
               <List.Item arrow="horizontal">商品状态</List.Item>
             </Picker>
             <Picker
-              data={seasons}
+              data={category}
               cascade={false}
               extra="请选择"
-              value={selectValue}
+              value={categoryValue}
               onChange={v => {
                 this.setState({
-                  selectValue: v,
+                  categoryValue: v,
                 })
               }}
             >
               <List.Item arrow="horizontal">商品类别</List.Item>
             </Picker>
             <Picker
-              data={seasons}
+              data={store}
               cascade={false}
               extra="请选择"
-              value={selectValue}
+              value={storeValue}
               onChange={v => {
                 this.setState({
-                  selectValue: v,
+                  storeValue: v,
                 })
               }}
             >
               <List.Item arrow="horizontal">选择添加到的店铺</List.Item>
             </Picker>
             <Picker
-              data={seasons}
+              data={classify}
               cascade={false}
               extra="请选择"
-              value={selectValue}
+              value={classifyValue}
               onChange={v => {
                 this.setState({
-                  selectValue: v,
+                  classifyValue: v,
                 })
               }}
             >
@@ -216,14 +323,28 @@ class RetailAdd extends React.Component {
                 </Tooltip>
               </InputItem>
             </Title>
-            <WingBlank>
-              <ImagePicker
-                files={files}
-                onChange={this.onChange}
-                onImageClick={(index, fs) => console.log(index, fs)}
-                selectable={files.length < 5}
-                accept="image/gif,image/jpeg,image/jpg,image/png"
-              />
+            <div>
+              <Item>
+                商品图片
+                <ImagePicker
+                  files={files}
+                  onChange={this.onChange}
+                  onImageClick={(index, fs) => console.log(index, fs)}
+                  selectable={files.length < 5}
+                  accept="image/gif,image/jpeg,image/jpg,image/png"
+                />
+              </Item>
+            </div>
+            <Item>
+              商品描述
+              <Editor>
+                <div ref={this.editor} className="editor" />
+              </Editor>
+            </Item>
+            <WingBlank style={{ padding: '10px 0' }}>
+              <Button type="primary" style={{ color: '#333', fontWeight: 'bold' }}>
+                添加
+              </Button>
             </WingBlank>
           </List>
         </form>

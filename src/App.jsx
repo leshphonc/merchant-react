@@ -16,8 +16,14 @@ import CardGroup from '@/pages/management/member/cardGroup'
 import Coupon from '@/pages/management/member/coupon'
 import Commodity from '@/pages/management/commodity'
 import Group from '@/pages/management/commodity/group'
+import GroupAdd from '@/pages/management/commodity/groupAdd'
+import GroupEdit from '@/pages/management/commodity/groupEdit'
+import GroupMealAdd from '@/pages/management/commodity/groupMealAdd'
 import Reserve from '@/pages/management/commodity/reserve'
+import ReserveAdd from '@/pages/management/commodity/reserveAdd'
+import ReserveEdit from '@/pages/management/commodity/reserveEdit'
 import Catering from '@/pages/management/commodity/catering'
+import CateringAdd from '@/pages/management/commodity/cateringAdd'
 import Retail from '@/pages/management/commodity/retail'
 import RetailAdd from '@/pages/management/commodity/retailAdd'
 import ManagementCategory from '@/pages/management/storeFront/managementCategory'
@@ -54,8 +60,14 @@ export default () => (
       <Route path="/management/member/coupon" component={Coupon} />
       <Route path="/management/commodity" exact component={Commodity} />
       <Route path="/management/commodity/group" component={Group} />
+      <Route path="/management/commodity/groupAdd" component={GroupAdd} />
+      <Route path="/management/commodity/groupEdit" component={GroupEdit} />
+      <Route path="/management/commodity/groupMealAdd" component={GroupMealAdd} />
       <Route path="/management/commodity/reserve" component={Reserve} />
+      <Route path="/management/commodity/reserveAdd" component={ReserveAdd} />
+      <Route path="/management/commodity/reserveEdit" component={ReserveEdit} />
       <Route path="/management/commodity/catering" component={Catering} />
+      <Route path="/management/commodity/cateringAdd" component={CateringAdd} />
       <Route path="/management/commodity/retail" component={Retail} />
       <Route path="/management/commodity/retailAdd" component={RetailAdd} />
       {/* 基本信息 -> setting */}

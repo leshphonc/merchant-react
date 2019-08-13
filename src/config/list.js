@@ -223,7 +223,7 @@ export const SaleList = [
   },
 ]
 
-export const Group = [
+export const Groups = [
   {
     img: avatar,
     name: 'madedf',

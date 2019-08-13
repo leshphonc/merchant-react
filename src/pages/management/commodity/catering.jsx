@@ -1,5 +1,6 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
+import { Link } from 'react-router-dom'
 import { SearchBar, Picker, List } from 'antd-mobile'
 import CardList from './components/Catering'
 import { CateringList } from '@/config/list'
@@ -26,10 +27,7 @@ class Catering extends React.Component {
     const { selectValue } = this.state
     return (
       <React.Fragment>
-        <NavBar
-          title="餐饮商品管理"
-          goBack
-        />
+        <NavBar title="餐饮商品管理" goBack />
         <List>
           <Picker
             data={seasons}
@@ -48,11 +46,25 @@ class Catering extends React.Component {
         <SearchBar placeholder="商品名称" maxLength={8} />
         <CardList list={CateringList} />
         <List>
-          <div style={{ fontWeight: 'bold', width: '100%', display: 'flex', justifyContent: 'space-around', position: 'fixed', bottom: '0', background: '#ffb000' }}>
-            <Item style={{ paddingLeft: '0', background: '#ffb000' }}>
-              <i className="iconfont" style={{ marginRight: '6px' }}>&#xe61e;</i>
-              添加商品
-            </Item>
+          <div
+            style={{
+              fontWeight: 'bold',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-around',
+              position: 'fixed',
+              bottom: '0',
+              background: '#ffb000',
+            }}
+          >
+            <Link to="/management/commodity/cateringAdd">
+              <Item style={{ paddingLeft: '0', background: '#ffb000' }}>
+                <i className="iconfont" style={{ marginRight: '6px' }}>
+                  &#xe61e;
+                </i>
+                添加商品
+              </Item>
+            </Link>
           </div>
         </List>
       </React.Fragment>
