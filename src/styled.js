@@ -208,7 +208,9 @@ export const FilterBox = styled.div`
   span {
     display: inline-block;
     vertical-align: middle;
+    min-width: 40px;
     max-width: 100px;
+    text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
