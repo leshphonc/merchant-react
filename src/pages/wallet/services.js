@@ -20,3 +20,43 @@ export const goPay = (id, type, paytype, openid) => axios.post('/appapi.php?c=Me
 export const getWxConfig = () => axios.post('/appapi.php?c=Config&a=wx_config', {
   ticket: localStorage.getItem('ticket'),
 })
+
+export const fetchWithdrawRecord = (page, size, type) => axios.get('/appapi.php?c=Merchantapp&a=money_withdraw_records', {
+  params: {
+    page,
+    size,
+    type,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+export const fetchAddCreditRecord = (page, size) => axios.get('/appapi.php?c=Merchantapp&a=money_merrecharge_list', {
+  params: {
+    page,
+    size,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+export const fetchIncomeRecord = (page, size, type, storeId, beginTime, endTime) => axios.get('/appapi.php?c=Merchantapp&a=money_income_list', {
+  params: {
+    page,
+    size,
+    type,
+    store_id: storeId,
+    begin_time: beginTime,
+    end_time: endTime,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+export const fetchIncomeCategoryList = () => axios.get('/appapi.php?c=Merchantapp&a=get_alias_c_name3', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+export const fetchIncomeStoreList = () => axios.get('/appapi.php?c=Merchantapp&a=get_store', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})

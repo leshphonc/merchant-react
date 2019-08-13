@@ -154,7 +154,6 @@ export const PrimaryTag = styled.div`
 `
 
 // 导航栏中间加号
-
 export const AddBtnBox = styled.div`
   position: relative;
   z-index: 1;
@@ -194,5 +193,24 @@ export const AddBtn = styled.div`
     color: #fff;
     background: #ffb000;
     z-index: 2;
+  }
+`
+
+// 自定义筛选块
+export const FilterBox = styled.div`
+  background: #fff;
+  display: inline-block;
+  font-size: 12px;
+  color: #666;
+  border: 1px solid #eee;
+  border-radius: 15px;
+  padding: 5px 10px;
+  span {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `

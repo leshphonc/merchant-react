@@ -22,7 +22,7 @@ axios.interceptors.response.use(config => {
   Toast.hide()
   if (config.data.errorCode !== ErrorCode.SUCCESS) {
     if (config.data.errorCode === ErrorCode.NOTICKET) {
-      window.location.href = '/login'
+      window.location.href = '/#/login'
     }
     Toast.fail(config.data.errorMsg, 2)
   }

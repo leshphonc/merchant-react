@@ -11,7 +11,7 @@ const Wallet = props => (
   <React.Fragment>
     <NavBar
       title="充值"
-      goBack
+      goBack="/"
       right={
         <Link to="/wallet/detail" style={{ color: '#fff', fontSize: 14 }}>
           账户明细
