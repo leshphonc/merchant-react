@@ -12,14 +12,20 @@ export default () => (
       <Link to="/management/member/miniProgram">
         <ColorCard style={{ background: 'rgb(187, 219, 156)' }}>
           <CardLeft>小程序粉丝</CardLeft>
-          <Icon type="right" color="#fff" />
+          <div>
+            <span style={{ verticalAlign: 'super', color: '#fff' }}>2150</span>
+            <Icon type="right" color="#fff" />
+          </div>
         </ColorCard>
       </Link>
       <WhiteSpace />
       <Link to="/management/member/publicMember">
         <ColorCard style={{ background: 'rgb(124, 214, 222)' }}>
           <CardLeft>公众号粉丝</CardLeft>
-          <Icon type="right" color="#fff" />
+          <div>
+            <span style={{ verticalAlign: 'super', color: '#fff' }}>1907</span>
+            <Icon type="right" color="#fff" />
+          </div>
         </ColorCard>
       </Link>
       <WhiteSpace />

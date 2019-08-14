@@ -16,6 +16,7 @@ class ModifyGroup extends React.Component {
 
   componentDidMount() {
     const { location } = this.props
+    console.log(location)
     if (location.state.type === '编辑') {
       this.setState({
         groupname: location.state.name,

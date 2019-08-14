@@ -1,8 +1,3 @@
-import React from 'react'
-import BMap from 'BMap'
-import { withRouter } from 'react-router-dom'
-import { SearchBar, Button } from 'antd-mobile'
-
 /**
  * @author cc
  * @param lng
@@ -11,6 +6,11 @@ import { SearchBar, Button } from 'antd-mobile'
  * @callback callback
  * @description 传入lng和lat用来初始化地图，点击确定将调用callback将lng、lat、address作为参数传出
  */
+
+import React from 'react'
+import BMap from 'BMap'
+import { withRouter } from 'react-router-dom'
+import { SearchBar, Button } from 'antd-mobile'
 
 @withRouter
 class CoordinatePicker extends React.Component {

@@ -46,7 +46,7 @@ class WithdrawRecord extends React.Component {
     const { wallet } = this.props
     const { withdrawRecordList } = wallet
     return withdrawRecordList.map(item => (
-      <React.Fragment key={item.id}>
+      <React.Fragment key={item.id + Math.random()}>
         <Card>
           <Card.Header
             title={

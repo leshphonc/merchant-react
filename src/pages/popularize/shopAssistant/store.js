@@ -48,7 +48,7 @@ class MastSotre {
     const response = await services.fetchSelectValues()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.selectValues = response.data.result.stroe_list
+        this.selectValues = response.data.result.store_list
       })
     }
   }

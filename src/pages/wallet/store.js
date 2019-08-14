@@ -34,6 +34,8 @@ class WalletStore {
 
   @observable incomeStore = []
 
+  @observable withDrawInfo = {}
+
   @action
   getWxCode = async () => {
     const response = await services.getWxConfig()
@@ -225,6 +227,21 @@ class WalletStore {
         this.incomeStore = response.data.result.store_list
       })
     }
+  }
+
+  @action
+  fetchWithDrawInfo = async () => {
+    const response = await services.fetchWithDrawInfo()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.withDrawInfo = response.data.result
+      })
+    }
+  }
+
+  @action
+  withDraw = async payload => {
+    await services.withDraw(payload)
   }
 }
 

@@ -27,11 +27,11 @@ class CateGoryPanel extends React.Component {
   }
 
   render() {
-    const { location, form } = this.props
+    const { match, form } = this.props
     const { getFieldProps, getFieldError } = form
     return (
       <React.Fragment>
-        <NavBar title={`${location.state}分类`} goBack />
+        <NavBar title={`${match.params.type}分类`} goBack />
         <WhiteSpace />
         <form>
           <List>
