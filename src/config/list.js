@@ -309,6 +309,45 @@ export const CateringList = [
     sold: '0',
   },
 ]
+export const ShopManager = [
+  {
+    tal: '15265478963',
+    num: '123456',
+    name: '情节和',
+    sold: '2',
+  },
+  {
+    tal: '18265477873',
+    num: '123456',
+    name: '情节和',
+    sold: '3',
+  },
+  {
+    tal: '19265478963',
+    num: '123456',
+    name: '情节和',
+    sold: '0',
+  },
+  {
+    tal: '12265478963',
+    num: '123456',
+    name: '情节和',
+    sold: '5',
+  },
+  {
+    tal: '14265478963',
+    num: '123456',
+    name: '情节和',
+    sold: '7',
+  },
+  {
+    tal: '13265558963',
+    num: '123456',
+    name: '情节和',
+    sold: '9',
+  },
+]
+
 export const MiniFansList = [
   {
     id: 1,

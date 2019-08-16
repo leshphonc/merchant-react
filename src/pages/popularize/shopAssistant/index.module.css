@@ -27,9 +27,11 @@
   width: 24vw;
   height: 10vw;
   border: none;
-  color: #333;
+  color: #fff;
   border-radius: 0;
   line-height: 10vw;
+  font-size: 15px;
+  font-weight: bold;
 }
 .foot{
   background: #ffb000;

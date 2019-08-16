@@ -27,12 +27,12 @@ import Retail from '@/pages/management/commodity/retail'
 import RetailAdd from '@/pages/management/commodity/retailAdd'
 import ManagementCategory from '@/pages/management/storeFront/managementCategory'
 import CategoryPanel from '@/pages/management/storeFront/categoryPanel'
+import ShopManager from '@/pages/management/shopManager'
+import ShopAdd from '@/pages/management/shopManager/shopAdd'
+import ShopEdit from '@/pages/management/shopManager/shopEdit'
 import BasicInformation from '@/pages/setting/basicInformation'
 import ShopAssistant from '@/pages/popularize/shopAssistant'
-import List from '@/pages/popularize/shopAssistant/list'
-import ScanList from '@/pages/popularize/shopAssistant/scanList'
-import SaleList from '@/pages/popularize/shopAssistant/saleList'
-import FansList from '@/pages/popularize/shopAssistant/fansList'
+
 import RedEnvelope from '@/pages/popularize/redEnvelope'
 
 // mobx严格模式 生产环境使用observed 开发使用always
@@ -68,14 +68,13 @@ export default () => (
       <Route path="/management/commodity/cateringAdd" component={CateringAdd} />
       <Route path="/management/commodity/retail" component={Retail} />
       <Route path="/management/commodity/retailAdd" component={RetailAdd} />
+      <Route path="/management/shopManager" exact component={ShopManager} />
+      <Route path="/management/shopManager/shopAdd" component={ShopAdd} />
+      <Route path="/management/shopManager/shopEdit" component={ShopEdit} />
       {/* 基本信息 -> setting */}
       <Route path="/setting/basicInformation" component={BasicInformation} />
       {/* 商家推广 ->  popularize */}
-      <Route path="/popularize/shopAssistant" exact component={ShopAssistant} />
-      <Route path="/popularize/shopAssistant/list" component={List} />
-      <Route path="/popularize/shopAssistant/scanList" component={ScanList} />
-      <Route path="/popularize/shopAssistant/saleList" component={SaleList} />
-      <Route path="/popularize/shopAssistant/fansList" component={FansList} />
+      <Route path="/popularize/shopAssistant" component={ShopAssistant} />
       <Route path="/popularize/redEnvelope" component={RedEnvelope} />
     </HashRouter>
   </Provider>

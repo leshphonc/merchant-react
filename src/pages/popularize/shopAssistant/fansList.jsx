@@ -24,9 +24,9 @@ class ShopAssistant extends React.Component {
   }
 
   componentDidMount() {
-    const { shopAssistant, history } = this.props
+    const { shopAssistant, match } = this.props
     const { height } = this.state
-    shopAssistant.fetchFansList(history.location.state.id)
+    shopAssistant.fetchFansList(match.params.id)
     if (this.refresh.current) {
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
       this.setState({
@@ -38,10 +38,10 @@ class ShopAssistant extends React.Component {
 
   search = () => {
     const { startdate, enddate } = this.state
-    const { shopAssistant, history } = this.props
+    const { shopAssistant, match } = this.props
     const searchStartDate = moment(startdate).format('YYYY-MM-DD')
     const searchEndDate = moment(enddate).format('YYYY-MM-DD')
-    shopAssistant.fetchScanList(history.location.state.id, searchStartDate, searchEndDate)
+    shopAssistant.fetchScanList(match.params.id, searchStartDate, searchEndDate)
   }
 
   mapList = () => {
@@ -85,7 +85,12 @@ class ShopAssistant extends React.Component {
           <Flex>
             <Flex.Item
               className={styles.tops}
-              style={{ textAlign: 'center', background: '#ffb000' }}
+              style={{
+                textAlign: 'center',
+                background: '#ffb000',
+                color: '#fff',
+                fontSize: '15px',
+              }}
             >
               今日推广
             </Flex.Item>

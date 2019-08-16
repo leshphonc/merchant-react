@@ -15,7 +15,7 @@ export const ColorBox = styled.div`
       overflow: hidden;
       text-align:center;
       text-overflow: inherit !important;
-      color:#333 !important;
+      color:#fff !important;
       font-size: 15px !important;
     }
   }

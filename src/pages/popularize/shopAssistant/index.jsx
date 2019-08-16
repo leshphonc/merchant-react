@@ -4,10 +4,14 @@ import { observer, inject } from 'mobx-react'
 import {
   Button, Flex, List, DatePicker, Picker, WingBlank,
 } from 'antd-mobile'
-import { Link } from 'react-router-dom'
+import { Link, Route } from 'react-router-dom'
 import moment from 'moment'
 import { ColorBox } from './styled'
 import styles from './index.module.css'
+import ShopAssistantList from './list'
+import ScanList from './scanList'
+import SaleList from './saleList'
+import FansList from './fansList'
 
 const { Item } = List
 // const seasons = [selectValues]
@@ -111,7 +115,12 @@ class ShopAssistant extends React.Component {
         <WingBlank
           size="md"
           className={styles.tops}
-          style={{ width: '96%', margin: '10px auto', textAlign: 'center' }}
+          style={{
+            width: '96%',
+            margin: '10px auto',
+            textAlign: 'center',
+            color: '#fff',
+          }}
         >
           当前记录
         </WingBlank>
@@ -134,15 +143,7 @@ class ShopAssistant extends React.Component {
         </div>
         {selectValue ? (
           <div className={styles.foot}>
-            <Link
-              to={{
-                pathname: '/popularize/shopAssistant/list',
-                state: {
-                  id: selectValue[0],
-                },
-              }}
-              style={{ color: '#333' }}
-            >
+            <Link to={`/popularize/shopAssistant/list/${selectValue[0]}`} style={{ color: '#fff' }}>
               查看推广详情
             </Link>
           </div>
@@ -153,4 +154,12 @@ class ShopAssistant extends React.Component {
     )
   }
 }
-export default ShopAssistant
+export default () => (
+  <React.Fragment>
+    <Route path="/popularize/shopAssistant" exact component={ShopAssistant} />
+    <Route path="/popularize/shopAssistant/list/:id" component={ShopAssistantList} />
+    <Route path="/popularize/shopAssistant/scanList/:id" component={ScanList} />
+    <Route path="/popularize/shopAssistant/saleList/:id" component={SaleList} />
+    <Route path="/popularize/shopAssistant/fansList/:id" component={FansList} />
+  </React.Fragment>
+)

@@ -16,9 +16,9 @@ class ShopAssistant extends React.Component {
   }
 
   componentDidMount() {
-    const { shopAssistant, location } = this.props
+    const { shopAssistant, match } = this.props
     // console.log(location)
-    shopAssistant.fetchStaffList(location.state.id)
+    shopAssistant.fetchStaffList(match.params.id)
   }
 
   mapList = () => {
@@ -30,7 +30,7 @@ class ShopAssistant extends React.Component {
           {item.pic ? (
             <img src={item.pic} alt="" />
           ) : (
-            <img src="../../../assets/image/avatar.jpeg" alt="" />
+            <img src={require('@/assets/image/avatar.jpeg')} alt="" />
           )}
           <TopContent>
             <div className="top-title" style={{ fontSize: '15px' }}>
@@ -54,40 +54,13 @@ class ShopAssistant extends React.Component {
         </ItemTop>
         <TopContent style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
           <div className="top-tags">
-            <Link
-              to={{
-                pathname: '/popularize/shopAssistant/scanList',
-                state: {
-                  id: item.id,
-                },
-              }}
-            >
-              扫码人数
-            </Link>
+            <Link to={`/popularize/shopAssistant/scanList/${item.id}`}>扫码人数</Link>
           </div>
           <div className="top-tags">
-            <Link
-              to={{
-                pathname: '/popularize/shopAssistant/fansList',
-                state: {
-                  id: item.id,
-                },
-              }}
-            >
-              绑粉人数
-            </Link>
+            <Link to={`/popularize/shopAssistant/fansList/${item.id}`}>绑粉人数</Link>
           </div>
           <div className="top-tags">
-            <Link
-              to={{
-                pathname: '/popularize/shopAssistant/saleList',
-                state: {
-                  id: item.id,
-                },
-              }}
-            >
-              购买人数
-            </Link>
+            <Link to={`/popularize/shopAssistant/saleList/${item.id}`}>购买人数</Link>
           </div>
         </TopContent>
       </ListItem>

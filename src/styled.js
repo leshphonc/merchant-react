@@ -104,7 +104,7 @@ export const TopContent = styled.div`
     text-align: center;
     line-height: 8vw;
     & > a {
-      color: #333;
+      color: #fff;
     }
   }
   & > .top-extra {
@@ -214,5 +214,17 @@ export const FilterBox = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+`
+export const Buttons = styled.div`
+  display: inline-block;
+  .am-button{
+    font-size: 16px;
+    overflow: initial;
+    height: 0;
+    line-height:1;
+  }
+  .am-button::before{
+    border:0 !important;
   }
 `

@@ -14,7 +14,7 @@ const ManagementGrid = {
     },
     {
       name: '店员管理',
-      path: '3',
+      path: '/management/shopmanager',
       enable: require('../assets/image/dygl.png'),
       disable: require('../assets/image/dygl_gray.png'),
     },

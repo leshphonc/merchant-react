@@ -5,6 +5,7 @@ import marketing from '@/pages/marketing/store'
 import basicInformation from '@/pages/setting/basicInformation/store'
 import shopAssistant from '@/pages/popularize/shopAssistant/store'
 import member from '@/pages/management/member/store'
+import commodity from '@/pages/management/commodity/store'
 
 const stores = {
   login,
@@ -14,5 +15,6 @@ const stores = {
   basicInformation,
   shopAssistant,
   member,
+  commodity,
 }
 export default stores
