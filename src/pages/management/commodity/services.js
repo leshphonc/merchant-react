@@ -52,16 +52,44 @@ export const fetchCateringValues = () => axios.get('/appapi.php?c=Merchantapp&a=
 })
 
 // 餐饮商店分类
-export const fetchCateringMeal = () => axios.get('/appapi.php?c=Merchantapp&a=select_meal_sort', {
+export const fetchCateringMeal = storeId => axios.get('/appapi.php?c=Merchantapp&a=select_meal_sort', {
   params: {
+    store_id: storeId,
     ticket: localStorage.getItem('ticket'),
   },
 })
 
-// 添加餐饮商品
-export const fetchCateringAdd = () => axios.post('/appapi.php?c=Merchantapp&a=add_meal', {
-  ticket: localStorage.getItem('ticket'),
+// 餐饮商品详情
+export const fetchCateringDetail = (id, type, stid) => axios.get('/appapi.php?c=Merchantapp&a=get_meal_detail', {
+  params: {
+    store_id: id,
+    goods_id: type,
+    stid,
+    ticket: localStorage.getItem('ticket'),
+  },
 })
+
+export const addCategory = payload => {
+  const body = {}
+  Object.keys(payload).forEach(item => {
+    body[item] = payload[item]
+  })
+  return axios.post('/appapi.php?c=Merchantapp&a=add_meal', {
+    ...body,
+    ticket: localStorage.getItem('ticket'),
+  })
+}
+
+export const modifyCategory = payload => {
+  const body = {}
+  Object.keys(payload).forEach(item => {
+    body[item] = payload[item]
+  })
+  return axios.post('/appapi.php?c=Merchantapp&a=edit_meal', {
+    ...body,
+    ticket: localStorage.getItem('ticket'),
+  })
+}
 
 // 餐饮删除
 export const fetchCateringDelete = (storeId, mealId) => axios.post('/appapi.php?c=Merchantapp&a=mdel', {

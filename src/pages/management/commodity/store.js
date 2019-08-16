@@ -19,6 +19,8 @@ class MastSotre {
 
   @observable reserveListTotal = null
 
+  @observable cateringDetail = {}
+
   @observable cateringList = []
 
   @observable cateringListPage = 1
@@ -37,7 +39,7 @@ class MastSotre {
 
   @observable cateringValues = []
 
-  @observable cateringMeal = {}
+  @observable cateringMeal = []
 
   @observable cateringDelete = {}
 
@@ -154,6 +156,32 @@ class MastSotre {
   }
 
   @action
+  fetchCateringDetail = async (id, type, stid) => {
+    const response = await services.fetchCateringDetail(id, type, stid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.cateringDetail = response.data.result
+      })
+    }
+  }
+
+  @action
+  addCategory = async payload => {
+    const response = await services.addCategory(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  modifyCategory = async payload => {
+    const response = await services.modifyCategory(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
   fetchRetailList = async () => {
     let hasMore = true
     if (this.retailListTotal !== null) {
@@ -187,8 +215,8 @@ class MastSotre {
   }
 
   @action
-  fetchCateringMeal = async () => {
-    const response = await services.fetchCateringMeal()
+  fetchCateringMeal = async storeId => {
+    const response = await services.fetchCateringMeal(storeId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.cateringMeal = response.data.result
@@ -214,11 +242,6 @@ class MastSotre {
   @action
   fetchCateringStand = async (storeId, mealId, status) => {
     await services.fetchCateringStand(storeId, mealId, status)
-  }
-
-  @action
-  fetchCateringAdd = async () => {
-    await services.fetchCateringAdd()
   }
 
   @action
