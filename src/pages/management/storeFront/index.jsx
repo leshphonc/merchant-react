@@ -75,6 +75,6 @@ export default () => (
       component={StoreDiscountPanel}
     />
     <Route path="/management/storefront/storePanel/:str/:id?" component={StorePanel} />
-    <Route path="/management/storefront/coordinatePicker" component={CoordinatePicker} />
+    <Route path="/management/storefront/coordinatePicker/:lng?/:lat?" component={CoordinatePicker} />
   </React.Fragment>
 )

@@ -14,10 +14,11 @@ class CoordinatePicker extends React.Component {
   }
 
   render() {
+    const { match } = this.props
     return (
       <React.Fragment>
         <NavBar title="商户坐标拾取" goBack />
-        <Picker callback={this.returnValue} />
+        <Picker callback={this.returnValue} lng={match.params.lng} lat={match.params.lat} />
       </React.Fragment>
     )
   }
