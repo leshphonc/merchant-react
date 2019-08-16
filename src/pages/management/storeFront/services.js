@@ -111,3 +111,13 @@ export const fetchCircle = id => axios.get('/appapi.php?c=Merchantapp&a=ajax_cir
     ticket: localStorage.getItem('ticket'),
   },
 })
+
+export const insertStoreFront = payload => axios.post('/appapi.php?c=Merchantapp&a=add_store', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const modifyStoreFront = payload => axios.post('/appapi.php?c=Merchantapp&a=edit_store', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})

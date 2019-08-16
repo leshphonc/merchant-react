@@ -1,4 +1,5 @@
 import login from '@/pages/login/store'
+import home from '@/pages/home/store'
 import order from '@/pages/order/store'
 import wallet from '@/pages/wallet/store'
 import storeFront from '@/pages/management/storeFront/store'
@@ -10,6 +11,7 @@ import commodity from '@/pages/management/commodity/store'
 
 const stores = {
   login,
+  home,
   order,
   wallet,
   storeFront,
