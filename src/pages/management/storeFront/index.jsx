@@ -1,49 +1,80 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import { Tabs, Badge, Menu, Icon } from 'antd-mobile'
-import { MenuMask } from '@/styled'
-import CardList from '@/common/StoreList'
-import { StoreList } from '@/config/list'
+import { Route, Link } from 'react-router-dom'
+import { observer, inject } from 'mobx-react'
+import { Tabs, WhiteSpace } from 'antd-mobile'
+import StoreList from './components/StoreList'
+import CategoryManagement from './categoryManagement'
+import CategoryPanel from './categoryPanel'
+import StoreDiscount from './storeDiscount'
+import StoreDiscountPanel from './storeDiscountPanel'
+import StorePanel from './storePanel'
+import CoordinatePicker from './modify/coordinate'
 
-export default () => {
-  const [menu, setMenu] = React.useState(false)
-  const tabs = [
-    { title: <Badge text="3">全部</Badge> },
-    { title: <Badge text="20">正常</Badge> },
-    { title: <Badge dot>待审核</Badge> },
-  ]
-  const menuEl = (
-    <Menu
-      className="menu-position"
-      data={[
-        {
-          value: '1',
-          label: '网店',
-        },
-        {
-          value: '2',
-          label: '餐饮',
-        },
-      ]}
-      value={['1']}
-      level={1}
-      onChange={() => setMenu(false)}
-    />
-  )
-  return (
-    <React.Fragment>
-      <NavBar
-        title="店铺管理"
-        goBack
-        right={<Icon onClick={() => setMenu(!menu)} type="ellipsis" />}
-      />
-      <Tabs tabs={tabs} initialPage={0}>
-        <CardList list={StoreList} />
-        <CardList list={StoreList} />
-        <CardList list={StoreList} />
-      </Tabs>
-      {menu ? menuEl : null}
-      {menu ? <MenuMask onClick={() => setMenu(false)} /> : null}
-    </React.Fragment>
-  )
+const TabsOption = [{ title: '网店', value: '1' }, { title: '餐饮', value: '2' }]
+
+@inject('storeFront')
+@observer
+class StoreFront extends React.Component {
+  state = {
+    type: '1',
+  }
+
+  componentDidMount() {
+    const { storeFront } = this.props
+    const { type } = this.state
+    storeFront.fetchStoreList(type)
+  }
+
+  changeTab = item => {
+    const { storeFront } = this.props
+    storeFront.fetchStoreList(item.value)
+    this.setState({
+      type: item.value,
+    })
+  }
+
+  render() {
+    const { storeFront } = this.props
+    const { type } = this.state
+    return (
+      <React.Fragment>
+        <NavBar
+          title="店铺管理"
+          goBack
+          right={
+            <Link style={{ color: '#fff' }} to="/management/storefront/storePanel/添加">
+              添加店铺
+            </Link>
+          }
+        />
+        <WhiteSpace />
+        <Tabs tabs={TabsOption} onChange={item => this.changeTab(item)}>
+          <StoreList list={storeFront.storeList} type={type} />
+          <StoreList list={storeFront.storeList} type={type} />
+        </Tabs>
+      </React.Fragment>
+    )
+  }
 }
+
+export default () => (
+  <React.Fragment>
+    <Route path="/management/storefront" exact component={StoreFront} />
+    <Route
+      path="/management/storefront/categoryManagement/:id/:type"
+      component={CategoryManagement}
+    />
+    <Route
+      path="/management/storefront/categoryPanel/:str/:id/:type/:stid?"
+      component={CategoryPanel}
+    />
+    <Route path="/management/storefront/storeDiscount/:id" component={StoreDiscount} />
+    <Route
+      path="/management/storefront/storeDiscountPanel/:str/:id/:cid?"
+      component={StoreDiscountPanel}
+    />
+    <Route path="/management/storefront/storePanel/:str/:id?" component={StorePanel} />
+    <Route path="/management/storefront/coordinatePicker" component={CoordinatePicker} />
+  </React.Fragment>
+)

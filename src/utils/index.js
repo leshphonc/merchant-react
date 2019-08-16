@@ -35,6 +35,13 @@ export default {
     }
     return val.substr(1)
   },
+  conversionTimeStringToDate(str) {
+    const date = new Date()
+    date.setHours(str.substr(0, 2))
+    date.setMinutes(str.substr(3, 2))
+    date.setSeconds(str.substr(6, 2))
+    return date
+  },
   initShareInfo(wx) {
     const shareInfo = {
       title: '分享标题', // 分享标题

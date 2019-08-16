@@ -1,4 +1,4 @@
-/* antd-mobile组件样式覆盖 */
+/* antd-mobil List样式覆盖 */
 .am-list-item .am-list-line .am-list-content {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.77);
@@ -26,13 +26,48 @@
   font-size: 12px;
 }
 
-/* 定义menu位置在navbar下面 */
-.menu-position {
-  position: fixed;
-  top: 54px;
+.am-textarea-label {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.77);
+}
+
+.am-textarea-control textarea {
+  color: #888;
+  font-size: 14px;
+}
+
+.am-textarea-count span {
+  color: #ffb000;
+}
+
+/* card自定义样式 */
+.am-card-header-content {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* switch自定义样式 */
+.am-switch .checkbox {
+  width: 40px;
+  height: 14px;
+}
+
+.am-switch .checkbox:before {
+  width: 37px;
+  height: 12px;
+}
+
+.am-switch .checkbox:after {
+  width: 20px;
+  height: 20px;
+  top: -3px;
   left: 0;
-  right: 0;
-  z-index: 90;
+}
+
+.am-switch input[type='checkbox']:checked + .checkbox:after {
+  transform: translateX(19px);
 }
 
 /* 导航栏阴影 */
@@ -42,6 +77,15 @@
 
 .am-tabs-horizontal .am-tabs-pane-wrap-inactive {
   z-index: -1;
+}
+
+/* 定义menu位置在navbar下面 */
+.menu-position {
+  position: fixed;
+  top: 54px;
+  left: 0;
+  right: 0;
+  z-index: 90;
 }
 
 /* 富文本工具栏换行 */
@@ -58,24 +102,8 @@
   left: 0;
 }
 
-/* switch自定义样式 */
-.am-switch .checkbox {
-  width: 40px;
-  height: 14px;
-}
-
-.am-switch .checkbox:before {
-  width: 37px;
-  height: 12px;
-}
-
-.am-switch .checkbox:after{
-  width: 20px;
-  height: 20px;
-  top: -3px;
-  left: 0;
-}
-
-.am-switch input[type='checkbox']:checked + .checkbox:after {
-  transform: translateX(19px);
+/* 清除默认button样式 */
+button {
+  border: none;
+  background-color: #fff;
 }

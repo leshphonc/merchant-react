@@ -60,3 +60,22 @@ export const fetchIncomeStoreList = () => axios.get('/appapi.php?c=Merchantapp&a
     ticket: localStorage.getItem('ticket'),
   },
 })
+
+export const fetchWithDrawInfo = () => axios.get('/appapi.php?c=Merchantapp&a=money_withdraw_info', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+export const withDraw = payload => axios.post('/appapi.php?c=Merchantapp&a=money_withdraw', {
+  withdraw_type: payload.receiptValue,
+  name: payload.name,
+  money: payload.amount,
+  weixin_account: payload.accountValue,
+  info: payload.remark,
+  card_username: payload.cardUserName,
+  card_number: payload.cardNumber,
+  bank: payload.bank,
+  invoice: payload.invoice,
+  ticket: localStorage.getItem('ticket'),
+})

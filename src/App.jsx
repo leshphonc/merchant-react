@@ -25,8 +25,6 @@ import Catering from '@/pages/management/commodity/catering'
 import CateringAdd from '@/pages/management/commodity/cateringAdd'
 import Retail from '@/pages/management/commodity/retail'
 import RetailAdd from '@/pages/management/commodity/retailAdd'
-import ManagementCategory from '@/pages/management/storeFront/managementCategory'
-import CategoryPanel from '@/pages/management/storeFront/categoryPanel'
 import ShopManager from '@/pages/management/shopManager'
 import ShopAdd from '@/pages/management/shopManager/shopAdd'
 import ShopEdit from '@/pages/management/shopManager/shopEdit'
@@ -48,9 +46,7 @@ export default () => (
       {/* 钱包页面 -> wallet */}
       <Route path="/wallet" component={Wallet} />
       {/* 管理页面 -> management */}
-      <Route path="/management/storefront" exact component={StoreFront} />
-      <Route path="/management/storefront/managementCategory" component={ManagementCategory} />
-      <Route path="/management/storefront/categoryPanel" component={CategoryPanel} />
+      <Route path="/management/storefront" component={StoreFront} />
       <Route path="/management/member" exact component={Member} />
       <Route path="/management/member/miniProgram" component={MiniProgram} />
       <Route path="/management/member/publicMember" component={PublicMember} />

@@ -1,3 +1,10 @@
+/**
+ * @author cc
+ * @param aspectratio 截图比,不传则不控制
+ * @callback callback
+ * @description 传入aspectratio控制截图比例，点击截取后将获得的url传入callback带出
+ */
+
 import React from 'react'
 import { Button, ImagePicker, Toast } from 'antd-mobile'
 import Cropper from 'react-cropper'
