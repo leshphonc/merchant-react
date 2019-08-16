@@ -192,14 +192,11 @@ class BasicInformation extends React.Component {
               arrow="horizontal"
               extra={`${basicInfo.long || 0}, ${basicInfo.lat || 0}`}
               onClick={() => {
-                history.push({
-                  pathname: '/setting/basicInformation/modifyCoordinate',
-                  state: {
-                    lng: basicInfo.long,
-                    lat: basicInfo.lat,
-                    address: basicInfo.adress,
-                  },
-                })
+                history.push(
+                  `/setting/basicInformation/modifyCoordinate/${basicInfo.long}/${basicInfo.lat}/${
+                    basicInfo.adress
+                  }`,
+                )
               }}
             >
               商户经纬度
@@ -298,6 +295,9 @@ export default () => (
     <Route path="/setting/basicInformation/modifyDescription" component={ModifyDescription} />
     <Route path="/setting/basicInformation/modifyPicture" component={ModifyPicture} />
     <Route path="/setting/basicInformation/modifyDetail" component={ModifyDetail} />
-    <Route path="/setting/basicInformation/modifyCoordinate" component={ModifyCoordinate} />
+    <Route
+      path="/setting/basicInformation/modifyCoordinate/:lng/:lat/:address"
+      component={ModifyCoordinate}
+    />
   </React.Fragment>
 )

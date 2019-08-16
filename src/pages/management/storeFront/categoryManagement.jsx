@@ -2,12 +2,16 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import { WhiteSpace, Card } from 'antd-mobile'
+import {
+  WhiteSpace, Card, Modal, Toast,
+} from 'antd-mobile'
 import { Link } from 'react-router-dom'
+
+const { alert } = Modal
 
 @inject('storeFront')
 @observer
-class ManagementCategory extends React.Component {
+class CategoryManagement extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -28,8 +32,17 @@ class ManagementCategory extends React.Component {
     })
   }
 
+  deleteCategory = id => {
+    const { storeFront, match } = this.props
+    storeFront.deleteCategory(match.params.id, match.params.type, id).then(res => {
+      if (res) {
+        Toast.success('删除成功', 1, () => storeFront.fetchCategoryList(match.params.id, match.params.type))
+      }
+    })
+  }
+
   mapList = () => {
-    const { storeFront } = this.props
+    const { storeFront, match } = this.props
     const { categoryList } = storeFront
     return categoryList.map(item => (
       <React.Fragment key={item.sort_id}>
@@ -39,18 +52,31 @@ class ManagementCategory extends React.Component {
           <Card.Footer
             extra={
               <React.Fragment>
-                <Link to="/management/storefront/categoryPanel/编辑" style={{ color: '#888', marginRight: 15 }}>
+                <Link
+                  to={`/management/storefront/categoryPanel/编辑/${match.params.id}/${
+                    match.params.type
+                  }/${item.sort_id}`}
+                  style={{ color: '#888', marginRight: 15 }}
+                >
                   <i className="iconfont" style={{ color: '#ffb000', marginRight: 5 }}>
                     &#xe634;
                   </i>
                   编辑
                 </Link>
-                <span>
+                <button
+                  type="button"
+                  style={{ color: '#888' }}
+                  onClick={() => alert('删除', '确定删除此分类？', [
+                    { text: '取消' },
+                    { text: '删除', onPress: () => this.deleteCategory(item.sort_id) },
+                  ])
+                  }
+                >
                   <i className="iconfont" style={{ color: '#ffb000', marginRight: 5 }}>
                     &#xe621;
                   </i>
                   删除
-                </span>
+                </button>
               </React.Fragment>
             }
           />
@@ -61,6 +87,7 @@ class ManagementCategory extends React.Component {
   }
 
   render() {
+    const { match } = this.props
     const { height } = this.state
     return (
       <React.Fragment>
@@ -68,7 +95,12 @@ class ManagementCategory extends React.Component {
           title="商品分类"
           goBack
           right={
-            <Link to="/management/storefront/categoryPanel/添加" style={{ color: '#fff' }}>
+            <Link
+              to={`/management/storefront/categoryPanel/添加/${match.params.id}/${
+                match.params.type
+              }`}
+              style={{ color: '#fff' }}
+            >
               添加分类
             </Link>
           }
@@ -82,4 +114,4 @@ class ManagementCategory extends React.Component {
   }
 }
 
-export default ManagementCategory
+export default CategoryManagement

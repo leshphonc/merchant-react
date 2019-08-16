@@ -101,3 +101,9 @@
   margin-left: 0 !important;
   left: 0;
 }
+
+/* 清除默认button样式 */
+button {
+  border: none;
+  background-color: #fff;
+}

@@ -5,9 +5,7 @@ import {
   WhiteSpace, List, Picker, InputItem, TextareaItem, Button, Toast,
 } from 'antd-mobile'
 import UploadInvoice from './components/UploadInvoice'
-import {
-  CustomizeList, ListTitle, ListContent, PrimaryTag, MenuMask,
-} from '@/styled'
+import { CustomizeList, ListTitle, ListContent } from '@/styled'
 
 const Receipt = [
   {

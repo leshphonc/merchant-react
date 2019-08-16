@@ -23,14 +23,14 @@ class CoordinatePicker extends React.Component {
   }
 
   componentDidMount() {
-    const { location } = this.props
+    const { match } = this.props
     const mapHeight = document.documentElement.clientHeight - 145
     this.setState(
       {
         mapHeight,
-        lng: location.state.lng,
-        lat: location.state.lat,
-        address: location.state.address,
+        lng: match.params.lng || 120.15,
+        lat: match.params.lat || 30.28,
+        address: match.params.address || '',
       },
       () => {
         this.initMap()

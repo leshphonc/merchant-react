@@ -58,26 +58,45 @@ class StoreList extends React.Component {
                   size="small"
                   onClick={() => {
                     history.push(
-                      `/management/storefront/managementCategory/${item.store_id}/${type}`,
+                      `/management/storefront/categoryManagement/${item.store_id}/${type}`,
                     )
                   }}
                 >
                   分类管理
                 </Button>
                 <WhiteSpace />
-                <Button type="primary" size="small">
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() => {
+                    history.push(`/management/storefront/storeDiscount/${item.store_id}`)
+                  }}
+                >
                   店铺优惠
                 </Button>
               </Flex.Item>
               <Flex.Item>
-                <Button type="primary" size="small">
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() => {
+                    history.push(
+                      `/management/storefront/categoryPanel/新增/${item.store_id}/${type}`,
+                    )
+                  }}
+                >
                   <i className="iconfont" style={{ marginRight: 4 }}>
                     &#xe633;
                   </i>
                   添加分类
                 </Button>
                 <WhiteSpace />
-                <Button type="primary" size="small">
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() => history.push(`/management/storefront/storePanel/编辑/${item.store_id}`)
+                  }
+                >
                   <i className="iconfont" style={{ marginRight: 4 }}>
                     &#xe634;
                   </i>
