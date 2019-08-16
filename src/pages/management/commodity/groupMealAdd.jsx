@@ -17,7 +17,7 @@ class GroupMealAdd extends React.Component {
     description: '',
   }
 
-  search = () => {
+  submit = () => {
     const { title, description } = this.state
     const { commodity } = this.props
     console.log(title)
@@ -64,7 +64,7 @@ class GroupMealAdd extends React.Component {
               <Button
                 type="primary"
                 style={{ color: '#333', fontWeight: 'bold' }}
-                onClick={this.search}
+                onClick={this.submit}
               >
                 添加
               </Button>

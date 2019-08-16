@@ -54,7 +54,7 @@ class Catering extends React.Component {
   }
 
   mapList = () => {
-    const { commodity } = this.props
+    const { commodity, history } = this.props
     const { cateringList } = commodity
     return cateringList.map(item => (
       <React.Fragment key={item.goods_id}>
@@ -105,19 +105,21 @@ class Catering extends React.Component {
                   删除
                 </Button>
               </Buttons>
-              <Link
-                to={{
-                  pathname: '/management/commodity/cateringAdd',
-                }}
-                style={{ color: '#333' }}
-              >
-                <div style={{ display: 'inline-block', marginLeft: '20px' }}>
-                  <i className="iconfont" style={{ color: '#ffb000' }}>
-                    &#xe645;
+              <Buttons>
+                <Button
+                  type="button"
+                  style={{ color: '#333', marginLeft: '20px' }}
+                  onClick={() => history.push(
+                    `/management/commodity/cateringPanel/编辑/${item.store_id}/${item.goods_id}/`,
+                  )
+                  }
+                >
+                  <i className="iconfont" style={{ color: '#ffb000', marginRight: 5 }}>
+                    &#xe634;
                   </i>
                   编辑
-                </div>
-              </Link>
+                </Button>
+              </Buttons>
             </TopContent>
           </ItemTop>
         </ListItem>
@@ -211,7 +213,7 @@ class Catering extends React.Component {
               background: '#ffb000',
             }}
           >
-            <Link to="/management/commodity/cateringAdd">
+            <Link to="/management/commodity/cateringPanel/添加">
               <Item style={{ paddingLeft: '0', background: '#ffb000' }}>
                 <i className="iconfont" style={{ marginRight: '6px' }}>
                   &#xe61e;
