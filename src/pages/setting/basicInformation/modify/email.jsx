@@ -13,9 +13,9 @@ class ModifyEmail extends React.Component {
   }
 
   componentDidMount() {
-    const { history } = this.props
+    const { match } = this.props
     this.setState({
-      email: history.location.state.value,
+      email: match.params.value,
     })
   }
 

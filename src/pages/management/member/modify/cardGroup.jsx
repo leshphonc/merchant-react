@@ -15,22 +15,22 @@ class ModifyGroup extends React.Component {
   }
 
   componentDidMount() {
-    const { location } = this.props
-    console.log(location)
-    if (location.state.type === '编辑') {
+    const { match } = this.props
+    console.log(match)
+    if (match.params.type === '编辑') {
       this.setState({
-        groupname: location.state.name,
-        comment: location.state.comment,
-        discount: location.state.discount,
+        groupname: match.params.name,
+        comment: match.params.comment,
+        discount: match.params.discount,
       })
     }
   }
 
   submit = async () => {
-    const { location, history, member } = this.props
+    const { match, history, member } = this.props
     const { groupname, comment, discount } = this.state
-    if (location.state.type === '编辑') {
-      await member.operatingCardGroup(groupname, comment, discount, location.state.id)
+    if (match.params.type === '编辑') {
+      await member.operatingCardGroup(groupname, comment, discount, match.params.id)
     } else {
       await member.operatingCardGroup(groupname, comment, discount)
     }
@@ -38,13 +38,13 @@ class ModifyGroup extends React.Component {
   }
 
   render() {
-    const { location } = this.props
+    const { match } = this.props
     const { groupname, comment, discount } = this.state
     return (
       <React.Fragment>
-        <NavBar title={`${location.state.type}分组`} goBack />
+        <NavBar title={`${match.params.str}分组`} goBack />
         <WhiteSpace />
-        <List renderFooter="会员分组是*************，功能是*********">
+        <List>
           <InputItem
             placeholder="请输入分组名称"
             type="text"

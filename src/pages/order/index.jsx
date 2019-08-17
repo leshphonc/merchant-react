@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import NavBar from '@/common/NavBar'
-import { WhiteSpace, List } from 'antd-mobile'
+import { WhiteSpace, List, Toast } from 'antd-mobile'
 
 @inject('order')
 @observer
@@ -17,7 +17,13 @@ class Order extends React.Component {
     return orderList.map(item => (
       <React.Fragment key={item.name}>
         <List>
-          <List.Item arrow="horizontal" extra={item.count} onClick={() => {}}>
+          <List.Item
+            arrow="horizontal"
+            extra={item.count}
+            onClick={() => {
+              Toast.info('暂无权限，请联系管理员')
+            }}
+          >
             {item.name}
           </List.Item>
         </List>

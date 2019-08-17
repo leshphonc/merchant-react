@@ -7,17 +7,17 @@ import CropperImg from '@/common/CropperImg'
 @observer
 class ModifyPicture extends React.Component {
   saveImg = async url => {
-    const { history, basicInformation } = this.props
-    await basicInformation[history.location.state.action](url)
+    const { history, match, basicInformation } = this.props
+    await basicInformation[match.params.action](url)
     history.goBack()
   }
 
   render() {
-    const { history } = this.props
+    const { match } = this.props
     return (
       <React.Fragment>
         <NavBar title="裁剪上传" goBack />
-        <CropperImg callback={this.saveImg} aspectratio={history.location.state.aspectratio} />
+        <CropperImg callback={this.saveImg} aspectratio={match.params.aspectratio - 0} />
       </React.Fragment>
     )
   }

@@ -197,7 +197,7 @@ class CateringPanel extends React.Component {
       if (item.file) {
         /* eslint no-new: 0 */
         new Compressor(item.file, {
-          quality: 0.3,
+          quality: 0.1,
           success: result => {
             const reader = new window.FileReader()
             reader.readAsDataURL(result)
@@ -384,7 +384,7 @@ class CateringPanel extends React.Component {
                 <Tooltip
                   trigger="click"
                   placement="topLeft"
-                  overlay="默认添加顺序排序，数值越大，排序越前"
+                  overlay="默认添加顺序排序，数值越大，排序越靠前"
                   onClick={e => {
                     e.stopPropagation()
                   }}

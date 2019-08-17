@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import { WhiteSpace, List } from 'antd-mobile'
+import { WhiteSpace, List, Toast } from 'antd-mobile'
 
 @inject('marketing')
 @observer
@@ -20,6 +20,7 @@ class Marketing extends React.Component {
           <List.Item
             arrow="horizontal"
             onClick={() => {
+              Toast.info('正在开发，敬请期待')
               console.log(item.url)
             }}
           >

@@ -79,6 +79,11 @@
   z-index: -1;
 }
 
+/* menu左侧滚动 */
+.am-menu .am-flexbox .am-flexbox-item:first-child {
+  height: 100%;
+}
+
 /* 定义menu位置在navbar下面 */
 .menu-position {
   position: fixed;

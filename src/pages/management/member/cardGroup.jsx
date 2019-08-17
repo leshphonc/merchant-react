@@ -66,16 +66,11 @@ class CardGroup extends React.Component {
                   type="primary"
                   size="small"
                   style={{ width: 120 }}
-                  onClick={() => history.push({
-                    pathname: '/management/member/cardGroup/modifyCardGroup',
-                    state: {
-                      type: '编辑',
-                      id: item.id,
-                      name: item.name,
-                      comment: item.des,
-                      discount: item.discount,
-                    },
-                  })
+                  onClick={() => history.push(
+                    `/management/member/cardGroup/modifyCardGroup/编辑/${item.id}/${item.name}/${
+                      item.des
+                    }/${item.discount}`,
+                  )
                   }
                 >
                   编辑
@@ -135,15 +130,7 @@ class CardGroup extends React.Component {
           title="会员卡分组"
           goBack
           right={
-            <Link
-              style={{ color: '#fff' }}
-              to={{
-                pathname: '/management/member/cardGroup/modifyCardGroup',
-                state: {
-                  type: '添加',
-                },
-              }}
-            >
+            <Link style={{ color: '#fff' }} to="/management/member/cardGroup/modifyCardGroup/添加">
               添加分组
             </Link>
           }
@@ -170,7 +157,10 @@ class CardGroup extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/management/member/cardGroup" exact component={CardGroup} />
-    <Route path="/management/member/cardGroup/modifyCardGroup" component={ModifyCardGroup} />
+    <Route
+      path="/management/member/cardGroup/modifyCardGroup/:str/:id?/:name?/:comment?/:discount?"
+      component={ModifyCardGroup}
+    />
     <Route path="/management/member/cardGroup/cardGroupUsers" component={CardGroupUsers} />
     <Route
       path="/management/member/cardGroup/modifyCardGroupUsers"

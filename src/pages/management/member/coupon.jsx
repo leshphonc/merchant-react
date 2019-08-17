@@ -80,12 +80,7 @@ class Coupon extends React.Component {
                 type="primary"
                 size="small"
                 onClick={() => {
-                  history.push({
-                    pathname: '/management/member/coupon/couponCheck',
-                    state: {
-                      id: item.coupon_id,
-                    },
-                  })
+                  history.push(`/management/member/coupon/couponCheck/${item.coupon_id}`)
                 }}
               >
                 已领取{item.had_pull}张
@@ -208,6 +203,6 @@ class Coupon extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/management/member/coupon" exact component={Coupon} />
-    <Route path="/management/member/coupon/couponCheck" component={CouponCheck} />
+    <Route path="/management/member/coupon/couponCheck/:id" component={CouponCheck} />
   </React.Fragment>
 )

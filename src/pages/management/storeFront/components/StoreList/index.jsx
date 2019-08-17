@@ -41,6 +41,7 @@ class StoreList extends React.Component {
 
   mapList = () => {
     const { list, type, history } = this.props
+    const storeType = sessionStorage.getItem('storeType')
     return list.map(item => (
       <React.Fragment key={item.store_id}>
         <Card>
@@ -65,15 +66,17 @@ class StoreList extends React.Component {
                   分类管理
                 </Button>
                 <WhiteSpace />
-                <Button
-                  type="primary"
-                  size="small"
-                  onClick={() => {
-                    history.push(`/management/storefront/storeDiscount/${item.store_id}`)
-                  }}
-                >
-                  店铺优惠
-                </Button>
+                {storeType === '1' ? (
+                  <Button
+                    type="primary"
+                    size="small"
+                    onClick={() => {
+                      history.push(`/management/storefront/storeDiscount/${item.store_id}`)
+                    }}
+                  >
+                    店铺优惠
+                  </Button>
+                ) : null}
               </Flex.Item>
               <Flex.Item>
                 <Button
@@ -101,6 +104,32 @@ class StoreList extends React.Component {
                     &#xe634;
                   </i>
                   编辑店铺
+                </Button>
+              </Flex.Item>
+              <Flex.Item>
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() => history.push(`/management/storefront/storePanel/编辑/${item.store_id}`)
+                  }
+                >
+                  <i className="iconfont" style={{ marginRight: 4 }}>
+                    &#xe6fd;
+                  </i>
+                  桌台管理
+                </Button>
+                <WhiteSpace />
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() => {
+                    history.push(`/management/storefront/diningInformation/${item.store_id}`)
+                  }}
+                >
+                  <i className="iconfont" style={{ marginRight: 4 }}>
+                    &#xe629;
+                  </i>
+                  餐饮信息
                 </Button>
               </Flex.Item>
             </Flex>

@@ -209,7 +209,7 @@ class RetailAdd extends React.Component {
               <Tooltip
                 trigger="click"
                 placement="topLeft"
-                overlay="默认添加顺序排序。数值越大，排序越前"
+                overlay="默认添加顺序排序。数值越大，排序越靠前"
                 onClick={e => {
                   e.stopPropagation()
                 }}

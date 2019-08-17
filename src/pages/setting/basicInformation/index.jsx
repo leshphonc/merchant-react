@@ -125,12 +125,7 @@ class BasicInformation extends React.Component {
               extra={basicInfo.phone}
               arrow="horizontal"
               onClick={() => {
-                history.push({
-                  pathname: '/setting/basicInformation/modifyPhone',
-                  state: {
-                    value: basicInfo.phone,
-                  },
-                })
+                history.push(`/setting/basicInformation/modifyPhone/${basicInfo.phone}`)
               }}
             >
               联系电话
@@ -139,12 +134,7 @@ class BasicInformation extends React.Component {
               extra={basicInfo.email}
               arrow="horizontal"
               onClick={() => {
-                history.push({
-                  pathname: '/setting/basicInformation/modifyEmail',
-                  state: {
-                    value: basicInfo.email,
-                  },
-                })
+                history.push(`/setting/basicInformation/modifyEmail/${basicInfo.email}`)
               }}
             >
               商家邮箱
@@ -210,12 +200,7 @@ class BasicInformation extends React.Component {
               extra={basicInfo.txt_info}
               arrow="horizontal"
               onClick={() => {
-                history.push({
-                  pathname: '/setting/basicInformation/modifyDescription',
-                  state: {
-                    value: basicInfo.txt_info,
-                  },
-                })
+                history.push(`/setting/basicInformation/modifyDescription/${basicInfo.txt_info}`)
               }}
             >
               商户描述
@@ -223,13 +208,7 @@ class BasicInformation extends React.Component {
             <Item
               arrow="horizontal"
               onClick={() => {
-                history.push({
-                  pathname: '/setting/basicInformation/modifyPicture',
-                  state: {
-                    action: 'modifyLogoUrl',
-                    aspectratio: 1 / 1,
-                  },
-                })
+                history.push('/setting/basicInformation/modifyPicture/modifyLogoUrl/1')
               }}
             >
               <CustomizeList>
@@ -242,13 +221,7 @@ class BasicInformation extends React.Component {
             <Item
               arrow="horizontal"
               onClick={() => {
-                history.push({
-                  pathname: '/setting/basicInformation/modifyPicture',
-                  state: {
-                    action: 'modifyImgUrl',
-                    aspectratio: 2 / 1,
-                  },
-                })
+                history.push('/setting/basicInformation/modifyPicture/modifyImgUrl/1')
               }}
             >
               <CustomizeList>
@@ -262,12 +235,8 @@ class BasicInformation extends React.Component {
               extra="前往修改"
               arrow="horizontal"
               onClick={() => {
-                history.push({
-                  pathname: '/setting/basicInformation/modifyDetail',
-                  state: {
-                    value: basicInfo.content,
-                  },
-                })
+                history.push('/setting/basicInformation/modifyDetail')
+                sessionStorage.setItem('content', basicInfo.content)
               }}
             >
               商户详情
@@ -290,10 +259,16 @@ class BasicInformation extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/setting/basicInformation" exact component={BasicInformation} />
-    <Route path="/setting/basicInformation/modifyPhone" component={ModifyPhone} />
-    <Route path="/setting/basicInformation/modifyEmail" component={ModifyEmail} />
-    <Route path="/setting/basicInformation/modifyDescription" component={ModifyDescription} />
-    <Route path="/setting/basicInformation/modifyPicture" component={ModifyPicture} />
+    <Route path="/setting/basicInformation/modifyPhone/:value" component={ModifyPhone} />
+    <Route path="/setting/basicInformation/modifyEmail/:value" component={ModifyEmail} />
+    <Route
+      path="/setting/basicInformation/modifyDescription/:value"
+      component={ModifyDescription}
+    />
+    <Route
+      path="/setting/basicInformation/modifyPicture/:action/:aspectratio"
+      component={ModifyPicture}
+    />
     <Route path="/setting/basicInformation/modifyDetail" component={ModifyDetail} />
     <Route
       path="/setting/basicInformation/modifyCoordinate/:lng/:lat/:address"

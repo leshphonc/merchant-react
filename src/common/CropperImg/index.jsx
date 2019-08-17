@@ -41,7 +41,7 @@ class CropperImg extends React.Component {
     this.cropper.current.getCroppedCanvas().toBlob(async blob => {
       /* eslint no-new: 0 */
       new Compressor(blob, {
-        quality: 0.3,
+        quality: 0.1,
         success: result => {
           const reader = new window.FileReader()
           reader.readAsDataURL(result)
@@ -60,10 +60,14 @@ class CropperImg extends React.Component {
                   Toast.fail(response.data.msg)
                 }
               })
+              .catch(e => {
+                alert(e.response)
+              })
           }
         },
         error: err => {
           console.log(err.message)
+          alert(err)
         },
       })
     })

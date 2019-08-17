@@ -137,7 +137,7 @@ class CateGoryPanel extends React.Component {
             <Tooltip
               trigger="click"
               placement="topLeft"
-              overlay="默认添加顺序排序！数值越大，排序越前"
+              overlay="默认添加顺序排序！数值越大，排序越靠前"
             >
               <i className="iconfont" style={{ marginLeft: 5, color: '#bbb' }}>
                 &#xe628;
