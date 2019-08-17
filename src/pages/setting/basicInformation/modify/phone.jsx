@@ -13,9 +13,9 @@ class ModifyPhone extends React.Component {
   }
 
   componentDidMount() {
-    const { history } = this.props
+    const { match } = this.props
     this.setState({
-      phone: history.location.state.value,
+      phone: match.params.value,
     })
   }
 

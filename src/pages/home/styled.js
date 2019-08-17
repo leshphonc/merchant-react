@@ -14,5 +14,15 @@ export default styled.div`
     font-size: 15px;
     font-weight: bold;
     margin-top: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+    // word-wrap:break-word;
+  }
+  &.cur {
+    background: #eee;
+    border: 1px solid #ccc;
   }
 `

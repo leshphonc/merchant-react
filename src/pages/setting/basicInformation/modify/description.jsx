@@ -13,9 +13,9 @@ class ModifyDescription extends React.Component {
   }
 
   componentDidMount() {
-    const { history } = this.props
+    const { match } = this.props
     this.setState({
-      desc: history.location.state.value,
+      desc: match.params.value,
     })
   }
 

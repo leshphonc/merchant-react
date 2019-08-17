@@ -22,10 +22,10 @@ class CouponCheck extends React.Component {
   }
 
   componentDidMount() {
-    const { member, location } = this.props
-    const { couponCheckList } = member
+    const { member, match } = this.props
+    // const { couponCheckList } = member
     const { height } = this.state
-    if (!couponCheckList.length) member.fetchCouponCheckList(location.state.id)
+    member.fetchCouponCheckList(match.params.id)
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
@@ -93,9 +93,9 @@ class CouponCheck extends React.Component {
   }
 
   loadMore = async () => {
-    const { member, location } = this.props
+    const { member, match } = this.props
     this.setState({ refreshing: true })
-    await member.fetchCouponCheckList(location.state.id)
+    await member.fetchCouponCheckList(match.params.id)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)

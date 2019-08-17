@@ -10,33 +10,28 @@ import StoreDiscount from './storeDiscount'
 import StoreDiscountPanel from './storeDiscountPanel'
 import StorePanel from './storePanel'
 import CoordinatePicker from './modify/coordinate'
+import DiningInformation from './diningInformation'
 
 const TabsOption = [{ title: '网店', value: '1' }, { title: '餐饮', value: '2' }]
 
 @inject('storeFront')
 @observer
 class StoreFront extends React.Component {
-  state = {
-    type: '1',
-  }
-
   componentDidMount() {
     const { storeFront } = this.props
-    const { type } = this.state
+    const type = sessionStorage.getItem('storeType') || '1'
     storeFront.fetchStoreList(type)
   }
 
   changeTab = item => {
     const { storeFront } = this.props
     storeFront.fetchStoreList(item.value)
-    this.setState({
-      type: item.value,
-    })
+    sessionStorage.setItem('storeType', item.value)
   }
 
   render() {
     const { storeFront } = this.props
-    const { type } = this.state
+    const type = sessionStorage.getItem('storeType') || '1'
     return (
       <React.Fragment>
         <NavBar
@@ -49,7 +44,7 @@ class StoreFront extends React.Component {
           }
         />
         <WhiteSpace />
-        <Tabs tabs={TabsOption} onChange={item => this.changeTab(item)}>
+        <Tabs tabs={TabsOption} initialPage={type - 1} onChange={item => this.changeTab(item)}>
           <StoreList list={storeFront.storeList} type={type} />
           <StoreList list={storeFront.storeList} type={type} />
         </Tabs>
@@ -75,6 +70,10 @@ export default () => (
       component={StoreDiscountPanel}
     />
     <Route path="/management/storefront/storePanel/:str/:id?" component={StorePanel} />
-    <Route path="/management/storefront/coordinatePicker/:lng?/:lat?" component={CoordinatePicker} />
+    <Route
+      path="/management/storefront/coordinatePicker/:lng?/:lat?"
+      component={CoordinatePicker}
+    />
+    <Route path="/management/storefront/diningInformation" component={DiningInformation} />
   </React.Fragment>
 )

@@ -16,9 +16,9 @@ class Detail extends React.Component {
   }
 
   componentDidMount() {
-    const { history } = this.props
+    const { match } = this.props
     this.setState({
-      editorContent: history.location.state.value,
+      editorContent: match.params.value,
     })
     const editor = new E(this.editor.current)
     // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
@@ -50,13 +50,12 @@ class Detail extends React.Component {
       'redo', // 重复
     ]
     editor.create()
-    editor.txt.html(history.location.state.value)
+    editor.txt.html(sessionStorage.getItem('content') || '')
   }
 
   submit = async () => {
     const { history, basicInformation } = this.props
     const { editorContent } = this.state
-    console.log(editorContent)
     await basicInformation.modifyDetail(editorContent)
     history.goBack()
   }

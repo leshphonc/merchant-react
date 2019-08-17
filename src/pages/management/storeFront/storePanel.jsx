@@ -9,6 +9,7 @@ import {
   DatePicker,
   ImagePicker,
   Toast,
+  TextareaItem,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import Tooltip from 'rc-tooltip'
@@ -41,18 +42,20 @@ class StorePanel extends React.Component {
       form.setFieldsValue({
         ...cacheStore,
       })
-      setTimeout(() => {
-        if (cacheStore.discount_type[0] === '1') {
-          form.setFieldsValue({
-            discount_percent: cacheStore.discount_percent,
-          })
-        } else {
-          form.setFieldsValue({
-            condition_price: cacheStore.condition_price,
-            minus_price: cacheStore.minus_price,
-          })
-        }
-      }, 20)
+      if (cacheStore.discount_type) {
+        setTimeout(() => {
+          if (cacheStore.discount_type[0] === '1') {
+            form.setFieldsValue({
+              discount_percent: cacheStore.discount_percent,
+            })
+          } else {
+            form.setFieldsValue({
+              condition_price: cacheStore.condition_price,
+              minus_price: cacheStore.minus_price,
+            })
+          }
+        }, 20)
+      }
       this.setState({
         pic: cacheStore.pic,
         long: cacheStore.long,
@@ -108,18 +111,20 @@ class StorePanel extends React.Component {
         ismain: [storeDetail.ismain],
         pic: picArr,
       })
-      setTimeout(() => {
-        if (storeDetail.discount_type[0] === '1') {
-          form.setFieldsValue({
-            discount_percent: storeDetail.discount_percent,
-          })
-        } else {
-          form.setFieldsValue({
-            condition_price: storeDetail.condition_price,
-            minus_price: storeDetail.minus_price,
-          })
-        }
-      }, 20)
+      if (storeDetail.discount_type) {
+        setTimeout(() => {
+          if (storeDetail.discount_type[0] === '1') {
+            form.setFieldsValue({
+              discount_percent: storeDetail.discount_percent,
+            })
+          } else {
+            form.setFieldsValue({
+              condition_price: storeDetail.condition_price,
+              minus_price: storeDetail.minus_price,
+            })
+          }
+        }, 20)
+      }
     })
   }
 
@@ -205,7 +210,7 @@ class StorePanel extends React.Component {
       if (item.file) {
         /* eslint no-new: 0 */
         new Compressor(item.file, {
-          quality: 0.3,
+          quality: 0.1,
           success: result => {
             const reader = new window.FileReader()
             reader.readAsDataURL(result)
@@ -373,14 +378,14 @@ class StorePanel extends React.Component {
           >
             人均消费
           </InputItem>
-          <InputItem
+          <TextareaItem
             {...getFieldProps('feature', {
               rules: [{ required: true }],
             })}
             placeholder="本店特色"
-          >
-            店铺特色
-          </InputItem>
+            title="店铺特色"
+            rows={2}
+          />
           <Picker
             {...getFieldProps('cascade', {
               rules: [{ required: true }],
@@ -406,22 +411,22 @@ class StorePanel extends React.Component {
           >
             <List.Item arrow="horizontal">所在商圈</List.Item>
           </Picker>
-          <InputItem
+          <TextareaItem
             {...getFieldProps('adress', {
               rules: [{ required: true }],
             })}
             placeholder="请输入详细地址"
-          >
-            详细地址
-          </InputItem>
-          <InputItem
+            title="详细地址"
+            rows={2}
+          />
+          <TextareaItem
             {...getFieldProps('trafficroute', {
               rules: [{ required: true }],
             })}
             placeholder="描述到店路线"
-          >
-            交通路线
-          </InputItem>
+            title="交通路线"
+            rows={2}
+          />
           <InputItem
             {...getFieldProps('sort', {
               rules: [{ required: true }],
@@ -432,7 +437,7 @@ class StorePanel extends React.Component {
             <Tooltip
               trigger="click"
               placement="topLeft"
-              overlay="默认添加顺序排序！数值越大，排序越前"
+              overlay="默认添加顺序排序！数值越大，排序越靠前"
             >
               <i className="iconfont" style={{ marginLeft: 5, color: '#bbb' }}>
                 &#xe628;
