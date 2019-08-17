@@ -29,6 +29,10 @@ class MastSotre {
 
   @observable cateringListTotal = null
 
+  @observable retailDetail = {}
+
+  @observable retailValues = []
+
   @observable retailList = []
 
   @observable retailListPage = 1
@@ -156,8 +160,8 @@ class MastSotre {
   }
 
   @action
-  fetchCateringDetail = async (id, type, stid) => {
-    const response = await services.fetchCateringDetail(id, type, stid)
+  fetchCateringDetail = async (id, goodid) => {
+    const response = await services.fetchCateringDetail(id, goodid)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.cateringDetail = response.data.result
@@ -182,7 +186,7 @@ class MastSotre {
   }
 
   @action
-  fetchRetailList = async () => {
+  fetchRetailList = async storeId => {
     let hasMore = true
     if (this.retailListTotal !== null) {
       hasMore = this.retailListPage * this.retailListSize < this.retailListTotal
@@ -190,7 +194,11 @@ class MastSotre {
         this.retailListPage += 1
       }
     }
-    const response = await services.fetchRetailList(this.retailListPage, this.retailListSize)
+    const response = await services.fetchRetailList(
+      this.retailListPage,
+      this.retailListSize,
+      storeId,
+    )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
@@ -211,6 +219,32 @@ class MastSotre {
           })
         }
       }
+    }
+  }
+
+  @action
+  fetchRetailDetail = async (id, goodid) => {
+    const response = await services.fetchRetailDetail(id, goodid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.retailDetail = response.data.result
+      })
+    }
+  }
+
+  @action
+  addRetail = async payload => {
+    const response = await services.addRetail(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  modifyRetail = async payload => {
+    const response = await services.modifyRetail(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
     }
   }
 
@@ -252,6 +286,16 @@ class MastSotre {
   @action
   fetchRetailStand = async (storeId, goodsId, status) => {
     await services.fetchRetailStand(storeId, goodsId, status)
+  }
+
+  @action
+  fetchRetailValues = async () => {
+    const response = await services.fetchRetailValues()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.retailValues = response.data.result
+      })
+    }
   }
 }
 export default new MastSotre()

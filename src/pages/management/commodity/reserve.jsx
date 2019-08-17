@@ -133,11 +133,10 @@ class Reserve extends React.Component {
       <React.Fragment>
         <NavBar title="预约商品管理" goBack />
         <SearchBar placeholder="商品名称" maxLength={8} />
-        {/* <CardList list={Reserve} /> */}
         {reserveListTotal < 10 ? (
           <React.Fragment>
             <WhiteSpace />
-            <WingBlank size="sm">{this.mapList()}</WingBlank>
+            <WingBlank size="sm" style={{ paddingBottom: '7vw' }}>{this.mapList()}</WingBlank>
           </React.Fragment>
         ) : (
           <PullToRefresh
@@ -152,24 +151,18 @@ class Reserve extends React.Component {
             onRefresh={this.loadMore}
           >
             <WhiteSpace />
-            <WingBlank size="sm">{this.mapList()}</WingBlank>
+            <WingBlank size="sm" style={{ paddingBottom: '22vw' }}>{this.mapList()}</WingBlank>
           </PullToRefresh>
         )}
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <List>
+        <List style={{ position: 'fixed', bottom: '0', width: '100%' }}>
           <div
             style={{
               fontWeight: 'bold',
               width: '100%',
               display: 'flex',
               justifyContent: 'space-around',
-              position: 'fixed',
-              bottom: '0',
               background: '#ffb000',
+              zIndex: '1000',
             }}
           >
             <Link to="/management/commodity/reserveAdd">

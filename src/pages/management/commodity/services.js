@@ -36,10 +36,11 @@ export const fetchCateringList = (page, size, storeId) => axios.get('/appapi.php
 })
 
 // 零售列表
-export const fetchRetailList = (page, size) => axios.get('/appapi.php?c=Merchantapp&a=spro', {
+export const fetchRetailList = (page, size, storeId) => axios.get('/appapi.php?c=Merchantapp&a=spro', {
   params: {
     page,
     size,
+    store_id: storeId,
     ticket: localStorage.getItem('ticket'),
   },
 })
@@ -60,14 +61,14 @@ export const fetchCateringMeal = storeId => axios.get('/appapi.php?c=Merchantapp
 })
 
 // 餐饮商品详情
-export const fetchCateringDetail = (id, type, stid) => axios.get('/appapi.php?c=Merchantapp&a=get_meal_detail', {
+export const fetchCateringDetail = (id, goodid) => axios.get('/appapi.php?c=Merchantapp&a=get_meal_detail', {
   params: {
     store_id: id,
-    goods_id: type,
-    stid,
+    goods_id: goodid,
     ticket: localStorage.getItem('ticket'),
   },
 })
+
 
 export const addCategory = payload => {
   const body = {}
@@ -91,11 +92,49 @@ export const modifyCategory = payload => {
   })
 }
 
+// 零售商品详情
+export const fetchRetailDetail = (id, goodid) => axios.get('/appapi.php?c=Merchantapp&a=get_shop_detail', {
+  params: {
+    store_id: id,
+    goods_id: goodid,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+export const addRetail = payload => {
+  const body = {}
+  Object.keys(payload).forEach(item => {
+    body[item] = payload[item]
+  })
+  return axios.post('/appapi.php?c=Merchantapp&a=add_shop', {
+    ...body,
+    ticket: localStorage.getItem('ticket'),
+  })
+}
+
+export const modifyRetail = payload => {
+  const body = {}
+  Object.keys(payload).forEach(item => {
+    body[item] = payload[item]
+  })
+  return axios.post('/appapi.php?c=Merchantapp&a=edit_shop', {
+    ...body,
+    ticket: localStorage.getItem('ticket'),
+  })
+}
+
 // 餐饮删除
 export const fetchCateringDelete = (storeId, mealId) => axios.post('/appapi.php?c=Merchantapp&a=mdel', {
   store_id: storeId,
   meal_id: mealId,
   ticket: localStorage.getItem('ticket'),
+})
+
+// 零售商店
+export const fetchRetailValues = () => axios.get('/appapi.php?c=Merchantapp&a=select_shop_store', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
 })
 
 // 餐饮商品上、下架

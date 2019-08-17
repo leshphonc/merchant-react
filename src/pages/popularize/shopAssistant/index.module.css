@@ -9,6 +9,8 @@
 }
 .top {
   background-color: #ffb000;
+  height: 10vw;
+  min-height: 0;
 }
 .tops{
   background-color: #ffb000;

@@ -120,7 +120,7 @@ class Group extends React.Component {
         {groupListTotal < 10 ? (
           <React.Fragment>
             <WhiteSpace />
-            <WingBlank size="sm">{this.mapList()}</WingBlank>
+            <WingBlank size="sm" style={{ paddingBottom: '12vw' }}>{this.mapList()}</WingBlank>
           </React.Fragment>
         ) : (
           <PullToRefresh
@@ -135,24 +135,18 @@ class Group extends React.Component {
             onRefresh={this.loadMore}
           >
             <WhiteSpace />
-            <WingBlank size="sm">{this.mapList()}</WingBlank>
+            <WingBlank size="sm" style={{ paddingBottom: '24vw' }}>{this.mapList()}</WingBlank>
           </PullToRefresh>
         )}
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <List>
+        <List style={{ position: 'fixed', bottom: '0', width: '100%' }}>
           <div
             style={{
               fontWeight: 'bold',
               width: '100%',
               display: 'flex',
               justifyContent: 'space-around',
-              position: 'fixed',
-              bottom: '0',
               background: '#ffb000',
+              zIndex: '1000',
             }}
           >
             <Item

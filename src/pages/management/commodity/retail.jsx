@@ -30,15 +30,24 @@ class Retail extends React.Component {
 
   componentDidMount() {
     const { commodity } = this.props
+    const { retailList } = commodity
     const { height } = this.state
-    commodity.fetchRetailList()
-    commodity.fetchCateringValues()
+    // commodity.fetchRetailList()
+    commodity.fetchRetailValues()
     if (this.refresh.current) {
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
       this.setState({
         height: hei,
       })
     }
+    commodity.fetchRetailList().then(() => {
+      this.setState({
+        storeValue: commodity.retailValues[0].value,
+      }, () => {
+        const { storeValue } = this.state
+        if (!retailList.length) commodity.fetchRetailList(storeValue)
+      })
+    })
     /* eslint react/no-find-dom-node: 0 */
   }
 
@@ -57,7 +66,7 @@ class Retail extends React.Component {
   }
 
   mapList = () => {
-    const { commodity } = this.props
+    const { commodity, history } = this.props
     const { retailList } = commodity
     return retailList.map(item => (
       <React.Fragment key={item.goods_id}>
@@ -108,19 +117,21 @@ class Retail extends React.Component {
                   删除
                 </Button>
               </Buttons>
-              <Link
-                to={{
-                  pathname: '/management/commodity/retailAdd',
-                }}
-                style={{ color: '#333' }}
-              >
-                <div style={{ display: 'inline-block', marginLeft: '15px' }}>
-                  <i className="iconfont" style={{ color: '#ffb000' }}>
-                    &#xe645;
+              <Buttons>
+                <Button
+                  type="button"
+                  style={{ color: '#333', marginLeft: '20px' }}
+                  onClick={() => history.push(
+                    `/management/commodity/retailPanel/编辑/${item.store_id}/${item.goods_id}/`,
+                  )
+                  }
+                >
+                  <i className="iconfont" style={{ color: '#ffb000', marginRight: 5 }}>
+                    &#xe634;
                   </i>
                   编辑
-                </div>
-              </Link>
+                </Button>
+              </Buttons>
             </TopContent>
           </ItemTop>
         </ListItem>
@@ -140,15 +151,13 @@ class Retail extends React.Component {
 
   findStoreLabelAndFetch = value => {
     const { commodity } = this.props
-    const { cateringValues } = commodity
-    const result = cateringValues.find(item => item.value === value[0])
+    const { retailValues } = commodity
+    const result = retailValues.find(item => item.value === value[0])
     this.setState({
       store: result.label,
       storeValue: result.value,
     })
-    commodity.fetchCateringList(
-      result.value,
-    )
+    commodity.fetchRetailList(result.value)
   }
 
   render() {
@@ -156,7 +165,7 @@ class Retail extends React.Component {
       storeValue, store, refreshing, height,
     } = this.state
     const { commodity } = this.props
-    const { retailListTotal, cateringValues } = commodity
+    const { retailListTotal, retailValues } = commodity
     return (
       <React.Fragment>
         <NavBar title="零售商品管理" goBack />
@@ -164,7 +173,7 @@ class Retail extends React.Component {
         <WingBlank>
           <FilterBox style={{ marginRight: 5 }}>
             <Picker
-              data={cateringValues}
+              data={retailValues}
               cols={1}
               value={[storeValue]}
               onChange={val => this.findStoreLabelAndFetch(val)}
@@ -182,7 +191,7 @@ class Retail extends React.Component {
         {retailListTotal < 10 ? (
           <React.Fragment>
             <WhiteSpace />
-            <WingBlank size="sm">{this.mapList()}</WingBlank>
+            <WingBlank size="sm" style={{ paddingBottom: '12vw' }}>{this.mapList()}</WingBlank>
           </React.Fragment>
         ) : (
           <PullToRefresh
@@ -197,27 +206,22 @@ class Retail extends React.Component {
             onRefresh={this.loadMore}
           >
             <WhiteSpace />
-            <WingBlank size="sm">{this.mapList()}</WingBlank>
+            <WingBlank size="sm" style={{ paddingBottom: '22vw' }}>{this.mapList()}</WingBlank>
           </PullToRefresh>
         )}
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <List>
+        {/* <div style={{ height: '12vw' }}>&nbsp;</div> */}
+        <List style={{ position: 'fixed', bottom: '0', width: '100%' }}>
           <div
             style={{
               fontWeight: 'bold',
               width: '100%',
               display: 'flex',
               justifyContent: 'space-around',
-              position: 'fixed',
-              bottom: '0',
               background: '#ffb000',
+              zIndex: '1000',
             }}
           >
-            <Link to="/management/commodity/retailAdd">
+            <Link to="/management/commodity/retailPanel/添加">
               <Item style={{ paddingLeft: '0', background: '#ffb000' }}>
                 <i className="iconfont" style={{ marginRight: '6px' }}>
                   &#xe61e;

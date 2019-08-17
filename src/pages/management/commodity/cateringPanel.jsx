@@ -46,9 +46,8 @@ class CateringPanel extends React.Component {
       // checked: false,
       // recom: false,
       storeValue: '',
-      statusValue: ['0'],
+      statusValue: '',
       classifyValue: '',
-      files: datas,
       editorContent: '',
       sortName: '',
       number: '',
@@ -57,14 +56,15 @@ class CateringPanel extends React.Component {
       price: '',
       oldPrice: '',
       sort: '',
-      storeId: '',
-      goodsId: '',
+      pic: [],
     }
     this.editor = React.createRef()
   }
 
   componentDidMount() {
     const { commodity, match } = this.props
+    // const { cateringDetail } = commodity
+    console.log(match)
     const editor = new E(this.editor.current)
     editor.customConfig.onchange = html => {
       this.setState({
@@ -96,14 +96,12 @@ class CateringPanel extends React.Component {
     editor.create()
 
     commodity.fetchCateringValues()
-    commodity.fetchCateringMeal(match.params.store_id)
-    if (!match.params.stid) return
-    commodity.fetchCateringDetail(match.params.store_id, match.params.goods_id).then(() => {
+    commodity.fetchCateringMeal(0)
+    if (!match.params.goodid) return
+    commodity.fetchCateringDetail(match.params.id, match.params.goodid).then(() => {
       const { cateringDetail } = commodity
       console.log(cateringDetail)
       this.setState({
-        storeId: cateringDetail.store_id,
-        goodsId: cateringDetail.goods_id,
         sortName: cateringDetail.name,
         number: cateringDetail.number,
         des: cateringDetail.des,
@@ -111,52 +109,33 @@ class CateringPanel extends React.Component {
         price: cateringDetail.price,
         oldPrice: cateringDetail.old_price,
         sort: cateringDetail.sort,
-        files: cateringDetail.pic_arr,
+        pic: cateringDetail.pic_arr,
       })
     })
-    commodity
-      .fetchCateringDetail(match.params.id, match.params.type, match.params.stid)
-      .then(() => {
-        const { cateringDetail } = commodity
-        this.setState({
-          sortName: cateringDetail.name,
-          sort: cateringDetail.sort,
-        })
-      })
   }
 
   submit = () => {
     const { commodity, match, history } = this.props
     const {
-      sortName,
-      number,
-      sort,
-      des,
-      unit,
-      price,
-      oldPrice,
-      storeId,
-      goodsId,
-      files,
+      sortName, number, sort, des, unit, price, oldPrice, pic,
     } = this.state
     if (!sortName && !sort && !sortName) {
       Toast.info('请填写完整信息')
       return
     }
-    if (match.params.stid) {
+    if (match.params.goodid) {
       commodity
         .modifyCategory({
-          sort_name: sortName,
+          name: sortName,
           sort,
           number,
           des,
           unit,
           price,
-          store_id: storeId,
-          goods_id: goodsId,
+          pic_arr: pic,
           old_price: oldPrice,
-          stid: match.params.stid,
-          store_type: match.params.type,
+          goods_id: match.params.goodid,
+          store_id: match.params.id,
         })
         .then(res => {
           if (res) Toast.success('编辑成功', 1, () => history.goBack())
@@ -170,10 +149,10 @@ class CateringPanel extends React.Component {
           des,
           unit,
           price,
+          pic_arr: pic,
           old_price: oldPrice,
-          store_id: storeId,
-          goods_id: goodsId,
-          pic_arr: files,
+          store_id: commodity.cateringValues[0].value,
+          // goods_id: match.params.goodid,
         })
         .then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
@@ -189,7 +168,7 @@ class CateringPanel extends React.Component {
   imgChange = (arr, type) => {
     if (type === 'remove') {
       this.setState({
-        files: arr,
+        pic: arr,
       })
       return
     }
@@ -210,7 +189,7 @@ class CateringPanel extends React.Component {
                     const picArr = arr
                     picArr.splice(index, 1, { url: response.data.msg })
                     this.setState({
-                      files: picArr,
+                      pic: picArr,
                     })
                   } else {
                     Toast.fail(response.data.msg)
@@ -232,13 +211,12 @@ class CateringPanel extends React.Component {
   }
 
   render() {
-    const { commodity } = this.props
+    const { commodity, match } = this.props
     const { cateringValues, cateringMeal } = commodity
     const {
       statusValue,
       storeValue,
       classifyValue,
-      files,
       sortName,
       number,
       des,
@@ -246,10 +224,11 @@ class CateringPanel extends React.Component {
       price,
       oldPrice,
       sort,
+      pic,
     } = this.state
     return (
       <React.Fragment>
-        <NavBar title="添加餐饮商品" goBack />
+        <NavBar title={`${match.params.str}餐饮商品`} goBack />
         <form>
           <NavBox>
             <List>
@@ -292,7 +271,7 @@ class CateringPanel extends React.Component {
                 })
                 }
               >
-                商品(单价)
+                商品(单位)
               </InputItem>
               <InputItem
                 defaultValue=""
@@ -407,19 +386,23 @@ class CateringPanel extends React.Component {
               >
                 <List.Item arrow="horizontal">商品状态</List.Item>
               </Picker>
-              <Picker
-                data={[cateringValues]}
-                cascade={false}
-                extra="请选择"
-                value={storeValue}
-                onChange={v => {
-                  this.setState({
-                    storeValue: v,
-                  })
-                }}
-              >
-                <List.Item arrow="horizontal">选择添加到的店铺</List.Item>
-              </Picker>
+              {!match.params.goodid ? (
+                <Picker
+                  data={[cateringValues]}
+                  cascade={false}
+                  extra="请选择"
+                  value={storeValue}
+                  onChange={v => {
+                    this.setState({
+                      storeValue: v,
+                    })
+                  }}
+                >
+                  <List.Item arrow="horizontal">选择添加到的店铺</List.Item>
+                </Picker>
+              ) : (
+                ''
+              )}
               <Picker
                 data={[cateringMeal]}
                 cascade={false}
@@ -436,10 +419,10 @@ class CateringPanel extends React.Component {
               <Item>
                 商品图片
                 <ImagePicker
-                  files={files}
+                  files={pic}
                   onChange={this.imgChange}
                   onImageClick={(index, fs) => console.log(index, fs)}
-                  selectable={files.length < 4}
+                  selectable={pic.length < 4}
                   accept="image/gif,image/jpeg,image/jpg,image/png"
                 />
               </Item>

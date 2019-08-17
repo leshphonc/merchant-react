@@ -100,9 +100,9 @@ export const TopContent = styled.div`
     display: inline-block;
     background: #ffb000;
     width: 30vw;
-    height: 8vw;
+    height: 10vw;
     text-align: center;
-    line-height: 8vw;
+    line-height: 10vw;
     & > a {
       color: #fff;
     }

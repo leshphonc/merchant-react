@@ -27,8 +27,9 @@ class Catering extends React.Component {
 
   componentDidMount() {
     const { commodity } = this.props
+    const { cateringList } = commodity
     const { height } = this.state
-    commodity.fetchCateringList()
+    // commodity.fetchCateringList()
     commodity.fetchCateringValues()
     if (this.refresh.current) {
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
@@ -36,6 +37,14 @@ class Catering extends React.Component {
         height: hei,
       })
     }
+    commodity.fetchCateringList().then(() => {
+      this.setState({
+        storeValue: commodity.cateringValues[0].value,
+      }, () => {
+        const { storeValue } = this.state
+        if (!cateringList.length) commodity.fetchCateringList(storeValue)
+      })
+    })
     /* eslint react/no-find-dom-node: 0 */
   }
 
@@ -178,7 +187,9 @@ class Catering extends React.Component {
         {cateringListTotal < 10 ? (
           <React.Fragment>
             <WhiteSpace />
-            <WingBlank size="sm">{this.mapList()}</WingBlank>
+            <WingBlank size="sm" style={{ paddingBottom: '24vw' }}>
+              {this.mapList()}
+            </WingBlank>
           </React.Fragment>
         ) : (
           <PullToRefresh
@@ -193,24 +204,20 @@ class Catering extends React.Component {
             onRefresh={this.loadMore}
           >
             <WhiteSpace />
-            <WingBlank size="sm">{this.mapList()}</WingBlank>
+            <WingBlank size="sm" style={{ paddingBottom: '22vw' }}>
+              {this.mapList()}
+            </WingBlank>
           </PullToRefresh>
         )}
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <List>
+        <List style={{ position: 'fixed', bottom: '0', width: '100%' }}>
           <div
             style={{
               fontWeight: 'bold',
               width: '100%',
               display: 'flex',
               justifyContent: 'space-around',
-              position: 'fixed',
-              bottom: '0',
               background: '#ffb000',
+              zIndex: '1000',
             }}
           >
             <Link to="/management/commodity/cateringPanel/添加">
