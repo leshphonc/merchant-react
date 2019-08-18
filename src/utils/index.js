@@ -1,3 +1,6 @@
+import Compressor from 'compressorjs'
+import axios from 'axios'
+
 /**
  * @author cc
  * @description 公共函数
@@ -34,6 +37,37 @@ export default {
       val += `&${k}=${obj[k]}`
     }
     return val.substr(1)
+  },
+  compressionAndUploadImg(blob) {
+    return new Promise((resolve, reject) => {
+      /* eslint no-new: 0 */
+      new Compressor(blob, {
+        quality: 0.1,
+        success: result => {
+          const reader = new window.FileReader()
+          reader.readAsDataURL(result)
+          reader.onloadend = () => {
+            // Send the compressed image file to server with XMLHttpRequest.
+            axios
+              .post('/appapi.php?c=Merchantapp&a=base64change', {
+                imgBase: reader.result,
+                ticket: localStorage.getItem('ticket'),
+              })
+              .then(response => {
+                if (response.data.error === 0) {
+                  resolve(response.data.msg)
+                }
+              })
+              .catch(e => {
+                reject(e)
+              })
+          }
+        },
+        error: err => {
+          alert(`压缩错误：${err}`)
+        },
+      })
+    })
   },
   conversionTimeStringToDate(str) {
     const date = new Date()

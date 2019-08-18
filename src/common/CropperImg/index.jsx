@@ -9,8 +9,7 @@ import React from 'react'
 import { Button, ImagePicker, Toast } from 'antd-mobile'
 import Cropper from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
-import Compressor from 'compressorjs'
-import axios from 'axios'
+import Utils from '@/utils'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 文件最大限制为5M
 
@@ -39,36 +38,12 @@ class CropperImg extends React.Component {
 
   intercept = () => {
     this.cropper.current.getCroppedCanvas().toBlob(async blob => {
-      /* eslint no-new: 0 */
-      new Compressor(blob, {
-        quality: 0.1,
-        success: result => {
-          const reader = new window.FileReader()
-          reader.readAsDataURL(result)
-          reader.onloadend = () => {
-            // Send the compressed image file to server with XMLHttpRequest.
-            axios
-              .post('/wap.php?g=Wap&c=upyun&a=base64change', { imgBase: reader.result })
-              .then(response => {
-                if (response.data.error === 0) {
-                  this.setState({
-                    files: [],
-                    file: null,
-                    resultImgUrl: response.data.msg,
-                  })
-                } else {
-                  Toast.fail(response.data.msg)
-                }
-              })
-              .catch(e => {
-                alert(e.response)
-              })
-          }
-        },
-        error: err => {
-          console.log(err.message)
-          alert(err)
-        },
+      Utils.compressionAndUploadImg(blob).then(res => {
+        this.setState({
+          files: [],
+          file: null,
+          resultImgUrl: res,
+        })
       })
     })
   }

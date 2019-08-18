@@ -3,15 +3,13 @@ import NavBar from '@/common/NavBar'
 import { Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import { WhiteSpace, List } from 'antd-mobile'
-import { TextBox } from './styled'
 import CateringPanel from './cateringPanel'
 import Group from './group'
-import GroupAdd from './groupAdd'
-import GroupEdit from './groupEdit'
+import GroupPanel from './groupPanel'
 import GroupMealAdd from './groupMealAdd'
 import Reserve from './reserve'
-import ReserveAdd from './reserveAdd'
-import ReserveEdit from './reserveEdit'
+import reservePanel from './reservePanel'
+// import ReserveEdit from './reserveEdit'
 import Catering from './catering'
 import Retail from './retail'
 import RetailPanel from './retailPanel'
@@ -24,7 +22,7 @@ class Commodity extends React.Component {
     const { history } = this.props
     return (
       <div>
-        <NavBar title="店铺管理" goBack />
+        <NavBar title="商品管理" goBack />
         <WhiteSpace />
         <List>
           <Item
@@ -33,7 +31,7 @@ class Commodity extends React.Component {
               history.push('/management/commodity/group')
             }}
           >
-            <TextBox>团购商品</TextBox>
+            团购商品
           </Item>
           <Item
             arrow="horizontal"
@@ -41,23 +39,23 @@ class Commodity extends React.Component {
               history.push('/management/commodity/reserve')
             }}
           >
-            <TextBox>预定商品</TextBox>
+            预定商品
           </Item>
-          <Item
+          {/* <Item
             arrow="horizontal"
             onClick={() => {
               history.push('/management/commodity/catering')
             }}
           >
             <TextBox>餐饮商品</TextBox>
-          </Item>
+          </Item> */}
           <Item
             arrow="horizontal"
             onClick={() => {
               history.push('/management/commodity/retail')
             }}
           >
-            <TextBox>零售商品</TextBox>
+            零售商品
           </Item>
         </List>
       </div>
@@ -72,12 +70,12 @@ export default () => (
       component={CateringPanel}
     />
     <Route path="/management/commodity/group" component={Group} />
-    <Route path="/management/commodity/groupAdd" component={GroupAdd} />
-    <Route path="/management/commodity/groupEdit" component={GroupEdit} />
+    <Route path="/management/commodity/groupPanel/:str/:id?" component={GroupPanel} />
+    {/* <Route path="/management/commodity/groupEdit" component={GroupEdit} /> */}
     <Route path="/management/commodity/groupMealAdd" component={GroupMealAdd} />
     <Route path="/management/commodity/reserve" component={Reserve} />
-    <Route path="/management/commodity/reserveAdd" component={ReserveAdd} />
-    <Route path="/management/commodity/reserveEdit" component={ReserveEdit} />
+    <Route path="/management/commodity/reservePanel/:str" component={reservePanel} />
+    {/* <Route path="/management/commodity/reserveEdit" component={ReserveEdit} /> */}
     <Route path="/management/commodity/catering" component={Catering} />
     <Route path="/management/commodity/retail" component={Retail} />
     <Route path="/management/commodity/retailPanel/:str/:id?/:goodid?" component={RetailPanel} />
