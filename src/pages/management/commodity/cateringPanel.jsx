@@ -8,8 +8,6 @@ import {
 import Tooltip from 'rc-tooltip'
 import E from 'wangeditor'
 import 'rc-tooltip/assets/bootstrap.css'
-import axios from 'axios'
-import Compressor from 'compressorjs'
 import { NavBox, Editor } from './styled'
 // import { CustomizeList, ListTitle, ListContent } from '@/styled'
 import Utils from '@/utils'
