@@ -112,3 +112,15 @@ button {
   border: none;
   background-color: #fff;
 }
+
+.slider-frame {
+  height: 100% !important;
+}
+
+.slider-list {
+  height: 100% !important;
+}
+
+.slider-list > img {
+  height: 100% !important;
+}

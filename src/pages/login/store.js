@@ -50,6 +50,7 @@ class LoginSotre {
             ], // 必填，需要使用的JS接口列表
           })
         })
+        return Promise.resolve(true)
       }
     } else {
       return Promise.reject(new Error('登录失败'))

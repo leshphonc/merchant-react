@@ -20,9 +20,11 @@ class Login extends React.Component {
     const { account, password } = this.state
     login
       .login(account, password)
-      .then(() => {
-        history.replace('/')
-        Toast.success('欢迎回来', 2, null, false)
+      .then(res => {
+        if (res) {
+          history.replace('/')
+          Toast.success('欢迎回来', 2, null, false)
+        }
       })
       .catch(val => {
         console.log(val)

@@ -2,7 +2,7 @@
   "name": "merchant-center",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "http://cs.7youke.com/newpage/",
   "dependencies": {
     "antd-mobile": "^2.2.14",
     "axios": "^0.19.0",

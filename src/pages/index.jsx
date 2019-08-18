@@ -7,11 +7,19 @@ import Order from '@/pages/order'
 import Marketing from '@/pages/marketing'
 import Mine from '@/pages/mine'
 
-@inject('login')
+@inject('login', 'home')
 @observer
 class Index extends React.Component {
   state = {
     cur: sessionStorage.getItem('currentTab') || 'home',
+  }
+
+  componentDidMount() {
+    const { history } = this.props
+    const ticket = localStorage.getItem('ticket')
+    if (!ticket) {
+      history.replace('/login')
+    }
   }
 
   render() {
