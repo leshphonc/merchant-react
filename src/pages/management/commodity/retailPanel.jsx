@@ -15,9 +15,12 @@ import {
 import Tooltip from 'rc-tooltip'
 import E from 'wangeditor'
 import 'rc-tooltip/assets/bootstrap.css'
+import { createForm } from 'rc-form'
 import axios from 'axios'
 import Compressor from 'compressorjs'
-import { Title, Editor } from './styled'
+import moment from 'moment'
+import { toJS } from 'mobx'
+import { Title, Editor, TimeBox } from './styled'
 
 const { Item } = List
 const seasons = [
@@ -32,61 +35,33 @@ const seasons = [
     },
   ],
 ]
-const category = [
-  [
-    {
-      label: '实体商品',
-      value: '2013',
-    },
-    {
-      label: '虚拟商品',
-      value: '2014',
-    },
-    {
-      label: '虚拟商品(需配送)',
-      value: '2015',
-    },
-  ],
-]
-const store = [
-  [
-    {
-      label: '可是劳动纠纷',
-      value: '2013',
-    },
-    {
-      label: '是法国首都了',
-      value: '2014',
-    },
-  ],
-]
-const classify = [
-  [
-    {
-      label: '水果',
-      value: '2013',
-    },
-    {
-      label: '蔬菜',
-      value: '2014',
-    },
-    {
-      label: '鲜肉',
-      value: '2015',
-    },
-  ],
-]
-const datas = [
-  {
-    url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
-    id: '2121',
-  },
-  {
-    url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
-    id: '2122',
-  },
-]
-
+// const category = [
+//   [
+//     {
+//       label: '实体商品',
+//       value: '0',
+//     },
+//     {
+//       label: '虚拟商品',
+//       value: '1',
+//     },
+//     {
+//       label: '虚拟商品(需配送)',
+//       value: '2',
+//     },
+//   ],
+// ]
+// const datas = [
+//   {
+//     url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
+//     id: '2121',
+//   },
+//   {
+//     url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
+//     id: '2122',
+//   },
+// ]
+@createForm()
 @inject('commodity')
 @observer
 class RetailAdd extends React.Component {
@@ -96,7 +71,6 @@ class RetailAdd extends React.Component {
       starttime: '',
       endtime: '',
       selectValue: '',
-      categoryValue: '',
       storeValue: '',
       classifyValue: '',
       // files: datas,
@@ -150,12 +124,20 @@ class RetailAdd extends React.Component {
     // editor.txt.html(history.location.state.value)
     const { commodity, match } = this.props
     console.log(this.props)
-    //
-
+    commodity.fetchRetailMeal(match.params.id)
+    commodity.fetchRetailValues()
     if (!match.params.goodid) return
     commodity.fetchRetailDetail(match.params.id, match.params.goodid).then(() => {
       const { retailDetail } = commodity
-      console.log(retailDetail)
+      console.log(toJS(retailDetail))
+      // const picArr = retailDetail.pic.map(item => ({
+      //   url: item,
+      // }))
+      // this.setState({
+      //   pic: picArr,
+      // })
+      console.log(toJS(moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD hh:mm')))
+      console.log(toJS(moment(retailDetail.seckill_open_time * 1000).format('YYYY-MM-DD hh:mm')))
       this.setState({
         sortName: retailDetail.name,
         number: retailDetail.number,
@@ -168,7 +150,10 @@ class RetailAdd extends React.Component {
         packingCharge: retailDetail.packing_charge,
         seckillPrice: retailDetail.seckill_price,
         seckillStock: retailDetail.seckill_stock,
-        pic: retailDetail.pic_arr,
+        selectValue: [retailDetail.status],
+        classifyValue: [retailDetail.sort_id],
+        pic: retailDetail.pic,
+        // starttime: [moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD hh:mm')],
       })
     })
   }
@@ -182,12 +167,17 @@ class RetailAdd extends React.Component {
       des,
       unit,
       price,
-      oldPrice,
       pic,
+      oldPrice,
       stockNum,
       packingCharge,
       seckillPrice,
       seckillStock,
+      storeValue,
+      selectValue,
+      classifyValue,
+      starttime,
+      endtime,
     } = this.state
     if (!sortName && !sort && !sortName) {
       Toast.info('请填写完整信息')
@@ -207,8 +197,14 @@ class RetailAdd extends React.Component {
           packing_charge: packingCharge,
           seckill_price: seckillPrice,
           seckill_stock: seckillStock,
+          status: selectValue[0],
+          sort_id: classifyValue[0],
+          seckill_open_time: starttime,
+          seckill_close_time: endtime,
           store_id: match.params.id,
           goods_id: match.params.goodid,
+          // pic: commodity.retailDetail.pic.map(item => item.url),
+          pic,
         })
         .then(res => {
           if (res) Toast.success('编辑成功', 1, () => history.goBack())
@@ -223,8 +219,17 @@ class RetailAdd extends React.Component {
           unit,
           price,
           old_price: oldPrice,
-          store_id: commodity.retailValues[0].value,
-          pic_arr: pic,
+          stock_num: stockNum,
+          status: selectValue[0],
+          sort_id: classifyValue[0],
+          seckill_open_time: starttime,
+          seckill_close_time: endtime,
+          packing_charge: packingCharge,
+          seckill_price: seckillPrice,
+          seckill_stock: seckillStock,
+          store_id: storeValue[0],
+          pic,
+          // pic_arr: commodity.retailDetail.pic_arr.map(item => item.url),
         })
         .then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
@@ -233,17 +238,20 @@ class RetailAdd extends React.Component {
   }
 
   imgChange = (arr, type) => {
+    const { form } = this.props
     if (type === 'remove') {
-      this.setState({
+      console.log(arr)
+      form.setFieldsValue({
         pic: arr,
       })
+      this.setState({ pic: arr })
       return
     }
     arr.forEach((item, index) => {
       if (item.file) {
         /* eslint no-new: 0 */
         new Compressor(item.file, {
-          quality: 0.3,
+          quality: 0.1,
           success: result => {
             const reader = new window.FileReader()
             reader.readAsDataURL(result)
@@ -255,9 +263,11 @@ class RetailAdd extends React.Component {
                   if (response.data.error === 0) {
                     const picArr = arr
                     picArr.splice(index, 1, { url: response.data.msg })
-                    this.setState({
+                    console.log(picArr)
+                    form.setFieldsValue({
                       pic: picArr,
                     })
+                    this.setState({ pic: picArr })
                   } else {
                     Toast.fail(response.data.msg)
                   }
@@ -279,10 +289,9 @@ class RetailAdd extends React.Component {
   }
 
   render() {
-    const { match } = this.props
-    const {
-      selectValue, categoryValue, storeValue, classifyValue,
-    } = this.state
+    const { match, commodity } = this.props
+    const { retailValues, retailMeal } = commodity
+    const { selectValue, storeValue, classifyValue } = this.state
     const {
       sortName,
       number,
@@ -291,6 +300,7 @@ class RetailAdd extends React.Component {
       oldPrice,
       sort,
       pic,
+      des,
       stockNum,
       packingCharge,
       seckillPrice,
@@ -300,30 +310,9 @@ class RetailAdd extends React.Component {
     } = this.state
     return (
       <React.Fragment>
-        <NavBar title={`${match.params.str}餐饮商品`} goBack />
+        <NavBar title={`${match.params.str}零售商品`} goBack />
         <form>
           <List>
-            <DatePicker
-              value={starttime}
-              onChange={v => {
-                this.setState({
-                  starttime: v,
-                })
-              }}
-            >
-              <List.Item />
-            </DatePicker>
-            至
-            <DatePicker
-              value={endtime}
-              onChange={v => {
-                this.setState({
-                  endtime: v,
-                })
-              }}
-            >
-              <List.Item />
-            </DatePicker>
             <InputItem
               placeholder="请填写商品名称"
               value={sortName}
@@ -488,7 +477,7 @@ class RetailAdd extends React.Component {
             >
               <List.Item arrow="horizontal">商品状态</List.Item>
             </Picker>
-            <Picker
+            {/* <Picker
               data={category}
               cascade={false}
               extra="请选择"
@@ -500,12 +489,12 @@ class RetailAdd extends React.Component {
               }}
             >
               <List.Item arrow="horizontal">商品类别</List.Item>
-            </Picker>
+            </Picker> */}
             {match.params.goodid ? (
               ''
             ) : (
               <Picker
-                data={store}
+                data={[retailValues]}
                 cascade={false}
                 extra="请选择"
                 value={storeValue}
@@ -513,6 +502,7 @@ class RetailAdd extends React.Component {
                   this.setState({
                     storeValue: v,
                   })
+                  commodity.fetchRetailMeal(v[0])
                 }}
               >
                 <List.Item arrow="horizontal">选择添加到的店铺</List.Item>
@@ -520,7 +510,7 @@ class RetailAdd extends React.Component {
             )}
 
             <Picker
-              data={classify}
+              data={[retailMeal]}
               cascade={false}
               extra="请选择"
               value={classifyValue}
@@ -582,6 +572,32 @@ class RetailAdd extends React.Component {
                 </Tooltip>
               </InputItem>
             </Title>
+            <Item>
+              限时段
+              <TimeBox>
+                <DatePicker
+                  value={starttime}
+                  onChange={v => {
+                    this.setState({
+                      starttime: v,
+                    })
+                  }}
+                >
+                  <List.Item />
+                </DatePicker>
+                至
+                <DatePicker
+                  value={endtime}
+                  onChange={v => {
+                    this.setState({
+                      endtime: v,
+                    })
+                  }}
+                >
+                  <List.Item />
+                </DatePicker>
+              </TimeBox>
+            </Item>
             <div>
               <Item>
                 商品图片
@@ -597,7 +613,15 @@ class RetailAdd extends React.Component {
             <Item>
               商品描述
               <Editor>
-                <div ref={this.editor} className="editor" />
+                <div
+                  ref={this.editor}
+                  className="editor"
+                  value={des}
+                  onChange={val => this.setState({
+                    des: val,
+                  })
+                  }
+                />
               </Editor>
             </Item>
             <WingBlank style={{ padding: '10px 0' }}>

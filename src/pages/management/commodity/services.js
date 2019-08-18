@@ -153,6 +153,14 @@ export const fetchRetailStand = (storeId, goodsId, status) => axios.post('/appap
   ticket: localStorage.getItem('ticket'),
 })
 
+// 零售商店分类
+export const fetchRetailMeal = storeId => axios.get('/appapi.php?c=Merchantapp&a=select_shop_sort', {
+  params: {
+    store_id: storeId,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
 // 零售删除
 export const fetchRetailDelete = (storeId, goodsId) => axios.post('/appapi.php?c=Merchantapp&a=goods_del', {
   store_id: storeId,

@@ -14,6 +14,26 @@ export const Title = styled.div`
   }
 }
 `
+export const TimeBox = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+ > div{
+  width:50%;
+  display:inline-block;
+  .am-list-item{
+    .am-list-line{
+      .am-list-extra{
+        flex-basis: 100%;
+        text-align: center;
+      }
+      .am-list-line:after{
+        background-color: none;
+      }
+    }
+  }
+}
+`
 export const SizeBox = styled.div`
 .am-list-item{
   .am-textarea-label{

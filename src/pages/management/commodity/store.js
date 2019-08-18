@@ -31,6 +31,8 @@ class MastSotre {
 
   @observable retailDetail = {}
 
+  @observable retailMeal = []
+
   @observable retailValues = []
 
   @observable retailList = []
@@ -286,6 +288,16 @@ class MastSotre {
   @action
   fetchRetailStand = async (storeId, goodsId, status) => {
     await services.fetchRetailStand(storeId, goodsId, status)
+  }
+
+  @action
+  fetchRetailMeal = async storeId => {
+    const response = await services.fetchRetailMeal(storeId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.retailMeal = response.data.result
+      })
+    }
   }
 
   @action
