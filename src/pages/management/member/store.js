@@ -67,6 +67,8 @@ class MemberStore {
 
   @observable couponCheckListTotal = null
 
+  @observable fansTotal = []
+
   @action
   fetchMiniProgramList = async () => {
     let hasMore = true
@@ -390,6 +392,22 @@ class MemberStore {
           })
         }
       })
+    }
+  }
+
+  @action
+  fetchFansTotal = async () => {
+    const response = await services.fetchMiniProgramList(1, 10)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      const response2 = await services.fetchPublicList(1, 10)
+      if (response2.data.errorCode === ErrorCode.SUCCESS) {
+        runInAction(() => {
+          this.fansTotal = {
+            mini: response.data.result.total,
+            public: response2.data.result.total,
+          }
+        })
+      }
     }
   }
 }

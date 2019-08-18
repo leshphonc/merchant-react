@@ -14,8 +14,6 @@ import {
 import { observer, inject } from 'mobx-react'
 import Tooltip from 'rc-tooltip'
 import { createForm } from 'rc-form'
-import axios from 'axios'
-import Compressor from 'compressorjs'
 import Utils from '@/utils'
 import moment from 'moment'
 import { toJS } from 'mobx'
@@ -208,43 +206,21 @@ class StorePanel extends React.Component {
     }
     arr.forEach((item, index) => {
       if (item.file) {
-        /* eslint no-new: 0 */
-        new Compressor(item.file, {
-          quality: 0.1,
-          success: result => {
-            const reader = new window.FileReader()
-            reader.readAsDataURL(result)
-            reader.onloadend = () => {
-              // Send the compressed image file to server with XMLHttpRequest.
-              axios
-                .post('/wap.php?g=Wap&c=upyun&a=base64change', { imgBase: reader.result })
-                .then(response => {
-                  if (response.data.error === 0) {
-                    const picArr = arr
-                    picArr.splice(index, 1, { url: response.data.msg })
-                    console.log(picArr)
-                    form.setFieldsValue({
-                      pic: picArr,
-                    })
-                    this.setState({ pic: picArr })
-                  } else {
-                    Toast.fail(response.data.msg)
-                  }
-                })
-            }
-          },
-          error: err => {
-            console.log(err.message)
-          },
+        Utils.compressionAndUploadImg(item.file).then(res => {
+          const picArr = arr
+          picArr.splice(index, 1, { url: res })
+          console.log(picArr)
+          form.setFieldsValue({
+            pic: picArr,
+          })
+          this.setState({ pic: picArr })
         })
       }
     })
   }
 
   submit = () => {
-    const {
-      storeFront, form, match, history,
-    } = this.props
+    const { storeFront, form, match, history } = this.props
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请输入完整信息')
@@ -313,9 +289,7 @@ class StorePanel extends React.Component {
       ? form.getFieldValue('discount_type')[0]
       : ''
     /* eslint camelcase: 0 */
-    const {
-      long, lat, pic, asyncCascadeValue,
-    } = this.state
+    const { long, lat, pic, asyncCascadeValue } = this.state
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}店铺`} goBack />

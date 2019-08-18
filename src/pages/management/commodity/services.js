@@ -1,10 +1,11 @@
 import axios from 'axios'
 
 // 团购列表
-export const fetchGroupList = (page, size) => axios.get('/appapi.php?c=Merchantapp&a=gpro', {
+export const fetchGroupList = (page, size, keyword) => axios.get('/appapi.php?c=Merchantapp&a=gpro', {
   params: {
     page,
     size,
+    keyword,
     ticket: localStorage.getItem('ticket'),
   },
 })
@@ -68,7 +69,6 @@ export const fetchCateringDetail = (id, goodid) => axios.get('/appapi.php?c=Merc
     ticket: localStorage.getItem('ticket'),
   },
 })
-
 
 export const addCategory = payload => {
   const body = {}

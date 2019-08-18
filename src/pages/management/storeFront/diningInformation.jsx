@@ -21,7 +21,7 @@ const SupportOptions = [{ label: '不支持', value: '0' }, { label: '支持', v
 @observer
 class DiningInformation extends React.Component {
   render() {
-    const { form, storeFront } = this.props
+    const { form } = this.props
     const { getFieldProps } = form
     return (
       <React.Fragment>

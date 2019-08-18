@@ -2,7 +2,7 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { Route, Link } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
-import { Tabs, WhiteSpace } from 'antd-mobile'
+import { WhiteSpace } from 'antd-mobile'
 import StoreList from './components/StoreList'
 import CategoryManagement from './categoryManagement'
 import CategoryPanel from './categoryPanel'
@@ -12,7 +12,7 @@ import StorePanel from './storePanel'
 import CoordinatePicker from './modify/coordinate'
 import DiningInformation from './diningInformation'
 
-const TabsOption = [{ title: '网店', value: '1' }, { title: '餐饮', value: '2' }]
+// const TabsOption = [{ title: '网店', value: '1' }, { title: '餐饮', value: '2' }]
 
 @inject('storeFront')
 @observer
@@ -44,10 +44,11 @@ class StoreFront extends React.Component {
           }
         />
         <WhiteSpace />
-        <Tabs tabs={TabsOption} initialPage={type - 1} onChange={item => this.changeTab(item)}>
+        {/* <Tabs tabs={TabsOption} initialPage={type - 1} onChange={item => this.changeTab(item)}>
           <StoreList list={storeFront.storeList} type={type} />
           <StoreList list={storeFront.storeList} type={type} />
-        </Tabs>
+        </Tabs> */}
+        <StoreList list={storeFront.storeList} type={type} />
       </React.Fragment>
     )
   }

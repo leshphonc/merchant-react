@@ -6,8 +6,6 @@ import { observer, inject } from 'mobx-react'
 import {
   SearchBar, List, WhiteSpace, WingBlank, PullToRefresh,
 } from 'antd-mobile'
-// import CardList from './components/Group'
-// import { Groups } from '@/config/list'
 import { ListItem, ItemTop, TopContent } from '@/styled'
 
 const { Item } = List
@@ -19,27 +17,22 @@ class Group extends React.Component {
     this.state = {
       refreshing: false,
       height: document.documentElement.clientHeight,
+      keyword: '',
     }
     this.refresh = React.createRef()
   }
 
   componentDidMount() {
     const { commodity } = this.props
-    const { height } = this.state
-    commodity.fetchGroupList()
-    if (this.refresh.current) {
-      const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
-      this.setState({
-        height: hei,
-      })
-    }
+    const { height, keyword } = this.state
+    commodity.fetchGroupList(keyword)
     /* eslint react/no-find-dom-node: 0 */
+    const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
+    this.setState({
+      height: hei,
+    })
   }
 
-  // componentDidMount() {
-  //   const { commodity } = this.props
-  //   commodity.fetchGroupList()
-  // }
   mapList = () => {
     const { commodity } = this.props
     const { groupList } = commodity
@@ -72,9 +65,7 @@ class Group extends React.Component {
                 已售出: {item.sale_count}
               </div>
               <Link
-                to={{
-                  pathname: '/management/commodity/groupEdit',
-                }}
+                to={`/management/commodity/groupPanel/编辑/${item.group_id}`}
                 style={{ color: '#333' }}
               >
                 <div style={{ display: 'inline-block' }}>
@@ -100,44 +91,40 @@ class Group extends React.Component {
 
   loadMore = async () => {
     const { commodity } = this.props
+    const { keyword } = this.state
     this.setState({ refreshing: true })
-    await commodity.fetchGroupList()
+    await commodity.fetchGroupList(keyword)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
   }
 
   render() {
-    const { commodity, history } = this.props
-    const { groupListTotal } = commodity
-    const { refreshing, height } = this.state
-    // const { history } = this.props
+    const { history, commodity } = this.props
+    const { refreshing, height, keyword } = this.state
     return (
       <React.Fragment>
         <NavBar title="团购商品管理" goBack />
-        <SearchBar placeholder="商品名称" maxLength={8} />
-        {/* <CardList list={Groups} /> */}
-        {groupListTotal < 10 ? (
-          <React.Fragment>
-            <WhiteSpace />
-            <WingBlank size="sm" style={{ paddingBottom: '12vw' }}>{this.mapList()}</WingBlank>
-          </React.Fragment>
-        ) : (
-          <PullToRefresh
-            ref={this.refresh}
-            refreshing={refreshing}
-            style={{
-              height,
-              overflow: 'auto',
-            }}
-            indicator={{ deactivate: '上拉可以刷新' }}
-            direction="up"
-            onRefresh={this.loadMore}
-          >
-            <WhiteSpace />
-            <WingBlank size="sm" style={{ paddingBottom: '24vw' }}>{this.mapList()}</WingBlank>
-          </PullToRefresh>
-        )}
+        <SearchBar
+          placeholder="商品名称"
+          value={keyword}
+          onChange={val => this.setState({ keyword: val })}
+          onSubmit={() => commodity.resetAndFetchGroupList(keyword)}
+        />
+        <PullToRefresh
+          ref={this.refresh}
+          refreshing={refreshing}
+          style={{
+            height,
+            overflow: 'auto',
+          }}
+          indicator={{ deactivate: '上拉可以刷新' }}
+          direction="up"
+          onRefresh={this.loadMore}
+        >
+          <WhiteSpace />
+          <WingBlank size="sm">{this.mapList()}</WingBlank>
+        </PullToRefresh>
         <List style={{ position: 'fixed', bottom: '0', width: '100%' }}>
           <div
             style={{
@@ -165,9 +152,7 @@ class Group extends React.Component {
             <Item
               style={{ paddingLeft: '0', background: '#ffb000' }}
               onClick={() => {
-                history.push({
-                  pathname: '/management/commodity/groupAdd',
-                })
+                history.push('/management/commodity/groupPanel/添加')
               }}
             >
               <i className="iconfont" style={{ marginRight: '6px' }}>

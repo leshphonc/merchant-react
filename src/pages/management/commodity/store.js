@@ -52,7 +52,7 @@ class MastSotre {
   @observable retailDelete = {}
 
   @action
-  fetchGroupList = async () => {
+  fetchGroupList = async keyword => {
     let hasMore = true
     if (this.groupListTotal !== null) {
       hasMore = this.groupListPage * this.groupListSize < this.groupListTotal
@@ -60,7 +60,7 @@ class MastSotre {
         this.groupListPage += 1
       }
     }
-    const response = await services.fetchGroupList(this.groupListPage, this.groupListSize)
+    const response = await services.fetchGroupList(this.groupListPage, this.groupListSize, keyword)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
@@ -82,6 +82,16 @@ class MastSotre {
         }
       }
     }
+  }
+
+  @action
+  resetAndFetchGroupList = keyword => {
+    runInAction(() => {
+      this.groupList = []
+      this.groupListPage = 1
+      this.groupListTotal = null
+      this.fetchGroupList(keyword)
+    })
   }
 
   @action

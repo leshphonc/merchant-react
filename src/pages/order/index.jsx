@@ -35,7 +35,7 @@ class Order extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <NavBar title="订单列表" goBack />
+        <NavBar title="订单列表" leftHide />
         <WhiteSpace />
         {this.mapList()}
       </React.Fragment>

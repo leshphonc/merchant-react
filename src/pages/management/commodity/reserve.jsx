@@ -27,13 +27,11 @@ class Reserve extends React.Component {
     const { commodity } = this.props
     const { height } = this.state
     commodity.fetchReserveList()
-    if (this.refresh.current) {
-      const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
-      this.setState({
-        height: hei,
-      })
-    }
     /* eslint react/no-find-dom-node: 0 */
+    const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
+    this.setState({
+      height: hei,
+    })
   }
 
   mapList = () => {
@@ -95,12 +93,7 @@ class Reserve extends React.Component {
               >
                 已预约: {item.appoint_sum}
               </div>
-              <Link
-                to={{
-                  pathname: '/management/commodity/reserveEdit',
-                }}
-                style={{ color: '#333' }}
-              >
+              <Link to="/management/commodity/reservePanel/编辑" style={{ color: '#333' }}>
                 <div style={{ display: 'inline-block' }}>
                   <i className="iconfont" style={{ color: '#ffb000' }}>
                     &#xe645;
@@ -126,34 +119,27 @@ class Reserve extends React.Component {
   }
 
   render() {
-    const { commodity } = this.props
-    const { reserveListTotal } = commodity
     const { refreshing, height } = this.state
     return (
       <React.Fragment>
         <NavBar title="预约商品管理" goBack />
         <SearchBar placeholder="商品名称" maxLength={8} />
-        {reserveListTotal < 10 ? (
-          <React.Fragment>
-            <WhiteSpace />
-            <WingBlank size="sm" style={{ paddingBottom: '7vw' }}>{this.mapList()}</WingBlank>
-          </React.Fragment>
-        ) : (
-          <PullToRefresh
-            ref={this.refresh}
-            refreshing={refreshing}
-            style={{
-              height,
-              overflow: 'auto',
-            }}
-            indicator={{ deactivate: '上拉可以刷新' }}
-            direction="up"
-            onRefresh={this.loadMore}
-          >
-            <WhiteSpace />
-            <WingBlank size="sm" style={{ paddingBottom: '22vw' }}>{this.mapList()}</WingBlank>
-          </PullToRefresh>
-        )}
+        <PullToRefresh
+          ref={this.refresh}
+          refreshing={refreshing}
+          style={{
+            height,
+            overflow: 'auto',
+          }}
+          indicator={{ deactivate: '上拉可以刷新' }}
+          direction="up"
+          onRefresh={this.loadMore}
+        >
+          <WhiteSpace />
+          <WingBlank size="sm">
+            {this.mapList()}
+          </WingBlank>
+        </PullToRefresh>
         <List style={{ position: 'fixed', bottom: '0', width: '100%' }}>
           <div
             style={{
@@ -165,7 +151,7 @@ class Reserve extends React.Component {
               zIndex: '1000',
             }}
           >
-            <Link to="/management/commodity/reserveAdd">
+            <Link to="/management/commodity/reservePanel/添加">
               <Item style={{ paddingLeft: '0', background: '#ffb000' }}>
                 <i className="iconfont" style={{ marginRight: '6px' }}>
                   &#xe61e;

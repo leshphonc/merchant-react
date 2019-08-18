@@ -133,7 +133,7 @@ const datas = [
     id: '2122',
   },
 ]
-class ReserveAdd extends React.Component {
+class ReservePanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -215,7 +215,7 @@ class ReserveAdd extends React.Component {
   }
 
   render() {
-    // const { history } = this.props
+    const { match } = this.props
     const { files } = this.state
     const {
       startdate,
@@ -237,7 +237,7 @@ class ReserveAdd extends React.Component {
     ]
     return (
       <React.Fragment>
-        <NavBar title="添加预定商品" goBack />
+        <NavBar title={`${match.params.str}预定商品`} goBack />
         <form>
           <NavBox>
             <List>
@@ -586,4 +586,4 @@ class ReserveAdd extends React.Component {
     )
   }
 }
-export default ReserveAdd
+export default ReservePanel
