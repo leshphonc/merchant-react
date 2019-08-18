@@ -27,6 +27,10 @@ class MemberStore {
 
   @observable cardGroupListTotal = null
 
+  @observable cardGroupDetail = {}
+
+  @observable giftVoucher = []
+
   @observable cardGroupUsersList = []
 
   @observable cardGroupUsersListPage = 1
@@ -175,9 +179,16 @@ class MemberStore {
   }
 
   @action
-  operatingCardGroup = async (groupname, comment, discount, id) => {
+  operatingCardGroup = async (groupname, comment, discount, id, effdays, give) => {
     if (id) {
-      const response = await services.modifyCardGroup(groupname, comment, discount, id)
+      const response = await services.modifyCardGroup(
+        groupname,
+        comment,
+        discount,
+        id,
+        effdays,
+        give,
+      )
       if (response.data.errorCode === ErrorCode.SUCCESS) {
         this.cardGroupList.forEach((item, index) => {
           if (item.id === id) {
@@ -188,9 +199,33 @@ class MemberStore {
             })
           }
         })
+        return Promise.resolve(true)
       }
     } else {
-      await services.insertCardGroup(groupname, comment, discount)
+      const response = await services.insertCardGroup(groupname, comment, discount, effdays, give)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        return Promise.resolve(true)
+      }
+    }
+  }
+
+  @action
+  fetchCardGroupDetail = async id => {
+    const response = await services.fetchCardGroupDetail(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.cardGroupDetail = response.data.result
+      })
+    }
+  }
+
+  @action
+  fetchGiftVoucher = async () => {
+    const response = await services.fetchGiftVoucher()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.giftVoucher = response.data.result
+      })
     }
   }
 

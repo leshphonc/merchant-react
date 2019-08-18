@@ -101,7 +101,7 @@ class ModifyGroup extends React.Component {
             arrow="empty"
             extra={
               cardGroupUserInfo.add_time
-                ? moment(cardGroupUserInfo.add_time * 1000).format('YYYY-MM-DD hh:mm')
+                ? moment(cardGroupUserInfo.add_time * 1000).format('YYYY-MM-DD HH:mm')
                 : '无记录'
             }
           >

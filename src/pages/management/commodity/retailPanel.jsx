@@ -16,11 +16,10 @@ import Tooltip from 'rc-tooltip'
 import E from 'wangeditor'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
-import axios from 'axios'
-import Compressor from 'compressorjs'
 import moment from 'moment'
 import { toJS } from 'mobx'
 import { Title, Editor, TimeBox } from './styled'
+import Utils from '@/utils'
 
 const { Item } = List
 const seasons = [
@@ -136,8 +135,8 @@ class RetailAdd extends React.Component {
       // this.setState({
       //   pic: picArr,
       // })
-      console.log(toJS(moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD hh:mm')))
-      console.log(toJS(moment(retailDetail.seckill_open_time * 1000).format('YYYY-MM-DD hh:mm')))
+      console.log(toJS(moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD HH:mm')))
+      console.log(toJS(moment(retailDetail.seckill_open_time * 1000).format('YYYY-MM-DD HH:mm')))
       this.setState({
         sortName: retailDetail.name,
         number: retailDetail.number,
@@ -153,7 +152,7 @@ class RetailAdd extends React.Component {
         selectValue: [retailDetail.status],
         classifyValue: [retailDetail.sort_id],
         pic: retailDetail.pic,
-        // starttime: [moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD hh:mm')],
+        // starttime: [moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD HH:mm')],
       })
     })
   }
@@ -249,35 +248,16 @@ class RetailAdd extends React.Component {
     }
     arr.forEach((item, index) => {
       if (item.file) {
-        /* eslint no-new: 0 */
-        new Compressor(item.file, {
-          quality: 0.1,
-          success: result => {
-            const reader = new window.FileReader()
-            reader.readAsDataURL(result)
-            reader.onloadend = () => {
-              // Send the compressed image file to server with XMLHttpRequest.
-              axios
-                .post('/wap.php?g=Wap&c=upyun&a=base64change', { imgBase: reader.result })
-                .then(response => {
-                  if (response.data.error === 0) {
-                    const picArr = arr
-                    picArr.splice(index, 1, { url: response.data.msg })
-                    console.log(picArr)
-                    form.setFieldsValue({
-                      pic: picArr,
-                    })
-                    this.setState({ pic: picArr })
-                  } else {
-                    Toast.fail(response.data.msg)
-                  }
-                })
-            }
-          },
-          error: err => {
-            console.log(err.message)
-          },
-        })
+        Utils.compressionAndUploadImg(item.file)
+          .then(res => {
+            const picArr = arr
+            picArr.splice(index, 1, { url: res })
+            form.setFieldsValue({
+              pic: picArr,
+            })
+            this.setState({ pic: picArr })
+          })
+          .catch(e => Toast.fail(e))
       }
     })
   }

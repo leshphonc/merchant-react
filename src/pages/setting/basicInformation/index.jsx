@@ -191,6 +191,7 @@ class BasicInformation extends React.Component {
             >
               商户经纬度
             </Item>
+            <Item extra={basicInfo.adress}>详细地址</Item>
             <Item arrow="empty" extra={this.getMenuList()}>
               商户所属分类
             </Item>
