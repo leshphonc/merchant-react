@@ -129,6 +129,7 @@ class RetailAdd extends React.Component {
     commodity.fetchRetailDetail(match.params.id, match.params.goodid).then(() => {
       const { retailDetail } = commodity
       console.log(toJS(retailDetail))
+<<<<<<< HEAD
       // const picArr = retailDetail.pic.map(item => ({
       //   url: item,
       // }))
@@ -137,6 +138,16 @@ class RetailAdd extends React.Component {
       // })
       console.log(toJS(moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD HH:mm')))
       console.log(toJS(moment(retailDetail.seckill_open_time * 1000).format('YYYY-MM-DD HH:mm')))
+=======
+      const picArr = retailDetail.pic.map(item => ({
+        url: item,
+      }))
+      this.setState({
+        pic: picArr,
+      })
+      console.log(toJS(moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD hh:mm')))
+      console.log(toJS(moment(retailDetail.seckill_open_time * 1000).format('YYYY-MM-DD hh:mm')))
+>>>>>>> dev
       this.setState({
         sortName: retailDetail.name,
         number: retailDetail.number,
@@ -151,8 +162,13 @@ class RetailAdd extends React.Component {
         seckillStock: retailDetail.seckill_stock,
         selectValue: [retailDetail.status],
         classifyValue: [retailDetail.sort_id],
+<<<<<<< HEAD
         pic: retailDetail.pic,
         // starttime: [moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD HH:mm')],
+=======
+        pic: picArr,
+        // starttime: moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD hh:mm'),
+>>>>>>> dev
       })
     })
   }
@@ -166,7 +182,6 @@ class RetailAdd extends React.Component {
       des,
       unit,
       price,
-      pic,
       oldPrice,
       stockNum,
       packingCharge,
@@ -177,6 +192,7 @@ class RetailAdd extends React.Component {
       classifyValue,
       starttime,
       endtime,
+      pic,
     } = this.state
     if (!sortName && !sort && !sortName) {
       Toast.info('请填写完整信息')
@@ -198,12 +214,13 @@ class RetailAdd extends React.Component {
           seckill_stock: seckillStock,
           status: selectValue[0],
           sort_id: classifyValue[0],
-          seckill_open_time: starttime,
-          seckill_close_time: endtime,
+          seckill_open_time: moment(starttime).format('YYYY-MM-DD hh:mm'),
+          seckill_close_time: moment(endtime).format('YYYY-MM-DD hh:mm'),
           store_id: match.params.id,
           goods_id: match.params.goodid,
+          pic: commodity.retailDetail.pic.map(item => item.url),
           // pic: commodity.retailDetail.pic.map(item => item.url),
-          pic,
+          // pic,
         })
         .then(res => {
           if (res) Toast.success('编辑成功', 1, () => history.goBack())
@@ -221,14 +238,15 @@ class RetailAdd extends React.Component {
           stock_num: stockNum,
           status: selectValue[0],
           sort_id: classifyValue[0],
-          seckill_open_time: starttime,
-          seckill_close_time: endtime,
+          seckill_open_time: moment(starttime).format('YYYY-MM-DD hh:mm'),
+          seckill_close_time: moment(endtime).format('YYYY-MM-DD hh:mm'),
           packing_charge: packingCharge,
           seckill_price: seckillPrice,
           seckill_stock: seckillStock,
           store_id: storeValue[0],
-          pic,
-          // pic_arr: commodity.retailDetail.pic_arr.map(item => item.url),
+          // pic,
+          pic: pic[0].url,
+          // pic,
         })
         .then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
@@ -585,7 +603,7 @@ class RetailAdd extends React.Component {
                   files={pic}
                   onChange={this.imgChange}
                   onImageClick={(index, fs) => console.log(index, fs)}
-                  selectable={pic.length < 5}
+                  selectable={pic.length < 4}
                   accept="image/gif,image/jpeg,image/jpg,image/png"
                 />
               </Item>
