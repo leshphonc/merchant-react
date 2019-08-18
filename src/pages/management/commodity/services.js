@@ -93,7 +93,7 @@ export const modifyCategory = payload => {
 }
 
 // 零售商品详情
-export const fetchRetailDetail = (id, goodid) => axios.get('/appapi.php?c=Merchantapp&a=get_shop_detail', {
+export const fetchRetailDetail = (id, goodid) => axios.get('/appapi.php?c=Merchantapp&a=goods_detail', {
   params: {
     store_id: id,
     goods_id: goodid,
@@ -106,7 +106,7 @@ export const addRetail = payload => {
   Object.keys(payload).forEach(item => {
     body[item] = payload[item]
   })
-  return axios.post('/appapi.php?c=Merchantapp&a=add_shop', {
+  return axios.post('/appapi.php?c=Merchantapp&a=goods_add', {
     ...body,
     ticket: localStorage.getItem('ticket'),
   })
@@ -117,7 +117,7 @@ export const modifyRetail = payload => {
   Object.keys(payload).forEach(item => {
     body[item] = payload[item]
   })
-  return axios.post('/appapi.php?c=Merchantapp&a=edit_shop', {
+  return axios.post('/appapi.php?c=Merchantapp&a=goods_edit', {
     ...body,
     ticket: localStorage.getItem('ticket'),
   })
