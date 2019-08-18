@@ -129,16 +129,6 @@ class RetailAdd extends React.Component {
     commodity.fetchRetailDetail(match.params.id, match.params.goodid).then(() => {
       const { retailDetail } = commodity
       console.log(toJS(retailDetail))
-<<<<<<< HEAD
-      // const picArr = retailDetail.pic.map(item => ({
-      //   url: item,
-      // }))
-      // this.setState({
-      //   pic: picArr,
-      // })
-      console.log(toJS(moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD HH:mm')))
-      console.log(toJS(moment(retailDetail.seckill_open_time * 1000).format('YYYY-MM-DD HH:mm')))
-=======
       const picArr = retailDetail.pic.map(item => ({
         url: item,
       }))
@@ -147,7 +137,6 @@ class RetailAdd extends React.Component {
       })
       console.log(toJS(moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD hh:mm')))
       console.log(toJS(moment(retailDetail.seckill_open_time * 1000).format('YYYY-MM-DD hh:mm')))
->>>>>>> dev
       this.setState({
         sortName: retailDetail.name,
         number: retailDetail.number,
@@ -162,13 +151,8 @@ class RetailAdd extends React.Component {
         seckillStock: retailDetail.seckill_stock,
         selectValue: [retailDetail.status],
         classifyValue: [retailDetail.sort_id],
-<<<<<<< HEAD
-        pic: retailDetail.pic,
-        // starttime: [moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD HH:mm')],
-=======
         pic: picArr,
         // starttime: moment(retailDetail.seckill_close_time * 1000).format('YYYY-MM-DD hh:mm'),
->>>>>>> dev
       })
     })
   }
