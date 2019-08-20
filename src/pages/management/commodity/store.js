@@ -19,6 +19,8 @@ class MastSotre {
 
   @observable reserveListTotal = null
 
+  @observable reserveCategoryOption = []
+
   @observable cateringDetail = {}
 
   @observable cateringList = []
@@ -131,6 +133,32 @@ class MastSotre {
           })
         }
       }
+    }
+  }
+
+  @action
+  fetchReserveCategoryOption = async () => {
+    const response = await services.fetchReserveCategoryOption()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.reserveCategoryOption = response.data.result
+      })
+    }
+  }
+
+  @action
+  addReserve = async payload => {
+    const response = await services.addReserve(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  modifyReserve = async payload => {
+    const response = await services.modifyReserve(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
     }
   }
 

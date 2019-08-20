@@ -99,8 +99,7 @@ class BasicInformation extends React.Component {
 
   render() {
     const { history, basicInformation } = this.props
-    const basicInfo = toJS(basicInformation.basicInfo)
-    const categoryOption = toJS(basicInformation.categoryOption)
+    const { basicInfo, categoryOption } = basicInformation
     const { menu } = this.state
     const menuEl = (
       <Menu

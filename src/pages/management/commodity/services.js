@@ -26,6 +26,23 @@ export const fetchReserveList = (page, size) => axios.get('/appapi.php?c=Merchan
   },
 })
 
+export const fetchReserveCategoryOption = (id = 0) => axios.get('/appapi.php?c=Merchantapp&a=ajax_get_appoint_category', {
+  params: {
+    cat_fid: id,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+export const addReserve = payload => axios.post('/appapi.php?c=Merchantapp&a=add_apponit', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const modifyReserve = payload => axios.post('/appapi.php?c=Merchantapp&a=edit_apponit', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
 // 餐饮列表
 export const fetchCateringList = (page, size, storeId) => axios.get('/appapi.php?c=Merchantapp&a=mpro', {
   params: {

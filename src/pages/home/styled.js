@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export default styled.div`
-  background: #ccc;
+  background: #eee;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,7 +22,6 @@ export default styled.div`
     // word-wrap:break-word;
   }
   &.cur {
-    background: #eee;
-    border: 1px solid #ccc;
+    background: #ccc;
   }
 `

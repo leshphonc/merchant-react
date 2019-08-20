@@ -1,5 +1,6 @@
 import Compressor from 'compressorjs'
 import axios from 'axios'
+import { Toast } from 'antd-mobile'
 
 /**
  * @author cc
@@ -37,6 +38,18 @@ export default {
       val += `&${k}=${obj[k]}`
     }
     return val.substr(1)
+  },
+  compressionAndUploadImgArr(arr) {
+    arr.forEach((item, index) => {
+      if (item.file) {
+        this.compressionAndUploadImg(item.file)
+          .then(res => {
+            arr.splice(index, 1, { url: res })
+          })
+          .catch(e => Toast.fail(e))
+      }
+    })
+    return arr
   },
   compressionAndUploadImg(blob) {
     return new Promise((resolve, reject) => {

@@ -190,6 +190,9 @@ class Home extends React.Component {
                   <div>{home.indexData.total_earn || 0}</div>
                 </FlexBox>
               </Flex.Item>
+            </Flex>
+            <WhiteSpace />
+            <Flex>
               <Flex.Item>
                 <FlexBox
                   className={cur === '2' ? 'cur' : ''}
