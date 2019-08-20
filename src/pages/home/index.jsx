@@ -147,9 +147,9 @@ class Home extends React.Component {
       return false
     }
     return (
-      <Carousel autoplay infinite style={{ height: 230 }}>
+      <Carousel autoplay infinite>
         {indexData.wap_MerchantAd.map(item => (
-          <img key={item.id} src={item.pic} style={{ width: '100%', height: 230 }} alt="" />
+          <img key={item.id} src={item.pic} alt="" />
         ))}
       </Carousel>
     )
