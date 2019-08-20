@@ -104,11 +104,15 @@ body {
 
 .w-e-text-container {
   height: 60vh !important;
+  z-index: 70 !important;
 }
 .w-e-text-container .w-e-panel-container {
   width: 100% !important;
   margin-left: 0 !important;
   left: 0;
+}
+.w-e-toolbar .w-e-menu {
+  z-index: 70 !important;
 }
 
 /* 清除默认button样式 */

@@ -12,6 +12,7 @@ import ModifyDescription from './modify/description'
 import ModifyPicture from './modify/picture'
 import ModifyDetail from './modify/detail'
 import ModifyCoordinate from './modify/coordinate'
+import ModifyAddress from './modify/address'
 import NavBar from '@/common/NavBar'
 import {
   CustomizeList, ListTitle, ListContent, PrimaryTag, MenuMask,
@@ -56,7 +57,10 @@ class BasicInformation extends React.Component {
           <PrimaryTag
             key={index}
             style={{ marginLeft: 2 }}
-            onClick={() => this.setState({ menu: true })}
+            onClick={() => {
+              document.body.style.position = 'fixed'
+              this.setState({ menu: true })
+            }}
           >
             {item}
           </PrimaryTag>
@@ -123,18 +127,16 @@ class BasicInformation extends React.Component {
             <Item
               extra={basicInfo.phone}
               arrow="horizontal"
-              onClick={() => {
-                history.push(`/setting/basicInformation/modifyPhone/${basicInfo.phone}`)
-              }}
+              onClick={() => history.push(`/setting/basicInformation/modifyPhone/${basicInfo.phone}`)
+              }
             >
               联系电话
             </Item>
             <Item
               extra={basicInfo.email}
               arrow="horizontal"
-              onClick={() => {
-                history.push(`/setting/basicInformation/modifyEmail/${basicInfo.email}`)
-              }}
+              onClick={() => history.push(`/setting/basicInformation/modifyEmail/${basicInfo.email}`)
+              }
             >
               商家邮箱
             </Item>
@@ -173,43 +175,43 @@ class BasicInformation extends React.Component {
               extra={
                 <Switch checked={basicInfo.is_offline === '1'} onChange={this.changePermission} />
               }
-              arrow="empty"
             >
               线下支付权限
             </Item>
             <Item
               arrow="horizontal"
               extra={`${basicInfo.long || 0}, ${basicInfo.lat || 0}`}
-              onClick={() => {
-                history.push(
-                  `/setting/basicInformation/modifyCoordinate/${basicInfo.long}/${basicInfo.lat}/${
-                    basicInfo.adress
-                  }`,
-                )
-              }}
+              onClick={() => history.push(
+                `/setting/basicInformation/modifyCoordinate/${basicInfo.long}/${basicInfo.lat}`,
+              )
+              }
             >
               商户经纬度
             </Item>
-            <Item extra={basicInfo.adress}>详细地址</Item>
-            <Item arrow="empty" extra={this.getMenuList()}>
-              商户所属分类
+            <Item
+              arrow="horizontal"
+              wrap
+              extra={basicInfo.adress}
+              onClick={() => history.push(`/setting/basicInformation/modifyAddress/${basicInfo.adress}`)
+              }
+            >
+              详细地址
             </Item>
+            <Item extra={this.getMenuList()}>商户所属分类</Item>
           </List>
           <List renderHeader="商家描述">
             <Item
               extra={basicInfo.txt_info}
               arrow="horizontal"
-              onClick={() => {
-                history.push(`/setting/basicInformation/modifyDescription/${basicInfo.txt_info}`)
-              }}
+              onClick={() => history.push(`/setting/basicInformation/modifyDescription/${basicInfo.txt_info}`)
+              }
             >
               商户描述
             </Item>
             <Item
               arrow="horizontal"
-              onClick={() => {
-                history.push('/setting/basicInformation/modifyPicture/modifyLogoUrl/1')
-              }}
+              onClick={() => history.push('/setting/basicInformation/modifyPicture/modifyLogoUrl/1')
+              }
             >
               <CustomizeList>
                 <ListTitle>商户LOGO</ListTitle>
@@ -220,9 +222,7 @@ class BasicInformation extends React.Component {
             </Item>
             <Item
               arrow="horizontal"
-              onClick={() => {
-                history.push('/setting/basicInformation/modifyPicture/modifyImgUrl/1')
-              }}
+              onClick={() => history.push('/setting/basicInformation/modifyPicture/modifyImgUrl/1')}
             >
               <CustomizeList>
                 <ListTitle>商户图片</ListTitle>
@@ -243,14 +243,25 @@ class BasicInformation extends React.Component {
             </Item>
           </List>
           <List renderHeader="绑定微信">
-            <Item arrow="horizontal" onClick={this.wxBind} extra={basicInfo.uid ? '已绑定' : ''}>
+            <Item
+              arrow="horizontal"
+              onClick={this.wxBind}
+              extra={basicInfo.uid ? '已绑定' : '点击绑定'}
+            >
               绑定微信
             </Item>
           </List>
           <WhiteSpace />
         </form>
         {menu ? menuEl : null}
-        {menu ? <MenuMask onClick={() => this.setState({ menu: false })} /> : null}
+        {menu ? (
+          <MenuMask
+            onClick={() => {
+              document.body.style.position = 'static'
+              this.setState({ menu: false })
+            }}
+          />
+        ) : null}
       </React.Fragment>
     )
   }
@@ -270,8 +281,9 @@ export default () => (
       component={ModifyPicture}
     />
     <Route path="/setting/basicInformation/modifyDetail" component={ModifyDetail} />
+    <Route path="/setting/basicInformation/modifyAddress/:address?" component={ModifyAddress} />
     <Route
-      path="/setting/basicInformation/modifyCoordinate/:lng/:lat/:address"
+      path="/setting/basicInformation/modifyCoordinate/:lng/:lat"
       component={ModifyCoordinate}
     />
   </React.Fragment>

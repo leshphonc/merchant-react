@@ -26,9 +26,8 @@ export const fetchReserveList = (page, size) => axios.get('/appapi.php?c=Merchan
   },
 })
 
-export const fetchReserveCategoryOption = (id = 0) => axios.get('/appapi.php?c=Merchantapp&a=ajax_get_appoint_category', {
+export const fetchReserveCategoryOption = () => axios.get('/appapi.php?c=Merchantapp&a=get_all_appoint_category', {
   params: {
-    cat_fid: id,
     ticket: localStorage.getItem('ticket'),
   },
 })

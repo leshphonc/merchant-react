@@ -13,10 +13,9 @@ export const updateInfo = (key, value) => axios.post('/appapi.php?c=Merchantapp&
   ticket: localStorage.getItem('ticket'),
 })
 
-export const modifyCoordinate = (lng, lat, address) => axios.post('/appapi.php?c=Merchantapp&a=modify_merchant', {
+export const modifyCoordinate = (lng, lat) => axios.post('/appapi.php?c=Merchantapp&a=modify_merchant', {
   long: lng,
   lat,
-  address,
   ticket: localStorage.getItem('ticket'),
 })
 

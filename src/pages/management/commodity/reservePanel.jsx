@@ -14,6 +14,7 @@ import {
   Flex,
   WhiteSpace,
   Toast,
+  Menu,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -149,7 +150,7 @@ class ReservePanel extends React.Component {
   }
 
   render() {
-    const { match, form } = this.props
+    const { match, form, commodity } = this.props
     const { files, menu } = this.state
     const { getFieldProps } = form
     const data = [
@@ -157,16 +158,19 @@ class ReservePanel extends React.Component {
       { value: 1, label: '同城百商联盟 - 下城区-跨贸小镇101幢' },
       { value: 2, label: '同城百商联盟 - 下城区-跨贸小镇102幢' },
     ]
+    const { reserveCategoryOption } = commodity
     const paymentValue = form.getFieldValue('payment_status')
+    console.log(paymentValue)
     const storeChecked = form.getFieldValue('is_store')
-    // const menuEl = (
-    //   <Menu
-    //     className="menu-position"
-    //     data={categoryOption}
-    //     value={[basicInfo.cat_fid, basicInfo.cat_id]}
-    //     onChange={this.changeCategory}
-    //   />
-    // )
+    const menuEl = (
+      <Menu
+        {...getFieldProps('cat_fid', {
+          rules: [{ required: true }],
+        })}
+        className="menu-position"
+        data={reserveCategoryOption}
+      />
+    )
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}预定商品`} goBack />
@@ -346,7 +350,15 @@ class ReservePanel extends React.Component {
           >
             <List.Item arrow="horizontal">服务类别</List.Item>
           </Picker>
-          <Item arrow="empty">商户所属分类</Item>
+          <Item
+            arrow="horizontal"
+            onClick={() => this.setState({
+              menu: true,
+            })
+            }
+          >
+            商户所属分类
+          </Item>
           <Item arrow="empty">
             商品图片
             <ImagePicker
@@ -474,7 +486,7 @@ class ReservePanel extends React.Component {
           </Button>
           <WhiteSpace />
         </WingBlank>
-        {/* {menu ? menuEl : null} */}
+        {menu ? menuEl : null}
         {menu ? <MenuMask onClick={() => this.setState({ menu: false })} /> : null}
       </React.Fragment>
     )

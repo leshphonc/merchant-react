@@ -62,8 +62,8 @@ class BasicInformationSotre {
   }
 
   @action
-  modifyCoordinate = async (lng, lat, address) => {
-    await services.modifyCoordinate(lng, lat, address)
+  modifyCoordinate = async (lng, lat) => {
+    await services.modifyCoordinate(lng, lat)
   }
 
   @action
@@ -106,6 +106,11 @@ class BasicInformationSotre {
   @action
   modifyImgUrl = async url => {
     await services.updateInfo('pic_info', url)
+  }
+
+  @action
+  modifyAddress = async address => {
+    await services.updateInfo('adress', address)
   }
 
   @action
