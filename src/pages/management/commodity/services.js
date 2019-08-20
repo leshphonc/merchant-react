@@ -70,6 +70,11 @@ export const fetchCateringDetail = (id, goodid) => axios.get('/appapi.php?c=Merc
   },
 })
 
+export const updateInfo = (key, value) => axios.post('/appapi.php?c=Merchantapp&a=get_meal_detail', {
+  [key]: value,
+  ticket: localStorage.getItem('ticket'),
+})
+
 export const addCategory = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {

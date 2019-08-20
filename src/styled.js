@@ -217,12 +217,20 @@ export const FilterBox = styled.div`
   }
 `
 export const Buttons = styled.div`
-  display: inline-block;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 24px;
+  align-items: center
   .am-button{
     font-size: 16px;
     overflow: initial;
     height: 0;
     line-height:1;
+    background: #ffb000;
+    height: 24px;
+    line-height: 24px;
+    width: 60px;
   }
   .am-button::before{
     border:0 !important;

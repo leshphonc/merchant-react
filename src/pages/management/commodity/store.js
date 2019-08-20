@@ -53,6 +53,8 @@ class MastSotre {
 
   @observable retailDelete = {}
 
+  @observable cacheStore = {}
+
   @action
   fetchGroupList = async keyword => {
     let hasMore = true
@@ -318,6 +320,12 @@ class MastSotre {
         this.retailValues = response.data.result
       })
     }
+  }
+
+  @action
+  cacheStoreDetail = async data => {
+    console.log(data)
+    this.cacheStore = data
   }
 }
 export default new MastSotre()
