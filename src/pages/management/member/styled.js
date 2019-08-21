@@ -36,6 +36,7 @@ export const ItemTop = styled.div`
     display: flex;
     justify-content: space-around;
     flex: 1;
+    max-width: 100%;
     font-size: 12px;
     .content-line {
       display: flex;
@@ -51,10 +52,13 @@ export const ItemTop = styled.div`
     }
     .content-left {
       display: flex;
+      max-width: 50%;
+      align-items: center;
       flex-direction: column;
       justify-content: space-between;
       min-width: 0;
       div {
+        max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -63,10 +67,13 @@ export const ItemTop = styled.div`
 
     .content-right {
       display: flex;
+      max-width: 50%;
+      align-items: center;
       flex-direction: column;
       justify-content: space-between;
       min-width: 0;
       div {
+        max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

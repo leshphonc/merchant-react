@@ -21,6 +21,7 @@ import 'rc-tooltip/assets/bootstrap.css'
 import E from 'wangeditor'
 import { createForm } from 'rc-form'
 import { observer, inject } from 'mobx-react'
+import Editor from '@/common/Editor'
 import { PrimaryTag, MenuMask } from '@/styled'
 import Utils from '@/utils'
 
@@ -56,49 +57,18 @@ class ReservePanel extends React.Component {
     this.state = {
       menu: false,
       files: [],
-      editorContent: '',
-      storeChecked: false,
-      paymentValue: false,
+      category: [],
+      editor: null,
     }
     this.editor = React.createRef()
   }
 
   componentDidMount() {
-    const { commodity } = this.props
-    // this.setState({
-    //   editorContent: history.location.state.value,
-    // })
+    const { commodity, match } = this.props
     commodity.fetchReserveCategoryOption()
-    const editor = new E(this.editor.current)
-    // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
-    editor.customConfig.onchange = html => {
-      this.setState({
-        editorContent: html,
-      })
+    if (match.params.id) {
+      commodity.fetchReserveDetail(match.params.id)
     }
-    editor.customConfig.uploadImgShowBase64 = true
-    editor.customConfig.menus = [
-      'head', // 标题
-      'bold', // 粗体
-      'fontSize', // 字号
-      'fontName', // 字体
-      'italic', // 斜体
-      'underline', // 下划线
-      'strikeThrough', // 删除线
-      'foreColor', // 文字颜色
-      'backColor', // 背景颜色
-      'link', // 插入链接
-      'list', // 列表
-      'justify', // 对齐方式
-      'quote', // 引用
-      'emoticon', // 表情
-      'image', // 插入图片
-      'table', // 表格
-      'video', // 插入视频
-      'undo', // 撤销
-      'redo', // 重复
-    ]
-    editor.create()
     // editor.txt.html(history.location.state.value)
   }
 
@@ -106,41 +76,47 @@ class ReservePanel extends React.Component {
     console.log(val)
   }
 
-  getMenuList = () => {
-    const { basicInformation } = this.props
-    const { basicInfo, categoryOption } = basicInformation
-    const cateGoryLabel = []
-    categoryOption.forEach(item => {
-      if (item.value === basicInfo.cat_fid) {
-        cateGoryLabel.push(item.label)
-        if (item.children.length) {
-          item.children.forEach(child => {
-            if (child.value === basicInfo.cat_id) {
-              cateGoryLabel.push(child.label)
-            }
-          })
-        }
-      }
-    })
-    return (
-      <Flex justify="end">
-        {cateGoryLabel.map((item, index) => (
-          <PrimaryTag
-            key={index}
-            style={{ marginLeft: 2 }}
-            onClick={() => this.setState({ menu: true })}
-          >
-            {item}
-          </PrimaryTag>
-        ))}
-      </Flex>
-    )
+  // getMenuList = () => {
+  //   const { commodity } = this.props
+  //   const { reserveCategoryOption } = commodity
+  //   const cateGoryLabel = []
+  //   reserveCategoryOption.forEach(item => {
+  //     if (item.value === basicInfo.cat_fid) {
+  //       cateGoryLabel.push(item.label)
+  //       if (item.children.length) {
+  //         item.children.forEach(child => {
+  //           if (child.value === basicInfo.cat_id) {
+  //             cateGoryLabel.push(child.label)
+  //           }
+  //         })
+  //       }
+  //     }
+  //   })
+  //   return (
+  //     <Flex justify="end">
+  //       {cateGoryLabel.map((item, index) => (
+  //         <PrimaryTag
+  //           key={index}
+  //           style={{ marginLeft: 2 }}
+  //           onClick={() => this.setState({ menu: true })}
+  //         >
+  //           {item}
+  //         </PrimaryTag>
+  //       ))}
+  //     </Flex>
+  //   )
+  // }
+
+  changeCategory = async arr => {
+    // const { basicInformation } = this.props
+    // await basicInformation.modifyCategory(arr)
+    this.setState({ menu: false, category: arr })
   }
 
   submit = async () => {
     const { form } = this.props
-    const { editorContent } = this.state
-    console.log(editorContent)
+    const content = this.editor.current.state.editor.txt.html()
+    console.log(content)
     form.validateFields((error, value) => {
       console.log(value)
       if (error) {
@@ -151,7 +127,7 @@ class ReservePanel extends React.Component {
 
   render() {
     const { match, form, commodity } = this.props
-    const { files, menu } = this.state
+    const { files, menu, category } = this.state
     const { getFieldProps } = form
     const data = [
       { value: 0, label: '同城百商联盟 - 下城区-跨贸小镇100幢' },
@@ -160,15 +136,13 @@ class ReservePanel extends React.Component {
     ]
     const { reserveCategoryOption } = commodity
     const paymentValue = form.getFieldValue('payment_status')
-    console.log(paymentValue)
     const storeChecked = form.getFieldValue('is_store')
     const menuEl = (
       <Menu
-        {...getFieldProps('cat_fid', {
-          rules: [{ required: true }],
-        })}
         className="menu-position"
+        value={category}
         data={reserveCategoryOption}
+        onChange={this.changeCategory}
       />
     )
     return (
@@ -373,7 +347,7 @@ class ReservePanel extends React.Component {
           </Item>
           <Item>
             服务详情
-            <div ref={this.editor} />
+            <Editor ref={this.editor} />
           </Item>
           <List.Item
             extra={

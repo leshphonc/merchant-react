@@ -3,7 +3,6 @@ import { Route } from 'react-router-dom'
 import {
   List, Switch, Picker, WhiteSpace, Menu, Flex, Toast,
 } from 'antd-mobile'
-import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import Tooltip from 'rc-tooltip'
 import ModifyPhone from './modify/phone'
@@ -18,10 +17,11 @@ import {
   CustomizeList, ListTitle, ListContent, PrimaryTag, MenuMask,
 } from '@/styled'
 import 'rc-tooltip/assets/bootstrap.css'
+import Utils from '@/utils'
 
 const { Item } = List
 
-@inject('basicInformation')
+@inject('basicInformation', 'common')
 @observer
 class BasicInformation extends React.Component {
   state = {
@@ -29,16 +29,36 @@ class BasicInformation extends React.Component {
   }
 
   componentDidMount() {
-    const { basicInformation } = this.props
+    const { basicInformation, common } = this.props
     basicInformation.fetchCategory()
     basicInformation.fetchBasicInfo()
+    const code = Utils.getUrlParam('code')
+    if (code) {
+      common.fetchOpenId(code).then(res => {
+        if (res) {
+          basicInformation.wxBind(common.openid).then(res2 => {
+            if (res2) {
+              Toast.success('绑定成功', 1, () => {
+                basicInformation.fetchBasicInfo()
+                window.location.search = ''
+              })
+            } else {
+              window.location.search = ''
+            }
+          })
+        }
+      })
+      // const openid = sessionStorage.getItem('openid')
+      // basicInformation.wxBind(openid)
+    }
   }
 
   getMenuList = () => {
     const { basicInformation } = this.props
-    const basicInfo = toJS(basicInformation.basicInfo)
-    const categoryOption = toJS(basicInformation.categoryOption)
+    const { basicInfo } = basicInformation
+    const { categoryOption } = basicInformation
     const cateGoryLabel = []
+    if (!categoryOption) return false
     categoryOption.forEach(item => {
       if (item.value === basicInfo.cat_fid) {
         cateGoryLabel.push(item.label)
@@ -82,19 +102,19 @@ class BasicInformation extends React.Component {
   changeCategory = async arr => {
     const { basicInformation } = this.props
     await basicInformation.modifyCategory(arr)
+    document.body.style.position = 'static'
     this.setState({ menu: false })
   }
 
   wxBind = async () => {
-    const { basicInformation } = this.props
+    const { basicInformation, common } = this.props
     const { basicInfo } = basicInformation
     const ua = window.navigator.userAgent.toLowerCase()
     /* eslint eqeqeq: 0 */
     if (!(ua.match(/micromessenger/i) == 'micromessenger')) {
       Toast.info('请在微信环境下进行绑定')
     } else if (!basicInfo.uid) {
-      const openid = sessionStorage.getItem('openid')
-      basicInformation.wxBind(openid)
+      common.getWxCode()
       // await basicInformation.getWxCode()
     } else {
       Toast.info('已绑定微信，无需重复绑定')
@@ -222,7 +242,7 @@ class BasicInformation extends React.Component {
             </Item>
             <Item
               arrow="horizontal"
-              onClick={() => history.push('/setting/basicInformation/modifyPicture/modifyImgUrl/1')}
+              onClick={() => history.push('/setting/basicInformation/modifyPicture/modifyImgUrl/2')}
             >
               <CustomizeList>
                 <ListTitle>商户图片</ListTitle>
@@ -234,10 +254,7 @@ class BasicInformation extends React.Component {
             <Item
               extra="前往修改"
               arrow="horizontal"
-              onClick={() => {
-                history.push('/setting/basicInformation/modifyDetail')
-                sessionStorage.setItem('content', basicInfo.content)
-              }}
+              onClick={() => history.push('/setting/basicInformation/modifyDetail')}
             >
               商户详情
             </Item>

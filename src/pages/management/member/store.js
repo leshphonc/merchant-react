@@ -179,7 +179,16 @@ class MemberStore {
   }
 
   @action
-  operatingCardGroup = async (groupname, comment, discount, id, effdays, give) => {
+  resetCardGroupList = () => {
+    runInAction(() => {
+      this.cardGroupList = []
+      this.cardGroupListPage = 1
+      this.cardGroupListTotal = null
+    })
+  }
+
+  @action
+  operatingCardGroup = async (groupname, comment, discount, effdays, give, id) => {
     if (id) {
       const response = await services.modifyCardGroup(
         groupname,
@@ -417,16 +426,26 @@ class MemberStore {
   }
 
   @action
-  checkCouponCode = async (id, code) => {
-    const response = await services.checkCouponCode(id, code)
+  checkCouponCode = async (id, code, splice) => {
+    const response = await services.checkCouponCode(id, code, splice)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       this.couponCheckList.forEach((item, index) => {
-        if (item.id === id) {
-          runInAction(() => {
-            this.couponCheckList[index].is_use = '1'
-          })
+        if (splice) {
+          if (item.id === id) {
+            runInAction(() => {
+              this.couponCheckList[index].is_use = '1'
+            })
+          }
+        } else {
+          const realId = code.split('d')[0]
+          if (item.id === realId) {
+            runInAction(() => {
+              this.couponCheckList[index].is_use = '1'
+            })
+          }
         }
       })
+      return Promise.resolve(true)
     }
   }
 

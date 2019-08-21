@@ -9,9 +9,14 @@ import { Toast } from 'antd-mobile'
 
 export default {
   // 传入键名 获取地址栏参数
-  getUrlParam(name) {
+  getUrlParam(name, url) {
     const reg = new RegExp(`(^|&)${name}=([^&]*)`)
-    const result = window.location.search.substr(1).match(reg)
+    let result = null
+    if (url) {
+      result = new URL(url).search.substr(1).match(reg)
+    } else {
+      result = window.location.search.substr(1).match(reg)
+    }
     if (result !== null) return decodeURIComponent(result[2])
     return ''
   },
@@ -38,6 +43,20 @@ export default {
       val += `&${k}=${obj[k]}`
     }
     return val.substr(1)
+  },
+  edtiorUploadImg(arr) {
+    return new Promise(resolve => {
+      arr.forEach((item, index) => {
+        this.compressionAndUploadImg(item)
+          .then(res => {
+            arr.splice(index, 1, res)
+            if (arr.length === index + 1) {
+              resolve(arr)
+            }
+          })
+          .catch(e => Toast.fail(e))
+      })
+    })
   },
   compressionAndUploadImgArr(arr) {
     arr.forEach((item, index) => {

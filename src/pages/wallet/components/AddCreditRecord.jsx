@@ -5,6 +5,7 @@ import {
   WhiteSpace, WingBlank, PullToRefresh, Card,
 } from 'antd-mobile'
 import moment from 'moment'
+import { IncomeStatus } from '@/config/constant'
 
 @inject('wallet')
 @observer
@@ -38,7 +39,12 @@ class AddCreditRecord extends React.Component {
         <Card>
           <Card.Header
             title={item.desc}
-            extra={<span style={{ color: '#690' }}>¥ {item.money}</span>}
+            extra={
+              <span style={{ color: IncomeStatus[item.income].color }}>
+                ¥ {IncomeStatus[item.income].str}
+                {item.money}
+              </span>
+            }
           />
           <Card.Body style={{ fontSize: 13, color: '#555' }}>
             <div>订单编号：{item.order_id}</div>

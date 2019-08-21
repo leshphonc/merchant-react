@@ -74,7 +74,7 @@ export default () => (
     {/* <Route path="/management/commodity/groupEdit" component={GroupEdit} /> */}
     <Route path="/management/commodity/groupMealAdd" component={GroupMealAdd} />
     <Route path="/management/commodity/reserve" component={Reserve} />
-    <Route path="/management/commodity/reservePanel/:str" component={reservePanel} />
+    <Route path="/management/commodity/reservePanel/:str/:id?" component={reservePanel} />
     {/* <Route path="/management/commodity/reserveEdit" component={ReserveEdit} /> */}
     <Route path="/management/commodity/catering" component={Catering} />
     <Route path="/management/commodity/retail" component={Retail} />

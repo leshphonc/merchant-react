@@ -26,20 +26,31 @@ export const fetchReserveList = (page, size) => axios.get('/appapi.php?c=Merchan
   },
 })
 
+// 获取分类picker的option
 export const fetchReserveCategoryOption = () => axios.get('/appapi.php?c=Merchantapp&a=get_all_appoint_category', {
   params: {
     ticket: localStorage.getItem('ticket'),
   },
 })
 
+// 新增预定商品
 export const addReserve = payload => axios.post('/appapi.php?c=Merchantapp&a=add_apponit', {
   ...payload,
   ticket: localStorage.getItem('ticket'),
 })
 
+// 编辑预定商品
 export const modifyReserve = payload => axios.post('/appapi.php?c=Merchantapp&a=edit_apponit', {
   ...payload,
   ticket: localStorage.getItem('ticket'),
+})
+
+// 获取预定商品详情
+export const fetchReserveDetail = id => axios.get('/appapi.php?c=Merchantapp&a=get_appoint', {
+  params: {
+    appoint_id: id,
+    ticket: localStorage.getItem('ticket'),
+  },
 })
 
 // 餐饮列表

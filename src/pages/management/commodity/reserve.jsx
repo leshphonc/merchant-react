@@ -93,7 +93,10 @@ class Reserve extends React.Component {
               >
                 已预约: {item.appoint_sum}
               </div>
-              <Link to="/management/commodity/reservePanel/编辑" style={{ color: '#333' }}>
+              <Link
+                to={`/management/commodity/reservePanel/编辑/${item.appoint_id}`}
+                style={{ color: '#333' }}
+              >
                 <div style={{ display: 'inline-block' }}>
                   <i className="iconfont" style={{ color: '#ffb000' }}>
                     &#xe645;
@@ -136,9 +139,7 @@ class Reserve extends React.Component {
           onRefresh={this.loadMore}
         >
           <WhiteSpace />
-          <WingBlank size="sm">
-            {this.mapList()}
-          </WingBlank>
+          <WingBlank size="sm">{this.mapList()}</WingBlank>
         </PullToRefresh>
         <List style={{ position: 'fixed', bottom: '0', width: '100%' }}>
           <div

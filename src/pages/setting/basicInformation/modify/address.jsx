@@ -15,7 +15,7 @@ class Modifyaddress extends React.Component {
   componentDidMount() {
     const { match } = this.props
     this.setState({
-      address: match.params.value,
+      address: match.params.address,
     })
   }
 

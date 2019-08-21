@@ -18,8 +18,8 @@ class ModifyGroup extends React.Component {
 
   componentDidMount() {
     const { member, match } = this.props
+    member.fetchGiftVoucher()
     if (match.params.id) {
-      member.fetchGiftVoucher()
       member.fetchCardGroupDetail(match.params.id).then(() => {
         this.setState({
           groupname: member.cardGroupDetail.name,
@@ -34,7 +34,7 @@ class ModifyGroup extends React.Component {
 
   changeGiveValue = (val, index) => {
     const { give } = this.state
-    const cache = Object.assign([], give)
+    const cache = JSON.parse(JSON.stringify(give))
     // eslint-disable-next-line prefer-destructuring
     cache[index].goods = val[0]
     this.setState({
@@ -44,8 +44,7 @@ class ModifyGroup extends React.Component {
 
   changeGiveNum = (val, index) => {
     const { give } = this.state
-    const cache = Object.assign([], give)
-    // eslint-disable-next-line prefer-destructuring
+    const cache = JSON.parse(JSON.stringify(give))
     cache[index].goods_num = val
     this.setState({
       give: cache,
@@ -56,7 +55,7 @@ class ModifyGroup extends React.Component {
     const { member } = this.props
     const { give } = this.state
     return give.map((item, index) => (
-      <React.Fragment key={Math.random()}>
+      <React.Fragment key={index}>
         <Picker
           data={member.giftVoucher}
           value={[item.goods]}
@@ -79,13 +78,23 @@ class ModifyGroup extends React.Component {
     } = this.state
     if (match.params.id) {
       await member
-        .operatingCardGroup(groupname, comment, discount, match.params.id, effdays, give)
+        .operatingCardGroup(groupname, comment, discount, effdays, give, match.params.id)
         .then(res => {
-          if (res) Toast.success('编辑成功', 1, () => history.goBack())
+          if (res) {
+            Toast.success('编辑成功', 1, () => {
+              member.resetCardGroupList()
+              history.goBack()
+            })
+          }
         })
     } else {
       await member.operatingCardGroup(groupname, comment, discount, effdays, give).then(res => {
-        if (res) Toast.success('新增成功', 1, () => history.goBack())
+        if (res) {
+          Toast.success('新增成功', 1, () => {
+            member.resetCardGroupList()
+            history.goBack()
+          })
+        }
       })
     }
   }
@@ -95,7 +104,6 @@ class ModifyGroup extends React.Component {
     const {
       groupname, comment, discount, effdays, give,
     } = this.state
-    console.log(give)
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}分组`} goBack />

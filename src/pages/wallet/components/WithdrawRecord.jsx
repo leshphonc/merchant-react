@@ -5,15 +5,16 @@ import {
   WhiteSpace, WingBlank, PullToRefresh, Card, Picker,
 } from 'antd-mobile'
 import { FilterBox } from '@/styled'
+import { WithdrawStatus } from '@/config/constant'
 
 const TypeData = [
   {
-    value: '1',
-    label: '提现到对公账户',
-  },
-  {
     value: '2',
     label: '提现到微信钱包',
+  },
+  {
+    value: '1',
+    label: '提现到对公账户',
   },
 ]
 @inject('wallet')
@@ -24,8 +25,8 @@ class WithdrawRecord extends React.Component {
     this.state = {
       refreshing: false,
       height: document.documentElement.clientHeight,
-      typeLabel: '提现到对公账户',
-      typeValue: '1',
+      typeLabel: '提现到微信钱包',
+      typeValue: '2',
     }
     this.refresh = React.createRef()
   }
@@ -50,19 +51,18 @@ class WithdrawRecord extends React.Component {
         <Card>
           <Card.Header
             title={
-              item.status === '1' ? (
-                <span style={{ color: '#690' }}>已通过</span>
-              ) : (
-                <span style={{ color: '#dd4a68' }}>被驳回</span>
-              )
+              <span style={{ color: WithdrawStatus[item.status].color }}>
+                {WithdrawStatus[item.status].label}
+              </span>
             }
-            extra={`¥ ${item.money}`}
+            extra={`¥ ${item.money / 100}`}
           />
           <Card.Body style={{ fontSize: 13, color: '#555' }}>
             <div>{item.remark}</div>
             <WhiteSpace />
             <WhiteSpace />
             <div dangerouslySetInnerHTML={{ __html: item.desc }} />
+            <div dangerouslySetInnerHTML={{ __html: item.result }} />
           </Card.Body>
           <WhiteSpace />
           <Card.Footer content={item.withdraw_time} />

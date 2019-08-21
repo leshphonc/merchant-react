@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 export const login = (account, pwd) => axios.post('/appapi.php?c=Merchantapp&a=login', {
+  // 'Device-Id': 'wx',
   account,
   pwd,
 })

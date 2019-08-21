@@ -116,7 +116,9 @@ class BasicInformationSotre {
   @action
   wxBind = async openid => {
     const response = await services.wxBind(openid)
-    console.log(response)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
   }
 
   constructor() {

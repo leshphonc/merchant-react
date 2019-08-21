@@ -1,3 +1,7 @@
+import { observable, action, runInAction } from 'mobx'
+import * as services from './services'
+import ErrorCode from '@/config/ErrorCode'
+
 import login from '@/pages/login/store'
 import home from '@/pages/home/store'
 import order from '@/pages/order/store'
@@ -9,7 +13,34 @@ import shopAssistant from '@/pages/popularize/shopAssistant/store'
 import member from '@/pages/management/member/store'
 import commodity from '@/pages/management/commodity/store'
 
+class CommonStore {
+  @observable openid = ''
+
+  @action
+  getWxCode = async () => {
+    const response = await services.getWxConfig()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      const url = encodeURIComponent(window.location.href)
+      window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${
+        response.data.result.appId
+      }&redirect_uri=${url}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`
+    }
+  }
+
+  @action
+  fetchOpenId = async code => {
+    const response = await services.fetchOpenId(code)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.openid = response.data.result
+      })
+      return Promise.resolve(true)
+    }
+  }
+}
+
 const stores = {
+  common: new CommonStore(),
   login,
   home,
   order,

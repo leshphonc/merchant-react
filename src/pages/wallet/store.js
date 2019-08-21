@@ -241,7 +241,10 @@ class WalletStore {
 
   @action
   withDraw = async payload => {
-    await services.withDraw(payload)
+    const response = await services.withDraw(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
   }
 }
 

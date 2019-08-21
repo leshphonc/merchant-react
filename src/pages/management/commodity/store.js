@@ -163,6 +163,14 @@ class MastSotre {
   }
 
   @action
+  fetchReserveDetail = async id => {
+    const response = await services.fetchReserveDetail(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      console.log(response.data)
+    }
+  }
+
+  @action
   fetchCateringList = async storeId => {
     let hasMore = true
     if (this.cateringListTotal !== null) {

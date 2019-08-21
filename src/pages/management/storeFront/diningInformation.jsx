@@ -61,39 +61,39 @@ class DiningInformation extends React.Component {
             data={SupportOptions}
             cols={1}
           >
-            <List.Item arrow="horizontal">预订</List.Item>
+            <List.Item arrow="horizontal">预定</List.Item>
           </Picker>
           <InputItem
             {...getFieldProps('fp', {
               rules: [{ required: true }],
             })}
             labelNumber={7}
-            placeholder="可提前预订多少天后的桌台"
+            placeholder="可提前预定多少天后的桌台"
           >
-            预订时长
+            预定时长
           </InputItem>
           <DatePicker
             {...getFieldProps('stime', {
               rules: [{ required: true }],
             })}
           >
-            <List.Item arrow="horizontal">预订开始时间</List.Item>
+            <List.Item arrow="horizontal">预定开始时间</List.Item>
           </DatePicker>
           <DatePicker
             {...getFieldProps('etime', {
               rules: [{ required: true }],
             })}
           >
-            <List.Item arrow="horizontal">预订结束时间</List.Item>
+            <List.Item arrow="horizontal">预定结束时间</List.Item>
           </DatePicker>
           <InputItem
             {...getFieldProps('fp', {
               rules: [{ required: true }],
             })}
             labelNumber={7}
-            placeholder="可提前预订多少天后的桌台"
+            placeholder="可提前预定多少天后的桌台"
           >
-            预订间隔时长
+            预定间隔时长
           </InputItem>
           <Picker
             {...getFieldProps('paihao', {

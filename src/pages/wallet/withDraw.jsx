@@ -72,7 +72,7 @@ class WithDraw extends React.Component {
   }
 
   submit = () => {
-    const { wallet } = this.props
+    const { wallet, history } = this.props
     const {
       name,
       amount,
@@ -85,28 +85,34 @@ class WithDraw extends React.Component {
       invoice,
     } = this.state
     if (receiptValue === '3') {
-      if (!name && !amount) {
+      if (!name || !amount || !accountValue) {
         Toast.info('请输入完整信息')
         return false
       }
     } else if (receiptValue === '0') {
-      if (!name && !amount && !cardUserName && !cardNumber && !bank && !invoice) {
+      if (!name || !amount || !cardUserName || !cardNumber || !bank || !invoice) {
         Toast.info('请输入完整信息')
         return false
       }
     }
 
-    wallet.withDraw({
-      receiptValue,
-      name,
-      amount,
-      accountValue,
-      remark,
-      cardUserName,
-      cardNumber,
-      bank,
-      invoice,
-    })
+    wallet
+      .withDraw({
+        receiptValue,
+        name,
+        amount,
+        accountValue,
+        remark,
+        cardUserName,
+        cardNumber,
+        bank,
+        invoice,
+      })
+      .then(res => {
+        if (res) {
+          Toast.success('已经提交申请，请等待审批', 1, () => history.goBack())
+        }
+      })
   }
 
   render() {
@@ -178,7 +184,7 @@ class WithDraw extends React.Component {
                     title="备注"
                     rows={4}
                     value={remark}
-                    placeholder="此条提现记录的备注"
+                    placeholder="此条提现记录的备注（选填）"
                     labelNumber={7}
                     count={100}
                     onChange={value => this.setState({
@@ -264,7 +270,7 @@ class WithDraw extends React.Component {
                   title="备注"
                   rows={4}
                   value={remark}
-                  placeholder="此条提现记录的备注"
+                  placeholder="此条提现记录的备注（选填）"
                   labelNumber={7}
                   count={100}
                   onChange={value => this.setState({

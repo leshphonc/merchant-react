@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import NavBar from '@/common/NavBar'
 import {
-  WingBlank, WhiteSpace, Card, PullToRefresh, Flex, Button, Modal,
+  WingBlank, WhiteSpace, Card, PullToRefresh, Flex, Button, Modal, Toast,
 } from 'antd-mobile'
+import Utils from '@/utils'
 import moment from 'moment'
 
 const { prompt } = Modal
@@ -76,7 +77,12 @@ class CouponCheck extends React.Component {
                   onClick={() => {
                     prompt('核销', '输入核销码进行核销', [
                       { text: '取消' },
-                      { text: '确定', onPress: code => member.checkCouponCode(item.id, code) },
+                      {
+                        text: '确定',
+                        onPress: code => member.checkCouponCode(item.id, code, true).then(res => {
+                          if (res) Toast.success('核销成功')
+                        }),
+                      },
                     ])
                   }}
                 >
@@ -102,10 +108,41 @@ class CouponCheck extends React.Component {
   }
 
   render() {
+    const { member } = this.props
     const { height, refreshing } = this.state
     return (
       <React.Fragment>
-        <NavBar title="优惠券领用列表" goBack />
+        <NavBar
+          title="优惠券领用列表"
+          goBack
+          right={
+            <Button
+              type="ghost"
+              style={{ color: '#fff', border: '1px solid #fff' }}
+              size="small"
+              onClick={() => {
+                window.wx.scanQRCode({
+                  needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                  scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+                  success(res) {
+                    const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
+                    // window.alert(result)
+                    const code = Utils.getUrlParam('code', result)
+                    if (code) {
+                      member.checkCouponCode(null, code, false).then(res2 => {
+                        if (res2) Toast.success('核销成功')
+                      })
+                    } else {
+                      Toast.info('未识别到code，无法核销')
+                    }
+                  },
+                })
+              }}
+            >
+              扫码核销
+            </Button>
+          }
+        />
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}

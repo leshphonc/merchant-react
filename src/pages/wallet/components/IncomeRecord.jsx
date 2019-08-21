@@ -6,6 +6,7 @@ import {
 } from 'antd-mobile'
 import { FilterBox } from '@/styled'
 import moment from 'moment'
+import { IncomeStatus } from '@/config/constant'
 
 @inject('wallet')
 @observer
@@ -63,18 +64,15 @@ class IncomeRecord extends React.Component {
         <Card>
           <Card.Header
             title={
-              item.income === '1' ? (
-                <span style={{ color: '#690' }}>收入</span>
-              ) : (
-                <span style={{ color: '#dd4a68' }}>支出</span>
-              )
+              <span style={{ color: IncomeStatus[item.income].color }}>
+                {IncomeStatus[item.income].label}
+              </span>
             }
             extra={
-              item.income === '1' ? (
-                <span style={{ color: '#690' }}>¥ +{item.money}</span>
-              ) : (
-                <span style={{ color: '#dd4a68' }}>¥ -{item.money}</span>
-              )
+              <span style={{ color: IncomeStatus[item.income].color }}>
+                ¥ {IncomeStatus[item.income].str}
+                {item.money}
+              </span>
             }
           />
           <Card.Body style={{ fontSize: 13, color: '#555' }}>
