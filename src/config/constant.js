@@ -25,3 +25,18 @@ export const IncomeStatus = {
     str: '-',
   },
 }
+
+export const StoreStatus = {
+  1: {
+    label: '正常',
+    color: '#690',
+  },
+  2: {
+    label: '审核',
+    color: '#ffb000',
+  },
+  4: {
+    label: '禁用',
+    color: '#dd4a68',
+  },
+}

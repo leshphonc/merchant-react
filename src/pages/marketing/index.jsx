@@ -35,7 +35,7 @@ class Marketing extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <NavBar title="营销活动列表" leftHide />
+        <NavBar title="营销活动列表" />
         <WhiteSpace />
         {this.mapList()}
       </React.Fragment>

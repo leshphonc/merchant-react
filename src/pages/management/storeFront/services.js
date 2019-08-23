@@ -1,12 +1,37 @@
 import axios from 'axios'
 
-export const fetchStoreList = type => axios.get('/appapi.php?c=Merchantapp&a=shop_list', {
+// 商铺列表
+export const fetchStoreList = () => axios.get('/appapi.php?c=Merchantapp&a=store_lists', {
   params: {
-    store_type: type,
     ticket: localStorage.getItem('ticket'),
   },
 })
+// 商铺详情
+export const fetchStoreDetail = id => axios.get('/appapi.php?c=Merchantapp&a=store_details', {
+  params: {
+    store_id: id,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+// 新增商铺
+export const insertStoreFront = payload => axios.post('/appapi.php?c=Merchantapp&a=add_store', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
 
+// 编辑商铺
+export const modifyStoreFront = payload => axios.post('/appapi.php?c=Merchantapp&a=edit_store', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const fetchBusinessList = id => axios.post('/appapi.php?c=Merchantapp&a=edit_store', {
+  params: {
+    id,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+// 分类列表
 export const fetchCategoryList = (id, type) => axios.get('/appapi.php?c=Merchantapp&a=sortlist', {
   params: {
     store_id: id,
@@ -15,6 +40,7 @@ export const fetchCategoryList = (id, type) => axios.get('/appapi.php?c=Merchant
   },
 })
 
+// 分类详情
 export const fetchCategoryDetail = (id, type, stid) => axios.get('/appapi.php?c=Merchantapp&a=sort_detail', {
   params: {
     store_id: id,
@@ -24,6 +50,7 @@ export const fetchCategoryDetail = (id, type, stid) => axios.get('/appapi.php?c=
   },
 })
 
+// 新增分类或编辑分类
 export const addCategory = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
@@ -35,6 +62,7 @@ export const addCategory = payload => {
   })
 }
 
+// 删除分类
 export const deleteCategory = (storeId, type, id) => axios.post('/appapi.php?c=Merchantapp&a=mstdel', {
   store_id: storeId,
   store_type: type,
@@ -42,6 +70,7 @@ export const deleteCategory = (storeId, type, id) => axios.post('/appapi.php?c=M
   ticket: localStorage.getItem('ticket'),
 })
 
+// 商铺优惠列表
 export const fetchStoreDiscountList = id => axios.get('/appapi.php?c=Merchantapp&a=discount', {
   params: {
     store_id: id,
@@ -49,6 +78,7 @@ export const fetchStoreDiscountList = id => axios.get('/appapi.php?c=Merchantapp
   },
 })
 
+// 商铺优惠详情
 export const fetchStoreDiscountDetail = (id, cid) => axios.get('/appapi.php?c=Merchantapp&a=get_discount', {
   params: {
     id: cid,
@@ -57,6 +87,7 @@ export const fetchStoreDiscountDetail = (id, cid) => axios.get('/appapi.php?c=Me
   },
 })
 
+// 新增商铺优惠
 export const addStoreDiscount = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
@@ -68,6 +99,7 @@ export const addStoreDiscount = payload => {
   })
 }
 
+// 编辑商铺列表
 export const modifyStoreDiscount = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
@@ -79,19 +111,14 @@ export const modifyStoreDiscount = payload => {
   })
 }
 
-export const fetchStoreDetail = id => axios.get('/appapi.php?c=Merchantapp&a=store_details', {
-  params: {
-    store_id: id,
-    ticket: localStorage.getItem('ticket'),
-  },
-})
-
+// 省份
 export const fetchProvince = () => axios.get('/appapi.php?c=Merchantapp&a=ajax_province', {
   params: {
     ticket: localStorage.getItem('ticket'),
   },
 })
 
+// 市区
 export const fetchCity = id => axios.get('/appapi.php?c=Merchantapp&a=ajax_city', {
   params: {
     id,
@@ -99,25 +126,17 @@ export const fetchCity = id => axios.get('/appapi.php?c=Merchantapp&a=ajax_city'
   },
 })
 
+// 地区
 export const fetchArea = id => axios.get('/appapi.php?c=Merchantapp&a=ajax_area', {
   params: {
     id,
     ticket: localStorage.getItem('ticket'),
   },
 })
+// 商圈
 export const fetchCircle = id => axios.get('/appapi.php?c=Merchantapp&a=ajax_circle', {
   params: {
     id,
     ticket: localStorage.getItem('ticket'),
   },
-})
-
-export const insertStoreFront = payload => axios.post('/appapi.php?c=Merchantapp&a=add_store', {
-  ...payload,
-  ticket: localStorage.getItem('ticket'),
-})
-
-export const modifyStoreFront = payload => axios.post('/appapi.php?c=Merchantapp&a=edit_store', {
-  ...payload,
-  ticket: localStorage.getItem('ticket'),
 })

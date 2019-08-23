@@ -11,18 +11,18 @@ import {
   Checkbox,
   DatePicker,
   ImagePicker,
-  Flex,
   WhiteSpace,
   Toast,
   Menu,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
-import E from 'wangeditor'
+// import E from 'wangeditor'
 import { createForm } from 'rc-form'
 import { observer, inject } from 'mobx-react'
 import Editor from '@/common/Editor'
-import { PrimaryTag, MenuMask } from '@/styled'
+import moment from 'moment'
+import { MenuMask } from '@/styled'
 import Utils from '@/utils'
 
 const { Item } = List
@@ -72,7 +72,7 @@ class ReservePanel extends React.Component {
     // editor.txt.html(history.location.state.value)
   }
 
-  onChange = val => {
+  sotreChange = val => {
     console.log(val)
   }
 
@@ -114,13 +114,39 @@ class ReservePanel extends React.Component {
   }
 
   submit = async () => {
-    const { form } = this.props
+    const { form, match, commodity } = this.props
+    const { category } = this.state
     const content = this.editor.current.state.editor.txt.html()
-    console.log(content)
     form.validateFields((error, value) => {
       console.log(value)
       if (error) {
         Toast.info('请输入完整信息')
+      }
+      const obj = {
+        ...value,
+        cat_fid: category[0],
+        cat_id: category[1],
+        appoint_pic_content: content,
+        start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD') : '',
+        end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD') : '',
+        office_start_time: value.office_start_time
+          ? moment(value.office_start_time).format('HH:mm')
+          : '',
+        office_stop_time: value.office_stop_time
+          ? moment(value.office_stop_time).format('HH:mm')
+          : '',
+        is_appoint_price: value.is_appoint_price[0],
+        appoint_type: value.appoint_type[0],
+        payment_status: value.payment_status ? '1' : '0',
+        appoint_date_type: value.appoint_date_type ? '1' : '0',
+        is_store: value.is_store ? '1' : '0',
+        appoint_status: value.appoint_status ? '1' : '0',
+        pic: value.pic.map(item => item.url),
+      }
+      if (match.params.id) {
+        commodity.modifyReserve({ ...obj, appoint_id: match.params.id })
+      } else {
+        commodity.insertReserve(obj)
       }
     })
   }
@@ -374,10 +400,9 @@ class ReservePanel extends React.Component {
               </i>
             </Tooltip>
           </List.Item>
-
           {storeChecked
             && data.map(i => (
-              <CheckboxItem key={i.value} onChange={() => this.onChange(i.value)}>
+              <CheckboxItem key={i.value} onChange={() => this.sotreChange(i.value)}>
                 {i.label}
               </CheckboxItem>
             ))}
@@ -385,7 +410,7 @@ class ReservePanel extends React.Component {
             {...getFieldProps('office_start_time', {
               rules: [{ required: true }],
             })}
-            mode="date"
+            mode="time"
             extra="选择时间"
           >
             <List.Item arrow="horizontal">
@@ -408,7 +433,7 @@ class ReservePanel extends React.Component {
             {...getFieldProps('office_stop_time', {
               rules: [{ required: true }],
             })}
-            mode="date"
+            mode="time"
             extra="选择时间"
           >
             <List.Item arrow="horizontal">

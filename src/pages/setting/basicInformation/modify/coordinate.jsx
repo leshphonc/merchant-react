@@ -2,7 +2,7 @@ import React from 'react'
 import { observer, inject } from 'mobx-react'
 import { Toast } from 'antd-mobile'
 import NavBar from '@/common/NavBar'
-import Picker from '@/common/CoordinatePicker'
+import Picker from '@/common/CoordinatePicker/Coordinate'
 
 @inject('basicInformation')
 @observer

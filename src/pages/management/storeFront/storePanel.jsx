@@ -10,6 +10,7 @@ import {
   ImagePicker,
   Toast,
   TextareaItem,
+  Switch,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import Tooltip from 'rc-tooltip'
@@ -17,51 +18,88 @@ import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import moment from 'moment'
 import { toJS } from 'mobx'
+import { CustomizeList, ListTitle, ListContent } from '@/styled'
 
-const PickerOptions = [{ label: '是', value: '1' }, { label: '否', value: '0' }]
-const DiscountOptions = [{ label: '折扣', value: '1' }, { label: '满减', value: '2' }]
+const DiscountOptions = [
+  { label: '无优惠', value: '0' },
+  { label: '折扣', value: '1' },
+  { label: '满减', value: '2' },
+]
 
 @createForm()
-@inject('storeFront')
+@inject('storeFront', 'common')
 @observer
 class StorePanel extends React.Component {
   state = {
+    asyncCascadeValue: [],
     long: '',
     lat: '',
-    pic: [],
-    asyncCascadeValue: [],
+    shopLogo: '',
+    qrcode: '',
   }
 
   componentDidMount() {
     const { storeFront, match, form } = this.props
-    const { cacheStore } = storeFront
-    if (Object.keys(cacheStore).length) {
-      console.log(toJS(cacheStore))
-      form.setFieldsValue({
-        ...cacheStore,
+
+    // 首先判断是否有缓存
+    const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
+    if (cacheData && Object.keys(cacheData).length) {
+      if (cacheData.cascade) {
+        storeFront.fetchCascadeOption(
+          cacheData.cascade[0],
+          cacheData.cascade[1],
+          cacheData.cascade[2],
+        )
+      } else {
+        storeFront.fetchCascadeOption()
+      }
+      // 整理默认数据存入state
+      this.setState({
+        asyncCascadeValue: cacheData.cascade,
+        shopLogo: cacheData.shopLogo,
+        qrcode: cacheData.qrcode,
+        long: cacheData.long,
+        lat: cacheData.lat,
       })
-      if (cacheStore.discount_type) {
+      // 整理默认数据放入表单
+      form.setFieldsValue({
+        name: cacheData.name,
+        ismain: cacheData.ismain,
+        phone: cacheData.phone,
+        cascade: cacheData.cascade,
+        circle_id: cacheData.circle_id,
+        adress: cacheData.adress,
+        sort: cacheData.sort,
+        have_mall: cacheData.have_mall,
+        have_peisong: cacheData.have_peisong,
+        have_meal: cacheData.have_meal,
+        have_hotel: cacheData.have_hotel,
+        have_auto_parts: cacheData.have_auto_parts,
+        txt_info: cacheData.txt_info,
+        context: cacheData.context,
+        pic: cacheData.pic,
+        discount_type: cacheData.discount_type,
+        open_1: cacheData.open_1 && new Date(cacheData.open_1),
+        close_1: cacheData.open_1 && new Date(cacheData.close_1),
+      })
+      if (cacheData.discount_type) {
         setTimeout(() => {
-          if (cacheStore.discount_type[0] === '1') {
+          if (cacheData.discount_type[0] === '1') {
             form.setFieldsValue({
-              discount_percent: cacheStore.discount_percent,
+              discount_percent: cacheData.discount_percent,
             })
           } else {
             form.setFieldsValue({
-              condition_price: cacheStore.condition_price,
-              minus_price: cacheStore.minus_price,
+              condition_price: cacheData.condition_price,
+              minus_price: cacheData.minus_price,
             })
           }
         }, 20)
       }
-      this.setState({
-        pic: cacheStore.pic,
-        long: cacheStore.long,
-        lat: cacheStore.lat,
-        asyncCascadeValue: cacheStore.asyncCascadeValue,
-      })
       return
     }
+
+    // 没有缓存判断是否为编辑，不是编辑则只获取默认级联数据，并结束mount
     if (!match.params.id) {
       storeFront.fetchCascadeOption().then(() => {
         const { asyncCascadeValue } = storeFront
@@ -71,43 +109,44 @@ class StorePanel extends React.Component {
       })
       return
     }
+    // 当前为编辑，获取商户详情
     storeFront.fetchStoreDetail(match.params.id).then(() => {
       const { storeDetail } = storeFront
-      // storeFront.fetchProvince()
-      // storeFront.fetchCity(storeDetail.province_id)
-      // storeFront.fetchArea(storeDetail.city_id)
-      // storeFront.fetchCircle(storeDetail.area_id)
       // 获取级联数据
       storeFront
         .fetchCascadeOption(storeDetail.province_id, storeDetail.city_id, storeDetail.area_id)
         .then(() => {
           const { asyncCascadeValue } = storeFront
+          // 整理默认数据存入state
           this.setState({
             asyncCascadeValue,
+            shopLogo: storeDetail.shop_logo,
+            qrcode: storeDetail.qrcode_backgroup,
+            long: storeDetail.long,
+            lat: storeDetail.lat,
           })
         })
-      console.log(toJS(storeDetail))
-      const picArr = storeDetail.pic.map(item => ({
-        url: item,
-      }))
-      this.setState({
-        long: storeDetail.long,
-        lat: storeDetail.lat,
-        pic: picArr,
-      })
-      Utils.conversionTimeStringToDate(storeDetail.open_1)
+      // 整理默认数据放入表单
+      console.log(toJS(storeDetail.pic))
       form.setFieldsValue({
-        ...storeDetail,
-        have_meal: [storeDetail.have_meal],
-        have_group: [storeDetail.have_group],
-        have_shop: [storeDetail.have_shop],
-        discount_type: [storeDetail.discount_type],
-        open_1: Utils.conversionTimeStringToDate(storeDetail.open_1),
-        close_1: Utils.conversionTimeStringToDate(storeDetail.close_1),
+        name: storeDetail.name,
+        ismain: storeDetail.ismain === '1',
+        phone: storeDetail.phone,
         cascade: [storeDetail.province_id, storeDetail.city_id, storeDetail.area_id],
         circle_id: [storeDetail.circle_id],
-        ismain: [storeDetail.ismain],
-        pic: picArr,
+        adress: storeDetail.adress,
+        sort: storeDetail.sort,
+        have_mall: storeDetail.have_mall === '1',
+        have_peisong: storeDetail.have_peisong === '1',
+        have_meal: storeDetail.have_meal === '1',
+        have_hotel: storeDetail.have_hotel === '1',
+        have_auto_parts: storeDetail.have_auto_parts === '1',
+        open_1: Utils.conversionTimeStringToDate(storeDetail.open_1),
+        close_1: Utils.conversionTimeStringToDate(storeDetail.close_1),
+        txt_info: storeDetail.txt_info,
+        context: storeDetail.context,
+        pic: storeDetail.pic,
+        discount_type: [storeDetail.discount_type],
       })
       if (storeDetail.discount_type) {
         setTimeout(() => {
@@ -127,41 +166,53 @@ class StorePanel extends React.Component {
   }
 
   cacheData = () => {
-    const { storeFront, history, form } = this.props
-    const { long, lat, asyncCascadeValue } = this.state
+    const { form } = this.props
+    const {
+      long, lat, shopLogo, qrcode, asyncCascadeValue,
+    } = this.state
     const formData = form.getFieldsValue()
     console.log(formData)
-    storeFront
-      .cacheStoreDetail({
-        ...formData,
-        long,
-        lat,
-        pic: formData.pic || [],
-        asyncCascadeValue,
-      })
-      .then(() => {
-        history.push(`/management/storefront/coordinatePicker/${long}/${lat}`)
-      })
+    form.asyncCascadeValue = asyncCascadeValue
+    formData.long = long
+    formData.lat = lat
+    formData.shopLogo = shopLogo
+    formData.qrcode = qrcode
+    Utils.cacheData(formData)
+  }
+
+  goMapPicker = () => {
+    const { history } = this.props
+    const { long, lat } = this.state
+    this.cacheData()
+    history.push(`/coordinatePicker/${long}/${lat}`)
+  }
+
+  goLogoPicker = () => {
+    const { history } = this.props
+    this.cacheData()
+    history.push('/uploadSingleImg/上传Logo/shopLogo/1')
+  }
+
+  goQrPicker = () => {
+    const { history } = this.props
+    this.cacheData()
+    history.push('/uploadSingleImg/上传二维码背景图/qrcode/2')
   }
 
   onPickerChange = val => {
     const { storeFront } = this.props
     const { cascadeOption } = storeFront
-    // let colNum = 1
     const d = [...cascadeOption]
     let asyncValue = [...val]
     // 遍历当前的PickerOption
     d.forEach(i => {
       // 遍历并找出传入的省份
       if (i.value === val[0]) {
-        // colNum = 2
         // 如果没有children，则去获取
         if (!i.children) {
           storeFront.fetchCityAndConcat(val[0]).then(res => {
             if (res) asyncValue = res
             this.setState({
-              // data: d,
-              // cols: colNum,
               asyncCascadeValue: asyncValue,
             })
           })
@@ -175,48 +226,17 @@ class StorePanel extends React.Component {
                 storeFront.fetchAreaAndConcat(val[0], val[1]).then(res => {
                   if (res) asyncValue = res
                   this.setState({
-                    // data: d,
-                    // cols: colNum,
                     asyncCascadeValue: asyncValue,
                   })
                 })
               }
             }
           })
-          // colNum = 3
         }
       }
     })
     this.setState({
-      // data: d,
-      // cols: colNum,
       asyncCascadeValue: asyncValue,
-    })
-  }
-
-  imgChange = (arr, type) => {
-    const { form } = this.props
-    if (type === 'remove') {
-      console.log(arr)
-      form.setFieldsValue({
-        pic: arr,
-      })
-      this.setState({ pic: arr })
-      return
-    }
-    arr.forEach((item, index) => {
-      if (item.file) {
-        Utils.compressionAndUploadImg(item.file)
-          .then(res => {
-            const picArr = arr
-            picArr.splice(index, 1, { url: res })
-            form.setFieldsValue({
-              pic: picArr,
-            })
-            this.setState({ pic: picArr })
-          })
-          .catch(e => Toast.fail(e))
-      }
     })
   }
 
@@ -224,41 +244,46 @@ class StorePanel extends React.Component {
     const {
       storeFront, form, match, history,
     } = this.props
+    const {
+      long, lat, shopLogo, qrcode,
+    } = this.state
+    if (!long || !lat || !shopLogo) {
+      Toast.info('请输入完整信息')
+      return
+    }
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请输入完整信息')
         return
       }
-      const { long, lat } = this.state
       const obj = {
         name: value.name,
-        ismain: value.ismain[0],
+        ismain: value.ismain ? '1' : '0',
         phone: value.phone,
-        weixin: value.weixin,
-        qq: value.qq,
-        keywords: value.keywords,
-        permoney: value.permoney,
-        feature: value.feature,
         province_id: value.cascade[0],
         city_id: value.cascade[1],
         area_id: value.cascade[2],
         circle_id: value.circle_id[0],
         adress: value.adress,
-        trafficroute: value.trafficroute,
         sort: value.sort,
-        have_meal: value.have_meal[0],
-        have_group: value.have_group[0],
-        have_shop: value.have_shop[0],
+        have_mall: value.have_mall ? '1' : '0',
+        have_peisong: value.have_peisong ? '1' : '0',
+        have_meal: value.have_meal ? '1' : '0',
+        have_hotel: value.have_hotel ? '1' : '0',
+        have_auto_parts: value.have_auto_parts ? '1' : '0',
         open_1: moment(value.open_1).format('HH:mm:ss'),
         close_1: moment(value.close_1).format('HH:mm:ss'),
-        long,
-        lat,
         txt_info: value.txt_info,
+        context: value.context,
         pic: value.pic.map(item => item.url),
         discount_type: value.discount_type[0],
         discount_percent: value.discount_percent,
         condition_price: value.condition_price,
         minus_price: value.minus_price,
+        long,
+        lat,
+        shop_logo: shopLogo,
+        qrcode_backgroup: qrcode,
       }
       console.log(value)
       console.log(obj)
@@ -276,7 +301,6 @@ class StorePanel extends React.Component {
 
   fetchCircle = val => {
     const { storeFront } = this.props
-    console.log(val)
     if (val[2]) {
       storeFront.fetchCircle(val[2])
     } else {
@@ -288,13 +312,15 @@ class StorePanel extends React.Component {
     const { match, form, storeFront } = this.props
     const { getFieldProps } = form
     const { cascadeOption, circleOption } = storeFront
+    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
+    /* eslint camelcase: 0 */
     const discount_type = form.getFieldValue('discount_type')
       ? form.getFieldValue('discount_type')[0]
       : ''
-    /* eslint camelcase: 0 */
     const {
-      long, lat, pic, asyncCascadeValue,
+      long, lat, asyncCascadeValue, shopLogo, qrcode,
     } = this.state
+    console.log(form.getFieldValue('have_auto_parts'))
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}店铺`} goBack />
@@ -308,15 +334,19 @@ class StorePanel extends React.Component {
           >
             店铺名称
           </InputItem>
-          <Picker
-            {...getFieldProps('ismain', {
-              rules: [{ required: true }],
-            })}
-            data={PickerOptions}
-            cols={1}
+          <List.Item
+            extra={
+              <Switch
+                {...getFieldProps('ismain', {
+                  initialValue: false,
+                  valuePropName: 'checked',
+                  rules: [{ required: true }],
+                })}
+              />
+            }
           >
-            <List.Item arrow="horizontal">是否设置成主店</List.Item>
-          </Picker>
+            是否设置成主店
+          </List.Item>
           <InputItem
             {...getFieldProps('phone', {
               rules: [{ required: true }],
@@ -325,46 +355,6 @@ class StorePanel extends React.Component {
           >
             联系电话
           </InputItem>
-          <InputItem
-            {...getFieldProps('weixin', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请输入联系微信"
-          >
-            联系微信
-          </InputItem>
-          <InputItem
-            {...getFieldProps('qq', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请输入联系QQ"
-          >
-            联系QQ
-          </InputItem>
-          <InputItem
-            {...getFieldProps('keywords', {
-              rules: [{ required: true }],
-            })}
-            placeholder="搜索关键词"
-          >
-            关键词
-          </InputItem>
-          <InputItem
-            {...getFieldProps('permoney', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请输入人均消费"
-          >
-            人均消费
-          </InputItem>
-          <TextareaItem
-            {...getFieldProps('feature', {
-              rules: [{ required: true }],
-            })}
-            placeholder="本店特色"
-            title="店铺特色"
-            rows={2}
-          />
           <Picker
             {...getFieldProps('cascade', {
               rules: [{ required: true }],
@@ -398,14 +388,9 @@ class StorePanel extends React.Component {
             title="详细地址"
             rows={2}
           />
-          <TextareaItem
-            {...getFieldProps('trafficroute', {
-              rules: [{ required: true }],
-            })}
-            placeholder="描述到店路线"
-            title="交通路线"
-            rows={2}
-          />
+          <List.Item extra={`${long}, ${lat}`} arrow="horizontal" onClick={this.goMapPicker}>
+            地图位置
+          </List.Item>
           <InputItem
             {...getFieldProps('sort', {
               rules: [{ required: true }],
@@ -423,34 +408,71 @@ class StorePanel extends React.Component {
               </i>
             </Tooltip>
           </InputItem>
-          <Picker
-            {...getFieldProps('have_meal', {
-              rules: [{ required: true }],
-            })}
-            data={PickerOptions}
-            cols={1}
+          <List.Item
+            extra={
+              <Switch
+                {...getFieldProps('have_mall', {
+                  initialValue: false,
+                  valuePropName: 'checked',
+                  rules: [{ required: true }],
+                })}
+              />
+            }
           >
-            <List.Item arrow="horizontal">餐饮</List.Item>
-          </Picker>
-          <Picker
-            {...getFieldProps('have_group', {
-              rules: [{ required: true }],
-            })}
-            data={PickerOptions}
-            cols={1}
+            电商
+          </List.Item>
+          <List.Item
+            extra={
+              <Switch
+                {...getFieldProps('have_peisong', {
+                  initialValue: false,
+                  valuePropName: 'checked',
+                  rules: [{ required: true }],
+                })}
+              />
+            }
           >
-            <List.Item arrow="horizontal">团购</List.Item>
-          </Picker>
-          <Picker
-            {...getFieldProps('have_shop', {
-              rules: [{ required: true }],
-            })}
-            data={PickerOptions}
-            cols={1}
+            外卖
+          </List.Item>
+          <List.Item
+            extra={
+              <Switch
+                {...getFieldProps('have_meal', {
+                  initialValue: false,
+                  valuePropName: 'checked',
+                  rules: [{ required: true }],
+                })}
+              />
+            }
           >
-            <List.Item arrow="horizontal">零售</List.Item>
-          </Picker>
-
+            餐饮
+          </List.Item>
+          <List.Item
+            extra={
+              <Switch
+                {...getFieldProps('have_hotel', {
+                  initialValue: false,
+                  valuePropName: 'checked',
+                  rules: [{ required: true }],
+                })}
+              />
+            }
+          >
+            酒店
+          </List.Item>
+          <List.Item
+            extra={
+              <Switch
+                {...getFieldProps('have_auto_parts', {
+                  initialValue: false,
+                  valuePropName: 'checked',
+                  rules: [{ required: true }],
+                })}
+              />
+            }
+          >
+            汽配
+          </List.Item>
           <DatePicker
             {...getFieldProps('open_1', {
               rules: [{ required: true }],
@@ -467,36 +489,51 @@ class StorePanel extends React.Component {
           >
             <List.Item arrow="horizontal">营业结束时间</List.Item>
           </DatePicker>
-          <List.Item extra={`${long}, ${lat}`} arrow="horizontal" onClick={this.cacheData}>
-            地图位置
-          </List.Item>
           <InputItem
             {...getFieldProps('txt_info', {
               rules: [{ required: true }],
             })}
-            placeholder=" 请输入店铺简介"
+            placeholder="请输入店铺描述"
           >
-            店铺简介
+            店铺描述
           </InputItem>
+          <TextareaItem
+            {...getFieldProps('context', {
+              rules: [{ required: true }],
+            })}
+            placeholder="店铺详细介绍"
+            title="店铺详情"
+            rows={3}
+            count={100}
+          />
+          <List.Item arrow="horizontal" onClick={this.goLogoPicker}>
+            <CustomizeList>
+              <ListTitle>商户LOGO</ListTitle>
+              <ListContent>
+                <img src={shopLogo || ''} className="w40" alt="" />
+              </ListContent>
+            </CustomizeList>
+          </List.Item>
           <List.Item arrow="empty">
             店铺图片
             <ImagePicker
               {...getFieldProps('pic', {
+                valuePropName: 'files',
+                getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
                 rules: [{ required: true }],
               })}
-              files={pic}
-              onChange={this.imgChange}
               selectable={pic.length < 4}
             />
           </List.Item>
-
-          <Picker
-            {...getFieldProps('discount_type', {
-              rules: [{ required: true }],
-            })}
-            data={DiscountOptions}
-            cols={1}
-          >
+          <List.Item arrow="horizontal" onClick={this.goQrPicker}>
+            <CustomizeList>
+              <ListTitle>二维码背景图</ListTitle>
+              <ListContent>
+                <img src={qrcode || ''} className="w40" alt="" />
+              </ListContent>
+            </CustomizeList>
+          </List.Item>
+          <Picker {...getFieldProps('discount_type')} data={DiscountOptions} cols={1}>
             <List.Item arrow="horizontal">优惠类型</List.Item>
           </Picker>
           {discount_type === '1' ? (

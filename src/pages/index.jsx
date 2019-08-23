@@ -7,7 +7,7 @@ import Order from '@/pages/order'
 import Marketing from '@/pages/marketing'
 import Mine from '@/pages/mine'
 
-@inject('login', 'home')
+@inject('home')
 @observer
 class Index extends React.Component {
   state = {
@@ -15,11 +15,13 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
-    const { history } = this.props
+    const { home, history } = this.props
     const ticket = localStorage.getItem('ticket')
     if (!ticket) {
       history.replace('/login')
+      return
     }
+    home.fetchIndexData()
   }
 
   render() {

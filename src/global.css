@@ -45,12 +45,10 @@ body {
   color: #ffb000;
 }
 
-/* card自定义样式 */
-.am-card-header-content {
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* card样式覆盖 */
+.am-card-header-content img {
+  width: 52px;
+  height: 52px;
 }
 
 /* switch自定义样式 */
@@ -133,13 +131,18 @@ button {
 .slider-list {
   height: 100% !important;
 }
+.slider-list a {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
 
-.slider-list > img {
+.slider-list img {
+  width: 100% !important;
   height: 100% !important;
 }
 
 .ellipsis {
-  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

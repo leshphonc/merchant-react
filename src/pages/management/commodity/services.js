@@ -34,13 +34,13 @@ export const fetchReserveCategoryOption = () => axios.get('/appapi.php?c=Merchan
 })
 
 // 新增预定商品
-export const addReserve = payload => axios.post('/appapi.php?c=Merchantapp&a=add_apponit', {
+export const insertReserve = payload => axios.post('/appapi.php?c=Merchantapp&a=add_appoint', {
   ...payload,
   ticket: localStorage.getItem('ticket'),
 })
 
 // 编辑预定商品
-export const modifyReserve = payload => axios.post('/appapi.php?c=Merchantapp&a=edit_apponit', {
+export const modifyReserve = payload => axios.post('/appapi.php?c=Merchantapp&a=edit_appoint', {
   ...payload,
   ticket: localStorage.getItem('ticket'),
 })

@@ -21,7 +21,10 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(config => {
   Toast.hide()
   if (config.data.errorCode !== ErrorCode.SUCCESS) {
-    if (config.data.errorCode === ErrorCode.NOTICKET) {
+    if (
+      config.data.errorCode === ErrorCode.NOTICKET
+      || config.data.errorCode === ErrorCode.TIMEOUT
+    ) {
       window.location.href = '/newpage/#/login'
     }
     if (config.data.error === ErrorCode.SUCCESS) {

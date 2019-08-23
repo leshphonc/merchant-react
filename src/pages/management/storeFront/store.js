@@ -5,6 +5,12 @@ import ErrorCode from '@/config/ErrorCode'
 class StoreFrontStore {
   @observable storeList = []
 
+  @observable storeDetail = {}
+
+  @observable cacheStore = {}
+
+  @observable storeBusiness = []
+
   @observable categoryList = []
 
   @observable categoryDetail = {}
@@ -12,10 +18,6 @@ class StoreFrontStore {
   @observable storeDiscountList = []
 
   @observable storeDiscountDetail = {}
-
-  @observable storeDetail = {}
-
-  @observable cacheStore = {}
 
   @observable cascadeOption = []
 
@@ -29,96 +31,18 @@ class StoreFrontStore {
 
   @observable circleOption = []
 
+  // 商铺列表
   @action
-  fetchStoreList = async type => {
-    const response = await services.fetchStoreList(type)
+  fetchStoreList = async () => {
+    const response = await services.fetchStoreList()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.storeList = response.data.result.lists
+        this.storeList = response.data.result
       })
     }
   }
 
-  @action
-  fetchCategoryList = async (id, type) => {
-    const response = await services.fetchCategoryList(id, type)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        this.categoryList = response.data.result
-      })
-    }
-  }
-
-  @action
-  fetchCategoryDetail = async (id, type, stid) => {
-    const response = await services.fetchCategoryDetail(id, type, stid)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        this.categoryDetail = response.data.result
-      })
-    }
-  }
-
-  @action
-  addCategory = async payload => {
-    const response = await services.addCategory(payload)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(true)
-    }
-  }
-
-  @action
-  modifyCategory = async payload => {
-    const response = await services.addCategory(payload)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(true)
-    }
-  }
-
-  @action
-  deleteCategory = async (storeId, type, id) => {
-    const response = await services.deleteCategory(storeId, type, id)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(true)
-    }
-  }
-
-  @action
-  fetchStoreDiscountList = async id => {
-    const response = await services.fetchStoreDiscountList(id)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        this.storeDiscountList = response.data.result
-      })
-    }
-  }
-
-  @action
-  fetchStoreDiscountDetail = async (id, cid) => {
-    const response = await services.fetchStoreDiscountDetail(id, cid)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        this.storeDiscountDetail = response.data.result
-      })
-    }
-  }
-
-  @action
-  addStoreDiscount = async payload => {
-    const response = await services.addStoreDiscount(payload)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(true)
-    }
-  }
-
-  @action
-  modifyStoreDiscount = async payload => {
-    const response = await services.modifyStoreDiscount(payload)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(true)
-    }
-  }
-
+  // 商铺详情
   @action
   fetchStoreDetail = async id => {
     const response = await services.fetchStoreDetail(id)
@@ -129,12 +53,132 @@ class StoreFrontStore {
     }
   }
 
+  // 新增商铺
+  @action
+  insertStoreFront = async payload => {
+    const response = await services.insertStoreFront(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 编辑商铺
+  @action
+  modifyStoreFront = async payload => {
+    const response = await services.modifyStoreFront(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 商铺业务列表
+  @action
+  fetchBusinessList = async id => {
+    const response = await services.fetchBusinessList(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.storeBusiness = response.data.result
+      })
+    }
+  }
+
+  // 分类列表
+  @action
+  fetchCategoryList = async (id, type) => {
+    const response = await services.fetchCategoryList(id, type)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.categoryList = response.data.result
+      })
+    }
+  }
+
+  // 分类详情
+  @action
+  fetchCategoryDetail = async (id, type, stid) => {
+    const response = await services.fetchCategoryDetail(id, type, stid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.categoryDetail = response.data.result
+      })
+    }
+  }
+
+  // 新增分类
+  @action
+  addCategory = async payload => {
+    const response = await services.addCategory(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 编辑分类
+  @action
+  modifyCategory = async payload => {
+    const response = await services.addCategory(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 删除分类
+  @action
+  deleteCategory = async (storeId, type, id) => {
+    const response = await services.deleteCategory(storeId, type, id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 商铺优惠列表
+  @action
+  fetchStoreDiscountList = async id => {
+    const response = await services.fetchStoreDiscountList(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.storeDiscountList = response.data.result
+      })
+    }
+  }
+
+  // 商铺优惠详情
+  @action
+  fetchStoreDiscountDetail = async (id, cid) => {
+    const response = await services.fetchStoreDiscountDetail(id, cid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.storeDiscountDetail = response.data.result
+      })
+    }
+  }
+
+  // 新增商铺优惠
+  @action
+  addStoreDiscount = async payload => {
+    const response = await services.addStoreDiscount(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 编辑商铺优惠
+  @action
+  modifyStoreDiscount = async payload => {
+    const response = await services.modifyStoreDiscount(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 缓存编辑商铺信息
   @action
   cacheStoreDetail = async data => {
     console.log(data)
     this.cacheStore = data
   }
 
+  // 暂存地图获取到的信息
   @action
   saveLngLatAddress = async (lng, lat) => {
     this.cacheStore = {
@@ -145,6 +189,7 @@ class StoreFrontStore {
     }
   }
 
+  // 省市区级联
   @action
   fetchCascadeOption = async (provinceId, cityId, areaId) => {
     const asyncCascadeValue = [provinceId]
@@ -186,6 +231,7 @@ class StoreFrontStore {
     }
   }
 
+  // 获取省下的市区并且合并到现有对象
   @action
   fetchCityAndConcat = async provinceId => {
     let cityId = ''
@@ -225,6 +271,7 @@ class StoreFrontStore {
     return Promise.resolve([provinceId])
   }
 
+  // 获取省下的地区并且合并到现有对象
   @action
   fetchAreaAndConcat = async (provinceId, cityId) => {
     const response = await services.fetchArea(cityId)
@@ -246,6 +293,7 @@ class StoreFrontStore {
     }
   }
 
+  // 省份列表
   @action
   fetchProvince = async () => {
     const response = await services.fetchProvince()
@@ -256,6 +304,7 @@ class StoreFrontStore {
     }
   }
 
+  // 市区列表
   @action
   fetchCity = async id => {
     const response = await services.fetchCity(id)
@@ -266,6 +315,7 @@ class StoreFrontStore {
     }
   }
 
+  // 区域列表
   @action
   fetchArea = async id => {
     const response = await services.fetchArea(id)
@@ -276,6 +326,7 @@ class StoreFrontStore {
     }
   }
 
+  // 商圈列表
   @action
   fetchCircle = async id => {
     this.circleOption = []
@@ -287,25 +338,10 @@ class StoreFrontStore {
     }
   }
 
+  // 重置商圈
   @action
   resetCircle = () => {
     this.circleOption = []
-  }
-
-  @action
-  insertStoreFront = async payload => {
-    const response = await services.insertStoreFront(payload)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(true)
-    }
-  }
-
-  @action
-  modifyStoreFront = async payload => {
-    const response = await services.modifyStoreFront(payload)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(true)
-    }
   }
 }
 

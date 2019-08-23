@@ -11,6 +11,8 @@ import {
 import moment from 'moment'
 import FlexBox from './styled'
 
+const ScreenWidth = document.documentElement.clientWidth
+
 const FilterData1 = [
   { label: '日', value: '1' },
   { label: '月', value: '2' },
@@ -27,6 +29,7 @@ class Home extends React.Component {
     echartData: [],
     cur: '1',
     searchType: 'all_money',
+    seriesLabel: '收入',
   }
 
   componentDidMount() {
@@ -37,12 +40,11 @@ class Home extends React.Component {
     home.fetchEchartData(filterValue1, filterLabel2, searchType).then(() => this.setState({
       echartData: home.echartData,
     }))
-    home.fetchIndexData()
   }
 
   getOption = () => {
     let xData = []
-    const { filterValue1, echartData } = this.state
+    const { filterValue1, echartData, seriesLabel } = this.state
     if (filterValue1 === '1') {
       xData = echartData.map((item, index) => `${(index + 1) * 2}点`)
     } else if (filterValue1 === '2') {
@@ -84,7 +86,7 @@ class Home extends React.Component {
       ],
       series: [
         {
-          name: '收入',
+          name: seriesLabel,
           type: 'bar',
           data: echartData,
         },
@@ -134,9 +136,27 @@ class Home extends React.Component {
     home.fetchEchartData(filterValue1, filterLabel2, type).then(() => this.setState({
       echartData: home.echartData,
     }))
+    let label = ''
+    switch (num) {
+      case '1':
+        label = '收入'
+        break
+      case '2':
+        label = '订单'
+        break
+      case '3':
+        label = '人数'
+        break
+      case '4':
+        label = '人数'
+        break
+      default:
+        label = '收入'
+    }
     this.setState({
       cur: num,
       searchType: type,
+      seriesLabel: label,
     })
   }
 
@@ -146,10 +166,16 @@ class Home extends React.Component {
     if (!indexData.wap_MerchantAd) {
       return false
     }
+    const ratio = indexData.wap_MerchantAd[0].cat_width_height_ratio
+    const widthRatio = ratio.split(':')[0] - 0
+    const heightRatio = ratio.split(':')[1] - 0
+    const height = (ScreenWidth * heightRatio) / widthRatio
     return (
-      <Carousel autoplay infinite>
+      <Carousel autoplay infinite style={{ height }}>
         {indexData.wap_MerchantAd.map(item => (
-          <img key={item.id} src={item.pic} alt="" />
+          <a href={item.url} key={item.id}>
+            <img src={item.pic} alt="" />
+          </a>
         ))}
       </Carousel>
     )

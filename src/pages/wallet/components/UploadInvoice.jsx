@@ -1,6 +1,6 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import CropperImg from '@/common/CropperImg'
+import CropperImg from '@/common/UploadImg/CropperImg'
 
 export default props => {
   const saveImg = url => {

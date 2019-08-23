@@ -30,6 +30,7 @@ export const ListTitle = styled.div`
 
 export const ListContent = styled.div`
   flex-basis: 65%;
+  text-align: center;
   color: #888;
   &.wrap {
     white-space: normal;
@@ -38,6 +39,9 @@ export const ListContent = styled.div`
   & > img {
     width: 100% !important;
     height: auto !important;
+  }
+  & > .w40 {
+    width: 40% !important;
   }
 `
 
@@ -148,6 +152,7 @@ export const PrimaryTag = styled.div`
   color: #ffb000;
   border: 1px solid #ffb000;
   height: 22px;
+  line-height: 22px;
   text-align: center;
   border-radius: 4px;
   padding: 0 5px;

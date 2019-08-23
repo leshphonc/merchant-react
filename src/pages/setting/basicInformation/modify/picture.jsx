@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import NavBar from '@/common/NavBar'
-import CropperImg from '@/common/CropperImg'
+import CropperImg from '@/common/UploadImg/CropperImg'
 
 @inject('basicInformation')
 @observer

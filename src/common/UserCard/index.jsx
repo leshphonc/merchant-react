@@ -13,12 +13,13 @@ class UserCard extends React.Component {
     const { home } = this.props
     const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
     const userName = userInfo ? userInfo.name : '未登录'
+    const { avatar } = userInfo || {}
     return (
       <Container>
         <WingBlank>
           <Flex>
             <Avatar>
-              <img src={require('../../assets/image/avatar.jpeg')} alt="" />
+              <img src={avatar || require('../../assets/image/default_avatar.png')} alt="" />
             </Avatar>
             <Content>
               <div>{userInfo ? `Hi , ${userName} 欢迎回来！` : '未登录'}</div>

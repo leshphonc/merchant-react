@@ -236,7 +236,7 @@ class BasicInformation extends React.Component {
               <CustomizeList>
                 <ListTitle>商户LOGO</ListTitle>
                 <ListContent>
-                  <img src={basicInfo.service_ico} alt="" />
+                  <img src={basicInfo.service_ico} className="w40" alt="" />
                 </ListContent>
               </CustomizeList>
             </Item>

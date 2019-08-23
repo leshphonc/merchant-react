@@ -147,8 +147,8 @@ class MastSotre {
   }
 
   @action
-  addReserve = async payload => {
-    const response = await services.addReserve(payload)
+  insertReserve = async payload => {
+    const response = await services.insertReserve(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }

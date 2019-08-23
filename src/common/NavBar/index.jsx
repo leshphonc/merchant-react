@@ -4,9 +4,7 @@ import { withRouter } from 'react-router-dom'
 import Placeholder from './styled'
 
 export default withRouter(props => {
-  const {
-    title, goBack, right, leftHide,
-  } = props
+  const { title, goBack, right } = props
   const handler = () => {
     if (goBack === true) {
       props.history.goBack()
@@ -18,7 +16,7 @@ export default withRouter(props => {
     <Placeholder>
       <NavBar
         mode="dark"
-        leftContent={!leftHide ? <i className="iconfont">&#xe654;</i> : null}
+        leftContent={goBack ? <i className="iconfont">&#xe654;</i> : null}
         rightContent={right}
         onLeftClick={handler}
         style={{

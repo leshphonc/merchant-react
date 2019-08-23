@@ -19,6 +19,9 @@ import ShopAdd from '@/pages/management/shopManager/shopAdd'
 import ShopEdit from '@/pages/management/shopManager/shopEdit'
 import BasicInformation from '@/pages/setting/basicInformation'
 import ShopAssistant from '@/pages/popularize/shopAssistant'
+import UploadSingleImg from '@/common/UploadImg/Single'
+import UploadMultipleImg from '@/common/UploadImg/Multiple'
+import CoordinatePicker from '@/common/CoordinatePicker'
 
 import RedEnvelope from '@/pages/popularize/redEnvelope'
 
@@ -50,6 +53,11 @@ export default () => (
       {/* 商家推广 ->  popularize */}
       <Route path="/popularize/shopAssistant" component={ShopAssistant} />
       <Route path="/popularize/redEnvelope" component={RedEnvelope} />
+      {/* 上传图片页面 */}
+      <Route path="/uploadSingleImg/:title/:key/:ratio" component={UploadSingleImg} />
+      <Route path="/uploadMultipleImg/:title/:key/:ratio" component={UploadMultipleImg} />
+      {/* 坐标拾取页面 */}
+      <Route path="/coordinatePicker/:lng/:lat" component={CoordinatePicker} />
     </HashRouter>
   </Provider>
 )

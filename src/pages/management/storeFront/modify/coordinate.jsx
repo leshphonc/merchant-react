@@ -1,16 +1,14 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import { observer, inject } from 'mobx-react'
 import Picker from '@/common/CoordinatePicker'
+import Utils from '@/utils'
 
-@inject('storeFront')
-@observer
 class CoordinatePicker extends React.Component {
-  returnValue = (lng, lat, address) => {
-    const { storeFront, history } = this.props
-    storeFront.saveLngLatAddress(lng, lat, address).then(() => {
-      history.goBack()
-    })
+  saveLngLat = (lng, lat) => {
+    const { history } = this.props
+    Utils.cacheItemToData('long', lng)
+    Utils.cacheItemToData('lat', lat)
+    history.goBack()
   }
 
   render() {
@@ -18,7 +16,7 @@ class CoordinatePicker extends React.Component {
     return (
       <React.Fragment>
         <NavBar title="商户坐标拾取" goBack />
-        <Picker callback={this.returnValue} lng={match.params.lng} lat={match.params.lat} />
+        <Picker lng={match.params.lng} lat={match.params.lat} callback={this.saveLngLat} />
       </React.Fragment>
     )
   }

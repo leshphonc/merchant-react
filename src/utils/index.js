@@ -140,4 +140,15 @@ export default {
     }
     return new RegExp(REGS[rule]).test(value)
   },
+  cacheData(data) {
+    sessionStorage.setItem('cacheData', JSON.stringify(data))
+  },
+  cacheItemToData(key, value) {
+    const data = JSON.parse(sessionStorage.getItem('cacheData'))
+    data[key] = value
+    sessionStorage.setItem('cacheData', JSON.stringify(data))
+  },
+  clearCacheData() {
+    sessionStorage.removeItem('cacheData')
+  },
 }
