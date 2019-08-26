@@ -8,6 +8,7 @@ import {
 import StorePanel from './storePanel'
 import CoordinatePicker from './modify/coordinate'
 import StoreFrontBusiness from './storeFrontBusiness'
+import ECommercePanel from './eCommercePanel'
 import CategoryManagement from './categoryManagement'
 import CategoryPanel from './categoryPanel'
 import StoreDiscount from './storeDiscount'
@@ -15,7 +16,6 @@ import StoreDiscountPanel from './storeDiscountPanel'
 import DiningInformation from './diningInformation'
 import { StoreStatus } from '@/config/constant'
 import { PrimaryTag } from '@/styled'
-import Utils from '@/utils'
 
 @inject('storeFront')
 @observer
@@ -23,7 +23,6 @@ class StoreFront extends React.Component {
   componentDidMount() {
     const { storeFront } = this.props
     storeFront.fetchStoreList()
-    Utils.clearCacheData()
   }
 
   mapList = () => {
@@ -81,7 +80,11 @@ class StoreFront extends React.Component {
                   <Button
                     type="primary"
                     size="small"
-                    onClick={() => history.push(`/management/storefront/storeFrontBusiness/${item.store_id}`)
+                    onClick={() => history.push(
+                      `/management/storefront/storeFrontBusiness/${item.store_id}/${
+                        item.have_mall
+                      }/${item.have_peisong}`,
+                    )
                     }
                   >
                     业务信息
@@ -124,7 +127,10 @@ export default () => (
       path="/management/storefront/coordinatePicker/:lng?/:lat?"
       component={CoordinatePicker}
     />
-    <Route path="/management/storefront/storeFrontBusiness/:id" component={StoreFrontBusiness} />
+    <Route
+      path="/management/storefront/storeFrontBusiness/:id/:mall/:peisong"
+      component={StoreFrontBusiness}
+    />
     <Route
       path="/management/storefront/categoryManagement/:id/:type"
       component={CategoryManagement}
@@ -133,11 +139,15 @@ export default () => (
       path="/management/storefront/categoryPanel/:str/:id/:type/:stid?"
       component={CategoryPanel}
     />
-    <Route path="/management/storefront/storeDiscount/:id" component={StoreDiscount} />
     <Route
       path="/management/storefront/storeDiscountPanel/:str/:id/:cid?"
       component={StoreDiscountPanel}
     />
     <Route path="/management/storefront/diningInformation" component={DiningInformation} />
+    <Route
+      path="/management/storefront/storeFrontBusiness/ECommercePanel/:id"
+      component={ECommercePanel}
+    />
+    <Route path="/management/storefront/storeFrontBusiness/storeDiscount/:id" component={StoreDiscount} />
   </React.Fragment>
 )

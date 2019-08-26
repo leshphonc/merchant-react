@@ -140,3 +140,17 @@ export const fetchCircle = id => axios.get('/appapi.php?c=Merchantapp&a=ajax_cir
     ticket: localStorage.getItem('ticket'),
   },
 })
+
+// 电商详情配置获取
+export const fetchECommerceDetail = id => axios.get('/appapi.php?c=Merchantapp&a=shop_detail', {
+  params: {
+    store_id: id,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 电商详情配置编辑
+export const modifyECommerceDetail = payload => axios.post('/appapi.php?c=Merchantapp&a=shop_detail', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})

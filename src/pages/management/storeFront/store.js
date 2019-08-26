@@ -31,6 +31,8 @@ class StoreFrontStore {
 
   @observable circleOption = []
 
+  @observable eCommerceDetail = {}
+
   // 商铺列表
   @action
   fetchStoreList = async () => {
@@ -342,6 +344,26 @@ class StoreFrontStore {
   @action
   resetCircle = () => {
     this.circleOption = []
+  }
+
+  // 电商详情配置获取
+  @action
+  fetchECommerceDetail = async id => {
+    const response = await services.fetchECommerceDetail(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.eCommerceDetail = response.data.result
+      })
+    }
+  }
+
+  // 电商详情配置编辑
+  @action
+  modifyECommerceDetail = async payload => {
+    const response = await services.modifyECommerceDetail(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      console.log(response.data)
+    }
   }
 }
 
