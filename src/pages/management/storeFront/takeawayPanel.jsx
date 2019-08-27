@@ -14,9 +14,11 @@ import {
   Toast,
 } from 'antd-mobile'
 import { createForm } from 'rc-form'
+import moment from 'moment'
 import CommodityCategory from './components/CommodityCategory'
 import MemberDiscount from './components/MemberDiscount'
 import { CustomizeList, ListTitle, ListContent } from '@/styled'
+import Utils from '@/utils'
 
 @createForm()
 @inject('storeFront')
@@ -33,39 +35,84 @@ class TakeawayPanel extends React.Component {
   }
 
   componentDidMount() {
-    const { storeFront, match } = this.props
+    const { storeFront, match, form } = this.props
     storeFront.fetchQrcode(match.params.id).then(() => {
       this.setState({
         qrcode: storeFront.qrCode,
       })
     })
-    storeFront.fetchTakeawayDetail(match.params.id)
+    storeFront.fetchTakeawayDetail(match.params.id).then(() => {
+      const { takeawayDetail } = storeFront
+      form.setFieldsValue({
+        is_open_pick: takeawayDetail.store_shop.is_open_pick === '1',
+        store_notice: takeawayDetail.store_shop.store_notice,
+        is_mult_class: takeawayDetail.store_shop.is_mult_class === '1',
+        is_auto_order: takeawayDetail.store_shop.is_auto_order === '1',
+        is_invoice: takeawayDetail.store_shop.is_invoice === '1',
+        advance_day: takeawayDetail.store_shop.advance_day,
+        pack_alias: takeawayDetail.store_shop.pack_alias,
+        freight_alias: takeawayDetail.store_shop.freight_alias,
+        send_time_type: [takeawayDetail.store_shop.send_time_type],
+        send_time: takeawayDetail.store_shop.send_time,
+        deliver_type: [takeawayDetail.store_shop.deliver_type],
+        basic_price: takeawayDetail.store_shop.basic_price,
+        delivery_radius: takeawayDetail.store_shop.delivery_radius,
+        store_discount: takeawayDetail.store_shop.store_discount,
+        stock_type: [takeawayDetail.store_shop.stock_type],
+        reduce_stock_type: [takeawayDetail.store_shop.reduce_stock_type],
+        rollback_time: takeawayDetail.store_shop.rollback_time,
+        discount_type: [takeawayDetail.store_shop.discount_type],
+        delivertime_start: Utils.conversionTimeStringToDate(
+          takeawayDetail.store_shop.delivertime_start,
+        ),
+        delivertime_stop: Utils.conversionTimeStringToDate(
+          takeawayDetail.store_shop.delivertime_stop,
+        ),
+        basic_distance: takeawayDetail.store_shop.basic_distance,
+        delivery_fee: takeawayDetail.store_shop.delivery_fee,
+        per_km_price: takeawayDetail.store_shop.per_km_price,
+        reach_delivery_fee_type: [takeawayDetail.store_shop.reach_delivery_fee_type],
+        no_delivery_fee_value: takeawayDetail.store_shop.no_delivery_fee_value,
+      })
+      if (takeawayDetail.store_shop.is_invoice === '1') {
+        setTimeout(() => {
+          form.setFieldsValue({
+            invoice_price: takeawayDetail.store_shop.invoice_price,
+          })
+        }, 50)
+      }
+    })
   }
 
   submit = () => {
     const {
       form, storeFront, match, history,
     } = this.props
-    const { storeBackground } = this.state
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请填写完整信息')
         return
       }
+      console.log(value)
       const obj = {
-        file: storeBackground,
-        is_invoice: value.is_invoice,
-        invoice_price: value.invoice_price,
-        discount_type: value.discount_type,
-        store_discount: value.store_discount,
-        stock_type: value.stock_type,
-        reduce_stock_type: value.reduce_stock_type,
-        rollback_time: value.rollback_time,
+        ...value,
+        is_open_pick: value.is_open_pick === '1',
+        is_mult_class: value.is_mult_class === '1',
+        is_auto_order: value.is_auto_order === '1',
+        is_invoice: value.is_invoice === '1',
+        send_time_type: value.send_time_type[0],
+        deliver_type: value.deliver_type[0],
+        stock_type: value.stock_type[0],
+        reduce_stock_type: value.reduce_stock_type[0],
+        discount_type: value.discount_type[0],
+        delivertime_start: moment(value.delivertime_start).format('HH:mm'),
+        delivertime_stop: moment(value.delivertime_stop).format('HH:mm'),
+        reach_delivery_fee_type: value.reach_delivery_fee_type[0],
         leveloff: this.memberDiscount.current.state.leveloff,
-        store_category: this.categoryCheck.current.arr,
+        store_category: this.categoryCheck.current.state.check,
         store_id: match.params.id,
       }
-      storeFront.modifyECommerceDetail(obj).then(res => {
+      storeFront.modifyTakeawayDetail(obj).then(res => {
         if (res) {
           Toast.success('编辑成功', 1, () => history.goBack())
         }
@@ -103,6 +150,8 @@ class TakeawayPanel extends React.Component {
             {...getFieldProps('store_notice', {
               rules: [{ required: true }],
             })}
+            rows={3}
+            count={100}
             title="店铺公告"
           />
           <List.Item
@@ -163,7 +212,7 @@ class TakeawayPanel extends React.Component {
             预订下单
           </InputItem>
           <InputItem
-            {...getFieldProps('advance_day', {
+            {...getFieldProps('pack_alias', {
               initialValue: '打包费',
             })}
             placeholder="给商品包装时耗材产生的费用名称"
@@ -171,7 +220,7 @@ class TakeawayPanel extends React.Component {
             包装费别名
           </InputItem>
           <InputItem
-            {...getFieldProps('advance_day', {
+            {...getFieldProps('freight_alias', {
               initialValue: '配送费用',
             })}
             placeholder="商品运输时所产生的费用名称"
@@ -202,7 +251,7 @@ class TakeawayPanel extends React.Component {
             配送费别名
           </InputItem>
           <Picker
-            {...getFieldProps('send_time_type', {
+            {...getFieldProps('deliver_type', {
               required: true,
             })}
             cols={1}
@@ -286,23 +335,24 @@ class TakeawayPanel extends React.Component {
           >
             <List.Item arrow="horizontal">达到起送价格</List.Item>
           </Picker>
-          {fee ? (
-            <InputItem
-              {...getFieldProps('no_delivery_fee_value', {
-                required: true,
-              })}
-              extra="元"
-              placeholder="请输入免外送费金额"
-            >
-              免外送费金额
-            </InputItem>
+          <InputItem
+            {...getFieldProps('no_delivery_fee_value', {
+              required: true,
+            })}
+            extra="元"
+            placeholder="请输入免外送费金额"
+          >
+            免外送费金额
+          </InputItem>
+          {storeFront.takeawayDetail.category_list ? (
+            <CommodityCategory
+              data={storeFront.takeawayDetail.category_list}
+              check={storeFront.takeawayDetail.relation_array}
+              type="1"
+              ref={this.categoryCheck}
+            />
           ) : null}
-          <CommodityCategory
-            data={storeFront.takeawayDetail.category_list}
-            check={storeFront.takeawayDetail.relation_array}
-            type="1"
-            ref={this.categoryCheck}
-          />
+
           <Picker
             {...getFieldProps('discount_type')}
             title="优惠方式"
@@ -372,7 +422,9 @@ class TakeawayPanel extends React.Component {
           >
             买单时长
           </InputItem>
-          <MemberDiscount ref={this.memberDiscount} />
+          {storeFront.takeawayDetail.store_shop ? (
+            <MemberDiscount ref={this.memberDiscount} data={storeFront.takeawayDetail.store_shop} />
+          ) : null}
           <List.Item
             arrow="horizontal"
             onClick={() => history.push(

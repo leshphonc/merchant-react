@@ -366,6 +366,9 @@ class StoreFrontStore {
   modifyECommerceDetail = async payload => {
     const response = await services.modifyECommerceDetail(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.eCommerceDetail = {}
+      })
       return Promise.resolve(true)
     }
   }
@@ -386,6 +389,9 @@ class StoreFrontStore {
   modifyTakeawayDetail = async payload => {
     const response = await services.modifyTakeawayDetail(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.takeawayDetail = {}
+      })
       return Promise.resolve(true)
     }
   }

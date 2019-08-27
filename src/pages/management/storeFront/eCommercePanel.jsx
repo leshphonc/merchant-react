@@ -76,7 +76,7 @@ class ECommercePanel extends React.Component {
         }, 50)
       }
       this.setState({
-        storeBackground: eCommerceDetail.store_shop.background_image,
+        storeBackground: eCommerceDetail.store_shop.background,
       })
     })
   }
@@ -102,23 +102,21 @@ class ECommercePanel extends React.Component {
         return
       }
       const obj = {
-        background_image: storeBackground,
-        is_invoice: value.is_invoice,
+        background: storeBackground,
+        is_invoice: value.is_invoice ? '1' : '0',
         invoice_price: value.invoice_price,
-        discount_type: value.discount_type,
+        discount_type: value.discount_type ? '1' : '0',
         store_discount: value.store_discount,
-        stock_type: value.stock_type,
-        reduce_stock_type: value.reduce_stock_type,
+        stock_type: value.stock_type[0],
+        reduce_stock_type: value.reduce_stock_type[0],
         rollback_time: value.rollback_time,
         leveloff: this.memberDiscount.current.state.leveloff,
         store_category: this.categoryCheck.current.state.check,
         store_id: match.params.id,
       }
-      console.log(this.categoryCheck.current.state.check)
-      console.log(this.memberDiscount.current.state.leveloff)
       storeFront.modifyECommerceDetail(obj).then(res => {
         if (res) {
-          Toast.success('编辑成功', 1, history.goBack())
+          Toast.success('编辑成功', 1, () => history.goBack())
         }
       })
     })
@@ -246,7 +244,13 @@ class ECommercePanel extends React.Component {
           >
             买单时长
           </InputItem>
-          <MemberDiscount ref={this.memberDiscount} />
+          {storeFront.eCommerceDetail.store_shop ? (
+            <MemberDiscount
+              ref={this.memberDiscount}
+              data={storeFront.eCommerceDetail.store_shop}
+            />
+          ) : null}
+
           <List.Item
             arrow="horizontal"
             onClick={() => history.push(
