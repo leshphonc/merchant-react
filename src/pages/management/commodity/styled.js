@@ -5,15 +5,7 @@ export const TextBox = styled.div`
   padding: 10px 0;
 `
 
-export const Title = styled.div`
-.am-list-item{
-  .am-list-line{
-    .am-input-label{
-      width:100px;
-    } 
-  }
-}
-`
+
 export const TimeBox = styled.div`
 display: flex;
 justify-content: center;
@@ -67,11 +59,28 @@ export const Center = styled.div`
         font-size: 15px !important;
       }
     }
+    .am-list-line::after{
+      background:0 !important;
+    }
   }
 }
 `
 export const Right = styled.div`
   display: inline-block;
+  .fx{
+    .am-list-item{
+      width: 80px;
+      display: inline-block;
+      // border: 1px solid #333;
+      height: 30px !important;
+      line-height: 30px;
+      margin: 0 6px;
+      min-height: 0;
+      .am-list-line::after{
+        background:0 !important;
+      }
+    }
+  }
 }
 `
 export const NavBox = styled.div`
@@ -137,4 +146,25 @@ export const Editor = styled.div`
     }
   }
 }
+`
+export const Shoe = styled.div`
+  .am-list-item{
+    .am-list-line{
+      .am-list-content{
+        .box{
+          margin-left: 30px;
+          margin-top: 10px;
+          .am-list-item{
+            width: 120px;
+            display: inline-block;
+            border: 1px solid #333;
+            height: 30px !important;
+            line-height: 30px;
+            margin: 0 6px;
+            min-height: 0;
+          }
+        }
+      }
+    }
+  }
 `
