@@ -698,7 +698,7 @@ class GroupPanel extends React.Component {
           </Item>
           <Team>
             <InputItem placeholder="必须填写 (例如：3-4人)" style={{ width: '100%' }}>
-              本团购套餐标签
+              本团购套餐标签1
             </InputItem>
           </Team>
           <Picker
