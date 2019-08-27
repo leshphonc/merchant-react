@@ -15,8 +15,6 @@ import CardGroup from '@/pages/management/member/cardGroup'
 import Coupon from '@/pages/management/member/coupon'
 import Commodity from '@/pages/management/commodity'
 import ShopManager from '@/pages/management/shopManager'
-import ShopAdd from '@/pages/management/shopManager/shopAdd'
-import ShopEdit from '@/pages/management/shopManager/shopEdit'
 import BasicInformation from '@/pages/setting/basicInformation'
 import ShopAssistant from '@/pages/popularize/shopAssistant'
 
@@ -42,9 +40,7 @@ export default () => (
       <Route path="/management/member/cardGroup" component={CardGroup} />
       <Route path="/management/member/coupon" component={Coupon} />
       <Route path="/management/commodity" component={Commodity} />
-      <Route path="/management/shopManager" exact component={ShopManager} />
-      <Route path="/management/shopManager/shopAdd" component={ShopAdd} />
-      <Route path="/management/shopManager/shopEdit" component={ShopEdit} />
+      <Route path="/management/shopManager" component={ShopManager} />
       {/* 基本信息 -> setting */}
       <Route path="/setting/basicInformation" component={BasicInformation} />
       {/* 商家推广 ->  popularize */}

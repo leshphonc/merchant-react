@@ -99,8 +99,7 @@ class BasicInformation extends React.Component {
 
   render() {
     const { history, basicInformation } = this.props
-    const basicInfo = toJS(basicInformation.basicInfo)
-    const categoryOption = toJS(basicInformation.categoryOption)
+    const { basicInfo, categoryOption } = basicInformation
     const { menu } = this.state
     const menuEl = (
       <Menu
@@ -191,6 +190,7 @@ class BasicInformation extends React.Component {
             >
               商户经纬度
             </Item>
+            <Item extra={basicInfo.adress}>详细地址</Item>
             <Item arrow="empty" extra={this.getMenuList()}>
               商户所属分类
             </Item>

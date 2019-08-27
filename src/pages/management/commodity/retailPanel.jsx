@@ -1,5 +1,5 @@
 import React from 'react'
-import NavBar from '@/common/NavBar'
+// import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
 import E from 'wangeditor'
@@ -11,24 +11,22 @@ import {
   Button,
   ImagePicker,
   Toast,
-  DatePicker,
+  // Switch,
+  Flex,
+  Menu,
+  ActivityIndicator,
+  NavBar,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 // import E from 'wangeditor'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
-import axios from 'axios'
-import Compressor from 'compressorjs'
-import moment from 'moment'
-import { toJS } from 'mobx'
+// import { toJS } from 'mobx'
 import Utils from '@/utils'
-import {
-  TimeBox, Shoe, Editor, Center, Right,
-} from './styled'
+import { Editor } from './styled'
 
 const { Item } = List
 const seasons = [{ label: '正常', value: '1' }, { label: '停售', value: '0' }]
-const seckill = [{ label: '固定时间段', value: '1' }, { label: '每天的时间段', value: '0' }]
 const isFx = [{ label: '是', value: '1' }, { label: '否', value: '0' }]
 const freightType = [{ label: '按最大值算', value: '0' }, { label: '单独计算', value: '1' }]
 const fxType = [{ label: '按固定金额', value: '0' }, { label: '按售价百分比', value: '1' }]
@@ -36,6 +34,21 @@ const category = [
   { label: '实体商品', value: '0' },
   { label: '虚拟商品', value: '1' },
   { label: '虚拟商品(需配送)', value: '2' },
+]
+const data = [
+  {
+    value: '1',
+    label: 'Food',
+  },
+  {
+    value: '2',
+    label: 'Supermarket',
+  },
+  {
+    value: '3',
+    label: 'Extra',
+    isLeaf: true,
+  },
 ]
 @createForm()
 @inject('commodity')
@@ -45,17 +58,23 @@ class RetailAdd extends React.Component {
     super(props)
     this.state = {
       pic: [],
-      storeValue: '',
+      editor: null,
       editorContent: '',
+      // give: [],
+      specification: [],
+      // speciValue: [],
+      initData: '',
+      show: false,
     }
     this.editor = React.createRef()
   }
 
   componentDidMount() {
     const { commodity, match } = this.props
-    // const { cateringDetail } = commodity
-    console.log(match)
     const editor = new E(this.editor.current)
+    this.setState({
+      editor,
+    })
     editor.customConfig.onchange = html => {
       this.setState({
         editorContent: html,
@@ -84,12 +103,15 @@ class RetailAdd extends React.Component {
       'redo', // 重复
     ]
     editor.create()
-    // editor.txt.html(sessionStorage.getItem('content') || '')
+    // console.log(editor.txt.html())
 
     const { form } = this.props
     console.log(this.props)
     commodity.fetchRetailMeal(match.params.id)
-    commodity.fetchRetailValues()
+    commodity.fetchGoodsSort(match.params.id)
+    commodity.fetchExpressLists()
+    console.log(commodity.expressLists)
+    // commodity.fetchExpressDetail()
     if (!match.params.goodid) return
     commodity.fetchRetailDetail(match.params.id, match.params.goodid).then(() => {
       const { retailDetail } = commodity
@@ -99,35 +121,80 @@ class RetailAdd extends React.Component {
       this.setState({
         pic: picArr,
       })
-      console.log(toJS(moment(retailDetail.seckill_open_time * 1000)).valueOf())
       form.setFieldsValue({
         ...retailDetail,
         status: [retailDetail.status],
         sort_id: [retailDetail.sort_id],
         stort_id: [retailDetail.stort_id],
         goods_type: [retailDetail.goods_type],
-        seckill_type: [retailDetail.seckill_type],
         in_group: [retailDetail.in_group],
         is_fx: [retailDetail.is_fx],
         fx_type: [retailDetail.fx_type],
         freight_type: [retailDetail.freight_type],
-        seckill_open_time: new Date(retailDetail.seckill_open_time * 1000),
-        seckill_close_time: new Date(retailDetail.seckill_close_time * 1000),
+        freight_template: [retailDetail.freight_template],
         pic: picArr,
+        cat_id: [retailDetail.cat_id],
       })
+      editor.txt.html(retailDetail.des)
+      // this.setState({
+      //   specification: retailDetail.spec_list,
+      // })
     })
   }
 
-  // submits = async () => {
-  //   const { editorContent } = this.state
-  //   console.log(editorContent)
+  changeGiveValue = (val, index) => {
+    const { specification } = this.state
+    const cache = Object.assign([], specification)
+    // eslint-disable-next-line prefer-destructuring
+    cache[index].spec_name = val[0]
+    this.setState({
+      specification: cache,
+    })
+  }
+
+  changeGiveNum = (val, index) => {
+    const { specification } = this.state
+    const cache = Object.assign([], specification)
+    // eslint-disable-next-line prefer-destructuring
+    cache[index].spec_val = val
+    this.setState({
+      specification: cache,
+    })
+  }
+
+  // changeSpeciValue = (val, index) => {
+  //   const { specification } = this.state
+  //   const cache = Object.assign([], specification)
+  //   // eslint-disable-next-line prefer-destructuring
+  //   cache[index].list = val
+  //   this.setState({
+  //     specification: cache,
+  //   })
+  // }
+
+  // mapSpeciValue = () => {
+  //   const { commodity } = this.props
+  //   const { speciValue } = this.state
+  //   // console.log(give)
+  //   return speciValue.map((item, index) => (
+  //     <React.Fragment key={item.value}>
+  //       <InputItem
+  //         defaultValue={item.goods}
+  //         placeholder="请输入属性值"
+  //         cols={1}
+  //         onChange={val => this.changeSpeciValue(val, index)}
+  //       >
+  //         规格属性值
+  //       </InputItem>
+  //     </React.Fragment>
+  //   ))
   // }
 
   submit = () => {
     const {
       commodity, form, match, history,
     } = this.props
-    const {  editorContent } = this.state
+    const { editorContent, editor, specification } = this.state
     console.log(editorContent)
     form.validateFields((error, value) => {
       // if (error) {
@@ -136,52 +203,90 @@ class RetailAdd extends React.Component {
       // }
       console.log(value)
       const obj = {
-        name: value.name,
-        sort: value.sort,
-        number: value.number,
-        unit: value.unit,
-        price: value.price,
-        old_price: value.old_price,
-        cost_price: value.cost_price,
-        stock_num: value.stock_num,
+        ...value,
         status: value.status[0],
         sort_id: value.sort_id[0],
         goods_type: value.goods_type[0],
-        packing_charge: value.packing_charge,
-        seckill_price: value.seckill_price,
-        seckill_stock: value.seckill_stock,
-        seckill_type: value.seckill_type[0],
         is_fx: value.is_fx[0],
         fx_type: value.fx_type[0],
-        fx_money: value.fx_money,
         freight_type: value.freight_type[0],
-        freight_value: value.freight_value,
-        spread_sale: value.spread_sale,
-        spread_rate: value.spread_rate,
-        dhb_get_num: value.dhb_get_num,
-        score_get_num: value.score_get_num,
-        seckill_open_time: moment(value.seckill_open_time).format('YYYY-MM-DD hh:mm'),
-        seckill_close_time: moment(value.seckill_close_time).format('YYYY-MM-DD hh:mm'),
+        freight_template: value.freight_template[0],
+        cat_id: value.cat_id[0],
         pic: value.pic.map(item => item.url),
-        goods_id: value.sort_id,
-        store_id: value.store_id[0],
-        des: editorContent,
+        des: editor.txt.html(),
+        spec_list: specification,
       }
       console.log(value)
       console.log(obj)
       if (match.params.id) {
+        console.log(match.params.id)
         commodity
           .modifyRetail({ ...obj, store_id: match.params.id, goods_id: match.params.goodid })
           .then(res => {
             if (res) Toast.success('编辑成功', 1, () => history.goBack())
           })
       } else {
-        commodity.addRetail(obj).then(res => {
+        console.log(value.store_id[0])
+        commodity.addRetail({ ...obj, store_id: value.store_id[0] }).then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
         })
       }
     })
   }
+
+  mapSpecification = () => {
+    const { specification } = this.state
+    // console.log(specification)
+    return specification.map((item, index) => (
+      <React.Fragment key={item.value}>
+        <InputItem
+          defaultValue={item.spec_name}
+          placeholder="请输入规则名称"
+          cols={1}
+          onChange={val => this.changeGiveValue(val, index)}
+        >
+          规格名称
+        </InputItem>
+        <InputItem
+          placeholder="请输入属性值"
+          defaultValue={item.spec_val}
+          onChange={val => this.changeGiveNum(val, index)}
+        >
+          规格属性值
+        </InputItem>
+        {/* <Item defaultValue={item.list} onChange={val => this.changeSpeciValue(val, index)}>
+          {this.mapSpeciValue()}
+        </Item> */}
+      </React.Fragment>
+    ))
+  }
+
+  // mapTemplate = () => {
+  //   const { template } = this.state
+  //   // console.log(template)
+  //   return template.map((item, index) => (
+  //     <React.Fragment key={item.value}>
+  //       <InputItem
+  //         defaultValue={item.spec_name}
+  //         placeholder="请输入规则名称"
+  //         cols={1}
+  //         onChange={val => this.changeGiveValue(val, index)}
+  //       >
+  //         规格名称
+  //       </InputItem>
+  //       <InputItem
+  //         placeholder="请输入属性值"
+  //         defaultValue={item.spec_val}
+  //         onChange={val => this.changeGiveNum(val, index)}
+  //       >
+  //         规格属性值
+  //       </InputItem>
+  //       {/* <Item defaultValue={item.list} onChange={val => this.changeSpeciValue(val, index)}>
+  //         {this.mapSpeciValue()}
+  //       </Item> */}
+  //     </React.Fragment>
+  //   ))
+  // }
 
   imgChange = (arr, type) => {
     const { form } = this.props
@@ -195,56 +300,149 @@ class RetailAdd extends React.Component {
     }
     arr.forEach((item, index) => {
       if (item.file) {
-        /* eslint no-new: 0 */
-        new Compressor(item.file, {
-          quality: 0.1,
-          success: result => {
-            const reader = new window.FileReader()
-            reader.readAsDataURL(result)
-            reader.onloadend = () => {
-              // Send the compressed image file to server with XMLHttpRequest.
-              axios
-                .post('/wap.php?g=Wap&c=upyun&a=base64change', { imgBase: reader.result })
-                .then(response => {
-                  if (response.data.error === 0) {
-                    const picArr = arr
-                    picArr.splice(index, 1, { url: response.data.msg })
-                    console.log(picArr)
-                    form.setFieldsValue({
-                      pic: picArr,
-                    })
-                    this.setState({ pic: picArr })
-                  } else {
-                    Toast.fail(response.data.msg)
-                  }
-                })
-            }
-          },
-          error: err => {
-            console.log(err.message)
-          },
-        })
+        Utils.compressionAndUploadImg(item.file)
+          .then(res => {
+            const picArr = arr
+            picArr.splice(index, 1, { url: res })
+            form.setFieldsValue({
+              pic: picArr,
+            })
+            this.setState({ pic: picArr })
+          })
+          .catch(e => Toast.fail(e))
       }
     })
   }
 
-  // submits = async () => {
-  //   // const { history } = this.props
-  //   const { editorContent } = this.state
-  //   console.log(editorContent)
-  // }
+  onChange = value => {
+    console.log(value)
+  }
+
+  onOk = value => {
+    console.log(value)
+    this.onCancel()
+  }
+
+  onCancel = () => {
+    this.setState({ show: false })
+  }
+
+  handleClick = e => {
+    e.preventDefault() // Fix event propagation on Android
+    this.setState({
+      show: !false,
+    })
+    // mock for async data loading
+    if (!this.state.initData) {
+      setTimeout(() => {
+        this.setState({
+          initData: data,
+        })
+      }, 500)
+    }
+  }
+
+  onMaskClick = () => {
+    this.setState({
+      show: false,
+    })
+  }
 
   render() {
+    const { initData, show } = this.state
     const { match, commodity, form } = this.props
-    const { retailValues, retailMeal, retailDetail } = commodity
+    const {
+      retailValues, retailMeal, goodsSort, expressLists,
+    } = commodity
     const { getFieldProps } = form
-    const { storeValue, pic } = this.state
-    // const fx_type = form.getFieldValue('fx_type')
-    //   ? form.getFieldValue('fx_type')[0]
-    //   : ''
+    const { pic, specification } = this.state
+    const fxTypeValue = form.getFieldValue('fx_type') ? form.getFieldValue('fx_type')[0] : ''
+    const menuEl = (
+      <Menu
+        className="single-multi-foo-menu"
+        data={initData}
+        // value={['1']}
+        level={1}
+        onChange={this.onChange}
+        onOk={this.onOk}
+        onCancel={this.onCancel}
+        height={document.documentElement.clientHeight * 0.6}
+        multiSelect
+      />
+    )
+    const loadingEl = (
+      <div
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: document.documentElement.clientHeight * 0.6,
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <ActivityIndicator size="large" />
+      </div>
+    )
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}零售商品`} goBack />
+        <InputItem
+          {...getFieldProps('name', {
+            rules: [{ required: true }],
+          })}
+          placeholder="请输入模板名称"
+        >
+          模板名称
+        </InputItem>
+        <Flex style={{ textAlign: 'center' }}>
+          <Flex.Item>可配送区域</Flex.Item>
+          <Flex.Item>运费</Flex.Item>
+          <Flex.Item>满免</Flex.Item>
+        </Flex>
+        <Flex style={{ textAlign: 'center' }}>
+          <Flex.Item>111</Flex.Item>
+          <Flex.Item>222</Flex.Item>
+          <Flex.Item>33</Flex.Item>
+        </Flex>
+        <List style={{ display: 'block' }}>
+          <div className={show ? 'single-multi-menu-active' : ''}>
+            <div>
+              <NavBar
+                leftContent="Menu"
+                mode="light"
+                onLeftClick={this.handleClick}
+                className="single-multi-top-nav-bar"
+              >
+                Single Multi menu
+              </NavBar>
+            </div>
+            {show ? (initData ? menuEl : loadingEl) : null}
+            {show ? <div className="menu-mask" onClick={this.onMaskClick} /> : null}
+          </div>
+        </List>
+        {/* <List>
+          <List.Item
+            extra={
+              <Switch
+                {...getFieldProps('is_fx', {
+                  initialValue: checked1,
+                  valuePropName: 'checked',
+                  onChange: val => {
+                    console.log(val)
+                  },
+                })}
+                onClick={checked => {
+                  // set new value
+                  form.setFieldsValue({
+                    is_fx: checked,
+                  })
+                }}
+              />
+            }
+          >
+            On
+          </List.Item>
+        </List> */}
         <List>
           <InputItem
             {...getFieldProps('name', {
@@ -256,7 +454,7 @@ class RetailAdd extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps('number', {
-              rules: [{ required: true }],
+              rules: [{ required: false }],
             })}
             placeholder="请填写商品条形码"
           >
@@ -425,6 +623,85 @@ class RetailAdd extends React.Component {
           >
             <List.Item arrow="horizontal">选择添加到的分类</List.Item>
           </Picker>
+          <List.Item
+            extra={
+              <Flex justify="between">
+                <Button
+                  size="small"
+                  type="ghost"
+                  onClick={() => this.setState({
+                    specification: specification.concat({ spec_name: '', spec_val: '' }),
+                  })
+                  }
+                >
+                  添加
+                </Button>
+                <Button
+                  size="small"
+                  type="warning"
+                  onClick={() => this.setState({
+                    specification: specification.slice(0, specification.length - 1),
+                  })
+                  }
+                >
+                  删除
+                </Button>
+              </Flex>
+            }
+          >
+            添加规格
+          </List.Item>
+          {/* {this.mapSpecification()} */}
+          {/* <List.Item
+            extra={
+              <Flex justify="between">
+                <Button
+                  size="small"
+                  type="ghost"
+                  onClick={() => this.setState({
+                    speciValue: speciValue.concat({ goods: '', goods_num: '' }),
+                  })
+                  }
+                >
+                  添加
+                </Button>
+                <Button
+                  size="small"
+                  type="warning"
+                  onClick={() => this.setState({
+                    speciValue: speciValue.slice(0, speciValue.length - 1),
+                  })
+                  }
+                >
+                  删除
+                </Button>
+              </Flex>
+            }
+          >
+            规格属性值
+          </List.Item> */}
+          {this.mapSpecification()}
+          {/* {this.mapSpeciValue()} */}
+
+          <Picker
+            {...getFieldProps('freight_template', {
+              rules: [{ required: false }],
+            })}
+            data={expressLists}
+            cols={1}
+            extra="请选择"
+          >
+            <List.Item arrow="horizontal">运费模板</List.Item>
+          </Picker>
+          <Picker
+            {...getFieldProps('freight_template', {
+              rules: [{ required: false }],
+            })}
+            onClick={this.handleClick}
+            extra="新建"
+          >
+            <List.Item>运费模板</List.Item>
+          </Picker>
           <InputItem
             {...getFieldProps('freight_value', {
               rules: [{ required: true }],
@@ -452,52 +729,43 @@ class RetailAdd extends React.Component {
           >
             <List.Item arrow="horizontal">是否发布到分销市场</List.Item>
           </Picker>
-          <Item>
-            分润设置
-            <Center>
-              <Picker
-                {...getFieldProps('fx_type', {
-                  rules: [{ required: true }],
-                })}
-                data={fxType}
-                cols={1}
-              >
-                <List.Item arrow="horizontal" />
-              </Picker>
-            </Center>
-            <Right>
-              <div className="fx">
-                <InputItem
-                  {...getFieldProps('fx_money', {
-                    rules: [{ required: true }],
-                  })}
-                  cols={1}
-                  style={{ display: 'inline-block' }}
-                />
-                元
-              </div>
-            </Right>
-            <Right>
-              <div className="fx">
-                <InputItem
-                  {...getFieldProps('fx_money', {
-                    rules: [{ required: true }],
-                  })}
-                  cols={1}
-                  style={{ display: 'inline-block' }}
-                />
-                %
-              </div>
-            </Right>
-          </Item>
+          <Picker
+            {...getFieldProps('fx_type', {
+              rules: [{ required: true }],
+            })}
+            data={fxType}
+            cols={1}
+          >
+            <List.Item arrow="horizontal">分润设置</List.Item>
+          </Picker>
+          <InputItem
+            {...getFieldProps('fx_money', {
+              rules: [{ required: true }],
+            })}
+            extra={fxTypeValue === '0' ? '元' : '%'}
+            labelNumber={6}
+            placeholder="请填写分润金额"
+          >
+            分润金额
+          </InputItem>
+          <Picker
+            {...getFieldProps('cat_id', {
+              rules: [{ required: true }],
+            })}
+            data={goodsSort}
+            cols={1}
+            extra="请选择"
+          >
+            <List.Item arrow="horizontal">商城商品分类</List.Item>
+          </Picker>
           <List.Item arrow="empty">
             店铺图片
             <ImagePicker
               {...getFieldProps('pic', {
+                valuePropName: 'files',
+                getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
                 rules: [{ required: true }],
               })}
-              files={pic}
-              onChange={this.imgChange}
               selectable={pic.length < 4}
             />
           </List.Item>
@@ -506,122 +774,6 @@ class RetailAdd extends React.Component {
             <Editor>
               <div ref={this.editor} className="editor" />
             </Editor>
-          </Item>
-          <InputItem
-            {...getFieldProps('spread_sale', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请填写佣金比例"
-          >
-            销售佣金比例
-            <Tooltip
-              trigger="click"
-              placement="topLeft"
-              overlay="用户分享商品链接后，其他用户点击链接购买该商品后，分享者将获得此佣金（百分比 0-100"
-              onClick={e => {
-                e.stopPropagation()
-              }}
-            >
-              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                &#xe628;
-              </i>
-            </Tooltip>
-          </InputItem>
-
-          <InputItem
-            {...getFieldProps('spread_rate', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请填写佣金比例"
-          >
-            推广佣金比例
-            <Tooltip
-              trigger="click"
-              placement="topLeft"
-              overlay="用户分享网页后，点击网页的新用户将会被绑定为分享者的粉丝，该粉丝在商户产生消费时，分享者将获得此佣金 （百分比 0-100"
-              onClick={e => {
-                e.stopPropagation()
-              }}
-            >
-              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                &#xe628;
-              </i>
-            </Tooltip>
-          </InputItem>
-          <InputItem
-            {...getFieldProps('seckill_price', {
-              rules: [{ required: true }],
-            })}
-            labelNumber={6}
-            placeholder="请填写限时价"
-          >
-            商品限时价
-            <Tooltip
-              trigger="click"
-              placement="topLeft"
-              overlay="0表示无限时价。"
-              onClick={e => {
-                e.stopPropagation()
-              }}
-            >
-              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                &#xe628;
-              </i>
-            </Tooltip>
-          </InputItem>
-
-          <InputItem
-            {...getFieldProps('seckill_stock', {
-              rules: [{ required: true }],
-            })}
-            labelNumber={6}
-            placeholder="请填写库存"
-          >
-            限时价库存
-            <Tooltip
-              trigger="click"
-              placement="topLeft"
-              overlay="-1表示无限量。"
-              onClick={e => {
-                e.stopPropagation()
-              }}
-            >
-              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                &#xe628;
-              </i>
-            </Tooltip>
-          </InputItem>
-
-          <Picker
-            {...getFieldProps('seckill_type', {
-              rules: [{ required: true }],
-            })}
-            data={seckill}
-            cols={1}
-          >
-            <List.Item arrow="horizontal">现时价类型</List.Item>
-          </Picker>
-          <Item>
-            限时段
-            <TimeBox>
-              <DatePicker
-                {...getFieldProps('seckill_open_time', {
-                  rules: [{ required: true }],
-                })}
-                mode="datetime"
-              >
-                <List.Item />
-              </DatePicker>
-              至
-              <DatePicker
-                {...getFieldProps('seckill_close_time', {
-                  rules: [{ required: true }],
-                })}
-                mode="datetime"
-              >
-                <List.Item />
-              </DatePicker>
-            </TimeBox>
           </Item>
           {/* <Picker
             {...getFieldProps('in_group', {
@@ -633,31 +785,6 @@ class RetailAdd extends React.Component {
           >
             <List.Item arrow="horizontal">选择会员分组</List.Item>
           </Picker> */}
-          <Shoe>
-            <Item>
-              用户消费赠送比例
-              <div className="box">
-                每消费1元赠送
-                <InputItem
-                  {...getFieldProps('dhb_get_num', {
-                    rules: [{ required: true }],
-                  })}
-                  placeholder="请填写元宝数量"
-                />
-                元宝
-              </div>
-              <div className="box">
-                每消费1元赠送
-                <InputItem
-                  {...getFieldProps('score_get_num', {
-                    rules: [{ required: true }],
-                  })}
-                  placeholder="请填写金币数量"
-                />
-                金币
-              </div>
-            </Item>
-          </Shoe>
           <WingBlank style={{ padding: '10px 0' }}>
             <Button
               type="primary"

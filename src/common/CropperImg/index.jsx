@@ -38,13 +38,15 @@ class CropperImg extends React.Component {
 
   intercept = () => {
     this.cropper.current.getCroppedCanvas().toBlob(async blob => {
-      Utils.compressionAndUploadImg(blob).then(res => {
-        this.setState({
-          files: [],
-          file: null,
-          resultImgUrl: res,
+      Utils.compressionAndUploadImg(blob)
+        .then(res => {
+          this.setState({
+            files: [],
+            file: null,
+            resultImgUrl: res,
+          })
         })
-      })
+        .catch(e => Toast.fail(e))
     })
   }
 

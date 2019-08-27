@@ -13,6 +13,8 @@ import reservePanel from './reservePanel'
 import Catering from './catering'
 import Retail from './retail'
 import RetailPanel from './retailPanel'
+import RetailSpread from './retailSpread'
+import RetailDiscounts from './retailDiscounts'
 
 const { Item } = List
 @inject('commodity')
@@ -79,5 +81,7 @@ export default () => (
     <Route path="/management/commodity/catering" component={Catering} />
     <Route path="/management/commodity/retail" component={Retail} />
     <Route path="/management/commodity/retailPanel/:str/:id?/:goodid?" component={RetailPanel} />
+    <Route path="/management/commodity/retailSpread/:str/:id?/:goodid?" component={RetailSpread} />
+    <Route path="/management/commodity/retailDiscounts/:str/:id?/:goodid?" component={RetailDiscounts} />
   </React.Fragment>
 )

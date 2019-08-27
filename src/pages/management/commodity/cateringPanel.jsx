@@ -8,10 +8,9 @@ import {
 import Tooltip from 'rc-tooltip'
 import E from 'wangeditor'
 import 'rc-tooltip/assets/bootstrap.css'
-import axios from 'axios'
-import Compressor from 'compressorjs'
 import { NavBox, Editor } from './styled'
 // import { CustomizeList, ListTitle, ListContent } from '@/styled'
+import Utils from '@/utils'
 
 const { Item } = List
 const status = [
@@ -174,33 +173,15 @@ class CateringPanel extends React.Component {
     }
     arr.forEach((item, index) => {
       if (item.file) {
-        /* eslint no-new: 0 */
-        new Compressor(item.file, {
-          quality: 0.1,
-          success: result => {
-            const reader = new window.FileReader()
-            reader.readAsDataURL(result)
-            reader.onloadend = () => {
-              // Send the compressed image file to server with XMLHttpRequest.
-              axios
-                .post('/wap.php?g=Wap&c=upyun&a=base64change', { imgBase: reader.result })
-                .then(response => {
-                  if (response.data.error === 0) {
-                    const picArr = arr
-                    picArr.splice(index, 1, { url: response.data.msg })
-                    this.setState({
-                      pic: picArr,
-                    })
-                  } else {
-                    Toast.fail(response.data.msg)
-                  }
-                })
-            }
-          },
-          error: err => {
-            console.log(err.message)
-          },
-        })
+        Utils.compressionAndUploadImg(item.file)
+          .then(res => {
+            const picArr = arr
+            picArr.splice(index, 1, { url: res })
+            this.setState({
+              pic: picArr,
+            })
+          })
+          .catch(e => Toast.fail(e))
       }
     })
   }

@@ -32,9 +32,12 @@ class Home extends React.Component {
   componentDidMount() {
     const { home } = this.props
     const { filterValue1, filterLabel2, searchType } = this.state
+    const ticket = localStorage.getItem('ticket')
+    if (!ticket) return
     home.fetchEchartData(filterValue1, filterLabel2, searchType).then(() => this.setState({
       echartData: home.echartData,
     }))
+    home.fetchIndexData()
   }
 
   getOption = () => {
@@ -140,11 +143,16 @@ class Home extends React.Component {
   mapAd = () => {
     const { home } = this.props
     const { indexData } = home
-    if (indexData.wap_MerchantAd) {
-      return indexData.wap_MerchantAd.map(item => (
-        <img key={item.id} src={item.pic} style={{ width: '100%', height: 230 }} alt="" />
-      ))
+    if (!indexData.wap_MerchantAd) {
+      return false
     }
+    return (
+      <Carousel autoplay infinite>
+        {indexData.wap_MerchantAd.map(item => (
+          <img key={item.id} src={item.pic} alt="" />
+        ))}
+      </Carousel>
+    )
   }
 
   render() {
@@ -154,9 +162,8 @@ class Home extends React.Component {
     } = this.state
     return (
       <React.Fragment>
-        <Carousel autoplay infinite>
-          {this.mapAd()}
-          {/* <img
+        {this.mapAd()}
+        {/* <img
             src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565972301653&di=cadc8eb6cb7d3a25cb455d27ee8342d0&imgtype=0&src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farticle%2F62e712378860c2e9ac3bf8186f8ecf6a3cb24c07.jpg"
             style={{ height: 230 }}
             alt=""
@@ -166,7 +173,7 @@ class Home extends React.Component {
             style={{ height: 230 }}
             alt=""
           /> */}
-        </Carousel>
+
         <UserCard />
         <WhiteSpace />
         <WingBlank size="md">
@@ -183,6 +190,9 @@ class Home extends React.Component {
                   <div>{home.indexData.total_earn || 0}</div>
                 </FlexBox>
               </Flex.Item>
+            </Flex>
+            <WhiteSpace />
+            <Flex>
               <Flex.Item>
                 <FlexBox
                   className={cur === '2' ? 'cur' : ''}

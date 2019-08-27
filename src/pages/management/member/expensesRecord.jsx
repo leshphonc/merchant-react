@@ -57,7 +57,7 @@ class ExpensesRecord extends React.Component {
             </Flex>
           </Card.Body>
           <WhiteSpace />
-          <Card.Footer extra={moment(item.time * 1000).format('YYYY-MM-DD hh:mm:ss')} />
+          <Card.Footer extra={moment(item.time * 1000).format('YYYY-MM-DD HH:mm:ss')} />
         </Card>
         <WhiteSpace />
       </React.Fragment>

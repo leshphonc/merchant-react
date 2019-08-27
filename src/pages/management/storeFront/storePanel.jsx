@@ -206,21 +206,24 @@ class StorePanel extends React.Component {
     }
     arr.forEach((item, index) => {
       if (item.file) {
-        Utils.compressionAndUploadImg(item.file).then(res => {
-          const picArr = arr
-          picArr.splice(index, 1, { url: res })
-          console.log(picArr)
-          form.setFieldsValue({
-            pic: picArr,
+        Utils.compressionAndUploadImg(item.file)
+          .then(res => {
+            const picArr = arr
+            picArr.splice(index, 1, { url: res })
+            form.setFieldsValue({
+              pic: picArr,
+            })
+            this.setState({ pic: picArr })
           })
-          this.setState({ pic: picArr })
-        })
+          .catch(e => Toast.fail(e))
       }
     })
   }
 
   submit = () => {
-    const { storeFront, form, match, history } = this.props
+    const {
+      storeFront, form, match, history,
+    } = this.props
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请输入完整信息')
@@ -246,8 +249,8 @@ class StorePanel extends React.Component {
         have_meal: value.have_meal[0],
         have_group: value.have_group[0],
         have_shop: value.have_shop[0],
-        open_1: moment(value.open_1).format('hh:mm:ss'),
-        close_1: moment(value.close_1).format('hh:mm:ss'),
+        open_1: moment(value.open_1).format('HH:mm:ss'),
+        close_1: moment(value.close_1).format('HH:mm:ss'),
         long,
         lat,
         txt_info: value.txt_info,
@@ -289,7 +292,9 @@ class StorePanel extends React.Component {
       ? form.getFieldValue('discount_type')[0]
       : ''
     /* eslint camelcase: 0 */
-    const { long, lat, pic, asyncCascadeValue } = this.state
+    const {
+      long, lat, pic, asyncCascadeValue,
+    } = this.state
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}店铺`} goBack />

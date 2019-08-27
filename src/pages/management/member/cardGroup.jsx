@@ -6,7 +6,7 @@ import { Route, Link } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
 import { WhiteSpace, Button, PullToRefresh } from 'antd-mobile'
 import { ListItem, ItemTop } from './styled'
-import ModifyCardGroup from './modify/cardGroup'
+import CardGroupPanel from './cardGroupPanel'
 import CardGroupUsers from './cardGroupUsers'
 import ModifyCardGroupUsers from './modify/cardGroupUsers'
 import ExpensesRecord from './expensesRecord'
@@ -66,11 +66,7 @@ class CardGroup extends React.Component {
                   type="primary"
                   size="small"
                   style={{ width: 120 }}
-                  onClick={() => history.push(
-                    `/management/member/cardGroup/modifyCardGroup/编辑/${item.id}/${item.name}/${
-                      item.des
-                    }/${item.discount}`,
-                  )
+                  onClick={() => history.push(`/management/member/cardGroup/cardGroupPanel/编辑/${item.id}`)
                   }
                 >
                   编辑
@@ -130,7 +126,7 @@ class CardGroup extends React.Component {
           title="会员卡分组"
           goBack
           right={
-            <Link style={{ color: '#fff' }} to="/management/member/cardGroup/modifyCardGroup/添加">
+            <Link style={{ color: '#fff' }} to="/management/member/cardGroup/cardGroupPanel/添加">
               添加分组
             </Link>
           }
@@ -158,8 +154,8 @@ export default () => (
   <React.Fragment>
     <Route path="/management/member/cardGroup" exact component={CardGroup} />
     <Route
-      path="/management/member/cardGroup/modifyCardGroup/:str/:id?/:name?/:comment?/:discount?"
-      component={ModifyCardGroup}
+      path="/management/member/cardGroup/cardGroupPanel/:str/:id?"
+      component={CardGroupPanel}
     />
     <Route path="/management/member/cardGroup/cardGroupUsers" component={CardGroupUsers} />
     <Route

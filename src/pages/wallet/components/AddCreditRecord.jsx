@@ -47,7 +47,7 @@ class AddCreditRecord extends React.Component {
             <div>余额：{item.now_mer_money}</div>
           </Card.Body>
           <WhiteSpace />
-          <Card.Footer content={moment(item.use_time * 1000).format('YYYY-MM-DD hh:mm:ss')} />
+          <Card.Footer content={moment(item.use_time * 1000).format('YYYY-MM-DD HH:mm:ss')} />
         </Card>
         <WhiteSpace />
       </React.Fragment>

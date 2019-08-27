@@ -9,11 +9,6 @@ import {
 @inject('home')
 @observer
 class UserCard extends React.Component {
-  componentDidMount() {
-    const { home } = this.props
-    home.fetchIndexData()
-  }
-
   render() {
     const { home } = this.props
     const userInfo = JSON.parse(localStorage.getItem('merchant_user'))

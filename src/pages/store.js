@@ -8,6 +8,7 @@ import basicInformation from '@/pages/setting/basicInformation/store'
 import shopAssistant from '@/pages/popularize/shopAssistant/store'
 import member from '@/pages/management/member/store'
 import commodity from '@/pages/management/commodity/store'
+import shopManager from '@/pages/management/shopManager/store'
 
 const stores = {
   login,
@@ -20,5 +21,6 @@ const stores = {
   shopAssistant,
   member,
   commodity,
+  shopManager,
 }
 export default stores

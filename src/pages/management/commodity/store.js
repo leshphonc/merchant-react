@@ -19,6 +19,8 @@ class MastSotre {
 
   @observable reserveListTotal = null
 
+  @observable reserveCategoryOption = []
+
   @observable cateringDetail = {}
 
   @observable cateringList = []
@@ -37,6 +39,10 @@ class MastSotre {
 
   @observable retailList = []
 
+  // @observable retailLists = []
+
+  @observable cardGroupAll = []
+
   @observable retailListPage = 1
 
   @observable retailListSize = 10
@@ -54,6 +60,16 @@ class MastSotre {
   @observable retailDelete = {}
 
   @observable cacheStore = {}
+
+  @observable userLevels = []
+
+  @observable giftVoucher = []
+
+  @observable goodsSort = []
+
+  @observable expressLists = []
+
+  @observable expressDetail = []
 
   @action
   fetchGroupList = async keyword => {
@@ -137,6 +153,32 @@ class MastSotre {
   }
 
   @action
+  fetchReserveCategoryOption = async () => {
+    const response = await services.fetchReserveCategoryOption()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.reserveCategoryOption = response.data.result
+      })
+    }
+  }
+
+  @action
+  addReserve = async payload => {
+    const response = await services.addReserve(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  modifyReserve = async payload => {
+    const response = await services.modifyReserve(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
   fetchCateringList = async storeId => {
     let hasMore = true
     if (this.cateringListTotal !== null) {
@@ -198,6 +240,16 @@ class MastSotre {
       return Promise.resolve(true)
     }
   }
+
+  // @action
+  // fetchRetailLists = async name => {
+  //   const response = await services.fetchRetailLists(name)
+  //   if (response.data.errorCode === ErrorCode.SUCCESS) {
+  //     runInAction(() => {
+  //       this.retailLists = response.data.result
+  //     })
+  //   }
+  // }
 
   @action
   fetchRetailList = async storeId => {
@@ -263,6 +315,22 @@ class MastSotre {
   }
 
   @action
+  goodsSpread = async payload => {
+    const response = await services.goodsSpread(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  goodsDiscounts = async payload => {
+    const response = await services.goodsDiscounts(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
   fetchCateringMeal = async storeId => {
     const response = await services.fetchCateringMeal(storeId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -303,6 +371,16 @@ class MastSotre {
   }
 
   @action
+  fetchUserLevel = async (storeId, goodid) => {
+    const response = await services.fetchUserLevel(storeId, goodid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.userLevels = response.data.result
+      })
+    }
+  }
+
+  @action
   fetchRetailMeal = async storeId => {
     const response = await services.fetchRetailMeal(storeId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -323,9 +401,56 @@ class MastSotre {
   }
 
   @action
-  cacheStoreDetail = async data => {
-    console.log(data)
-    this.cacheStore = data
+  fetchCardGroupAll = async () => {
+    const response = await services.fetchCardGroupAll()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.cardGroupAll = response.data.result
+      })
+    }
+  }
+
+  // 优惠券
+  @action
+  fetchGiftVoucher = async () => {
+    const response = await services.fetchGiftVoucher()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.giftVoucher = response.data.result
+      })
+    }
+  }
+
+  // 商城商品分类
+  @action
+  fetchGoodsSort = async storeId => {
+    const response = await services.fetchGoodsSort(storeId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.goodsSort = response.data.result
+      })
+    }
+  }
+
+  // 运费模板列表
+  @action
+  fetchExpressLists = async () => {
+    const response = await services.fetchExpressLists()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.expressLists = response.data.result
+      })
+    }
+  }
+
+  @action
+  fetchExpressDetail = async tid => {
+    const response = await services.fetchExpressDetail(tid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.expressDetail = response.data.result
+      })
+    }
   }
 }
 export default new MastSotre()
