@@ -13,6 +13,7 @@ import shopAssistant from '@/pages/popularize/shopAssistant/store'
 import member from '@/pages/management/member/store'
 import commodity from '@/pages/management/commodity/store'
 import shopManager from '@/pages/management/shopManager/store'
+import giftManagement from '@/pages/popularize/giftManagement/store'
 
 class CommonStore {
   @observable openid = ''
@@ -53,5 +54,6 @@ const stores = {
   member,
   commodity,
   shopManager,
+  giftManagement,
 }
 export default stores
