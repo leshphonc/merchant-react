@@ -1,6 +1,5 @@
 import React from 'react'
 import { List, Picker, InputItem } from 'antd-mobile'
-import { toJS } from 'mobx'
 
 class MemberDiscount extends React.Component {
   state = {
@@ -46,14 +45,15 @@ class MemberDiscount extends React.Component {
 
   componentDidMount() {
     const { data } = this.props
-    console.log(toJS(data))
     const { leveloff } = this.state
     const obj = JSON.parse(JSON.stringify(leveloff))
-    console.log(toJS(data))
+    console.log(obj)
     obj.map((item, index) => {
-      if (data.leveloff[index]) {
-        item.type = `${data.leveloff[index].type}`
-        item.vv = `${data.leveloff[index].vv}`
+      if (data.leveloff) {
+        if (data.leveloff[index]) {
+          item.type = `${data.leveloff[index].type}`
+          item.vv = `${data.leveloff[index].vv}`
+        }
       }
       return null
     })

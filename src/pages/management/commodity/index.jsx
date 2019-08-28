@@ -11,10 +11,11 @@ import Reserve from './reserve'
 import reservePanel from './reservePanel'
 // import ReserveEdit from './reserveEdit'
 import Catering from './catering'
-import Retail from './retail'
-import RetailPanel from './retailPanel'
-import RetailSpread from './retailSpread'
-import RetailDiscounts from './retailDiscounts'
+import ECommerce from './eCommerce'
+import ECommercePanel from './eCommercePanel'
+import ECommerceSpread from './eCommerceSpread'
+import ECommerceDiscounts from './eCommerceDiscounts'
+import ECommerceDeliveryTemplate from './eCommerceDeliveryTemplate'
 
 const { Item } = List
 @inject('commodity')
@@ -43,21 +44,21 @@ class Commodity extends React.Component {
           >
             预定商品
           </Item>
-          {/* <Item
-            arrow="horizontal"
-            onClick={() => {
-              history.push('/management/commodity/catering')
-            }}
-          >
-            <TextBox>餐饮商品</TextBox>
-          </Item> */}
           <Item
             arrow="horizontal"
             onClick={() => {
-              history.push('/management/commodity/retail')
+              history.push('/management/commodity/eCommerce')
             }}
           >
-            零售商品
+            电商商品
+          </Item>
+          <Item
+            arrow="horizontal"
+            onClick={() => {
+              history.push('/management/commodity/eCommerce')
+            }}
+          >
+            外卖商品
           </Item>
         </List>
       </div>
@@ -79,9 +80,22 @@ export default () => (
     <Route path="/management/commodity/reservePanel/:str/:id?" component={reservePanel} />
     {/* <Route path="/management/commodity/reserveEdit" component={ReserveEdit} /> */}
     <Route path="/management/commodity/catering" component={Catering} />
-    <Route path="/management/commodity/retail" component={Retail} />
-    <Route path="/management/commodity/retailPanel/:str/:id?/:goodid?" component={RetailPanel} />
-    <Route path="/management/commodity/retailSpread/:str/:id?/:goodid?" component={RetailSpread} />
-    <Route path="/management/commodity/retailDiscounts/:str/:id?/:goodid?" component={RetailDiscounts} />
+    <Route path="/management/commodity/eCommerce" component={ECommerce} />
+    <Route
+      path="/management/commodity/eCommercePanel/:str/:id?/:goodid?"
+      component={ECommercePanel}
+    />
+    <Route
+      path="/management/commodity/eCommerceSpread/:str/:id?/:goodid?"
+      component={ECommerceSpread}
+    />
+    <Route
+      path="/management/commodity/eCommerceDiscounts/:str/:id?/:goodid?"
+      component={ECommerceDiscounts}
+    />
+    <Route
+      path="/management/commodity/eCommerceDeliveryTemplate"
+      component={ECommerceDeliveryTemplate}
+    />
   </React.Fragment>
 )

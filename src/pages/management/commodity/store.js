@@ -39,23 +39,21 @@ class MastSotre {
 
   @observable cateringListTotal = null
 
-  @observable retailDetail = {}
+  @observable eCommerceDetail = {}
 
-  @observable retailMeal = []
+  @observable eCommerceMeal = []
 
-  @observable retailValues = []
-
-  @observable retailList = []
-
-  // @observable retailLists = []
+  @observable eCommerceValues = []
 
   @observable cardGroupAll = []
 
-  @observable retailListPage = 1
+  @observable eCommerceList = []
 
-  @observable retailListSize = 10
+  @observable eCommerceListPage = 1
 
-  @observable retailListTotal = null
+  @observable eCommerceListSize = 10
+
+  @observable eCommerceListTotal = null
 
   @observable cateringValues = []
 
@@ -65,7 +63,7 @@ class MastSotre {
 
   @observable cateringStand = {}
 
-  @observable retailDelete = {}
+  @observable eCommerceDelete = {}
 
   @observable cacheStore = {}
 
@@ -241,30 +239,29 @@ class MastSotre {
     }
   }
 
-   @action
-   fetchGroupDetail = async goodid => {
-     const response = await services.fetchGroupDetail(goodid)
-     if (response.data.errorCode === ErrorCode.SUCCESS) {
-       runInAction(() => {
-         this.groupDetail = response.data.result
-       })
-     }
-   }
+  @action
+  fetchGroupDetail = async goodid => {
+    const response = await services.fetchGroupDetail(goodid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.groupDetail = response.data.result
+      })
+    }
+  }
 
-   @action
-   fetchShopList = async () => {
-     const response = await services.fetchShopList()
-     if (response.data.errorCode === ErrorCode.SUCCESS) {
-       runInAction(() => {
-         response.data.result.store_list.forEach(item => {
-           if (item.value > 0) {
-             this.shopList.push(item)
-           }
-         })
-
-       })
-     }
-   }
+  @action
+  fetchShopList = async () => {
+    const response = await services.fetchShopList()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        response.data.result.store_list.forEach(item => {
+          if (item.value > 0) {
+            this.shopList.push(item)
+          }
+        })
+      })
+    }
+  }
 
   @action
   fetchGroupCat = async catfid => {
@@ -297,46 +294,46 @@ class MastSotre {
   }
 
   // @action
-  // fetchRetailLists = async name => {
-  //   const response = await services.fetchRetailLists(name)
+  // fetchECommerceLists = async name => {
+  //   const response = await services.fetchECommerceLists(name)
   //   if (response.data.errorCode === ErrorCode.SUCCESS) {
   //     runInAction(() => {
-  //       this.retailLists = response.data.result
+  //       this.eCommerceLists = response.data.result
   //     })
   //   }
   // }
 
   @action
-  fetchRetailList = async storeId => {
+  fetchECommerceList = async storeId => {
     let hasMore = true
-    if (this.retailListTotal !== null) {
-      hasMore = this.retailListPage * this.retailListSize < this.retailListTotal
+    if (this.eCommerceListTotal !== null) {
+      hasMore = this.eCommerceListPage * this.eCommerceListSize < this.eCommerceListTotal
       if (hasMore) {
-        this.retailListPage += 1
+        this.eCommerceListPage += 1
       }
     }
-    const response = await services.fetchRetailList(
-      this.retailListPage,
-      this.retailListSize,
+    const response = await services.fetchECommerceList(
+      this.eCommerceListPage,
+      this.eCommerceListSize,
       storeId,
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
-          const arr = this.retailList
+          const arr = this.eCommerceList
           arr.push(...response.data.result.lists)
-          this.retailList = arr
-          this.retailListTotal = response.data.result.total - 0
+          this.eCommerceList = arr
+          this.eCommerceListTotal = response.data.result.total - 0
         })
       } else {
-        const remainder = this.retailListTotal % this.retailListSize
+        const remainder = this.eCommerceListTotal % this.eCommerceListSize
         if (remainder) {
           runInAction(() => {
-            this.retailList.splice(this.retailListTotal - remainder, remainder)
-            const arr = this.retailList
+            this.eCommerceList.splice(this.eCommerceListTotal - remainder, remainder)
+            const arr = this.eCommerceList
             arr.push(...response.data.result.lists)
-            this.retailList = arr
-            this.retailListTotal = response.data.result.total - 0
+            this.eCommerceList = arr
+            this.eCommerceListTotal = response.data.result.total - 0
           })
         }
       }
@@ -344,26 +341,26 @@ class MastSotre {
   }
 
   @action
-  fetchRetailDetail = async (id, goodid) => {
-    const response = await services.fetchRetailDetail(id, goodid)
+  fetchECommerceDetail = async (id, goodid) => {
+    const response = await services.fetchECommerceDetail(id, goodid)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.retailDetail = response.data.result
+        this.eCommerceDetail = response.data.result
       })
     }
   }
 
   @action
-  addRetail = async payload => {
-    const response = await services.addRetail(payload)
+  addECommerce = async payload => {
+    const response = await services.addECommerce(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }
   }
 
   @action
-  modifyRetail = async payload => {
-    const response = await services.modifyRetail(payload)
+  modifyECommerce = async payload => {
+    const response = await services.modifyECommerce(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }
@@ -416,13 +413,24 @@ class MastSotre {
   }
 
   @action
-  fetchRetailDelete = async (storeId, goodsId) => {
-    await services.fetchRetailDelete(storeId, goodsId)
+  fetchECommerceDelete = async (storeId, goodsId) => {
+    await services.fetchECommerceDelete(storeId, goodsId)
   }
 
   @action
-  fetchRetailStand = async (storeId, goodsId, status) => {
-    await services.fetchRetailStand(storeId, goodsId, status)
+  changeECommerceStand = async (storeId, goodsId, status) => {
+    const response = await services.changeECommerceStand(storeId, goodsId, status)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      this.eCommerceList.forEach((item, index) => {
+        if (item.goods_id === goodsId) {
+          runInAction(() => {
+            const now = `${status}` !== '1' ? '0' : '1'
+            this.eCommerceList[index].status = now
+          })
+        }
+      })
+      return Promise.resolve(true)
+    }
   }
 
   @action
@@ -436,21 +444,21 @@ class MastSotre {
   }
 
   @action
-  fetchRetailMeal = async storeId => {
-    const response = await services.fetchRetailMeal(storeId)
+  fetchECommerceMeal = async storeId => {
+    const response = await services.fetchECommerceMeal(storeId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.retailMeal = response.data.result
+        this.eCommerceMeal = response.data.result
       })
     }
   }
 
   @action
-  fetchRetailValues = async () => {
-    const response = await services.fetchRetailValues()
+  fetchECommerceValues = async () => {
+    const response = await services.fetchECommerceValues()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.retailValues = response.data.result
+        this.eCommerceValues = response.data.result
       })
     }
   }

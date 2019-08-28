@@ -45,7 +45,7 @@ export default props => {
             </div>
             <Link
               to={{
-                pathname: '/management/commodity/retailAdd',
+                pathname: '/management/commodity/eCommerceAdd',
               }}
               style={{ color: '#333' }}
             >

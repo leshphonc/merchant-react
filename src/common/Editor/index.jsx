@@ -53,7 +53,9 @@ class Editor extends React.Component {
   }
 
   render() {
-    return <div ref={this.editor} style={{ textAlign: 'left', background: '#fff' }} />
+    return (
+      <div ref={this.editor} style={{ textAlign: 'left', background: '#fff', margin: '10px 0' }} />
+    )
   }
 }
 

@@ -7,12 +7,13 @@ import {
 } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
+import Utils from '@/utils'
 
 const seasons = [{ label: '能', value: '1' }, { label: '不能', value: '0' }]
 @createForm()
 @inject('shopManager')
 @observer
-class RetailAdd extends React.Component {
+class ECommerceAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -23,15 +24,15 @@ class RetailAdd extends React.Component {
 
   componentDidMount() {
     const { shopManager, match, form } = this.props
-    console.log(this.props)
     shopManager.fetchStaffType(match.params.id)
-    shopManager.fetchRetailValues()
+    shopManager.fetchECommerceValues()
     shopManager.fetchBusinessList(match.params.id)
     if (!match.params.id) return
     shopManager.fetchStaffDetail(match.params.id, match.params.staffId).then(() => {
       const { staffDetail } = shopManager
       form.setFieldsValue({
         ...staffDetail,
+        password: '',
         is_change: [staffDetail.is_change],
         business_id: [staffDetail.business_id],
         type: [staffDetail.type],
@@ -48,25 +49,22 @@ class RetailAdd extends React.Component {
         Toast.info('请输入完整信息')
         return
       }
-      console.log(value)
+
       const obj = {
         ...value,
+        password: value.password ? Utils.md5(value.password) : '',
         is_change: value.is_change[0],
         // business_id: value.business_id[0],
         type: value.type[0],
       }
-      console.log(value)
-      console.log(obj)
       if (match.params.id) {
-        console.log(match.params.id)
         shopManager
-          .addRetail({ ...obj, store_id: match.params.id, staff_id: match.params.staffId })
+          .addECommerce({ ...obj, store_id: match.params.id, staff_id: match.params.staffId })
           .then(res => {
             if (res) Toast.success('编辑成功', 1, () => history.goBack())
           })
       } else {
-        console.log(value.store_id[0])
-        shopManager.modifyRetail({ ...obj, store_id: value.store_id[0] }).then(res => {
+        shopManager.modifyECommerce({ ...obj, store_id: value.store_id[0] }).then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
         })
       }
@@ -75,7 +73,7 @@ class RetailAdd extends React.Component {
 
   render() {
     const { match, form, shopManager } = this.props
-    const { staffType, businessList, retailValues } = shopManager
+    const { staffType, businessList, eCommerceValues } = shopManager
     const { getFieldProps } = form
     return (
       <React.Fragment>
@@ -119,13 +117,7 @@ class RetailAdd extends React.Component {
               账号
             </InputItem>
           )}
-          <InputItem
-            {...getFieldProps('password', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请填写密码"
-            type="password"
-          >
+          <InputItem {...getFieldProps('password')} placeholder="请填写密码" type="password">
             密码
           </InputItem>
           <InputItem
@@ -144,7 +136,7 @@ class RetailAdd extends React.Component {
               {...getFieldProps('store_id', {
                 rules: [{ required: true }],
               })}
-              data={retailValues}
+              data={eCommerceValues}
               cols={1}
               extra="请选择"
             >
@@ -194,4 +186,4 @@ class RetailAdd extends React.Component {
     )
   }
 }
-export default RetailAdd
+export default ECommerceAdd

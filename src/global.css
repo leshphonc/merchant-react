@@ -95,6 +95,9 @@ body {
 .am-flexbox-item {
   align-self: stretch;
 }
+.am-menu .am-menu-select-container {
+  flex: 1;
+}
 
 /* 富文本工具栏换行 */
 .w-e-toolbar {

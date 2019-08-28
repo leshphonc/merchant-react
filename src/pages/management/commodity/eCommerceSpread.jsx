@@ -14,7 +14,7 @@ const levelSet = [{ label: '开启', value: '1' }, { label: '关闭', value: '0'
 @createForm()
 @inject('commodity')
 @observer
-class RetailSpread extends React.Component {
+class ECommerceSpread extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -31,14 +31,14 @@ class RetailSpread extends React.Component {
       })
     })
     if (!match.params.goodid) return
-    commodity.fetchRetailDetail(match.params.id, match.params.goodid).then(() => {
-      const { retailDetail } = commodity
+    commodity.fetchECommerceDetail(match.params.id, match.params.goodid).then(() => {
+      const { eCommerceDetail } = commodity
       form.setFieldsValue({
-        ...retailDetail,
-        level_set: [retailDetail.level_set],
+        ...eCommerceDetail,
+        level_set: [eCommerceDetail.level_set],
       })
       this.setState({
-        userLevels: retailDetail.spread,
+        userLevels: eCommerceDetail.spread,
       })
     })
   }
@@ -195,4 +195,4 @@ class RetailSpread extends React.Component {
     )
   }
 }
-export default RetailSpread
+export default ECommerceSpread

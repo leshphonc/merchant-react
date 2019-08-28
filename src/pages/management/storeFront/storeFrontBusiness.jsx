@@ -9,7 +9,6 @@ import Utils from '@/utils'
 class StoreFrontBusiness extends React.Component {
   componentDidMount() {
     Utils.clearCacheData()
-    console.log(123)
   }
 
   render() {

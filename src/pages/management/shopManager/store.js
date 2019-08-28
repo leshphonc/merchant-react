@@ -11,7 +11,7 @@ class MastSotre {
 
   @observable businessList = []
 
-  @observable retailValues = []
+  @observable eCommerceValues = []
 
   @observable classify = []
 
@@ -46,8 +46,8 @@ class MastSotre {
 
   // 店员添加
   @action
-  addRetail = async payload => {
-    const response = await services.addRetail(payload)
+  addECommerce = async payload => {
+    const response = await services.addECommerce(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }
@@ -55,8 +55,8 @@ class MastSotre {
 
   // 店员编辑
   @action
-  modifyRetail = async payload => {
-    const response = await services.modifyRetail(payload)
+  modifyECommerce = async payload => {
+    const response = await services.modifyECommerce(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }
@@ -81,11 +81,11 @@ class MastSotre {
   }
 
   @action
-  fetchRetailValues = async () => {
-    const response = await services.fetchRetailValues()
+  fetchECommerceValues = async () => {
+    const response = await services.fetchECommerceValues()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.retailValues = response.data.result
+        this.eCommerceValues = response.data.result
       })
     }
   }
