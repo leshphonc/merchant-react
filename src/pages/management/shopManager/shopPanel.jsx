@@ -54,7 +54,6 @@ class ECommerceAdd extends React.Component {
         ...value,
         password: value.password ? Utils.md5(value.password) : '',
         is_change: value.is_change[0],
-        // business_id: value.business_id[0],
         type: value.type[0],
       }
       if (match.params.id) {

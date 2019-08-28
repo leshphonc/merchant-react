@@ -14,6 +14,8 @@ import member from '@/pages/management/member/store'
 import commodity from '@/pages/management/commodity/store'
 import shopManager from '@/pages/management/shopManager/store'
 import redEnvelop from '@/pages/popularize/redEnvelope/store'
+import giftManagement from '@/pages/popularize/giftManagement/store'
+
 
 class CommonStore {
   @observable openid = ''
@@ -55,5 +57,6 @@ const stores = {
   redEnvelop,
   commodity,
   shopManager,
+  giftManagement,
 }
 export default stores
