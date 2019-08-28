@@ -9,6 +9,8 @@ import StorePanel from './storePanel'
 import CoordinatePicker from './modify/coordinate'
 import StoreFrontBusiness from './storeFrontBusiness'
 import ECommercePanel from './eCommercePanel'
+import TakeawayPanel from './takeawayPanel'
+import CloneCommodity from './components/CloneCommodity'
 import CategoryManagement from './categoryManagement'
 import CategoryPanel from './categoryPanel'
 import StoreDiscount from './storeDiscount'
@@ -122,32 +124,54 @@ class StoreFront extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/management/storefront" exact component={StoreFront} />
+    {/* 店铺基本信息编辑 */}
     <Route path="/management/storefront/storePanel/:str/:id?" component={StorePanel} />
+    {/* 坐标拾取 */}
     <Route
       path="/management/storefront/coordinatePicker/:lng?/:lat?"
       component={CoordinatePicker}
     />
+    {/* 店铺业务列表 */}
     <Route
       path="/management/storefront/storeFrontBusiness/:id/:mall/:peisong"
       component={StoreFrontBusiness}
     />
-    <Route
-      path="/management/storefront/categoryManagement/:id/:type"
-      component={CategoryManagement}
-    />
-    <Route
-      path="/management/storefront/categoryPanel/:str/:id/:type/:stid?"
-      component={CategoryPanel}
-    />
-    <Route
-      path="/management/storefront/storeDiscountPanel/:str/:id/:cid?"
-      component={StoreDiscountPanel}
-    />
-    <Route path="/management/storefront/diningInformation" component={DiningInformation} />
+    {/* 电商业务配置编辑 */}
     <Route
       path="/management/storefront/storeFrontBusiness/ECommercePanel/:id"
       component={ECommercePanel}
     />
-    <Route path="/management/storefront/storeFrontBusiness/storeDiscount/:id" component={StoreDiscount} />
+    {/* 外卖业务配置编辑 */}
+    <Route
+      path="/management/storefront/storeFrontBusiness/TakeawayPanel/:id"
+      component={TakeawayPanel}
+    />
+    {/* 克隆商铺 */}
+    <Route
+      path="/management/storefront/storeFrontBusiness/cloneCommodity/:id"
+      component={CloneCommodity}
+    />
+    {/* 分类管理列表 */}
+    <Route
+      path="/management/storefront/categoryManagement/:id/:type"
+      component={CategoryManagement}
+    />
+    {/* 分类管理编辑 */}
+    <Route
+      path="/management/storefront/categoryPanel/:str/:id/:type/:stid?"
+      component={CategoryPanel}
+    />
+    {/* 店铺优惠列表 */}
+    <Route
+      path="/management/storefront/storeFrontBusiness/storeDiscount/:id"
+      component={StoreDiscount}
+    />
+    {/* 店铺优惠编辑 */}
+    <Route
+      path="/management/storefront/storeDiscountPanel/:str/:id/:cid?"
+      component={StoreDiscountPanel}
+    />
+    {/* 餐饮信息 */}
+    <Route path="/management/storefront/diningInformation" component={DiningInformation} />
   </React.Fragment>
 )

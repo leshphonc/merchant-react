@@ -89,6 +89,15 @@ export const fetchRetailList = (page, size, storeId) => axios.get('/appapi.php?c
   },
 })
 
+export const fetchRetailLists = (page, size, name) => axios.get('/appapi.php?c=Merchantapp&a=spro', {
+  params: {
+    page,
+    size,
+    name,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
 // 餐饮商店
 export const fetchCateringValues = () => axios.get('/appapi.php?c=Merchantapp&a=select_meal_store', {
   params: {
@@ -166,12 +175,41 @@ export const modifyRetail = payload => {
   })
 }
 
+export const goodsSpread = payload => {
+  const body = {}
+  Object.keys(payload).forEach(item => {
+    body[item] = payload[item]
+  })
+  return axios.post('/appapi.php?c=Merchantapp&a=goods_spread', {
+    ...body,
+    ticket: localStorage.getItem('ticket'),
+  })
+}
+
+export const goodsDiscounts = payload => {
+  const body = {}
+  Object.keys(payload).forEach(item => {
+    body[item] = payload[item]
+  })
+  return axios.post('/appapi.php?c=Merchantapp&a=goods_discount', {
+    ...body,
+    ticket: localStorage.getItem('ticket'),
+  })
+}
+
+export const fetchUserLevel = (storeId, goodid) => axios.post('/appapi.php?c=Merchantapp&a=user_level', {
+  store_id: storeId,
+  goods_id: goodid,
+  ticket: localStorage.getItem('ticket'),
+})
+
 // 餐饮删除
 export const fetchCateringDelete = (storeId, mealId) => axios.post('/appapi.php?c=Merchantapp&a=mdel', {
   store_id: storeId,
   meal_id: mealId,
   ticket: localStorage.getItem('ticket'),
 })
+
 
 // 零售商店
 export const fetchRetailValues = () => axios.get('/appapi.php?c=Merchantapp&a=select_shop_store', {
@@ -204,6 +242,13 @@ export const fetchRetailMeal = storeId => axios.get('/appapi.php?c=Merchantapp&a
   },
 })
 
+// 零售会员分组
+export const fetchCardGroupAll = () => axios.get('/appapi.php?c=Merchantapp&a=card_group_all', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
 // 零售删除
 export const fetchRetailDelete = (storeId, goodsId) => axios.post('/appapi.php?c=Merchantapp&a=goods_del', {
   store_id: storeId,
@@ -214,6 +259,37 @@ export const fetchRetailDelete = (storeId, goodsId) => axios.post('/appapi.php?c
 // 店铺列表
 export const fetchShopList = () => axios.get('/appapi.php?c=Merchantapp&a=get_store', {
   params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 优惠券
+export const fetchGiftVoucher = () => axios.get('/appapi.php?c=Merchantapp&a=select_card_coupon', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+
+// 商城商品分类
+export const fetchGoodsSort = storeId => axios.get('/appapi.php?c=Merchantapp&a=select_goods_sort', {
+  params: {
+    store_id: storeId,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 运费模板列表
+export const fetchExpressLists = () => axios.get('/appapi.php?c=Merchantapp&a=select_express_lists', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 模板名称
+export const fetchExpressDetail = tid => axios.get('/appapi.php?c=Merchantapp&a=express_detail', {
+  params: {
+    tid,
     ticket: localStorage.getItem('ticket'),
   },
 })

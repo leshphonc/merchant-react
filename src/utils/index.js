@@ -44,6 +44,7 @@ export default {
     }
     return val.substr(1)
   },
+  // 富文本编辑器上传图片
   edtiorUploadImg(arr) {
     return new Promise(resolve => {
       arr.forEach((item, index) => {
@@ -58,6 +59,7 @@ export default {
       })
     })
   },
+  // 上传数组图片
   compressionAndUploadImgArr(arr) {
     arr.forEach((item, index) => {
       if (item.file) {
@@ -70,6 +72,7 @@ export default {
     })
     return arr
   },
+  // 上传单个图片
   compressionAndUploadImg(blob) {
     return new Promise((resolve, reject) => {
       /* eslint no-new: 0 */
@@ -101,6 +104,7 @@ export default {
       })
     })
   },
+  // 将 10:10:10 转成date供插件使用
   conversionTimeStringToDate(str) {
     const date = new Date()
     date.setHours(str.substr(0, 2))
@@ -108,6 +112,7 @@ export default {
     date.setSeconds(str.substr(6, 2))
     return date
   },
+  // 微信分享
   initShareInfo(wx) {
     const shareInfo = {
       title: '分享标题', // 分享标题
@@ -129,6 +134,7 @@ export default {
     // 分享到QQ空间（即将废弃 now:2019.6.22）
     wx.onMenuShareQZone(shareInfo)
   },
+  // 公用正则
   matchExp(rule, value) {
     const REGS = {
       name: '/^[\\u4e00-\\u9fa5A-Za-z()]+$/',

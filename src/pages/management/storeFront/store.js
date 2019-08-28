@@ -33,6 +33,10 @@ class StoreFrontStore {
 
   @observable eCommerceDetail = {}
 
+  @observable takeawayDetail = {}
+
+  @observable qrCode = ''
+
   // 商铺列表
   @action
   fetchStoreList = async () => {
@@ -362,7 +366,53 @@ class StoreFrontStore {
   modifyECommerceDetail = async payload => {
     const response = await services.modifyECommerceDetail(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      console.log(response.data)
+      runInAction(() => {
+        this.eCommerceDetail = {}
+      })
+      return Promise.resolve(true)
+    }
+  }
+
+  // 外卖详情配置获取
+  @action
+  fetchTakeawayDetail = async id => {
+    const response = await services.fetchTakeawayDetail(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.takeawayDetail = response.data.result
+      })
+    }
+  }
+
+  // 外卖详情配置编辑
+  @action
+  modifyTakeawayDetail = async payload => {
+    const response = await services.modifyTakeawayDetail(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.takeawayDetail = {}
+      })
+      return Promise.resolve(true)
+    }
+  }
+
+  // 克隆商品
+  @action
+  cloneCommodity = async (id, ids) => {
+    const response = await services.cloneCommodity(id, ids)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 获取二维码
+  @action
+  fetchQrcode = async id => {
+    const response = await services.fetchQrcode(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.qrCode = response.data.result
+      })
     }
   }
 }

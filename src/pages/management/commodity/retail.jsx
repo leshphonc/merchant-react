@@ -3,8 +3,16 @@ import NavBar from '@/common/NavBar'
 import { Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
+import { createForm } from 'rc-form'
 import {
-  SearchBar, Picker, List, WhiteSpace, PullToRefresh, WingBlank, Button,
+  SearchBar,
+  Picker,
+  List,
+  WhiteSpace,
+  PullToRefresh,
+  WingBlank,
+  Button,
+  Switch,
 } from 'antd-mobile'
 // import CardList from './components/Retail'
 // import { CateringList } from '@/config/list'
@@ -14,6 +22,8 @@ import {
 } from '@/styled'
 
 const { Item } = List
+
+@createForm()
 @inject('commodity')
 @observer
 class Retail extends React.Component {
@@ -32,7 +42,6 @@ class Retail extends React.Component {
     const { commodity } = this.props
     const { retailList } = commodity
     const { height } = this.state
-    // commodity.fetchRetailList()
     commodity.fetchRetailValues()
     if (this.refresh.current) {
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
@@ -41,12 +50,8 @@ class Retail extends React.Component {
       })
     }
     commodity.fetchRetailList().then(() => {
-      this.setState({
-        storeValue: commodity.retailValues[0].value,
-      }, () => {
-        const { storeValue } = this.state
-        if (!retailList.length) commodity.fetchRetailList(storeValue)
-      })
+      console.log(retailList)
+      this.setState({})
     })
     /* eslint react/no-find-dom-node: 0 */
   }
@@ -78,62 +83,77 @@ class Retail extends React.Component {
                 {item.s_name}
               </div>
               <WhiteSpace />
-              <div
-                className="top-features"
-                style={{ position: 'initial', fontSize: '14px', color: '#fb6a41' }}
-              >
+              <WhiteSpace />
+              <div className="top-features" style={{ position: 'initial', fontSize: '14px' }}>
                 售价: {item.price} 元
               </div>
               <WhiteSpace />
-              <div
-                className="top-features"
-                style={{ position: 'initial', fontSize: '14px', color: '#fb6a41' }}
-              >
-                状态: {item.statusstr}
+              <div className="top-features" style={{ position: 'initial', fontSize: '14px' }}>
+                库存: {item.stock_num}
               </div>
+              <WhiteSpace />
               <div className="top-features" style={{ position: 'initial' }}>
                 已售出: {item.sell_count}
               </div>
               <WhiteSpace />
-              <Buttons>
-                <Button
-                  style={{ display: 'inline-block' }}
-                  onClick={() => this.stand(item.goods_id, item.status, item.store_id)}
-                >
-                  <i className="iconfont" style={{ color: '#ffb000' }}>
-                    &#xe645;
-                  </i>
-                  {item.statusoptstr}
-                </Button>
-              </Buttons>
-              <Buttons>
-                <Button
-                  style={{ display: 'inline-block', marginLeft: '20px' }}
-                  onClick={() => this.detele(item.goods_id, item.store_id)}
-                >
-                  <i className="iconfont" style={{ color: '#ffb000' }}>
-                    &#xe621;
-                  </i>
-                  删除
-                </Button>
-              </Buttons>
-              <Buttons>
-                <Button
-                  type="button"
-                  style={{ color: '#333', marginLeft: '20px' }}
-                  onClick={() => history.push(
-                    `/management/commodity/retailPanel/编辑/${item.store_id}/${item.goods_id}/`,
-                  )
-                  }
-                >
-                  <i className="iconfont" style={{ color: '#ffb000', marginRight: 5 }}>
-                    &#xe634;
-                  </i>
-                  编辑
-                </Button>
-              </Buttons>
+              <Item
+                extra={
+                  <Switch
+                    checked={item.status === '1'}
+                    onClick={() => this.stand(item.goods_id, item.status, item.store_id)}
+                  />
+                }
+              >
+                状态
+              </Item>
             </TopContent>
           </ItemTop>
+          <Item>
+            <Buttons>
+              {/* <Button
+                style={{ display: 'inline-block', color: '#fff' }}
+                onClick={() => this.stand(item.goods_id, item.status, item.store_id)}
+              >
+                {item.statusoptstr}
+              </Button> */}
+              <Button
+                style={{ display: 'inline-block', color: '#fff', marginLeft: '15px' }}
+                onClick={() => this.detele(item.goods_id, item.store_id)}
+              >
+                删除
+              </Button>
+              <Button
+                type="button"
+                style={{ display: 'inline-block', color: '#fff', marginLeft: '15px' }}
+                onClick={() => history.push(
+                  `/management/commodity/retailPanel/编辑/${item.store_id}/${item.goods_id}/`,
+                )
+                }
+              >
+                编辑
+              </Button>
+              <Button
+                type="button"
+                style={{ display: 'inline-block', color: '#fff', marginLeft: '15px' }}
+                onClick={() => history.push(
+                  `/management/commodity/retailDiscounts/编辑/${item.store_id}/${item.goods_id}/`,
+                )
+                }
+              >
+                优惠
+              </Button>
+              <Button
+                type="button"
+                style={{ display: 'inline-block', color: '#fff', marginLeft: '15px' }}
+                onClick={() => history.push(
+                  `/management/commodity/retailSpread/编辑/${item.store_id}/${item.goods_id}/`,
+                )
+                }
+              >
+                佣金
+              </Button>
+            </Buttons>
+          </Item>
         </ListItem>
         <WhiteSpace size="sm" />
       </React.Fragment>
@@ -168,8 +188,20 @@ class Retail extends React.Component {
     const { retailListTotal, retailValues } = commodity
     return (
       <React.Fragment>
-        <NavBar title="零售商品管理" goBack />
-        <SearchBar placeholder="商品名称" maxLength={8} />
+        <NavBar
+          title="零售商品管理"
+          goBack
+          right={
+            <Link style={{ color: '#fff' }} to="/management/commodity/retailPanel/添加">
+              添加
+            </Link>
+          }
+        />
+        <SearchBar
+          placeholder="商品名称"
+          maxLength={8}
+          onChange={name => commodity.fetchRetailLists(name)}
+        />
         <WingBlank>
           <FilterBox style={{ marginRight: 5 }}>
             <Picker
@@ -191,7 +223,7 @@ class Retail extends React.Component {
         {retailListTotal < 10 ? (
           <React.Fragment>
             <WhiteSpace />
-            <WingBlank size="sm" style={{ paddingBottom: '12vw' }}>{this.mapList()}</WingBlank>
+            <WingBlank size="sm">{this.mapList()}</WingBlank>
           </React.Fragment>
         ) : (
           <PullToRefresh
@@ -206,31 +238,9 @@ class Retail extends React.Component {
             onRefresh={this.loadMore}
           >
             <WhiteSpace />
-            <WingBlank size="sm" style={{ paddingBottom: '22vw' }}>{this.mapList()}</WingBlank>
+            <WingBlank size="sm">{this.mapList()}</WingBlank>
           </PullToRefresh>
         )}
-        {/* <div style={{ height: '12vw' }}>&nbsp;</div> */}
-        <List style={{ position: 'fixed', bottom: '0', width: '100%' }}>
-          <div
-            style={{
-              fontWeight: 'bold',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-around',
-              background: '#ffb000',
-              zIndex: '1000',
-            }}
-          >
-            <Link to="/management/commodity/retailPanel/添加">
-              <Item style={{ paddingLeft: '0', background: '#ffb000' }}>
-                <i className="iconfont" style={{ marginRight: '6px' }}>
-                  &#xe61e;
-                </i>
-                添加商品
-              </Item>
-            </Link>
-          </div>
-        </List>
       </React.Fragment>
     )
   }

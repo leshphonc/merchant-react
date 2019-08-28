@@ -10,16 +10,7 @@ class StoreFrontBusiness extends React.Component {
   componentDidMount() {
     Utils.clearCacheData()
     console.log(123)
-    // const { storeFront, match } = this.props
-    // console.log(match)
-    // storeFront.fetchBusinessList(match.params.id)
   }
-
-  // mapList = () => {
-  //   const { storeFront } = this.props
-  //   const { storeBusiness } = storeFront
-  //   return storeBusiness.map(item => <List.Item key={item.id}>123</List.Item>)
-  // }
 
   render() {
     const { match, history } = this.props
@@ -39,7 +30,17 @@ class StoreFrontBusiness extends React.Component {
               电商配置
             </List.Item>
           ) : null}
-          {match.params.peisong - 0 ? <List.Item arrow="horizontal">外卖配置</List.Item> : null}
+          {match.params.peisong - 0 ? (
+            <List.Item
+              arrow="horizontal"
+              onClick={() => history.push(
+                `/management/storefront/storeFrontBusiness/TakeawayPanel/${match.params.id}`,
+              )
+              }
+            >
+              外卖配置
+            </List.Item>
+          ) : null}
         </List>
       </React.Fragment>
     )

@@ -150,7 +150,36 @@ export const fetchECommerceDetail = id => axios.get('/appapi.php?c=Merchantapp&a
 })
 
 // 电商详情配置编辑
-export const modifyECommerceDetail = payload => axios.post('/appapi.php?c=Merchantapp&a=shop_detail', {
+export const modifyECommerceDetail = payload => axios.post('/appapi.php?c=Merchantapp&a=shop_edit', {
   ...payload,
   ticket: localStorage.getItem('ticket'),
+})
+
+// 外卖详情配置获取
+export const fetchTakeawayDetail = id => axios.get('/appapi.php?c=Merchantapp&a=shop_detail', {
+  params: {
+    store_id: id,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 外卖详情配置编辑
+export const modifyTakeawayDetail = payload => axios.post('/appapi.php?c=Merchantapp&a=shop_edit', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 克隆商品
+export const cloneCommodity = (id, ids) => axios.post('/appapi.php?c=Merchantapp&a=clone_goods', {
+  store_id: id,
+  store_ids: ids,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 二维码
+export const fetchQrcode = id => axios.get('/appapi.php?c=Merchantapp&type=merchantstore&a=see_qrcode', {
+  params: {
+    id,
+    ticket: localStorage.getItem('ticket'),
+  },
 })
