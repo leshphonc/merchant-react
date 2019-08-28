@@ -53,7 +53,7 @@ export default () => (
       <Route path="/uploadSingleImg/:title/:key/:ratio" component={UploadSingleImg} />
       <Route path="/uploadMultipleImg/:title/:key/:ratio" component={UploadMultipleImg} />
       {/* 坐标拾取页面 */}
-      <Route path="/coordinatePicker/:lng/:lat" component={CoordinatePicker} />
+      <Route path="/coordinatePicker/:lng?/:lat?" component={CoordinatePicker} />
     </HashRouter>
   </Provider>
 )

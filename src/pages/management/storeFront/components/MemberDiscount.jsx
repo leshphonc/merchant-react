@@ -55,6 +55,7 @@ class MemberDiscount extends React.Component {
         item.type = `${data.leveloff[index].type}`
         item.vv = `${data.leveloff[index].vv}`
       }
+      return null
     })
     this.setState({
       leveloff: obj,

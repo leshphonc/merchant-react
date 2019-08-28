@@ -13,6 +13,7 @@ import shopAssistant from '@/pages/popularize/shopAssistant/store'
 import member from '@/pages/management/member/store'
 import commodity from '@/pages/management/commodity/store'
 import shopManager from '@/pages/management/shopManager/store'
+import redEnvelop from '@/pages/popularize/redEnvelope/store'
 
 class CommonStore {
   @observable openid = ''
@@ -51,6 +52,7 @@ const stores = {
   basicInformation,
   shopAssistant,
   member,
+  redEnvelop,
   commodity,
   shopManager,
 }

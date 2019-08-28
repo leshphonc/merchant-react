@@ -24,6 +24,7 @@ class RedEnvelopStore {
       this.redEnvelopListPage,
       this.redEnvelopListSize,
     )
+    debugger
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {

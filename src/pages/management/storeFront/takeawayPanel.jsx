@@ -127,7 +127,6 @@ class TakeawayPanel extends React.Component {
     const { getFieldProps } = form
     const { qrcode, modal } = this.state
     const invoice = form.getFieldValue('is_invoice')
-    const fee = form.getFieldValue('reach_delivery_fee_type')
     return (
       <React.Fragment>
         <NavBar title="外卖详情配置" goBack />

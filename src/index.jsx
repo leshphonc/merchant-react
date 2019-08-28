@@ -15,25 +15,31 @@ axios.interceptors.request.use(
     config.data = qs.stringify(config.data) // 转为formdata数据格式
     return config
   },
-  error => Promise.error(error),
+  error => Promise.reject(error),
 )
 
-axios.interceptors.response.use(config => {
-  Toast.hide()
-  if (config.data.errorCode !== ErrorCode.SUCCESS) {
-    if (
-      config.data.errorCode === ErrorCode.NOTICKET
-      || config.data.errorCode === ErrorCode.TIMEOUT
-    ) {
-      window.location.href = '/newpage/#/login'
+axios.interceptors.response.use(
+  config => {
+    Toast.hide()
+    if (config.data.errorCode !== ErrorCode.SUCCESS) {
+      if (
+        config.data.errorCode === ErrorCode.NOTICKET
+        || config.data.errorCode === ErrorCode.TIMEOUT
+      ) {
+        window.location.href = '/newpage/#/login'
+      }
+      if (config.data.error === ErrorCode.SUCCESS) {
+        return config
+      }
+      Toast.fail(config.data.errorMsg, 2)
     }
-    if (config.data.error === ErrorCode.SUCCESS) {
-      return config
-    }
-    Toast.fail(config.data.errorMsg, 2)
-  }
-  return config
-})
+    return config
+  },
+  error => {
+    Toast.fail('网络错误，请刷新页面重试')
+    return Promise.reject(error)
+  },
+)
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
