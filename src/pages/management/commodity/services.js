@@ -17,6 +17,22 @@ export const fetchGroupMealAdd = (title, description) => axios.post('/appapi.php
   ticket: localStorage.getItem('ticket'),
 })
 
+// 团购详情
+export const fetchGroupDetail = goodid => axios.get('/appapi.php?c=Merchantapp&a=get_group_detail', {
+  params: {
+    group_id: goodid,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 团购分类
+export const fetchGroupCat = catfid => axios.get('/appapi.php?c=Merchantapp&a=group_category', {
+  params: {
+    cat_fid: catfid,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
 // 预定列表
 export const fetchReserveList = (page, size) => axios.get('/appapi.php?c=Merchantapp&a=apro', {
   params: {
@@ -240,12 +256,20 @@ export const fetchRetailDelete = (storeId, goodsId) => axios.post('/appapi.php?c
   ticket: localStorage.getItem('ticket'),
 })
 
+// 店铺列表
+export const fetchShopList = () => axios.get('/appapi.php?c=Merchantapp&a=get_store', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
 // 优惠券
 export const fetchGiftVoucher = () => axios.get('/appapi.php?c=Merchantapp&a=select_card_coupon', {
   params: {
     ticket: localStorage.getItem('ticket'),
   },
 })
+
 
 // 商城商品分类
 export const fetchGoodsSort = storeId => axios.get('/appapi.php?c=Merchantapp&a=select_goods_sort', {

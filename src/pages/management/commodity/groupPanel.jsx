@@ -19,8 +19,9 @@ import E from 'wangeditor'
 // import CropperImg from '@/common/CropperImg'
 import { createForm } from 'rc-form'
 import {
-  Center, Right, Team, Editor,
+ Team, Editor,
 } from './styled'
+import { toJS } from 'mobx'
 // import { CustomizeList, ListTitle, ListContent } from '@/styled'
 
 const { Item } = List
@@ -53,7 +54,19 @@ const share = [
     },
   ],
 ]
-const member = [
+const stockreduce = [
+    [
+        {
+          label:'支付成功后减库存',
+          value:'0'
+        },
+        {
+            label:'下单成功后减库存',
+            value:'1'
+        }
+    ]
+]
+/*const member = [
   [
     {
       label: '无优惠',
@@ -68,8 +81,8 @@ const member = [
       value: '2015',
     },
   ],
-]
-const member1 = [
+]*/
+/*const member1 = [
   [
     {
       label: '无优惠',
@@ -84,8 +97,8 @@ const member1 = [
       value: '2015',
     },
   ],
-]
-const member2 = [
+]*/
+/*const member2 = [
   [
     {
       label: '无优惠',
@@ -132,8 +145,8 @@ const member4 = [
       value: '2015',
     },
   ],
-]
-const setMeal = [
+]*/
+/*const setMeal = [
   [
     {
       label: '不加入任何套餐',
@@ -144,7 +157,7 @@ const setMeal = [
       value: '2014',
     },
   ],
-]
+]*/
 const times = [
   [
     {
@@ -161,16 +174,16 @@ const times = [
     },
   ],
 ]
-const datas = [
-  {
-    url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
-    id: '2121',
-  },
-  {
-    url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
-    id: '2122',
-  },
-]
+// const datas = [
+//   {
+//     url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
+//     id: '2121',
+//   },
+//   {
+//     url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
+//     id: '2122',
+//   },
+// ]
 
 @createForm()
 @inject('commodity')
@@ -193,8 +206,14 @@ class GroupPanel extends React.Component {
       member3Value: '',
       member4Value: '',
       setMealValue: '',
-      files: datas,
+      files: [],
       editorContent: '',
+      stockreduce:[],
+      groupCatFir: [],
+      groupCatSec: [],
+      cat_fid:'',
+      cat_id:'',
+      des:''
     }
     this.editor = React.createRef()
   }
@@ -204,10 +223,38 @@ class GroupPanel extends React.Component {
     // this.setState({
     //   editorContent: history.location.state.value,
     // })
-    // const { commodity, match } = this.props
-    // if(match.params.id) {
-    //   commodity
-    // }
+    const { commodity, match } = this.props
+    if(match.params.id) {
+        commodity.fetchGroupDetail(match.params.id).then(()=>{
+            const { groupDetail } = commodity
+            this.setState({
+                files:toJS(groupDetail).pic_arr,
+                cat_fid:toJS(groupDetail).cat_fid,
+                cat_id:toJS(groupDetail).cat_id,
+            })
+            commodity.fetchGroupCat(this.state.cat_fid).then(()=>{
+                const { groupCatSec } = commodity
+                this.setState({
+                    groupCatSec:toJS(groupCatSec)
+                })
+            })
+        })
+
+        commodity.fetchGroupCat(0).then(()=>{
+            const { groupCatFir } = commodity
+            this.setState({
+                groupCatFir:toJS(groupCatFir)
+            })
+        })
+        commodity.fetchShopList().then(() => {
+          const { shopList } = commodity
+            console.log(toJS(shopList))
+        })
+    }else{
+
+    }
+
+
     const editor = new E(this.editor.current)
     // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
     editor.customConfig.onchange = html => {
@@ -263,41 +310,28 @@ class GroupPanel extends React.Component {
     const { match, form } = this.props
     const { getFieldProps } = form
     const { files } = this.state
+    const { commodity } =this.props
+    const { groupCatFir, groupCatSec } = commodity
+    console.log(groupCatFir)
     const {
       // startdate,
       // enddate,
       checked,
       selectValue,
+      cat_fid,
+      cat_id,
       timees,
-      distribution,
       statusValue,
       typeValue,
-      memberValue,
-      member1Value,
-      member2Value,
-      member3Value,
-      member4Value,
-      setMealValue,
+      des
     } = this.state
-    const data = [
-      { value: 0, label: '同城百商联盟 - 下城区-跨贸小镇100幢' },
-      { value: 1, label: '同城百商联盟 - 下城区-跨贸小镇101幢' },
-      { value: 2, label: '同城百商联盟 - 下城区-跨贸小镇102幢' },
-    ]
+    const { shopList } = commodity
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}团购商品`} goBack />
         <List>
           <InputItem
             {...getFieldProps('name', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请填写商品标题"
-          >
-            商品标题
-          </InputItem>
-          <InputItem
-            {...getFieldProps('s_name', {
               rules: [{ required: true }],
             })}
             placeholder="请填写商品名称"
@@ -313,14 +347,6 @@ class GroupPanel extends React.Component {
             rows={4}
             count={80}
           />
-          <InputItem
-            {...getFieldProps('keywords', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请填写关键词，最多5个"
-          >
-            关键词
-          </InputItem>
           <List.Item
             extra={
               <Switch
@@ -353,26 +379,6 @@ class GroupPanel extends React.Component {
             placeholder="请填写团购价，最多一位小数"
           >
             团购价
-          </InputItem>
-          <InputItem
-            {...getFieldProps('wx_cheap', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请填写优惠数值，单位元"
-          >
-            微信优惠
-            <Tooltip
-              trigger="click"
-              placement="topLeft"
-              overlay="最多支持一位小数，不填则不显示微信优惠！实际购买价=(团购价 - 微信优惠价)"
-              onClick={e => {
-                e.stopPropagation()
-              }}
-            >
-              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                &#xe628;
-              </i>
-            </Tooltip>
           </InputItem>
           <DatePicker
             {...getFieldProps('begin_time', {
@@ -416,12 +422,70 @@ class GroupPanel extends React.Component {
               </Tooltip>
             </Item>
           </DatePicker>
+          <Picker
+              data={type}
+              cascade={false}
+              extra="请选择"
+              value={[typeValue]}
+              onChange={v => {
+                  console.log(v)
+                  this.setState({
+                      typeValue: v[0],
+                  })
+              }}
+          >
+            <List.Item arrow="horizontal">
+              团购类型
+              <Tooltip
+                  trigger="click"
+                  placement="topLeft"
+                  overlay="如果是团购券或代金券,则会生成券密码;如果是实物,则需要填写快递单号"
+                  onClick={e => {
+                      e.stopPropagation()
+                  }}
+              >
+                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  &#xe628;
+                </i>
+              </Tooltip>
+            </List.Item>
+
+          </Picker>
+          <List.Item
+              extra={
+                <Switch
+                    {...getFieldProps('status', {
+                        rules: [{ required: true }],
+                    })}
+                    checked={statusValue}
+                    onChange={() => {
+                        this.setState({
+                            statusValue: !statusValue,
+                        })
+                    }}
+                />
+              }
+          >
+            是否自提
+            <Tooltip
+                trigger="click"
+                placement="topLeft"
+                overlay="为了方便用户能查到以前的订单，团购无法删除！"
+                onClick={e => {
+                    e.stopPropagation()
+                }}
+            >
+              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                &#xe628;
+              </i>
+            </Tooltip>
+          </List.Item>
           <DatePicker
             {...getFieldProps('deadline_time', {
               rules: [{ required: true }],
             })}
           >
-            <Item arrow="horizontal">优惠券有效期</Item>
+            <Item arrow="horizontal">团购券有效期</Item>
           </DatePicker>
           <Picker
             {...getFieldProps('is_general', {
@@ -438,23 +502,6 @@ class GroupPanel extends React.Component {
           >
             <Item arrow="horizontal">使用时间限制</Item>
           </Picker>
-          <List.Item
-            extra={
-              <Switch
-                {...getFieldProps('is_fx', {
-                  rules: [{ required: true }],
-                })}
-                checked={distribution}
-                onChange={() => {
-                  this.setState({
-                    distribution: !distribution,
-                  })
-                }}
-              />
-            }
-          >
-            是否发布到分销市场
-          </List.Item>
           <Picker
             {...getFieldProps('fx_type', {
               rules: [{ required: true }],
@@ -510,43 +557,64 @@ class GroupPanel extends React.Component {
               </i>
             </Tooltip>
           </List.Item>
+          <Picker
+              {...getFieldProps('cat_fid', {
+                  rules: [{ required: true }],
+              })}
+              data={groupCatFir}
+              value={[cat_fid]}
+              cols={1}
+              extra="请选择"
+              onOk={v => {
+                  this.setState({
+                      cat_fid:v[0],
+                  })
+                  commodity.fetchGroupCat(v[0]).then(()=>{
+                      const { groupCatSec } = commodity
+                      this.setState({
+                          groupCatSec:toJS(groupCatSec)
+                      })
+                  })
+              }}
+          >
+            <List.Item arrow="horizontal">
+              选择分类
+            </List.Item>
+
+          </Picker>
+          <Picker
+              {...getFieldProps('cat_id', {
+                  rules: [{ required: true }],
+              })}
+              value={[cat_id]}
+              data={groupCatSec}
+              cols={1}
+              extra="请选择"
+              onOk={v => {
+                  this.setState({
+                      cat_id:v[0],
+                  })
+              }}
+          >
+            <List.Item arrow="horizontal">
+              选择子分类
+            </List.Item>
+
+          </Picker>
           <Item>选择店铺</Item>
-          {data.map(i => (
+          {shopList.map(i => (
             <CheckboxItem key={i.value}>
               {i.label}
             </CheckboxItem>
           ))}
-          <Picker
-            data={type}
-            cascade={false}
-            extra="请选择"
-            value={[typeValue]}
-            onChange={v => {
-              this.setState({
-                typeValue: v[0],
-              })
-            }}
-          >
-            <List.Item arrow="horizontal">
-              团购类型
-              <Tooltip
-                trigger="click"
-                placement="topLeft"
-                overlay="如果是团购券或代金券,则会生成券密码;如果是实物,则需要填写快递单号"
-                onClick={e => {
-                  e.stopPropagation()
-                }}
-              >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                  &#xe628;
-                </i>
-              </Tooltip>
-            </List.Item>
-          </Picker>
           <Item>
             本单详情
             <Editor>
-              <div ref={this.editor} className="editor" />
+              <div
+                  ref={this.editor}
+                  className="editor"
+                  value={des}
+              />
             </Editor>
           </Item>
           <div>
@@ -563,184 +631,19 @@ class GroupPanel extends React.Component {
           </div>
           <Item>
             <div style={{ whiteSpace: 'initial', color: '#ea6161' }}>
-              说明：必须设置一个会员等级优惠类型和优惠类型对应的数值，我们将结合优惠类型和所填的数值来计算该商品会员等级的优惠的幅度！
-            </div>
-          </Item>
-          <Item>
-            白银会员 优惠类型
-            <Center>
-              <Picker
-                data={member}
-                cascade={false}
-                extra="请选择"
-                value={memberValue}
-                onChange={v => {
-                  this.setState({
-                    memberValue: v,
-                  })
-                }}
-              >
-                <List.Item arrow="horizontal" />
-              </Picker>
-            </Center>
-            <Right>
-              <InputItem
-                defaultValue=""
-                placeholder="请填写优惠数值"
-                style={{ display: 'inline-block' }}
-              />
-            </Right>
-          </Item>
-          <Item>
-            黄金会员 优惠类型
-            <Center>
-              <Picker
-                data={member1}
-                cascade={false}
-                extra="请选择"
-                value={member1Value}
-                onChange={v => {
-                  this.setState({
-                    member1Value: v,
-                  })
-                }}
-              >
-                <List.Item arrow="horizontal" />
-              </Picker>
-            </Center>
-            <Right>
-              <InputItem
-                defaultValue=""
-                placeholder="请填写优惠数值"
-                style={{ display: 'inline-block' }}
-              />
-            </Right>
-          </Item>
-          <Item>
-            城市合伙人 优惠类型
-            <Center>
-              <Picker
-                data={member2}
-                cascade={false}
-                extra="请选择"
-                value={member2Value}
-                onChange={v => {
-                  this.setState({
-                    member2Value: v,
-                  })
-                }}
-              >
-                <List.Item arrow="horizontal" />
-              </Picker>
-            </Center>
-            <Right>
-              <InputItem
-                defaultValue=""
-                placeholder="请填写优惠数值"
-                style={{ display: 'inline-block' }}
-              />
-            </Right>
-          </Item>
-          <Item>
-            区域合伙人 优惠类型
-            <Center>
-              <Picker
-                data={member3}
-                cascade={false}
-                extra="请选择"
-                value={member3Value}
-                onChange={v => {
-                  this.setState({
-                    member3Value: v,
-                  })
-                }}
-              >
-                <List.Item arrow="horizontal" />
-              </Picker>
-            </Center>
-            <Right>
-              <InputItem
-                defaultValue=""
-                placeholder="请填写优惠数值"
-                style={{ display: 'inline-block' }}
-              />
-            </Right>
-          </Item>
-          <Item>
-            总部合伙人 优惠类型
-            <Center>
-              <Picker
-                data={member4}
-                cascade={false}
-                extra="请选择"
-                value={member4Value}
-                onChange={v => {
-                  this.setState({
-                    member4Value: v,
-                  })
-                }}
-              >
-                <List.Item arrow="horizontal" />
-              </Picker>
-            </Center>
-            <Right>
-              <InputItem
-                defaultValue=""
-                placeholder="请填写优惠数值"
-                style={{ display: 'inline-block' }}
-              />
-            </Right>
-          </Item>
-          <Item>
-            <div style={{ whiteSpace: 'initial', color: '#ea6161' }}>
               说明：一个团购商品只能参与一个套餐！
             </div>
           </Item>
           <Team>
-            <InputItem placeholder="必须填写 (例如：3-4人)" style={{ width: '100%' }}>
-              本团购套餐标签1
-            </InputItem>
-          </Team>
-          <Picker
-            data={setMeal}
-            cascade={false}
-            extra="请选择"
-            value={setMealValue}
-            onChange={v => {
-              this.setState({
-                setMealValue: v,
-              })
-            }}
-          >
-            <List.Item arrow="horizontal">选择加入套餐</List.Item>
-          </Picker>
-          <Team>
-            <InputItem defaultValue="1" placeholder="请填写人数">
-              成功团购人数要求
-              <Tooltip
-                trigger="click"
-                placement="topLeft"
-                overlay="最少需要多少人购买才算团购成功"
-                onClick={e => {
-                  e.stopPropagation()
-                }}
-              >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                  &#xe628;
-                </i>
-              </Tooltip>
-            </InputItem>
-          </Team>
-          <Team>
             <InputItem defaultValue="0" placeholder="请填写商品数量">
               商品总数量
               <Tooltip
-                trigger="click"
-                placement="topLeft"
-                overlay="0表示不限制,否则产品会出现“已卖光”状态"
-                onClick={e => {
-                  e.stopPropagation()
-                }}
+                  trigger="click"
+                  placement="topLeft"
+                  overlay="0表示不限制,否则产品会出现“已卖光”状态"
+                  onClick={e => {
+                      e.stopPropagation()
+                  }}
               >
                 <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
                   &#xe628;
@@ -752,12 +655,12 @@ class GroupPanel extends React.Component {
             <InputItem defaultValue="0" placeholder="请填写购买数量">
               ID最多购买数量
               <Tooltip
-                trigger="click"
-                placement="topLeft"
-                overlay="一个ID最多购买数量,0表示不限制"
-                onClick={e => {
-                  e.stopPropagation()
-                }}
+                  trigger="click"
+                  placement="topLeft"
+                  overlay="一个ID最多购买数量,0表示不限制"
+                  onClick={e => {
+                      e.stopPropagation()
+                  }}
               >
                 <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
                   &#xe628;
@@ -769,9 +672,80 @@ class GroupPanel extends React.Component {
             <InputItem defaultValue="1" placeholder="请填写购买数量">
               一次最少购买数量
               <Tooltip
+                  trigger="click"
+                  placement="topLeft"
+                  overlay="购买数量低于此设置不允许参团"
+                  onClick={e => {
+                      e.stopPropagation()
+                  }}
+              >
+                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  &#xe628;
+                </i>
+              </Tooltip>
+            </InputItem>
+          </Team>
+          <Picker
+              data={stockreduce}
+              cascade={false}
+              extra="请选择"
+              value={[selectValue]}
+              onChange={v => {
+                  this.setState({
+                      selectValue: v[0],
+                  })
+              }}
+          >
+            <List.Item arrow="horizontal">库存减少方式</List.Item>
+          </Picker>
+          <Team>
+            <InputItem {...getFieldProps('pin_num', {
+                rules: [{ required: true }],
+            })} placeholder="必须填写 (0表示不设置拼团)" style={{ width: '100%' }}>
+              拼团人数设置
+            </InputItem>
+          </Team>
+          <Team>
+            <InputItem
+                {...getFieldProps('start_discount', {
+                    rules: [{ required: true }],
+                })}
+                placeholder="团长优惠 0 为免费，100 为原价" style={{ width: '100%' }}>
+             团长优惠比例
+            </InputItem>
+          </Team>
+          <Team>
+            <InputItem
+                {...getFieldProps('group_refund_fee', {
+                    rules: [{ required: true }],
+                })}
+                defaultValue="0" placeholder="请填写人数">
+              退款手续费比例：
+              <Tooltip
+                  trigger="click"
+                  placement="topLeft"
+                  overlay="手续费将按单价百分比（0-100）收取,设置为100（成团前所有参团人也不可退）则不允许退款"
+                  onClick={e => {
+                      e.stopPropagation()
+                  }}
+              >
+                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  &#xe628;
+                </i>
+              </Tooltip>
+            </InputItem>
+          </Team>
+          <Team>
+            <InputItem
+                {...getFieldProps('pin_effective_time', {
+                    rules: [{ required: true }],
+                })}
+                defaultValue="1" placeholder="请填写人数">
+              成团有效期
+              <Tooltip
                 trigger="click"
                 placement="topLeft"
-                overlay="购买数量低于此设置不允许参团"
+                overlay="有效期内未成团团长不能取消订单，单位/时"
                 onClick={e => {
                   e.stopPropagation()
                 }}
@@ -782,6 +756,7 @@ class GroupPanel extends React.Component {
               </Tooltip>
             </InputItem>
           </Team>
+
           <WingBlank style={{ padding: '10px 0' }}>
             <Button type="primary" style={{ color: '#333', fontWeight: 'bold' }}>
               添加
