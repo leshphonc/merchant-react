@@ -13,11 +13,9 @@ import shopAssistant from '@/pages/popularize/shopAssistant/store'
 import member from '@/pages/management/member/store'
 import commodity from '@/pages/management/commodity/store'
 import shopManager from '@/pages/management/shopManager/store'
-<<<<<<< HEAD
 import redEnvelop from '@/pages/popularize/redEnvelope/store'
-=======
 import giftManagement from '@/pages/popularize/giftManagement/store'
->>>>>>> popularize-shop
+
 
 class CommonStore {
   @observable openid = ''
