@@ -52,7 +52,7 @@ class RetailAdd extends React.Component {
       const obj = {
         ...value,
         is_change: value.is_change[0],
-        business_id: value.business_id[0],
+        // business_id: value.business_id[0],
         type: value.type[0],
       }
       console.log(value)
@@ -132,12 +132,8 @@ class RetailAdd extends React.Component {
             {...getFieldProps('tel', {
               rules: [{ required: true }],
             })}
-            type="phone"
+            maxLength="11"
             placeholder="请填写员工手机号"
-            // error={hasError}
-            // onErrorClick={this.onErrorClick}
-            // onChange={this.onChange}
-            // value={value}
           >
             手机号
           </InputItem>
@@ -166,7 +162,7 @@ class RetailAdd extends React.Component {
           </Picker>
           <Picker
             {...getFieldProps('business_id', {
-              rules: [{ required: true }],
+              rules: [{ required: false }],
             })}
             data={businessList}
             cols={1}
@@ -176,7 +172,7 @@ class RetailAdd extends React.Component {
           </Picker>
           <InputItem
             {...getFieldProps('spread_rato', {
-              rules: [{ required: true }],
+              rules: [{ required: false }],
             })}
             extra="%"
             labelNumber={7}

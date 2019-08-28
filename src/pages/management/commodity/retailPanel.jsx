@@ -11,10 +11,8 @@ import {
   Button,
   ImagePicker,
   Toast,
-  // Switch,
+  Switch,
   Flex,
-  Menu,
-  ActivityIndicator,
   NavBar,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
@@ -27,28 +25,12 @@ import { Editor } from './styled'
 
 const { Item } = List
 const seasons = [{ label: '正常', value: '1' }, { label: '停售', value: '0' }]
-const isFx = [{ label: '是', value: '1' }, { label: '否', value: '0' }]
 const freightType = [{ label: '按最大值算', value: '0' }, { label: '单独计算', value: '1' }]
 const fxType = [{ label: '按固定金额', value: '0' }, { label: '按售价百分比', value: '1' }]
 const category = [
   { label: '实体商品', value: '0' },
   { label: '虚拟商品', value: '1' },
   { label: '虚拟商品(需配送)', value: '2' },
-]
-const data = [
-  {
-    value: '1',
-    label: 'Food',
-  },
-  {
-    value: '2',
-    label: 'Supermarket',
-  },
-  {
-    value: '3',
-    label: 'Extra',
-    isLeaf: true,
-  },
 ]
 @createForm()
 @inject('commodity')
@@ -63,8 +45,6 @@ class RetailAdd extends React.Component {
       // give: [],
       specification: [],
       // speciValue: [],
-      initData: '',
-      show: false,
     }
     this.editor = React.createRef()
   }
@@ -128,7 +108,7 @@ class RetailAdd extends React.Component {
         stort_id: [retailDetail.stort_id],
         goods_type: [retailDetail.goods_type],
         in_group: [retailDetail.in_group],
-        is_fx: [retailDetail.is_fx],
+        is_fx: retailDetail.is_fx === '1',
         fx_type: [retailDetail.fx_type],
         freight_type: [retailDetail.freight_type],
         freight_template: [retailDetail.freight_template],
@@ -162,34 +142,6 @@ class RetailAdd extends React.Component {
     })
   }
 
-  // changeSpeciValue = (val, index) => {
-  //   const { specification } = this.state
-  //   const cache = Object.assign([], specification)
-  //   // eslint-disable-next-line prefer-destructuring
-  //   cache[index].list = val
-  //   this.setState({
-  //     specification: cache,
-  //   })
-  // }
-
-  // mapSpeciValue = () => {
-  //   const { commodity } = this.props
-  //   const { speciValue } = this.state
-  //   // console.log(give)
-  //   return speciValue.map((item, index) => (
-  //     <React.Fragment key={item.value}>
-  //       <InputItem
-  //         defaultValue={item.goods}
-  //         placeholder="请输入属性值"
-  //         cols={1}
-  //         onChange={val => this.changeSpeciValue(val, index)}
-  //       >
-  //         规格属性值
-  //       </InputItem>
-  //     </React.Fragment>
-  //   ))
-  // }
-
   submit = () => {
     const {
       commodity, form, match, history,
@@ -207,7 +159,7 @@ class RetailAdd extends React.Component {
         status: value.status[0],
         sort_id: value.sort_id[0],
         goods_type: value.goods_type[0],
-        is_fx: value.is_fx[0],
+        is_fx: value.is_fx ? '1' : '0',
         fx_type: value.fx_type[0],
         freight_type: value.freight_type[0],
         freight_template: value.freight_template[0],
@@ -261,33 +213,6 @@ class RetailAdd extends React.Component {
     ))
   }
 
-  // mapTemplate = () => {
-  //   const { template } = this.state
-  //   // console.log(template)
-  //   return template.map((item, index) => (
-  //     <React.Fragment key={item.value}>
-  //       <InputItem
-  //         defaultValue={item.spec_name}
-  //         placeholder="请输入规则名称"
-  //         cols={1}
-  //         onChange={val => this.changeGiveValue(val, index)}
-  //       >
-  //         规格名称
-  //       </InputItem>
-  //       <InputItem
-  //         placeholder="请输入属性值"
-  //         defaultValue={item.spec_val}
-  //         onChange={val => this.changeGiveNum(val, index)}
-  //       >
-  //         规格属性值
-  //       </InputItem>
-  //       {/* <Item defaultValue={item.list} onChange={val => this.changeSpeciValue(val, index)}>
-  //         {this.mapSpeciValue()}
-  //       </Item> */}
-  //     </React.Fragment>
-  //   ))
-  // }
-
   imgChange = (arr, type) => {
     const { form } = this.props
     if (type === 'remove') {
@@ -314,42 +239,7 @@ class RetailAdd extends React.Component {
     })
   }
 
-  onChange = value => {
-    console.log(value)
-  }
-
-  onOk = value => {
-    console.log(value)
-    this.onCancel()
-  }
-
-  onCancel = () => {
-    this.setState({ show: false })
-  }
-
-  handleClick = e => {
-    e.preventDefault() // Fix event propagation on Android
-    this.setState({
-      show: !false,
-    })
-    // mock for async data loading
-    if (!this.state.initData) {
-      setTimeout(() => {
-        this.setState({
-          initData: data,
-        })
-      }, 500)
-    }
-  }
-
-  onMaskClick = () => {
-    this.setState({
-      show: false,
-    })
-  }
-
   render() {
-    const { initData, show } = this.state
     const { match, commodity, form } = this.props
     const {
       retailValues, retailMeal, goodsSort, expressLists,
@@ -357,92 +247,9 @@ class RetailAdd extends React.Component {
     const { getFieldProps } = form
     const { pic, specification } = this.state
     const fxTypeValue = form.getFieldValue('fx_type') ? form.getFieldValue('fx_type')[0] : ''
-    const menuEl = (
-      <Menu
-        className="single-multi-foo-menu"
-        data={initData}
-        // value={['1']}
-        level={1}
-        onChange={this.onChange}
-        onOk={this.onOk}
-        onCancel={this.onCancel}
-        height={document.documentElement.clientHeight * 0.6}
-        multiSelect
-      />
-    )
-    const loadingEl = (
-      <div
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: document.documentElement.clientHeight * 0.6,
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        <ActivityIndicator size="large" />
-      </div>
-    )
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}零售商品`} goBack />
-        <InputItem
-          {...getFieldProps('name', {
-            rules: [{ required: true }],
-          })}
-          placeholder="请输入模板名称"
-        >
-          模板名称
-        </InputItem>
-        <Flex style={{ textAlign: 'center' }}>
-          <Flex.Item>可配送区域</Flex.Item>
-          <Flex.Item>运费</Flex.Item>
-          <Flex.Item>满免</Flex.Item>
-        </Flex>
-        <Flex style={{ textAlign: 'center' }}>
-          <Flex.Item>111</Flex.Item>
-          <Flex.Item>222</Flex.Item>
-          <Flex.Item>33</Flex.Item>
-        </Flex>
-        <List style={{ display: 'block' }}>
-          <div className={show ? 'single-multi-menu-active' : ''}>
-            <div>
-              <NavBar
-                leftContent="Menu"
-                mode="light"
-                onLeftClick={this.handleClick}
-                className="single-multi-top-nav-bar"
-              >
-                Single Multi menu
-              </NavBar>
-            </div>
-            {show ? (initData ? menuEl : loadingEl) : null}
-            {show ? <div className="menu-mask" onClick={this.onMaskClick} /> : null}
-          </div>
-        </List>
-        {/* <List>
-          <List.Item
-            extra={
-              <Switch
-                {...getFieldProps('is_fx', {
-                  initialValue: checked1,
-                  valuePropName: 'checked',
-                  onChange: val => {
-                    console.log(val)
-                  },
-                })}
-                onClick={checked => {
-                  // set new value
-                  form.setFieldsValue({
-                    is_fx: checked,
-                  })
-                }}
-              />
-            }
-          >
-            On
-          </List.Item>
-        </List> */}
         <List>
           <InputItem
             {...getFieldProps('name', {
@@ -720,15 +527,19 @@ class RetailAdd extends React.Component {
           >
             <List.Item arrow="horizontal">运费计算方式</List.Item>
           </Picker>
-          <Picker
-            {...getFieldProps('is_fx', {
-              rules: [{ required: true }],
-            })}
-            data={isFx}
-            cols={1}
+          <List.Item
+            extra={
+              <Switch
+                {...getFieldProps('is_fx', {
+                  initialValue: false,
+                  valuePropName: 'checked',
+                  rules: [{ required: true }],
+                })}
+              />
+            }
           >
-            <List.Item arrow="horizontal">是否发布到分销市场</List.Item>
-          </Picker>
+            是否发布到分销市场
+          </List.Item>
           <Picker
             {...getFieldProps('fx_type', {
               rules: [{ required: true }],

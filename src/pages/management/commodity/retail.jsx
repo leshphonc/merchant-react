@@ -3,8 +3,16 @@ import NavBar from '@/common/NavBar'
 import { Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
+import { createForm } from 'rc-form'
 import {
-  SearchBar, Picker, List, WhiteSpace, PullToRefresh, WingBlank, Button,
+  SearchBar,
+  Picker,
+  List,
+  WhiteSpace,
+  PullToRefresh,
+  WingBlank,
+  Button,
+  Switch,
 } from 'antd-mobile'
 // import CardList from './components/Retail'
 // import { CateringList } from '@/config/list'
@@ -14,6 +22,8 @@ import {
 } from '@/styled'
 
 const { Item } = List
+
+@createForm()
 @inject('commodity')
 @observer
 class Retail extends React.Component {
@@ -41,8 +51,7 @@ class Retail extends React.Component {
     }
     commodity.fetchRetailList().then(() => {
       console.log(retailList)
-      this.setState({
-      })
+      this.setState({})
     })
     /* eslint react/no-find-dom-node: 0 */
   }
@@ -75,34 +84,38 @@ class Retail extends React.Component {
               </div>
               <WhiteSpace />
               <WhiteSpace />
-              <div
-                className="top-features"
-                style={{ position: 'initial', fontSize: '14px', color: '#fb6a41' }}
-              >
+              <div className="top-features" style={{ position: 'initial', fontSize: '14px' }}>
                 售价: {item.price} 元
               </div>
               <WhiteSpace />
-              <div
-                className="top-features"
-                style={{ position: 'initial', fontSize: '14px', color: '#fb6a41' }}
-              >
-                状态: {item.statusstr}
+              <div className="top-features" style={{ position: 'initial', fontSize: '14px' }}>
+                库存: {item.stock_num}
               </div>
               <WhiteSpace />
               <div className="top-features" style={{ position: 'initial' }}>
                 已售出: {item.sell_count}
               </div>
               <WhiteSpace />
+              <Item
+                extra={
+                  <Switch
+                    checked={item.status === '1'}
+                    onClick={() => this.stand(item.goods_id, item.status, item.store_id)}
+                  />
+                }
+              >
+                状态
+              </Item>
             </TopContent>
           </ItemTop>
           <Item>
             <Buttons>
-              <Button
+              {/* <Button
                 style={{ display: 'inline-block', color: '#fff' }}
                 onClick={() => this.stand(item.goods_id, item.status, item.store_id)}
               >
                 {item.statusoptstr}
-              </Button>
+              </Button> */}
               <Button
                 style={{ display: 'inline-block', color: '#fff', marginLeft: '15px' }}
                 onClick={() => this.detele(item.goods_id, item.store_id)}
@@ -210,9 +223,7 @@ class Retail extends React.Component {
         {retailListTotal < 10 ? (
           <React.Fragment>
             <WhiteSpace />
-            <WingBlank size="sm">
-              {this.mapList()}
-            </WingBlank>
+            <WingBlank size="sm">{this.mapList()}</WingBlank>
           </React.Fragment>
         ) : (
           <PullToRefresh
@@ -227,9 +238,7 @@ class Retail extends React.Component {
             onRefresh={this.loadMore}
           >
             <WhiteSpace />
-            <WingBlank size="sm">
-              {this.mapList()}
-            </WingBlank>
+            <WingBlank size="sm">{this.mapList()}</WingBlank>
           </PullToRefresh>
         )}
       </React.Fragment>
