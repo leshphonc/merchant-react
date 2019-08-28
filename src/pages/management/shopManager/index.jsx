@@ -43,7 +43,7 @@ class ShopManager extends React.Component {
     return staffList.map(item => (
       <React.Fragment key={item.staff_id}>
         <ListItem>
-          <ItemTop>
+          <ItemTop style={{ width: '70%', display: 'inline-block' }}>
             <TopContent>
               <div className="top-title" style={{ fontSize: '15px' }}>
                 电话：{item.tel}
@@ -51,7 +51,7 @@ class ShopManager extends React.Component {
               <WhiteSpace />
               <div>店员账号: {item.username}</div>
               <WhiteSpace />
-              <div>店员性名: {item.name}</div>
+              <div>店员姓名: {item.name}</div>
               <WhiteSpace />
               <div>所属店铺: {item.storename}</div>
               <WhiteSpace />
@@ -59,52 +59,30 @@ class ShopManager extends React.Component {
               {/* <WhiteSpace />
               <div>能否修改订单价格: {item.is_change === '0' ? '不能' : '能'}</div>
               <WhiteSpace /> */}
-              <Btn>
-                <Button
-                  type="button"
-                  onClick={() => history.push(
-                    `/management/shopManager/shopPanel/编辑/${item.store_id}/${item.staff_id}`,
-                  )
-                  }
-                >
-                  编辑
-                </Button>
-              </Btn>
-
-              <Btn>
-                <Button
-                  onClick={() => (window.location.href = 'http://cs.7youke.com/packapp/storestaff/index.html')
-                  }
-                  style={{ display: 'inline-block', marginLeft: '30px' }}
-                >
-                  登陆
-                </Button>
-              </Btn>
-              <Btn>
-                <Button
-                  style={{ display: 'inline-block', marginLeft: '30px' }}
-                  onClick={() => this.detele(item.staff_id)}
-                >
-                  删除
-                </Button>
-              </Btn>
-              {/* <Button
-                onClick={() => alert('Are you sure???', [
-                  { text: 'Cancel', onPress: () => console.log('cancel') },
-                  {
-                    text: 'Ok',
-                    onPress: () => new Promise(resolve => {
-                      Toast.info('onPress Promise', 1)
-                      setTimeout(resolve, 1000)
-                    }),
-                  },
-                ])
-                }
-              >
-                promise
-              </Button> */}
             </TopContent>
           </ItemTop>
+          <div style={{ width: '20%', display: 'inline-block', float: 'right' }}>
+            <Btn>
+              <Button
+                style={{ marginTop: '20px' }}
+                type="button"
+                onClick={() => history.push(
+                  `/management/shopManager/shopPanel/编辑/${item.store_id}/${item.staff_id}`,
+                )
+                }
+              >
+                编辑
+              </Button>
+            </Btn>
+            <Btn>
+              <Button
+                style={{ display: 'inline-block', marginTop: '30px' }}
+                onClick={() => this.detele(item.staff_id)}
+              >
+                删除
+              </Button>
+            </Btn>
+          </div>
         </ListItem>
         <WhiteSpace size="sm" />
       </React.Fragment>
@@ -114,7 +92,19 @@ class ShopManager extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <NavBar title="店员管理" goBack />
+        <NavBar
+          title="店员管理"
+          goBack
+          right={
+            <Link
+              style={{ color: '#fff' }}
+              onClick={() => (window.location.href = 'http://cs.7youke.com/packapp/storestaff/index.html')
+              }
+            >
+              登陆
+            </Link>
+          }
+        />
         <WhiteSpace />
         <WingBlank size="sm">{this.mapList()}</WingBlank>
         <WhiteSpace />
