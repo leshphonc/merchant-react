@@ -11,6 +11,14 @@ class MastSotre {
 
   @observable groupListTotal = null
 
+  @observable groupDetail = []
+
+  @observable shopList = []
+
+  @observable groupCatFir = []
+
+  @observable groupCatSec = []
+
   @observable reserveList = []
 
   @observable reserveListPage = 1
@@ -208,11 +216,50 @@ class MastSotre {
   }
 
   @action
-  fetchCateringDetail = async (id, goodid) => {
-    const response = await services.fetchCateringDetail(id, goodid)
+  fetchCateringDetail = async goodid => {
+    const response = await services.fetchCateringDetail(goodid)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.cateringDetail = response.data.result
+      })
+    }
+  }
+
+   @action
+   fetchGroupDetail = async goodid => {
+     const response = await services.fetchGroupDetail(goodid)
+     if (response.data.errorCode === ErrorCode.SUCCESS) {
+       runInAction(() => {
+         this.groupDetail = response.data.result
+       })
+     }
+   }
+
+   @action
+   fetchShopList = async () => {
+     const response = await services.fetchShopList()
+     if (response.data.errorCode === ErrorCode.SUCCESS) {
+       runInAction(() => {
+         response.data.result.store_list.forEach(item => {
+           if (item.value > 0) {
+             this.shopList.push(item)
+           }
+         })
+
+       })
+     }
+   }
+
+  @action
+  fetchGroupCat = async catfid => {
+    const response = await services.fetchGroupCat(catfid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        if (!catfid) {
+          this.groupCatFir = response.data.result
+        } else {
+          this.groupCatSec = response.data.result
+        }
       })
     }
   }
