@@ -24,6 +24,13 @@ class GiftManagement extends React.Component {
 
   search = () => {}
 
+  detele = id => {
+    const { giftManagement } = this.props
+    giftManagement.fetchDelGift(id).then(() => {
+      giftManagement.fetchGetGift()
+    })
+  }
+
   mapList = () => {
     const { giftManagement, history } = this.props
     const { getGift, getLists } = giftManagement
@@ -38,7 +45,7 @@ class GiftManagement extends React.Component {
                 {item.gift_name}
               </span>
             }
-            thumb={item.wap_pic}
+            thumb={item.wap_pic_list[0].image}
             extra={<span>{seasons[item.status].label}</span>}
           />
           <Card.Body style={{ minHeight: '22px' }}>
@@ -66,11 +73,20 @@ class GiftManagement extends React.Component {
                     type="primary"
                     size="small"
                     onClick={() => history.push(
-                      `/popularize/giftManagement/giftPanel/修改/${item.gift_id}`,
+                      `/popularize/giftManagement/giftPanel/修改/${item.gift_id}/${item.cat_fid}`,
                     )
                     }
                   >
                     编辑
+                  </Button>
+                </Flex.Item>
+                <Flex.Item>
+                  <Button
+                    type="primary"
+                    size="small"
+                    onClick={() => this.detele(item.gift_id)}
+                  >
+                    删除
                   </Button>
                 </Flex.Item>
               </Flex>
@@ -105,6 +121,6 @@ class GiftManagement extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/popularize/giftManagement" exact component={GiftManagement} />
-    <Route path="/popularize/giftManagement/giftPanel/:str/:giftId?" component={GiftPanel} />
+    <Route path="/popularize/giftManagement/giftPanel/:str/:giftId?/:catFid?" component={GiftPanel} />
   </React.Fragment>
 )
