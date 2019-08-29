@@ -101,3 +101,10 @@ export const fetchCircle = id => axios.get('/appapi.php?c=Merchantapp&a=ajax_cir
     ticket: localStorage.getItem('ticket'),
   },
 })
+
+// 店铺列表
+export const fetchShopList = () => axios.get('/appapi.php?c=Merchantapp&a=get_store', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})

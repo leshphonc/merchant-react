@@ -27,6 +27,8 @@ class MastSotre {
 
   @observable circleOption = []
 
+  @observable shopList = []
+
   @action
   fetchGetGift = async () => {
     let hasMore = true
@@ -264,6 +266,20 @@ class MastSotre {
   @action
   resetCircle = () => {
     this.circleOption = []
+  }
+
+  @action
+  fetchShopList = async () => {
+    const response = await services.fetchShopList()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        response.data.result.store_list.forEach(item => {
+          if (item.value > 0) {
+            this.shopList.push(item)
+          }
+        })
+      })
+    }
   }
 }
 export default new MastSotre()

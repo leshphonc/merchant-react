@@ -16,6 +16,7 @@ import {
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 import Utils from '@/utils'
+// import toJS from 'mobx'
 
 const { CheckboxItem } = Checkbox
 const data = [
@@ -87,6 +88,10 @@ class RetailAdd extends React.Component {
         cascade: [getGiftDetail.province_idss, getGiftDetail.city_idss, getGiftDetail.area_idss],
         circle_idss: [getGiftDetail.circle_idss],
       })
+    })
+    giftManagement.fetchShopList().then(() => {
+      const { shopList } = giftManagement
+      console.log(shopList)
     })
   }
 
@@ -307,7 +312,7 @@ class RetailAdd extends React.Component {
             // </InputItem>
             <List.Item>
               选择店铺
-              {data.map(i => (
+              {shopList.map(i => (
                 <CheckboxItem key={i.value} onChange={() => this.onChange(i.value)}>
                   {i.label}
                 </CheckboxItem>
