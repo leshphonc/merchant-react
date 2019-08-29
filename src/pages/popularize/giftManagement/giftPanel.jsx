@@ -208,12 +208,12 @@ class RetailAdd extends React.Component {
   render() {
     const { giftManagement, match, form } = this.props
     const { getFieldProps } = form
-    const { giftCategory, giftCategorylist } = giftManagement
+    const { giftCategory, giftCategorylist, shopList } = giftManagement
     const { pic, asyncCascadeValue } = this.state
     const { cascadeOption, circleOption } = giftManagement
     console.log(circleOption)
     const pickinstore = form.getFieldValue('pick_in_store')
-    console.log(pickinstore)
+    console.log(shopList)
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}礼品`} goBack />
