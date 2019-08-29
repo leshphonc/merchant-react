@@ -7,6 +7,8 @@ import {
 } from 'antd-mobile'
 import { toJS } from 'mobx'
 import GiftPanel from './giftPanel'
+import OrdersGoods from './ordersGoods'
+import OrderDetails from './orderDetails'
 
 const seasons = [{ label: '关闭', value: '0' }, { label: '启用', value: '1' }]
 @inject('giftManagement')
@@ -33,9 +35,8 @@ class GiftManagement extends React.Component {
 
   mapList = () => {
     const { giftManagement, history } = this.props
-    const { getGift, getLists } = giftManagement
+    const { getGift } = giftManagement
     console.log(toJS(getGift))
-    console.log(toJS(getLists))
     return getGift.map(item => (
       <React.Fragment key={item.gift_id}>
         <Card>
@@ -62,7 +63,7 @@ class GiftManagement extends React.Component {
                   <Button
                     type="primary"
                     size="small"
-                    onClick={() => history.push(`/management/storefront/storePanel/${item.store_id}`)
+                    onClick={() => history.push(`/popularize/giftManagement/ordersGoods/商品订单/${item.gift_id}`)
                     }
                   >
                     商品订单
@@ -122,5 +123,7 @@ export default () => (
   <React.Fragment>
     <Route path="/popularize/giftManagement" exact component={GiftManagement} />
     <Route path="/popularize/giftManagement/giftPanel/:str/:giftId?/:catFid?" component={GiftPanel} />
+    <Route path="/popularize/giftManagement/ordersGoods/:str/:giftId?" component={OrdersGoods} />
+    <Route path="/popularize/giftManagement/orderDetails/:orderId?" component={OrderDetails} />
   </React.Fragment>
 )

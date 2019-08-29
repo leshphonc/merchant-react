@@ -29,6 +29,49 @@ class MastSotre {
 
   @observable shopList = []
 
+  @observable giftOrder = []
+
+  @observable giftOrderPage = 1
+
+  @observable giftOrderSize = 10
+
+  @observable giftOrderTotal = null
+
+  @observable giftOrderDetail = {}
+
+  @action
+  fetchGiftOrder = async giftId => {
+    let hasMore = true
+    if (this.giftOrderTotal !== null) {
+      hasMore = this.giftOrderPage * this.giftOrderSize < this.giftOrderTotal
+      if (hasMore) {
+        this.giftOrderPage += 1
+      }
+    }
+    const response = await services.fetchGiftOrder(this.giftOrderPage, this.giftOrderSize, giftId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      if (hasMore) {
+        runInAction(() => {
+          const arr = this.giftOrder
+          arr.push(...response.data.result.lists)
+          this.giftOrder = arr
+          this.giftOrderTotal = response.data.result.total - 0
+        })
+      } else {
+        const remainder = this.giftOrderTotal % this.giftOrderSize
+        if (remainder) {
+          runInAction(() => {
+            this.giftOrder.splice(this.giftOrderTotal - remainder, remainder)
+            const arr = this.giftOrder
+            arr.push(...response.data.result.lists)
+            this.giftOrder = arr
+            this.giftOrderTotal = response.data.result.total - 0
+          })
+        }
+      }
+    }
+  }
+
   @action
   fetchGetGift = async () => {
     let hasMore = true
@@ -278,6 +321,16 @@ class MastSotre {
             this.shopList.push(item)
           }
         })
+      })
+    }
+  }
+
+  @action
+  fetchGiftOrderDetail = async orderId => {
+    const response = await services.fetchGiftOrderDetail(orderId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.giftOrderDetail = response.data.result
       })
     }
   }

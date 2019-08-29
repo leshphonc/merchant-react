@@ -1,6 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
+import E from 'wangeditor'
 import {
   List,
   InputItem,
@@ -16,14 +17,16 @@ import {
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 import Utils from '@/utils'
-// import toJS from 'mobx'
+import { toJS } from 'mobx'
+import { Editor } from './styled'
 
+const { Item } = List
 const { CheckboxItem } = Checkbox
-const data = [
-  { value: 0, label: 'Ph.D.' },
-  { value: 1, label: 'Bachelor' },
-  { value: 2, label: 'College diploma' },
-]
+// const data = [
+//   { value: 0, label: 'Ph.D.' },
+//   { value: 1, label: 'Bachelor' },
+//   { value: 2, label: 'College diploma' },
+// ]
 @createForm()
 @inject('giftManagement')
 @observer
@@ -33,11 +36,47 @@ class RetailAdd extends React.Component {
     this.state = {
       pic: [],
       asyncCascadeValue: [],
+      editor: null,
+      editorContent: '',
     }
+    this.editor = React.createRef()
   }
 
   componentDidMount() {
     const { giftManagement, match, form } = this.props
+    const editor = new E(this.editor.current)
+    this.setState({
+      editor,
+    })
+    editor.customConfig.onchange = html => {
+      this.setState({
+        editorContent: html,
+      })
+    }
+    editor.customConfig.uploadImgShowBase64 = true
+    editor.customConfig.menus = [
+      'head', // 标题
+      'bold', // 粗体
+      'fontSize', // 字号
+      'fontName', // 字体
+      'italic', // 斜体
+      'underline', // 下划线
+      'strikeThrough', // 删除线
+      'foreColor', // 文字颜色
+      'backColor', // 背景颜色
+      'link', // 插入链接
+      'list', // 列表
+      'justify', // 对齐方式
+      'quote', // 引用
+      'emoticon', // 表情
+      'image', // 插入图片
+      'table', // 表格
+      'video', // 插入视频
+      'undo', // 撤销
+      'redo', // 重复
+    ]
+    editor.create()
+
     console.log(this.props)
     giftManagement.fetchGiftCategory()
     giftManagement.fetchGiftCategorylist(match.params.catFid)
@@ -88,10 +127,11 @@ class RetailAdd extends React.Component {
         cascade: [getGiftDetail.province_idss, getGiftDetail.city_idss, getGiftDetail.area_idss],
         circle_idss: [getGiftDetail.circle_idss],
       })
+      editor.txt.html(getGiftDetail.gift_content)
     })
     giftManagement.fetchShopList().then(() => {
       const { shopList } = giftManagement
-      console.log(shopList)
+      console.log(toJS(shopList))
     })
   }
 
@@ -140,6 +180,8 @@ class RetailAdd extends React.Component {
     const {
       giftManagement, form, match, history,
     } = this.props
+    const { editorContent, editor } = this.state
+    console.log(editorContent)
     form.validateFields((error, value) => {
       // if (error) {
       //   Toast.info('请输入完整信息')
@@ -155,6 +197,7 @@ class RetailAdd extends React.Component {
         city_idss: value.cascade ? value.cascade[1] : value.city_idss,
         area_idss: value.cascade ? value.cascade[2] : value.area_idss,
         circle_idss: value.circle_idss ? value.circle_idss[0] : value.circle_idss,
+        gift_content: editor.txt.html(),
       }
       console.log(value)
       console.log(obj)
@@ -302,14 +345,6 @@ class RetailAdd extends React.Component {
             ''
           )}
           {pickinstore === true ? (
-            // <InputItem
-            //   {...getFieldProps('gift_name', {
-            //     rules: [{ required: true }],
-            //   })}
-            //   placeholder="请填写礼品名称"
-            // >
-            //   选择店铺
-            // </InputItem>
             <List.Item>
               选择店铺
               {shopList.map(i => (
@@ -364,6 +399,18 @@ class RetailAdd extends React.Component {
               placeholder="请填写发货清单"
             />
           </List.Item>
+          {/* <Item>
+            礼品详情
+            <Editor>
+              <div ref={this.editor} className="editor" />
+            </Editor>
+          </Item> */}
+          <Item>
+            商品描述
+            <Editor>
+              <div ref={this.editor} className="editor" />
+            </Editor>
+          </Item>
           <WingBlank style={{ padding: '10px 0' }}>
             <Button
               type="primary"

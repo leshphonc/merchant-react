@@ -23,15 +23,19 @@ export const fetchGiftCategorylist = catFid => axios.post('/appapi.php?c=Merchan
 })
 
 // 金币商城订单
-export const fetchGiftOrder = () => axios.get('/appapi.php?c=Merchantapp&a=gift_order', {
+export const fetchGiftOrder = (page, size, giftId) => axios.get('/appapi.php?c=Merchantapp&a=gift_order', {
   params: {
+    page,
+    size,
+    gift_id: giftId,
     ticket: localStorage.getItem('ticket'),
   },
 })
 
 // 金币商城详情
-export const fetchGiftOrderDetail = () => axios.get('/appapi.php?c=Merchantapp&a=gift_order_detail', {
+export const fetchGiftOrderDetail = orderId => axios.get('/appapi.php?c=Merchantapp&a=gift_order_detail', {
   params: {
+    order_id: orderId,
     ticket: localStorage.getItem('ticket'),
   },
 })
