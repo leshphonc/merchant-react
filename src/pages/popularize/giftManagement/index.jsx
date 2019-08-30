@@ -3,7 +3,7 @@ import NavBar from '@/common/NavBar'
 import { Route, Link } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  Button, Flex, WingBlank, Card, WhiteSpace,
+  Button, Flex, WingBlank, Card, WhiteSpace, SearchBar,
 } from 'antd-mobile'
 import { toJS } from 'mobx'
 import GiftPanel from './giftPanel'
@@ -16,15 +16,15 @@ const seasons = [{ label: '关闭', value: '0' }, { label: '启用', value: '1' 
 class GiftManagement extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      keyword: '',
+    }
   }
 
   componentDidMount() {
     const { giftManagement } = this.props
     giftManagement.fetchGetGift()
   }
-
-  search = () => {}
 
   detele = id => {
     const { giftManagement } = this.props
@@ -63,7 +63,9 @@ class GiftManagement extends React.Component {
                   <Button
                     type="primary"
                     size="small"
-                    onClick={() => history.push(`/popularize/giftManagement/ordersGoods/商品订单/${item.gift_id}`)
+                    onClick={() => history.push(
+                      `/popularize/giftManagement/ordersGoods/商品订单/${item.gift_id}`,
+                    )
                     }
                   >
                     商品订单
@@ -82,11 +84,7 @@ class GiftManagement extends React.Component {
                   </Button>
                 </Flex.Item>
                 <Flex.Item>
-                  <Button
-                    type="primary"
-                    size="small"
-                    onClick={() => this.detele(item.gift_id)}
-                  >
+                  <Button type="primary" size="small" onClick={() => this.detele(item.gift_id)}>
                     删除
                   </Button>
                 </Flex.Item>
@@ -101,6 +99,8 @@ class GiftManagement extends React.Component {
   }
 
   render() {
+    const { giftManagement } = this.props
+    const { keyword } = this.state
     return (
       <React.Fragment>
         <NavBar
@@ -112,6 +112,12 @@ class GiftManagement extends React.Component {
             </Link>
           }
         />
+        <SearchBar
+          placeholder="礼品名称"
+          value={keyword}
+          onChange={val => this.setState({ keyword: val })}
+          onSubmit={() => giftManagement.resetAndFetchGroupList(keyword)}
+        />
         <WingBlank size="sm" style={{ marginTop: '10px' }}>
           {this.mapList()}
         </WingBlank>
@@ -122,7 +128,10 @@ class GiftManagement extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/popularize/giftManagement" exact component={GiftManagement} />
-    <Route path="/popularize/giftManagement/giftPanel/:str/:giftId?/:catFid?" component={GiftPanel} />
+    <Route
+      path="/popularize/giftManagement/giftPanel/:str/:giftId?/:catFid?"
+      component={GiftPanel}
+    />
     <Route path="/popularize/giftManagement/ordersGoods/:str/:giftId?" component={OrdersGoods} />
     <Route path="/popularize/giftManagement/orderDetails/:orderId?" component={OrderDetails} />
   </React.Fragment>

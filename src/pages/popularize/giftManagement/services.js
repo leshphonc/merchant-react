@@ -1,10 +1,11 @@
 import axios from 'axios'
 
 // 礼品列表
-export const fetchGetGift = (page, size) => axios.get('/appapi.php?c=Merchantapp&a=giftpro', {
+export const fetchGetGift = (page, size, keyword) => axios.get('/appapi.php?c=Merchantapp&a=giftpro', {
   params: {
     page,
     size,
+    gift_name: keyword,
     ticket: localStorage.getItem('ticket'),
   },
 })

@@ -334,5 +334,15 @@ class MastSotre {
       })
     }
   }
+
+  @action
+  resetAndFetchGroupList = keyword => {
+    runInAction(() => {
+      this.getGift = []
+      this.getGiftPage = 1
+      this.getGiftTotal = null
+      this.fetchGetGift(keyword)
+    })
+  }
 }
 export default new MastSotre()
