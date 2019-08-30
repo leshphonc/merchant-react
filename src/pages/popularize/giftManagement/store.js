@@ -73,7 +73,7 @@ class MastSotre {
   }
 
   @action
-  fetchGetGift = async () => {
+  fetchGetGift = async keyword => {
     let hasMore = true
     if (this.getGiftTotal !== null) {
       hasMore = this.getGiftPage * this.getGiftSize < this.getGiftTotal
@@ -81,7 +81,7 @@ class MastSotre {
         this.getGiftPage += 1
       }
     }
-    const response = await services.fetchGetGift(this.getGiftPage, this.getGiftSize)
+    const response = await services.fetchGetGift(this.getGiftPage, this.getGiftSize, keyword)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {

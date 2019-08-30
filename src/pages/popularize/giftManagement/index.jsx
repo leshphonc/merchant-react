@@ -23,7 +23,8 @@ class GiftManagement extends React.Component {
 
   componentDidMount() {
     const { giftManagement } = this.props
-    giftManagement.fetchGetGift()
+    const { keyword } = this.state
+    giftManagement.fetchGetGift(keyword)
   }
 
   detele = id => {
@@ -96,6 +97,16 @@ class GiftManagement extends React.Component {
         <WhiteSpace size="sm" />
       </React.Fragment>
     ))
+  }
+
+  loadMore = async () => {
+    const { commodity } = this.props
+    const { keyword } = this.state
+    this.setState({ refreshing: true })
+    await commodity.fetchGroupList(keyword)
+    setTimeout(() => {
+      this.setState({ refreshing: false })
+    }, 100)
   }
 
   render() {
