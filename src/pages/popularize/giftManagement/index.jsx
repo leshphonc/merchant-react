@@ -3,12 +3,13 @@ import NavBar from '@/common/NavBar'
 import { Route, Link } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  Button, Flex, WingBlank, Card, WhiteSpace, SearchBar, PullToRefresh,
+  Button, Flex, WingBlank, Card, WhiteSpace, SearchBar,
 } from 'antd-mobile'
 import { toJS } from 'mobx'
 import GiftPanel from './giftPanel'
 import OrdersGoods from './ordersGoods'
 import OrderDetails from './orderDetails'
+import DeliverGoods from './deliverGoods'
 
 const seasons = [{ label: '关闭', value: '0' }, { label: '启用', value: '1' }]
 @inject('giftManagement')
@@ -18,7 +19,6 @@ class GiftManagement extends React.Component {
     super(props)
     this.state = {
       keyword: '',
-      refreshing: false,
     }
   }
 
@@ -100,19 +100,9 @@ class GiftManagement extends React.Component {
     ))
   }
 
-  loadMore = async () => {
-    const { giftManagement } = this.props
-    const { keyword } = this.state
-    this.setState({ refreshing: true })
-    await giftManagement.fetchGetGift(keyword)
-    setTimeout(() => {
-      this.setState({ refreshing: false })
-    }, 100)
-  }
-
   render() {
     const { giftManagement } = this.props
-    const { keyword, refreshing, height } = this.state
+    const { keyword } = this.state
     return (
       <React.Fragment>
         <NavBar
@@ -130,27 +120,6 @@ class GiftManagement extends React.Component {
           onChange={val => this.setState({ keyword: val })}
           onSubmit={() => giftManagement.resetAndFetchGroupList(keyword)}
         />
-        {/* {fansListTotal < 10 ? (
-          <React.Fragment>
-            <WhiteSpace />
-            <WingBlank size="sm">{this.mapList()}</WingBlank>
-          </React.Fragment>
-        ) : (
-          <PullToRefresh
-            ref={this.refresh}
-            refreshing={refreshing}
-            style={{
-              height,
-              overflow: 'auto',
-            }}
-            indicator={{ deactivate: '上拉可以刷新' }}
-            direction="up"
-            onRefresh={this.loadMore}
-          >
-            <WhiteSpace />
-            <WingBlank size="sm">{this.mapList()}</WingBlank>
-          </PullToRefresh>
-        )} */}
         <WingBlank size="sm" style={{ marginTop: '10px' }}>
           {this.mapList()}
         </WingBlank>
@@ -166,6 +135,7 @@ export default () => (
       component={GiftPanel}
     />
     <Route path="/popularize/giftManagement/ordersGoods/:str/:giftId?" component={OrdersGoods} />
+    <Route path="/popularize/giftManagement/deliverGoods/:orderId?" component={DeliverGoods} />
     <Route path="/popularize/giftManagement/orderDetails/:orderId?" component={OrderDetails} />
   </React.Fragment>
 )

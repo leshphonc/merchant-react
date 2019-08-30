@@ -65,7 +65,11 @@ class OressGoods extends React.Component {
                   <Button
                     type="primary"
                     size="small"
-                    onClick={() => this.detele(item.gift_id)}
+                    onClick={() => history.push(
+                      `/popularize/giftManagement/deliverGoods/${item.order_id}`,
+                    )
+                    }
+                    // onClick={() => this.detele(item.gift_id)}
                   >
                     发货
                   </Button>

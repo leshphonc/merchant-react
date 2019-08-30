@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import { WingBlank, WhiteSpace, List } from 'antd-mobile'
+import { List } from 'antd-mobile'
 import { toJS } from 'mobx'
 import moment from 'moment'
 

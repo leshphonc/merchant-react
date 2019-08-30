@@ -5,9 +5,18 @@ export const fetchGetGift = (page, size, keyword) => axios.get('/appapi.php?c=Me
   params: {
     page,
     size,
-    gift_name: keyword,
+    keyword,
     ticket: localStorage.getItem('ticket'),
   },
+})
+
+export const fetchGetGiftser = (page, size, keyword) => axios.post('/appapi.php?c=Merchantapp&a=giftpro', {
+  // params: {
+  page,
+  size,
+  keyword,
+  ticket: localStorage.getItem('ticket'),
+  // },
 })
 
 // 金币商城分类

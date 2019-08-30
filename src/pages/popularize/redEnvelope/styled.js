@@ -22,3 +22,24 @@ export const Editor = styled.div`
   }
 }
 `
+export const Info = styled.div`
+.am-list-body{
+  display: flex;
+  justify-content: space-around;
+  padding:10px 0;
+}
+`
+export const List = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  span {
+    display: inline-block;
+    text-align: center;
+    & > img {
+      width: 10vw;
+      height: 10vw;
+      border-radius: 50%;
+    }
+  }
+`

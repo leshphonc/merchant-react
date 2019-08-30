@@ -261,7 +261,7 @@ class RetailAdd extends React.Component {
     const { cascadeOption, circleOption } = giftManagement
     console.log(circleOption)
     const pickinstore = form.getFieldValue('pick_in_store')
-    console.log(shopList)
+    console.log(pickinstore)
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}礼品`} goBack />
