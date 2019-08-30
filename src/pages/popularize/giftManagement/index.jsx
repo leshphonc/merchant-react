@@ -3,7 +3,7 @@ import NavBar from '@/common/NavBar'
 import { Route, Link } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  Button, Flex, WingBlank, Card, WhiteSpace, SearchBar,
+  Button, Flex, WingBlank, Card, WhiteSpace, SearchBar, PullToRefresh,
 } from 'antd-mobile'
 import { toJS } from 'mobx'
 import GiftPanel from './giftPanel'
@@ -18,6 +18,7 @@ class GiftManagement extends React.Component {
     super(props)
     this.state = {
       keyword: '',
+      refreshing: false,
     }
   }
 
@@ -100,10 +101,10 @@ class GiftManagement extends React.Component {
   }
 
   loadMore = async () => {
-    const { commodity } = this.props
+    const { giftManagement } = this.props
     const { keyword } = this.state
     this.setState({ refreshing: true })
-    await commodity.fetchGroupList(keyword)
+    await giftManagement.fetchGetGift(keyword)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
@@ -111,7 +112,7 @@ class GiftManagement extends React.Component {
 
   render() {
     const { giftManagement } = this.props
-    const { keyword } = this.state
+    const { keyword, refreshing, height } = this.state
     return (
       <React.Fragment>
         <NavBar
@@ -129,6 +130,27 @@ class GiftManagement extends React.Component {
           onChange={val => this.setState({ keyword: val })}
           onSubmit={() => giftManagement.resetAndFetchGroupList(keyword)}
         />
+        {/* {fansListTotal < 10 ? (
+          <React.Fragment>
+            <WhiteSpace />
+            <WingBlank size="sm">{this.mapList()}</WingBlank>
+          </React.Fragment>
+        ) : (
+          <PullToRefresh
+            ref={this.refresh}
+            refreshing={refreshing}
+            style={{
+              height,
+              overflow: 'auto',
+            }}
+            indicator={{ deactivate: '上拉可以刷新' }}
+            direction="up"
+            onRefresh={this.loadMore}
+          >
+            <WhiteSpace />
+            <WingBlank size="sm">{this.mapList()}</WingBlank>
+          </PullToRefresh>
+        )} */}
         <WingBlank size="sm" style={{ marginTop: '10px' }}>
           {this.mapList()}
         </WingBlank>
