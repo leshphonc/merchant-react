@@ -79,6 +79,12 @@ class MastSotre {
 
   @observable expressDetail = []
 
+  @observable retailDelete = []
+
+  @observable appointDetail = []
+
+  @observable workerList = []
+
   @action
   fetchGroupList = async keyword => {
     let hasMore = true
@@ -190,7 +196,9 @@ class MastSotre {
   fetchReserveDetail = async id => {
     const response = await services.fetchReserveDetail(id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      console.log(response.data)
+      runInAction(() => {
+        this.appointDetail = response.data.result
+      })
     }
   }
 
@@ -252,16 +260,21 @@ class MastSotre {
    }
 
    @action
-   fetchShopList = async () => {
-     const response = await services.fetchShopList()
+   fetchShopList = async appointType => {
+     const response = await services.fetchShopList(appointType)
      if (response.data.errorCode === ErrorCode.SUCCESS) {
        runInAction(() => {
-         response.data.result.store_list.forEach(item => {
-           if (item.value > 0) {
-             this.shopList.push(item)
+         const shopList = response.data.result.store_list
+         shopList.shift(0)
+         shopList.forEach(item => {
+           if (item.worker_list) {
+             item.worker_list.forEach(i => {
+               i.value = i.merchant_worker_id
+               i.label = i.name
+             })
            }
          })
-
+         this.shopList = shopList
        })
      }
    }
@@ -507,5 +520,32 @@ class MastSotre {
       })
     }
   }
+
+  @action
+  fetchAddGroup = async groupAddDetail => {
+    const response = await services.fetchAddGroup(groupAddDetail)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  fetchEditGroup = async (groupEditDetail, id) => {
+    const response = await services.fetchEditGroup(groupEditDetail, id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  fetchGetWorker = async storeId => {
+    const response = await services.fetchGetWorker(storeId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      console.log(response.data)
+    }
+  }
 }
+
+
+
 export default new MastSotre()

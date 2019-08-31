@@ -17,14 +17,15 @@ import {
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
-// import E from 'wangeditor'
+import E from 'wangeditor'
 import { createForm } from 'rc-form'
 import { observer, inject } from 'mobx-react'
-import Editor from '@/common/Editor'
+// import Editor from '@/common/Editor'
 import moment from 'moment'
 import { MenuMask } from '@/styled'
+import { Editor } from './styled'
 import Utils from '@/utils'
-
+import { toJS } from 'mobx'
 const { Item } = List
 const { CheckboxItem } = Checkbox
 const price = [
@@ -33,7 +34,7 @@ const price = [
     value: '0',
   },
   {
-    label: '未定义',
+    label: '自定义',
     value: '1',
   },
 ]
@@ -59,66 +60,225 @@ class ReservePanel extends React.Component {
       files: [],
       category: [],
       editor: null,
+      shopList:[],
+      store:[],
+      workerList:[],
+      appoint_type: 0,
+      workerSele:[],
+      custom_name: [],
+      custom_payment_price:[],
+      custom_price: [],
+      custom_content: [],
+      use_time:[],
+      custom_id: [],
     }
     this.editor = React.createRef()
   }
 
   componentDidMount() {
-    const { commodity, match } = this.props
+    const { commodity, match , form } = this.props
+    const { appoint_type } = this.state
+      commodity.fetchShopList(appoint_type).then(() => {
+          const { shopList } = commodity
+          this.setState({
+              shopList:shopList
+          })
+      })
+
     commodity.fetchReserveCategoryOption()
     if (match.params.id) {
-      commodity.fetchReserveDetail(match.params.id)
+      commodity.fetchReserveDetail(match.params.id).then(res => {
+        const { appointDetail } = commodity
+        const workerSele = []
+          if(appointDetail.merchant_workers_appoint_list){
+              appointDetail.merchant_workers_appoint_list.forEach((item,index) => {
+                  workerSele.push(item.merchant_worker_id)
+              })
+          }
+        this.setState({
+            files: appointDetail.appoint_list.pic_arr,
+            category:[appointDetail.appoint_list.cat_fid,appointDetail.appoint_list.cat_id],
+            store: appointDetail.store_arr,
+            workerSele
+        })
+          commodity.fetchShopList(appoint_type).then(() => {
+              const { shopList } = commodity
+              this.setState({
+                  shopList:shopList
+              })
+              const start_workder = []
+              shopList.forEach(item => {
+                  if(item.worker_list){
+                      item.worker_list.forEach( t => {
+                          if(this.state.workerSele.indexOf(t.merchant_worker_id) !== -1){
+                              start_workder.push(item.value+','+t.merchant_worker_id)
+                          }
+                      })
+                      this.setState({
+                          workerList:start_workder
+                      })
+                  }
+              })
+          })
+        form.setFieldsValue({
+            appoint_name: appointDetail.appoint_list.appoint_name,
+            appoint_content: appointDetail.appoint_list.appoint_content,
+            old_price: appointDetail.appoint_list.old_price,
+            payment_status: appointDetail.appoint_list.payment_status,
+            appoint_date_type: appointDetail.appoint_list.appoint_date_type,
+            appoint_date_num: appointDetail.appoint_list.appoint_date_num,
+            expend_time: appointDetail.appoint_list.expend_time,
+            sort: appointDetail.appoint_list.sort,
+            start_time: appointDetail.appoint_list.start_time?new Date(appointDetail.appoint_list.start_time*1000):'',
+            end_time: appointDetail.appoint_list.end_time?new Date(appointDetail.appoint_list.end_time*1000):'',
+            is_store: appointDetail.appoint_list.is_store,
+            office_start_time: Utils.conversionTimeStringToDate(appointDetail.office_time.open),
+            office_stop_time: Utils.conversionTimeStringToDate(appointDetail.office_time.close),
+            appoint_status: (appointDetail.appoint_list.appoint_status === '0') ? true :false,
+            appoint_type: appointDetail.appoint_list.appoint_type,
+            is_appoint_price: appointDetail.appoint_list.is_appoint_price||0,
+            pic: appointDetail.appoint_list.pic_arr
+        })
+          this.setState({
+              editor:appointDetail.appoint_list.appoint_pic_content
+          })
+          console.log(this.state.editor)
+          const editor = new E(this.editor.current)
+          // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
+          editor.customConfig.onchange = html => {
+              this.setState({
+                  editor: html,
+              })
+          }
+          editor.customConfig.uploadImgShowBase64 = true
+          editor.customConfig.menus = [
+              'head', // 标题
+              'bold', // 粗体
+              'fontSize', // 字号
+              'fontName', // 字体
+              'italic', // 斜体
+              'underline', // 下划线
+              'strikeThrough', // 删除线
+              'foreColor', // 文字颜色
+              'backColor', // 背景颜色
+              'link', // 插入链接
+              'list', // 列表
+              'justify', // 对齐方式
+              'quote', // 引用
+              'emoticon', // 表情
+              'image', // 插入图片
+              'table', // 表格
+              'video', // 插入视频
+              'undo', // 撤销
+              'redo', // 重复
+          ]
+          editor.create()
+          console.log(appointDetail.appoint_list.appoint_pic_content)
+          editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
+          setTimeout(() => {
+              form.setFieldsValue({
+                  payment_money: appointDetail.appoint_list.payment_money,
+                  appoint_price: appointDetail.appoint_list.appoint_price,
+              })
+          },100)
+        if(appointDetail.product_list)  {
+          const custom_name = [],custom_payment_price = [],custom_price=[],custom_content=[],use_time=[],custom_id=[]
+           appointDetail.product_list.forEach((item,index) => {
+                   custom_name.push(item.name)
+                   custom_payment_price.push(item.price)
+                   custom_price.push(item.price)
+                   custom_content.push(item.content)
+                   use_time.push(item.use_time)
+                   custom_id.push(item.id)
+           })
+            this.setState({
+                custom_name,
+                custom_payment_price,
+                custom_price,
+                custom_content,
+                use_time,
+                custom_id
+            })
+        }
+        this.setState({
+            appoint_type: appointDetail.appoint_list.appoint_type
+        })
+      })
+    }else{
+        const editor = new E(this.editor.current)
+        // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
+        editor.customConfig.onchange = html => {
+            console.log(html)
+            this.setState({
+                editor: html,
+            })
+        }
+        editor.customConfig.uploadImgShowBase64 = true
+        editor.customConfig.menus = [
+            'head', // 标题
+            'bold', // 粗体
+            'fontSize', // 字号
+            'fontName', // 字体
+            'italic', // 斜体
+            'underline', // 下划线
+            'strikeThrough', // 删除线
+            'foreColor', // 文字颜色
+            'backColor', // 背景颜色
+            'link', // 插入链接
+            'list', // 列表
+            'justify', // 对齐方式
+            'quote', // 引用
+            'emoticon', // 表情
+            'image', // 插入图片
+            'table', // 表格
+            'video', // 插入视频
+            'undo', // 撤销
+            'redo', // 重复
+        ]
+        editor.create()
+        editor.txt.html()
     }
     // editor.txt.html(history.location.state.value)
+
   }
 
   sotreChange = val => {
     console.log(val)
   }
-
-  // getMenuList = () => {
-  //   const { commodity } = this.props
-  //   const { reserveCategoryOption } = commodity
-  //   const cateGoryLabel = []
-  //   reserveCategoryOption.forEach(item => {
-  //     if (item.value === basicInfo.cat_fid) {
-  //       cateGoryLabel.push(item.label)
-  //       if (item.children.length) {
-  //         item.children.forEach(child => {
-  //           if (child.value === basicInfo.cat_id) {
-  //             cateGoryLabel.push(child.label)
-  //           }
-  //         })
-  //       }
-  //     }
-  //   })
-  //   return (
-  //     <Flex justify="end">
-  //       {cateGoryLabel.map((item, index) => (
-  //         <PrimaryTag
-  //           key={index}
-  //           style={{ marginLeft: 2 }}
-  //           onClick={() => this.setState({ menu: true })}
-  //         >
-  //           {item}
-  //         </PrimaryTag>
-  //       ))}
-  //     </Flex>
-  //   )
-  // }
-
+  delSpe = async id => {
+    console.log(id)
+  }
   changeCategory = async arr => {
     // const { basicInformation } = this.props
     // await basicInformation.modifyCategory(arr)
     this.setState({ menu: false, category: arr })
   }
-
+  addSpe = async () => {
+    const  { custom_name, custom_payment_price,custom_price,custom_content,use_time,custom_id} = this.state
+      if(custom_name.length < 9){
+          custom_name.push('')
+          custom_payment_price.push('')
+          custom_price.push('')
+          custom_content.push('')
+          use_time.push('')
+          custom_id.push('')
+        this.setState({
+          custom_name,
+          custom_payment_price,
+          custom_price,
+          custom_content,
+          use_time,
+          custom_id
+        })
+      }else{
+          Toast.info('不能超过9个规格')
+      }
+  }
   submit = async () => {
-    const { form, match, commodity } = this.props
+    const { form, match, commodity , history } = this.props
     const { category } = this.state
-    const content = this.editor.current.state.editor.txt.html()
+    // const content = this.editor.current.state.editor.txt.html()
     form.validateFields((error, value) => {
-      console.log(value)
       if (error) {
         Toast.info('请输入完整信息')
       }
@@ -126,7 +286,7 @@ class ReservePanel extends React.Component {
         ...value,
         cat_fid: category[0],
         cat_id: category[1],
-        appoint_pic_content: content,
+        appoint_pic_content: this.state.editor,
         start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD') : '',
         end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD') : '',
         office_start_time: value.office_start_time
@@ -140,29 +300,39 @@ class ReservePanel extends React.Component {
         payment_status: value.payment_status ? '1' : '0',
         appoint_date_type: value.appoint_date_type ? '1' : '0',
         is_store: value.is_store ? '1' : '0',
-        appoint_status: value.appoint_status ? '1' : '0',
+        appoint_status: !value.appoint_status ? '1' : '0',
         pic: value.pic.map(item => item.url),
+        store: this.state.store,
+        worker_memus: this.state.workerList,
+        custom_name: this.state.custom_name,
+        custom_payment_price:this.state.custom_payment_price,
+        custom_price: this.state.custom_price,
+        custom_content: this.state.custom_content,
+        custom_use_time:this.state.use_time,
+        custom_id:this.state.custom_id
       }
       if (match.params.id) {
-        commodity.modifyReserve({ ...obj, appoint_id: match.params.id })
+        commodity.modifyReserve({ ...obj, appoint_id: match.params.id }).then(res => {
+            if(res) Toast.success('修改成功', 1, () => history.goBack())
+        })
       } else {
-        commodity.insertReserve(obj)
+        commodity.insertReserve(obj).then(res => {
+            if(res) Toast.success('新增成功', 1, () => history.goBack())
+        })
       }
     })
   }
 
   render() {
     const { match, form, commodity } = this.props
-    const { files, menu, category } = this.state
+    const { files, menu, category , store , custom_name, custom_payment_price,custom_price,custom_content,use_time} = this.state
     const { getFieldProps } = form
-    const data = [
-      { value: 0, label: '同城百商联盟 - 下城区-跨贸小镇100幢' },
-      { value: 1, label: '同城百商联盟 - 下城区-跨贸小镇101幢' },
-      { value: 2, label: '同城百商联盟 - 下城区-跨贸小镇102幢' },
-    ]
+    const { shopList } = this.state
+
     const { reserveCategoryOption } = commodity
     const paymentValue = form.getFieldValue('payment_status')
     const storeChecked = form.getFieldValue('is_store')
+    const is_appoint_price = form .getFieldValue('is_appoint_price') || '0'
     const menuEl = (
       <Menu
         className="menu-position"
@@ -233,6 +403,16 @@ class ReservePanel extends React.Component {
           >
             <List.Item arrow="horizontal">全价</List.Item>
           </Picker>
+            {is_appoint_price[0] === '1' &&(
+                <InputItem
+                    {...getFieldProps('appoint_price', {
+                        rules: [{ required: true }],
+                    })}
+                    placeholder="请填写自定义价格，最多两位小数"
+                >
+                  自定义价格
+                </InputItem>
+            )}
           <List.Item
             extra={
               <Switch
@@ -347,6 +527,14 @@ class ReservePanel extends React.Component {
             data={types}
             cols={1}
             extra="请选择"
+            onOk={e => {
+              commodity.fetchShopList(e[0]).then(() => {
+                  const { shopList } = commodity
+                  this.setState({
+                      shopList:shopList
+                  })
+              })
+            }}
           >
             <List.Item arrow="horizontal">服务类别</List.Item>
           </Picker>
@@ -358,6 +546,7 @@ class ReservePanel extends React.Component {
             }
           >
             商户所属分类
+            <div>{}</div>
           </Item>
           <Item arrow="empty">
             商品图片
@@ -373,7 +562,12 @@ class ReservePanel extends React.Component {
           </Item>
           <Item>
             服务详情
-            <Editor ref={this.editor} />
+            <Editor>
+                <div
+                    ref={this.editor}
+                    className="editor"
+                />
+            </Editor>
           </Item>
           <List.Item
             extra={
@@ -383,6 +577,15 @@ class ReservePanel extends React.Component {
                   valuePropName: 'checked',
                   rules: [{ required: true }],
                 })}
+                onClick={e => {
+                   if(!e){
+                       this.setState({
+                           store:[],
+                           workerList:[],
+                           workerSele:[]
+                       })
+                   }
+                }}
               />
             }
           >
@@ -393,6 +596,7 @@ class ReservePanel extends React.Component {
               overlay="关闭后，订单将由商家指定门店及技师进行服务"
               onClick={e => {
                 e.stopPropagation()
+
               }}
             >
               <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
@@ -401,10 +605,61 @@ class ReservePanel extends React.Component {
             </Tooltip>
           </List.Item>
           {storeChecked
-            && data.map(i => (
-              <CheckboxItem key={i.value} onChange={() => this.sotreChange(i.value)}>
-                {i.label}
-              </CheckboxItem>
+            && shopList.map(i => (
+              <div key={i.value}>
+                <CheckboxItem key={i.value}
+                              checked = {store.indexOf(i.value) !== -1?true:false}
+                              onChange={e => {
+                                        const store_now = toJS(this.state.store)
+                                        const workerList = toJS(this.state.workerList)
+                                        const workerSele = toJS(this.state.workerSele)
+                                        if (store_now.indexOf(i.value) === -1){
+                                            store_now.push(i.value)
+                                        }else{
+                                            store_now.splice(store_now.indexOf(i.value),1)
+                                            if(i.worker_list){
+                                              i.worker_list.forEach(item => {
+                                                   if (workerList.indexOf(item.merchant_store_id+','+item.merchant_worker_id) !== -1) {
+                                                       workerList.splice(workerList.indexOf(item.merchant_store_id+','+item.merchant_worker_id),1)
+                                                       workerSele.splice(workerSele.indexOf(item.merchant_worker_id),1)
+                                                   }
+                                               })
+                                            }
+                                            console.log(workerList)
+                                        }
+                                        this.setState({
+                                            store:store_now,
+                                            workerList,
+                                            workerSele
+                                        })
+                                    }
+                              }>
+                    {i.label}
+                </CheckboxItem>
+                  {this.state.store.indexOf(i.value) !== -1 && i.worker_list && i.worker_list.map(j => (
+                    <List.Item key={j.value}>
+                      <CheckboxItem
+                       checked={this.state.workerSele.indexOf(j.value) !== -1?true:false}
+                       onChange={e => {
+                           const workerList = toJS(this.state.workerList)
+                           const workerSele = toJS(this.state.workerSele)
+                        if (workerList.indexOf(i.value+','+j.value) === -1) {
+                            workerList.push(i.value+','+j.value)
+                            workerSele.push(j.value)
+                          }else{
+                            workerList.splice(workerList.indexOf(i.value+','+j.value),1)
+                            workerSele.splice(workerSele.indexOf(j.value),1)
+                        }
+                          this.setState({
+                              workerList,
+                              workerSele
+                          })
+                      }}>{j.label}</CheckboxItem>
+                    </List.Item>
+                      ))
+                  }
+
+              </div>
             ))}
           <DatePicker
             {...getFieldProps('office_start_time', {
@@ -435,6 +690,9 @@ class ReservePanel extends React.Component {
             })}
             mode="time"
             extra="选择时间"
+            onOk={e=>{
+              console.log(e)
+            }}
           >
             <List.Item arrow="horizontal">
               营业结束时间
@@ -452,6 +710,97 @@ class ReservePanel extends React.Component {
               </Tooltip>
             </List.Item>
           </DatePicker>
+
+            {custom_name && custom_name.map((item , index) => (
+                <List key={index} style={{marginBottom:"2%"}}>
+                  <InputItem
+                      placeholder=""
+                      value={custom_name[index]?custom_name[index]:''}
+                      onChange={e=>{
+                          custom_name[index]=e
+                        this.setState({
+                            custom_name
+                        })
+                      }}
+                  >
+                    规格名称
+                  </InputItem>
+                  <InputItem
+                      placeholder=""
+                      value={custom_payment_price[index]?custom_payment_price[index]:''}
+                      onChange={e=>{
+                          custom_payment_price[index]=e
+                          this.setState({
+                              custom_payment_price
+                          })
+                      }}
+                  >
+                    规格定金
+                  </InputItem>
+                  <InputItem
+                      placeholder=""
+                      value={custom_price[index]?custom_price[index]:''}
+                      onChange={e=>{
+                          custom_price[index]=e
+                          this.setState({
+                              custom_price
+                          })
+                      }}
+                  >
+                    规格全价
+                  </InputItem>
+                  <InputItem
+                      placeholder=""
+                      value={custom_content[index]?custom_content[index]:''}
+                      onChange={e=>{
+                          custom_content[index]=e
+                          this.setState({
+                              custom_content
+                          })
+                      }}
+                  >
+                    规格描述
+                  </InputItem>
+                  <InputItem
+                      placeholder="(分钟)"
+                      value={use_time[index]?use_time[index]:''}
+                      onChange={e=>{
+                          use_time[index]=e
+                          this.setState({
+                              use_time
+                          })
+                      }}
+                  >
+                    平均用时
+                  </InputItem>
+          {/*        <Button type="primary"
+                          style={{width:"20%",height:"25px",lineHeight:"25px",fontSize:"14px",margin:"0 auto"}}
+                          onClick={ e => {
+                                    console.log(this.state.custom_name)
+                                  custom_name.splice(index,1)
+                                  custom_payment_price.splice(index,1)
+                                  custom_price.splice(index,1)
+                                  custom_content.splice(index,1)
+                                  use_time.splice(index,1)
+                          this.setState({
+                              custom_name,
+                              custom_payment_price,
+                              custom_price,
+                              custom_content,
+                              use_time
+                          },() => {console.log(this.state.custom_name)})
+                  }}>
+                   删除
+                  </Button>*/}
+                </List>
+            ))
+
+            }
+
+            <Button type="primary" style={{width:"30%",height:"30px",lineHeight:"30px",fontSize:"14px",margin:"0 auto"}} onClick={this.addSpe}>
+              增加规格
+            </Button>
+
           <List.Item
             extra={
               <Switch
@@ -478,6 +827,7 @@ class ReservePanel extends React.Component {
             </Tooltip>
           </List.Item>
         </List>
+
         <WingBlank>
           <WhiteSpace />
           <Button type="primary" onClick={this.submit}>

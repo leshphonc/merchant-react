@@ -36,6 +36,12 @@ class Group extends React.Component {
   mapList = () => {
     const { commodity } = this.props
     const { groupList } = commodity
+    const styleSpan = {
+      spaner: {
+        display: 'inline-block',
+        width: '50%',
+      },
+    }
     return groupList.map(item => (
       <React.Fragment key={item.group_id}>
         <ListItem>
@@ -48,9 +54,10 @@ class Group extends React.Component {
               <WhiteSpace />
               <div
                 className="top-features"
-                style={{ position: 'initial', fontSize: '14px', color: '#fb6a41' }}
+                style={{ position: 'initial', fontSize: '14px', color: '#fb6a41', width: '100%' }}
               >
-                现金: {item.price} 元
+                <span style={{ display: 'inline-block', width: '50%' }}>团购价: {item.price}</span>
+                {item.old_price ? (<span style={{ display: 'inline-block', width: '50%' }}>原价： {item.old_price}</span>) : ''}
               </div>
               <WhiteSpace />
               <div
@@ -60,26 +67,62 @@ class Group extends React.Component {
                   display: 'block',
                   fontSize: '14px',
                   marginBottom: '10px',
+                  width: '100%',
                 }}
               >
-                已售出: {item.sale_count}
+                <span style={styleSpan.spaner}>库存：{item.count_num}</span>
+                <span style={styleSpan.spaner}>销量: {item.sale_count}</span>
               </div>
-              <Link
-                to={`/management/commodity/groupPanel/编辑/${item.group_id}`}
-                style={{ color: '#333' }}
+              <div
+                className="top-features"
+                style={{
+                  position: 'initial',
+                  display: 'block',
+                  fontSize: '14px',
+                  marginBottom: '10px',
+                  width: '100%',
+                }}
               >
-                <div style={{ display: 'inline-block' }}>
+                <span style={styleSpan.spaner}>运行状态:
+                  { new Date(item.begin_time * 1000) > new Date() ? '未开团' : (
+                    new Date(item.end_time * 1000) < new Date() ? '已结束' : (
+                      item.type === '3' ? '已结束' : (
+                        item.type === '4' ? '结束失败' : '进行中'
+                      )
+                    )
+                  )}
+                </span>
+                <span style={styleSpan.spaner}>
+                    团购状态：{item.status === '1' ? '开启' : '关闭'}
+                </span>
+              </div>
+              <div
+                className="top-features"
+                style={{
+                  position: 'initial',
+                  display: 'block',
+                  fontSize: '14px',
+                  marginBottom: '10px',
+                  width: '100%',
+                }}
+              >
+                <div style={styleSpan.spaner}>
                   <i className="iconfont" style={{ color: '#ffb000' }}>
-                    &#xe645;
+                          &#xe6fd;
                   </i>
-                  编辑
+                      订单列表
                 </div>
-              </Link>
-              <div style={{ display: 'inline-block', marginLeft: '30px' }}>
-                <i className="iconfont" style={{ color: '#ffb000' }}>
-                  &#xe6fd;
-                </i>
-                评论展示
+                <Link
+                  to={`/management/commodity/groupPanel/编辑/${item.group_id}`}
+                  style={{ color: '#333', width: '50%' }}
+                >
+                  <div style={styleSpan.spaner}>
+                    <i className="iconfont" style={{ color: '#ffb000' }}>
+                        &#xe645;
+                    </i>
+                      编辑
+                  </div>
+                </Link>
               </div>
             </TopContent>
           </ItemTop>

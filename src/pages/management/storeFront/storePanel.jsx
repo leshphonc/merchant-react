@@ -289,11 +289,13 @@ class StorePanel extends React.Component {
       console.log(obj)
       if (match.params.id) {
         storeFront.modifyStoreFront({ ...obj, store_id: match.params.id }).then(res => {
+          return
           if (res) Toast.success('编辑成功', 1, () => history.goBack())
         })
       } else {
         storeFront.insertStoreFront(obj).then(res => {
-          if (res) Toast.success('新增成功', 1, () => history.goBack())
+            return
+            if (res) Toast.success('新增成功', 1, () => history.goBack())
         })
       }
     })
