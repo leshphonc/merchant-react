@@ -3,13 +3,13 @@ import { observer, inject } from 'mobx-react'
 import NavBar from '@/common/NavBar'
 import CropperImg from '@/common/UploadImg/CropperImg'
 
-@inject('basicInformation')
+@inject('redEnvelop')
 @observer
 class ModifyPicture extends React.Component {
   saveImg = async url => {
-    const { history, match, basicInformation } = this.props
+    const { history, match, redEnvelop } = this.props
     console.log(this.props)
-    await basicInformation[match.params.action](url)
+    await redEnvelop[match.params.action](url)
     history.goBack()
   }
 

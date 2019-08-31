@@ -8,8 +8,6 @@ import {
   Button,
   Toast,
   Picker,
-  Switch,
-  ImagePicker,
   TextareaItem,
   DatePicker,
 } from 'antd-mobile'
@@ -18,40 +16,171 @@ import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import moment from 'moment'
+import { CustomizeList, ListTitle, ListContent } from '@/styled'
 import { toJS } from 'mobx'
 
-const { Item } = List
-const data = []
 const packetType = [{ label: '手气红包', value: '1' }, { label: '普通红包', value: '2' }]
 const isOpen = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
 @createForm()
-@inject('redEnvelop')
+@inject('redEnvelop', 'common')
 @observer
 class RetailAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      pic: [],
-      files: data,
       asyncCascadeValue: [],
+      shopLogo: '',
     }
   }
 
   componentDidMount() {
     const { redEnvelop, match, form } = this.props
     console.log(this.props)
-    if (!match.params.id) return
+    const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
+    if (cacheData && Object.keys(cacheData).length) {
+      if (cacheData.cascade) {
+        redEnvelop.fetchCascadeOption(
+          cacheData.cascade[0],
+          cacheData.cascade[1],
+          cacheData.cascade[2],
+        )
+      } else {
+        redEnvelop.fetchCascadeOption()
+      }
+      // 整理默认数据存入state
+      this.setState({
+        asyncCascadeValue: cacheData.cascade,
+        shopLogo: cacheData.shopLogo,
+      })
+      form.setFieldsValue({
+        cascade: cacheData.cascade,
+        packet_type: cacheData.packet_type,
+        title: cacheData.title,
+        share_url: cacheData.share_url,
+        desc: cacheData.desc,
+        start_time: cacheData.start_time && new Date(cacheData.start_time),
+        end_time: cacheData.end_time && new Date(cacheData.end_time),
+        is_open: cacheData.is_open,
+        item_sum: cacheData.item_sum,
+        item_max: cacheData.item_max,
+        item_min: cacheData.item_min,
+        item_num: cacheData.item_num,
+        item_unit: cacheData.item_unit,
+        keyword: cacheData.title,
+        people: cacheData.people,
+        get_number: cacheData.get_number,
+        day_number: cacheData.day_number,
+      })
+      return
+    }
+
+    if (!match.params.id) {
+      redEnvelop.fetchCascadeOption().then(() => {
+        const { asyncCascadeValue } = redEnvelop
+        this.setState({
+          asyncCascadeValue,
+        })
+      })
+      return
+    }
     redEnvelop.fetchGetRedPacket(match.params.id).then(() => {
       const { getRedPacket } = redEnvelop
-      console.log(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD'))
+      redEnvelop
+        .fetchCascadeOption(getRedPacket.province_id, getRedPacket.city_id, getRedPacket.area_id)
+        .then(() => {
+          const { asyncCascadeValue } = redEnvelop
+          // 整理默认数据存入state
+          this.setState({
+            asyncCascadeValue,
+            shopLogo: getRedPacket.pic,
+          })
+        })
+      console.log(moment(getRedPacket.start_time).format('YYYY-MM-DD'))
       form.setFieldsValue({
         ...getRedPacket,
-        // pic: getRedPacket.pic,
-        start_time: new Date(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD hh:mm:ss')),
-        end_time: new Date(moment(getRedPacket.end_time * 1000).format('YYYY-MM-DD hh:mm:ss')),
+        title: getRedPacket.title,
+        share_url: getRedPacket.share_url,
+        desc: getRedPacket.desc,
+        cascade: [getRedPacket.province_id, getRedPacket.city_id, getRedPacket.area_id],
+        start_time: new Date(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD hh:mm')),
+        end_time: new Date(moment(getRedPacket.end_time * 1000).format('YYYY-MM-DD hh:mm')),
         is_open: [getRedPacket.is_open],
         packet_type: [getRedPacket.packet_type],
       })
+      if (getRedPacket.packet_type) {
+        setTimeout(() => {
+          if (getRedPacket.packet_type[0] === '1') {
+            form.setFieldsValue({
+              item_sum: getRedPacket.item_sum,
+              item_max: getRedPacket.item_max,
+              item_min: getRedPacket.item_min,
+            })
+          } else {
+            form.setFieldsValue({
+              item_num: getRedPacket.item_num,
+              item_unit: getRedPacket.item_unit,
+            })
+          }
+        }, 20)
+      }
+    })
+  }
+
+  cacheData = () => {
+    // debugger
+    const { form } = this.props
+    const { shopLogo } = this.state
+    console.log(shopLogo)
+    const formData = form.getFieldsValue()
+    console.log(formData)
+    formData.shopLogo = shopLogo
+    Utils.cacheData(formData)
+  }
+
+  goLogoPicker = () => {
+    const { history } = this.props
+    this.cacheData()
+    history.push('/uploadSingleImg/上传Logo/shopLogo/1')
+  }
+
+  onPickerChange = val => {
+    const { redEnvelop } = this.props
+    const { cascadeOption } = redEnvelop
+    const d = [...cascadeOption]
+    let asyncValue = [...val]
+    // 遍历当前的PickerOption
+    d.forEach(i => {
+      // 遍历并找出传入的省份
+      if (i.value === val[0]) {
+        // 如果没有children，则去获取
+        if (!i.children) {
+          redEnvelop.fetchCityAndConcat(val[0]).then(res => {
+            if (res) asyncValue = res
+            this.setState({
+              asyncCascadeValue: asyncValue,
+            })
+          })
+        } else {
+          // 如果有children，则遍历children
+          i.children.forEach(j => {
+            // 遍历并找出传入的市
+            if (j.value === val[1]) {
+              // 如果没有children，则获取
+              if (!j.children) {
+                redEnvelop.fetchAreaAndConcat(val[0], val[1]).then(res => {
+                  if (res) asyncValue = res
+                  this.setState({
+                    asyncCascadeValue: asyncValue,
+                  })
+                })
+              }
+            }
+          })
+        }
+      }
+    })
+    this.setState({
+      asyncCascadeValue: asyncValue,
     })
   }
 
@@ -59,17 +188,32 @@ class RetailAdd extends React.Component {
     const {
       redEnvelop, form, match, history,
     } = this.props
+    const { shopLogo } = this.state
+    if (!shopLogo) {
+      Toast.info('请输入完整信息')
+      return
+    }
     form.validateFields((error, value) => {
-      // if (error) {
-      //   Toast.info('请输入完整信息')
-      //   return
-      // }
+      if (error) {
+        Toast.info('请输入完整信息')
+        return
+      }
       const obj = {
         ...value,
-        start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD') : '',
-        end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD') : '',
+        start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD hh:mm') : '',
+        end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD hh:mm') : '',
         is_open: value.is_open[0],
+        province_id: value.cascade[0],
+        city_id: value.cascade[1],
+        area_id: value.cascade[2],
         packet_type: value.packet_type[0],
+        item_sum: value.item_sum,
+        item_max: value.item_max,
+        item_min: value.item_min,
+        item_num: value.item_num,
+        item_unit: value.item_unit,
+        keyword: value.title,
+        pic: shopLogo,
       }
       console.log(value)
       console.log(obj)
@@ -86,52 +230,17 @@ class RetailAdd extends React.Component {
     })
   }
 
-  fetchCircle = val => {
-    const { giftManagement } = this.props
-    if (val[2]) {
-      giftManagement.fetchCircle(val[2])
-    } else {
-      giftManagement.resetCircle()
-    }
-  }
-
-  imgChange = (arr, type) => {
-    const { form } = this.props
-    if (type === 'remove') {
-      console.log(arr)
-      form.setFieldsValue({
-        pic: arr,
-      })
-      this.setState({ pic: arr })
-      return
-    }
-    arr.forEach((item, index) => {
-      if (item.file) {
-        Utils.compressionAndUploadImg(item.file)
-          .then(res => {
-            const picArr = arr
-            picArr.splice(index, 1, { url: res })
-            form.setFieldsValue({
-              pic: picArr,
-            })
-            this.setState({ pic: picArr })
-          })
-          .catch(e => Toast.fail(e))
-      }
-    })
-  }
-
   onChange = val => {
     console.log(val)
   }
 
   render() {
-    const { giftManagement, match, form } = this.props
+    const { redEnvelop, match, form } = this.props
     const { getFieldProps } = form
-    // const { giftCategory, giftCategorylist, shopList } = giftManagement
-    const { pic, asyncCascadeValue, files } = this.state
-    // const { cascadeOption, circleOption } = giftManagement
+    const { asyncCascadeValue } = this.state
+    const { cascadeOption } = redEnvelop
     // console.log(circleOption)
+    const { shopLogo } = this.state
     const packettype = form.getFieldValue('packet_type') ? form.getFieldValue('packet_type')[0] : ''
     // console.log(shopList)
     return (
@@ -146,34 +255,14 @@ class RetailAdd extends React.Component {
           >
             活动名称
           </InputItem>
-          <InputItem
-            {...getFieldProps('keyword', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请填写关键词"
-          >
-            关键词
-          </InputItem>
-          <ImagePicker
-            length="6"
-            files={files}
-            onChange={this.onChange}
-            onImageClick={(index, fs) => console.log(index, fs)}
-            selectable={files.length < 2}
-            onAddImageClick={this.onAddImageClick}
-            disableDelete
-          />
-          {/* <List.Item arrow="empty">
-            活动图片
-            <ImagePicker
-              {...getFieldProps('pic', {
-                valuePropName: 'files',
-                getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
-                rules: [{ required: true }],
-              })}
-              selectable={pic.length < 4}
-            />
-          </List.Item> */}
+          <List.Item arrow="horizontal" onClick={this.goLogoPicker}>
+            <CustomizeList>
+              <ListTitle>活动图片</ListTitle>
+              <ListContent>
+                <img src={shopLogo || ''} className="w40" alt="" />
+              </ListContent>
+            </CustomizeList>
+          </List.Item>
           <DatePicker
             {...getFieldProps('start_time', {
               rules: [{ required: true }],
@@ -196,31 +285,27 @@ class RetailAdd extends React.Component {
             活动介绍
             <TextareaItem {...getFieldProps('desc')} rows={3} placeholder="请填写简短描述" />
           </List.Item>
-          {/* <Picker
+          <Picker
             {...getFieldProps('cascade', {
               rules: [{ required: true }],
             })}
             title="选择地区"
             extra="请选择"
             cols={3}
-            // data={cascadeOption}
+            data={cascadeOption}
             value={asyncCascadeValue}
             onPickerChange={this.onPickerChange}
-            onOk={this.fetchCircle}
           >
-            <List.Item arrow="horizontal">店铺所在地</List.Item>
+            <List.Item arrow="horizontal">活动地区</List.Item>
           </Picker>
-          <Picker
-            {...getFieldProps('circle_idss', {
+          <InputItem
+            {...getFieldProps('share_url', {
               rules: [{ required: true }],
             })}
-            // data={circleOption}
-            title="选择商圈"
-            extra="请选择"
-            cols={1}
+            placeholder="请填写链接"
           >
-            <List.Item arrow="horizontal">所在商圈</List.Item>
-          </Picker> */}
+            分享链接
+          </InputItem>
           <InputItem
             {...getFieldProps('people', {
               rules: [{ required: true }],

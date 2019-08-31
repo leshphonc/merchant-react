@@ -55,3 +55,26 @@ export const modifyPacket = payload => {
     ticket: localStorage.getItem('ticket'),
   })
 }
+
+// 省份
+export const fetchProvince = () => axios.get('/appapi.php?c=Merchantapp&a=ajax_province', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 市区
+export const fetchCity = id => axios.get('/appapi.php?c=Merchantapp&a=ajax_city', {
+  params: {
+    id,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 地区
+export const fetchArea = id => axios.get('/appapi.php?c=Merchantapp&a=ajax_area', {
+  params: {
+    id,
+    ticket: localStorage.getItem('ticket'),
+  },
+})

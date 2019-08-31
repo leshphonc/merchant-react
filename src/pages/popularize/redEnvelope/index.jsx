@@ -8,8 +8,10 @@ import {
 } from 'antd-mobile'
 import moment from 'moment'
 import { toJS } from 'mobx'
+import Utils from '@/utils'
 import RedEnvelopePanel from './redEnvelopePanel'
 import GetList from './getList'
+import ModifyPicture from './modify/picture'
 
 const seasons = [{ label: '未开启', value: '0' }, { label: '已开启', value: '1' }]
 const isFabu = [
@@ -24,6 +26,7 @@ class RedEnvelope extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      show: 'none',
       refreshing: false,
       height: document.documentElement.clientHeight,
     }
@@ -40,6 +43,7 @@ class RedEnvelope extends React.Component {
         height: hei,
       })
     }
+    Utils.clearCacheData()
     /* eslint react/no-find-dom-node: 0 */
   }
 
@@ -69,6 +73,7 @@ class RedEnvelope extends React.Component {
   mapList = () => {
     const { redEnvelop, history } = this.props
     const { redEnvelopList } = redEnvelop
+    const { show } = this.state
     console.log(toJS(redEnvelopList))
     return redEnvelopList.map(item => (
       <React.Fragment key={item.id}>
@@ -140,7 +145,7 @@ class RedEnvelope extends React.Component {
                 {item.is_fabu === '0' ? (
                   <Flex.Item>
                     <Button type="primary" size="small" onClick={() => this.fabu(item.id)}>
-                      发布到红包广场
+                      发布
                     </Button>
                   </Flex.Item>
                 ) : (
@@ -203,5 +208,9 @@ export default () => (
     <Route path="/popularize/redEnvelope" exact component={RedEnvelope} />
     <Route path="/popularize/redEnvelope/redEnvelopePanel/:str/:id?" component={RedEnvelopePanel} />
     <Route path="/popularize/redEnvelope/getList/:id" component={GetList} />
+    <Route
+      path="/popularize/redEnvelope/modifyPicture/:action/:aspectratio"
+      component={ModifyPicture}
+    />
   </React.Fragment>
 )
