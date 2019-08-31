@@ -4,14 +4,13 @@ import ReactDOM from 'react-dom'
 import { Route, Link } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  Button, Flex, Card, WhiteSpace, PullToRefresh, WingBlank, Toast,
+  Button, Flex, Card, WhiteSpace, PullToRefresh, WingBlank,
 } from 'antd-mobile'
 import moment from 'moment'
 import { toJS } from 'mobx'
 import Utils from '@/utils'
 import RedEnvelopePanel from './redEnvelopePanel'
 import GetList from './getList'
-import ModifyPicture from './modify/picture'
 
 const seasons = [{ label: '未开启', value: '0' }, { label: '已开启', value: '1' }]
 const isFabu = [
@@ -26,7 +25,6 @@ class RedEnvelope extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      show: 'none',
       refreshing: false,
       height: document.documentElement.clientHeight,
     }
@@ -73,7 +71,6 @@ class RedEnvelope extends React.Component {
   mapList = () => {
     const { redEnvelop, history } = this.props
     const { redEnvelopList } = redEnvelop
-    const { show } = this.state
     console.log(toJS(redEnvelopList))
     return redEnvelopList.map(item => (
       <React.Fragment key={item.id}>
@@ -175,7 +172,6 @@ class RedEnvelope extends React.Component {
             </Link>
           }
         />
-        {/* {this.mapList()} */}
         {redEnvelopListTotal < 10 ? (
           <React.Fragment>
             <WhiteSpace />
@@ -208,9 +204,5 @@ export default () => (
     <Route path="/popularize/redEnvelope" exact component={RedEnvelope} />
     <Route path="/popularize/redEnvelope/redEnvelopePanel/:str/:id?" component={RedEnvelopePanel} />
     <Route path="/popularize/redEnvelope/getList/:id" component={GetList} />
-    <Route
-      path="/popularize/redEnvelope/modifyPicture/:action/:aspectratio"
-      component={ModifyPicture}
-    />
   </React.Fragment>
 )

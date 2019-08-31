@@ -106,5 +106,4 @@ class RedEnvelope extends React.Component {
   }
 }
 
-// export default RedEnvelop
 export default RedEnvelope

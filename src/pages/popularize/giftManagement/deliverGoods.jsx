@@ -4,7 +4,7 @@ import { observer, inject } from 'mobx-react'
 import { List, Picker, WingBlank, Button } from 'antd-mobile'
 import { toJS } from 'mobx'
 
-const { Item } = List
+// const { Item } = List
 
 @inject('giftManagement')
 @observer

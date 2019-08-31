@@ -140,7 +140,7 @@ class RetailAdd extends React.Component {
   goLogoPicker = () => {
     const { history } = this.props
     this.cacheData()
-    history.push('/uploadSingleImg/上传Logo/shopLogo/1')
+    history.push('/uploadSingleImg/上传图片/shopLogo/1')
   }
 
   onPickerChange = val => {
