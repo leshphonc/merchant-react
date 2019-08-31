@@ -16,12 +16,13 @@ import Coupon from '@/pages/management/member/coupon'
 import Commodity from '@/pages/management/commodity'
 import ShopManager from '@/pages/management/shopManager'
 import BasicInformation from '@/pages/setting/basicInformation'
-import ShopAssistant from '@/pages/popularize/shopAssistant'
 import UploadSingleImg from '@/common/UploadImg/Single'
 import UploadMultipleImg from '@/common/UploadImg/Multiple'
 import CoordinatePicker from '@/common/CoordinatePicker'
 
+import ShopAssistant from '@/pages/popularize/shopAssistant'
 import RedEnvelope from '@/pages/popularize/redEnvelope'
+import GiftManagement from '@/pages/popularize/giftManagement'
 
 // mobx严格模式 生产环境使用observed 开发使用always
 configure({ enforceActions: 'always' })
@@ -49,11 +50,12 @@ export default () => (
       {/* 商家推广 ->  popularize */}
       <Route path="/popularize/shopAssistant" component={ShopAssistant} />
       <Route path="/popularize/redEnvelope" component={RedEnvelope} />
+      <Route path="/popularize/giftManagement" component={GiftManagement} />
       {/* 上传图片页面 */}
       <Route path="/uploadSingleImg/:title/:key/:ratio" component={UploadSingleImg} />
       <Route path="/uploadMultipleImg/:title/:key/:ratio" component={UploadMultipleImg} />
       {/* 坐标拾取页面 */}
-      <Route path="/coordinatePicker/:lng/:lat" component={CoordinatePicker} />
+      <Route path="/coordinatePicker/:lng?/:lat?" component={CoordinatePicker} />
     </HashRouter>
   </Provider>
 )

@@ -10,13 +10,7 @@ import { createForm } from 'rc-form'
 @createForm()
 @inject('shopManager')
 @observer
-class RetailAdd extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-    }
-  }
-
+class ECommerceAdd extends React.Component {
   componentDidMount() {
     const { shopManager, match, form } = this.props
     console.log(this.props)
@@ -45,11 +39,9 @@ class RetailAdd extends React.Component {
       console.log(obj)
       if (match.params.id) {
         console.log(match.params.id)
-        shopManager
-          .addClassify({ ...obj, id: match.params.id })
-          .then(res => {
-            if (res) Toast.success('编辑成功', 1, () => history.goBack())
-          })
+        shopManager.addClassify({ ...obj, id: match.params.id }).then(res => {
+          if (res) Toast.success('编辑成功', 1, () => history.goBack())
+        })
       } else {
         shopManager.modifyClassify({ ...obj }).then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
@@ -87,4 +79,4 @@ class RetailAdd extends React.Component {
     )
   }
 }
-export default RetailAdd
+export default ECommerceAdd

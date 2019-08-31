@@ -43,43 +43,45 @@ class TakeawayPanel extends React.Component {
     })
     storeFront.fetchTakeawayDetail(match.params.id).then(() => {
       const { takeawayDetail } = storeFront
-      form.setFieldsValue({
-        is_open_pick: takeawayDetail.store_shop.is_open_pick === '1',
-        store_notice: takeawayDetail.store_shop.store_notice,
-        is_mult_class: takeawayDetail.store_shop.is_mult_class === '1',
-        is_auto_order: takeawayDetail.store_shop.is_auto_order === '1',
-        is_invoice: takeawayDetail.store_shop.is_invoice === '1',
-        advance_day: takeawayDetail.store_shop.advance_day,
-        pack_alias: takeawayDetail.store_shop.pack_alias,
-        freight_alias: takeawayDetail.store_shop.freight_alias,
-        send_time_type: [takeawayDetail.store_shop.send_time_type],
-        send_time: takeawayDetail.store_shop.send_time,
-        deliver_type: [takeawayDetail.store_shop.deliver_type],
-        basic_price: takeawayDetail.store_shop.basic_price,
-        delivery_radius: takeawayDetail.store_shop.delivery_radius,
-        store_discount: takeawayDetail.store_shop.store_discount,
-        stock_type: [takeawayDetail.store_shop.stock_type],
-        reduce_stock_type: [takeawayDetail.store_shop.reduce_stock_type],
-        rollback_time: takeawayDetail.store_shop.rollback_time,
-        discount_type: [takeawayDetail.store_shop.discount_type],
-        delivertime_start: Utils.conversionTimeStringToDate(
-          takeawayDetail.store_shop.delivertime_start,
-        ),
-        delivertime_stop: Utils.conversionTimeStringToDate(
-          takeawayDetail.store_shop.delivertime_stop,
-        ),
-        basic_distance: takeawayDetail.store_shop.basic_distance,
-        delivery_fee: takeawayDetail.store_shop.delivery_fee,
-        per_km_price: takeawayDetail.store_shop.per_km_price,
-        reach_delivery_fee_type: [takeawayDetail.store_shop.reach_delivery_fee_type],
-        no_delivery_fee_value: takeawayDetail.store_shop.no_delivery_fee_value,
-      })
-      if (takeawayDetail.store_shop.is_invoice === '1') {
-        setTimeout(() => {
-          form.setFieldsValue({
-            invoice_price: takeawayDetail.store_shop.invoice_price,
-          })
-        }, 50)
+      if (Object.keys(takeawayDetail.store_shop).length) {
+        form.setFieldsValue({
+          is_open_pick: takeawayDetail.store_shop.is_open_pick === '1',
+          store_notice: takeawayDetail.store_shop.store_notice,
+          is_mult_class: takeawayDetail.store_shop.is_mult_class === '1',
+          is_auto_order: takeawayDetail.store_shop.is_auto_order === '1',
+          is_invoice: takeawayDetail.store_shop.is_invoice === '1',
+          advance_day: takeawayDetail.store_shop.advance_day,
+          pack_alias: takeawayDetail.store_shop.pack_alias,
+          freight_alias: takeawayDetail.store_shop.freight_alias,
+          send_time_type: [takeawayDetail.store_shop.send_time_type],
+          send_time: takeawayDetail.store_shop.send_time,
+          deliver_type: [takeawayDetail.store_shop.deliver_type],
+          basic_price: takeawayDetail.store_shop.basic_price,
+          delivery_radius: takeawayDetail.store_shop.delivery_radius,
+          store_discount: takeawayDetail.store_shop.store_discount,
+          stock_type: [takeawayDetail.store_shop.stock_type],
+          reduce_stock_type: [takeawayDetail.store_shop.reduce_stock_type],
+          rollback_time: takeawayDetail.store_shop.rollback_time,
+          discount_type: [takeawayDetail.store_shop.discount_type],
+          delivertime_start: Utils.conversionTimeStringToDate(
+            takeawayDetail.store_shop.delivertime_start,
+          ),
+          delivertime_stop: Utils.conversionTimeStringToDate(
+            takeawayDetail.store_shop.delivertime_stop,
+          ),
+          basic_distance: takeawayDetail.store_shop.basic_distance,
+          delivery_fee: takeawayDetail.store_shop.delivery_fee,
+          per_km_price: takeawayDetail.store_shop.per_km_price,
+          reach_delivery_fee_type: [takeawayDetail.store_shop.reach_delivery_fee_type],
+          no_delivery_fee_value: takeawayDetail.store_shop.no_delivery_fee_value,
+        })
+        if (takeawayDetail.store_shop.is_invoice === '1') {
+          setTimeout(() => {
+            form.setFieldsValue({
+              invoice_price: takeawayDetail.store_shop.invoice_price,
+            })
+          }, 50)
+        }
       }
     })
   }
@@ -127,7 +129,6 @@ class TakeawayPanel extends React.Component {
     const { getFieldProps } = form
     const { qrcode, modal } = this.state
     const invoice = form.getFieldValue('is_invoice')
-    const fee = form.getFieldValue('reach_delivery_fee_type')
     return (
       <React.Fragment>
         <NavBar title="外卖详情配置" goBack />

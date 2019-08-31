@@ -24,7 +24,7 @@ export const fetchStaffDetail = (storeId, staffId) => axios.get('/appapi.php?c=M
 })
 
 // 店员添加、编辑
-export const addRetail = payload => {
+export const addECommerce = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
     body[item] = payload[item]
@@ -35,7 +35,7 @@ export const addRetail = payload => {
   })
 }
 
-export const modifyRetail = payload => {
+export const modifyECommerce = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
     body[item] = payload[item]
@@ -63,7 +63,7 @@ export const fetchBusinessList = storeId => axios.get('/appapi.php?c=Merchantapp
 })
 
 // 商品店铺
-export const fetchRetailValues = () => axios.get('/appapi.php?c=Merchantapp&a=select_shop_store', {
+export const fetchECommerceValues = () => axios.get('/appapi.php?c=Merchantapp&a=select_shop_store', {
   params: {
     ticket: localStorage.getItem('ticket'),
   },

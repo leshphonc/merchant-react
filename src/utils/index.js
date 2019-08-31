@@ -1,4 +1,5 @@
 import Compressor from 'compressorjs'
+import crypto from 'crypto'
 import axios from 'axios'
 import { Toast } from 'antd-mobile'
 
@@ -133,6 +134,11 @@ export default {
     wx.onMenuShareQQ(shareInfo)
     // 分享到QQ空间（即将废弃 now:2019.6.22）
     wx.onMenuShareQZone(shareInfo)
+  },
+  md5(str) {
+    const md5 = crypto.createHash('md5')
+    md5.update(str)
+    return md5.digest('hex')
   },
   // 公用正则
   matchExp(rule, value) {

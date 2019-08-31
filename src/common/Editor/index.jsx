@@ -16,6 +16,7 @@ class Editor extends React.Component {
 
   componentDidMount() {
     const { content } = this.props
+    console.log(this.props)
     const editor = new E(this.editor.current)
     this.setState({
       editor,
@@ -53,7 +54,9 @@ class Editor extends React.Component {
   }
 
   render() {
-    return <div ref={this.editor} style={{ textAlign: 'left', background: '#fff' }} />
+    return (
+      <div ref={this.editor} style={{ textAlign: 'left', background: '#fff', margin: '10px 0' }} />
+    )
   }
 }
 

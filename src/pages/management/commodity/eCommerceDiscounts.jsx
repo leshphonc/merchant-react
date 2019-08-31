@@ -15,7 +15,7 @@ const seckill = [{ label: '固定时间段', value: '1' }, { label: '每天的�
 @createForm()
 @inject('commodity')
 @observer
-class RetailDiscounts extends React.Component {
+class ECommerceDiscounts extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -29,17 +29,17 @@ class RetailDiscounts extends React.Component {
     commodity.fetchCardGroupAll()
     if (!match.params.goodid) return
     commodity.fetchGiftVoucher()
-    commodity.fetchRetailDetail(match.params.id, match.params.goodid).then(() => {
-      const { retailDetail } = commodity
+    commodity.fetchECommerceDetail(match.params.id, match.params.goodid).then(() => {
+      const { eCommerceDetail } = commodity
       form.setFieldsValue({
-        ...retailDetail,
-        seckill_type: [retailDetail.seckill_type],
-        seckill_open_time: new Date(retailDetail.seckill_open_time * 1000),
-        seckill_close_time: new Date(retailDetail.seckill_close_time * 1000),
-        in_group: [retailDetail.in_group],
+        ...eCommerceDetail,
+        seckill_type: [eCommerceDetail.seckill_type],
+        seckill_open_time: new Date(eCommerceDetail.seckill_open_time * 1000),
+        seckill_close_time: new Date(eCommerceDetail.seckill_close_time * 1000),
+        in_group: [eCommerceDetail.in_group],
       })
       this.setState({
-        give: retailDetail.give,
+        give: eCommerceDetail.give,
       })
     })
   }
@@ -267,4 +267,4 @@ class RetailDiscounts extends React.Component {
     )
   }
 }
-export default RetailDiscounts
+export default ECommerceDiscounts

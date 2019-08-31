@@ -2,55 +2,70 @@ import { observable, action, runInAction } from 'mobx'
 import * as services from './services'
 import ErrorCode from '@/config/ErrorCode'
 
-class RedEnvelopStore {
-  @observable redEnvelopList = []
+class MastSotre {
+  @observable getGift = []
 
-  @observable redEnvelopListPage = 1
+  @observable getGiftPage = 1
 
-  @observable redEnvelopListSize = 10
+  @observable getGiftSize = 10
 
-  @observable redEnvelopListTotal = null
+  @observable getGiftTotal = null
 
-  @observable getList = []
+  @observable getGiftDetail = {}
 
-  @observable getListPage = 1
+  @observable giftCategory = []
 
-  @observable getListSize = 10
+  @observable giftCategorylist = []
 
-  @observable getListTotal = null
+  @observable asyncCascadeValue = []
 
-  @observable getRedPacket = {}
+  @observable provinceOption = []
+
+  @observable cityOption = []
+
+  @observable areaOption = []
+
+  @observable circleOption = []
+
+  @observable shopList = []
+
+  @observable giftOrder = []
+
+  @observable giftOrderPage = 1
+
+  @observable giftOrderSize = 10
+
+  @observable giftOrderTotal = null
+
+  @observable giftOrderDetail = {}
 
   @action
-  fetchRedEnvelopList = async () => {
+  fetchGiftOrder = async giftId => {
     let hasMore = true
-    if (this.redEnvelopListTotal !== null) {
-      hasMore = this.redEnvelopListPage * this.redEnvelopListSize < this.redEnvelopListTotal
+    if (this.giftOrderTotal !== null) {
+      hasMore = this.giftOrderPage * this.giftOrderSize < this.giftOrderTotal
       if (hasMore) {
-        this.redEnvelopListPage += 1
+        this.giftOrderPage += 1
       }
     }
-    const response = await services.fetchRedEnvelopList(
-      this.redEnvelopListPage,
-      this.redEnvelopListSize,
-    )
+    const response = await services.fetchGiftOrder(this.giftOrderPage, this.giftOrderSize, giftId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
-          const arr = this.redEnvelopList
+          const arr = this.giftOrder
           arr.push(...response.data.result.lists)
-          this.redEnvelopList = arr
-          this.redEnvelopListTotal = response.data.result.total - 0
+          this.giftOrder = arr
+          this.giftOrderTotal = response.data.result.total - 0
         })
       } else {
-        const remainder = this.redEnvelopListTotal % this.redEnvelopListSize
+        const remainder = this.giftOrderTotal % this.giftOrderSize
         if (remainder) {
           runInAction(() => {
-            this.redEnvelopList.splice(this.redEnvelopListTotal - remainder, remainder)
-            const arr = this.redEnvelopList
+            this.giftOrder.splice(this.giftOrderTotal - remainder, remainder)
+            const arr = this.giftOrder
             arr.push(...response.data.result.lists)
-            this.redEnvelopList = arr
-            this.redEnvelopListTotal = response.data.result.total - 0
+            this.giftOrder = arr
+            this.giftOrderTotal = response.data.result.total - 0
           })
         }
       }
@@ -58,33 +73,32 @@ class RedEnvelopStore {
   }
 
   @action
-  fetchGetList = async id => {
+  fetchGetGift = async keyword => {
     let hasMore = true
-    // debugger
-    if (this.getListTotal !== null) {
-      hasMore = this.getListPage * this.getListSize < this.getListTotal
+    if (this.getGiftTotal !== null) {
+      hasMore = this.getGiftPage * this.getGiftSize < this.getGiftTotal
       if (hasMore) {
-        this.getListPage += 1
+        this.getGiftPage += 1
       }
     }
-    const response = await services.fetchGetList(this.getListPage, this.getListSize, id)
+    const response = await services.fetchGetGift(this.getGiftPage, this.getGiftSize, keyword)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
-          const arr = this.getList
+          const arr = this.getGift
           arr.push(...response.data.result.lists)
-          this.getList = arr
-          this.getListTotal = response.data.result.total - 0
+          this.getGift = arr
+          this.getGiftTotal = response.data.result.total - 0
         })
       } else {
-        const remainder = this.getListTotal % this.getListSize
+        const remainder = this.getGiftTotal % this.getGiftSize
         if (remainder) {
           runInAction(() => {
-            this.getList.splice(this.getListTotal - remainder, remainder)
-            const arr = this.getList
+            this.getGift.splice(this.getGiftTotal - remainder, remainder)
+            const arr = this.getGift
             arr.push(...response.data.result.lists)
-            this.getList = arr
-            this.getListTotal = response.data.result.total - 0
+            this.getGift = arr
+            this.getGiftTotal = response.data.result.total - 0
           })
         }
       }
@@ -92,39 +106,54 @@ class RedEnvelopStore {
   }
 
   @action
-  fetchPacketDel = async id => {
-    await services.fetchPacketDel(id)
+  addGift = async payload => {
+    const response = await services.addGift(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
   }
 
   @action
-  fetchFabu = async id => {
-    await services.fetchFabu(id)
+  modifyGift = async payload => {
+    const response = await services.modifyGift(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
   }
 
   @action
-  fetchGetRedPacket = async id => {
-    const response = await services.fetchGetRedPacket(id)
+  fetchGetGiftDetail = async giftId => {
+    const response = await services.fetchGetGiftDetail(giftId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.getRedPacket = response.data.result
+        this.getGiftDetail = response.data.result
       })
     }
   }
 
   @action
-  addPacket = async payload => {
-    const response = await services.addPacket(payload)
+  fetchGiftCategory = async catFid => {
+    const response = await services.fetchGiftCategory(catFid)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(true)
+      runInAction(() => {
+        this.giftCategory = response.data.result
+      })
     }
   }
 
   @action
-  modifyPacket = async payload => {
-    const response = await services.modifyPacket(payload)
+  fetchGiftCategorylist = async catFid => {
+    const response = await services.fetchGiftCategorylist(catFid)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(true)
+      runInAction(() => {
+        this.giftCategorylist = response.data.result
+      })
     }
+  }
+
+  @action
+  fetchDelGift = async giftId => {
+    await services.fetchDelGift(giftId)
   }
 
   // 省市区级联
@@ -137,6 +166,12 @@ class RedEnvelopStore {
       if (city.data.errorCode === ErrorCode.SUCCESS) {
         const area = await services.fetchArea(cityId)
         if (area.data.errorCode === ErrorCode.SUCCESS) {
+          const circle = await services.fetchCircle(areaId)
+          if (circle.data.errorCode === ErrorCode.SUCCESS) {
+            runInAction(() => {
+              this.circleOption = circle.data.result
+            })
+          }
           const provinceData = province.data.result
           const cityData = city.data.result
           const areaData = area.data.result
@@ -257,6 +292,57 @@ class RedEnvelopStore {
       })
     }
   }
-}
 
-export default new RedEnvelopStore()
+  // 商圈列表
+  @action
+  fetchCircle = async id => {
+    this.circleOption = []
+    const response = await services.fetchCircle(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.circleOption = response.data.result
+      })
+    }
+  }
+
+  // 重置商圈
+  @action
+  resetCircle = () => {
+    this.circleOption = []
+  }
+
+  @action
+  fetchShopList = async () => {
+    const response = await services.fetchShopList()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        response.data.result.store_list.forEach(item => {
+          if (item.value > 0) {
+            this.shopList.push(item)
+          }
+        })
+      })
+    }
+  }
+
+  @action
+  fetchGiftOrderDetail = async orderId => {
+    const response = await services.fetchGiftOrderDetail(orderId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.giftOrderDetail = response.data.result
+      })
+    }
+  }
+
+  @action
+  resetAndFetchGroupList = keyword => {
+    runInAction(() => {
+      this.getGift = []
+      this.getGiftPage = 1
+      this.getGiftTotal = null
+      this.fetchGetGift(keyword)
+    })
+  }
+}
+export default new MastSotre()

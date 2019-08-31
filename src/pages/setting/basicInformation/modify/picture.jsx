@@ -8,6 +8,7 @@ import CropperImg from '@/common/UploadImg/CropperImg'
 class ModifyPicture extends React.Component {
   saveImg = async url => {
     const { history, match, basicInformation } = this.props
+    console.log(this.props)
     await basicInformation[match.params.action](url)
     history.goBack()
   }

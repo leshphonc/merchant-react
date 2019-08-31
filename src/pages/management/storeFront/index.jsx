@@ -18,6 +18,7 @@ import StoreDiscountPanel from './storeDiscountPanel'
 import DiningInformation from './diningInformation'
 import { StoreStatus } from '@/config/constant'
 import { PrimaryTag } from '@/styled'
+import Utils from '@/utils'
 
 @inject('storeFront')
 @observer
@@ -25,6 +26,7 @@ class StoreFront extends React.Component {
   componentDidMount() {
     const { storeFront } = this.props
     storeFront.fetchStoreList()
+    Utils.clearCacheData()
   }
 
   mapList = () => {
