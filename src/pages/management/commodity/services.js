@@ -242,7 +242,15 @@ export const fetchECommerceMeal = storeId => axios.get('/appapi.php?c=Merchantap
 })
 
 // 电商商品分类
-export const fetchGoodsSort = storeId => axios.get('/appapi.php?c=Merchantapp&a=select_goods_sort', {
+// export const fetchGoodsSort = storeId => axios.get('/appapi.php?c=Merchantapp&a=select_goods_sort', {
+//   params: {
+//     store_id: storeId,
+//     ticket: localStorage.getItem('ticket'),
+//   },
+// })
+
+// 商城商品分类
+export const fetchGoodsCategory = storeId => axios.get('/appapi.php?c=Merchantapp&a=goods_category', {
   params: {
     store_id: storeId,
     ticket: localStorage.getItem('ticket'),
@@ -290,4 +298,16 @@ export const fetchExpressDetail = tid => axios.get('/appapi.php?c=Merchantapp&a=
     tid,
     ticket: localStorage.getItem('ticket'),
   },
+})
+
+// 新增模版
+export const addExpress = payload => axios.post('/appapi.php?c=Merchantapp&a=add_express', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 编辑模版
+export const editExpress = payload => axios.post('/appapi.php?c=Merchantapp&a=edit_express', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
 })

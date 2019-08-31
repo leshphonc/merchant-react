@@ -16,6 +16,7 @@ class Editor extends React.Component {
 
   componentDidMount() {
     const { content } = this.props
+    console.log(this.props)
     const editor = new E(this.editor.current)
     this.setState({
       editor,

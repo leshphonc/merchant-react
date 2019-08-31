@@ -16,6 +16,8 @@ import ECommercePanel from './eCommercePanel'
 import ECommerceSpread from './eCommerceSpread'
 import ECommerceDiscounts from './eCommerceDiscounts'
 import ECommerceDeliveryTemplate from './eCommerceDeliveryTemplate'
+import ECommerceDeliveryTemplatePanel from './eCommerceDeliveryTemplatePanel'
+import ECommerceSpecification from './eCommerceSpecification'
 
 const { Item } = List
 @inject('commodity')
@@ -97,5 +99,10 @@ export default () => (
       path="/management/commodity/eCommerceDeliveryTemplate"
       component={ECommerceDeliveryTemplate}
     />
+    <Route
+      path="/management/commodity/eCommerceDeliveryTemplatePanel/:id?"
+      component={ECommerceDeliveryTemplatePanel}
+    />
+    <Route path="/management/commodity/eCommerceSpecification" component={ECommerceSpecification} />
   </React.Fragment>
 )

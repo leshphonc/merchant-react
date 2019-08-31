@@ -27,6 +27,10 @@ body {
   color: #888;
 }
 
+.am-list-item .am-input-extra {
+  max-height: 30px;
+}
+
 .am-list-footer {
   font-size: 12px;
 }

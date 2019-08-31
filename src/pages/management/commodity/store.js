@@ -71,11 +71,11 @@ class MastSotre {
 
   @observable giftVoucher = []
 
-  @observable goodsSort = []
+  @observable goodsCategory = []
 
   @observable expressLists = []
 
-  @observable expressDetail = []
+  @observable expressDetail = {}
 
   @action
   fetchGroupList = async keyword => {
@@ -484,13 +484,24 @@ class MastSotre {
     }
   }
 
+  // // 商城商品分类
+  // @action
+  // fetchGoodsSort = async storeId => {
+  //   const response = await services.fetchGoodsSort(storeId)
+  //   if (response.data.errorCode === ErrorCode.SUCCESS) {
+  //     runInAction(() => {
+  //       this.goodsSort = response.data.result
+  //     })
+  //   }
+  // }
+
   // 商城商品分类
   @action
-  fetchGoodsSort = async storeId => {
-    const response = await services.fetchGoodsSort(storeId)
+  fetchGoodsCategory = async () => {
+    const response = await services.fetchGoodsCategory()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.goodsSort = response.data.result
+        this.goodsCategory = response.data.result
       })
     }
   }
@@ -513,6 +524,22 @@ class MastSotre {
       runInAction(() => {
         this.expressDetail = response.data.result
       })
+    }
+  }
+
+  @action
+  addExpress = async payload => {
+    const response = await services.addExpress(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  editExpress = async payload => {
+    const response = await services.editExpress(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
     }
   }
 }

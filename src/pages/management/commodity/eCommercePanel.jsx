@@ -2,13 +2,22 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 import {
-  Picker, List, InputItem, Button, ImagePicker, Toast, Flex, WhiteSpace,
+  Picker,
+  List,
+  InputItem,
+  Button,
+  ImagePicker,
+  Toast,
+  Flex,
+  WhiteSpace,
+  Menu,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import Editor from '@/common/Editor'
+import { MenuMask, PrimaryTag } from '@/styled'
 
 const { Item } = List
 const seasons = [{ label: '正常', value: '1' }, { label: '停售', value: '0' }]
@@ -27,6 +36,8 @@ class ECommerceAdd extends React.Component {
     this.state = {
       pic: [],
       specification: [],
+      open: false,
+      goods: [],
     }
     this.editor = React.createRef()
   }
@@ -36,7 +47,7 @@ class ECommerceAdd extends React.Component {
     if (!commodity.eCommerceValues.length) commodity.fetchECommerceValues()
     // 获取
     commodity.fetchECommerceMeal(match.params.id)
-    commodity.fetchGoodsSort(match.params.id)
+    commodity.fetchGoodsCategory()
     commodity.fetchExpressLists()
 
     if (!match.params.goodid) return
@@ -52,17 +63,11 @@ class ECommerceAdd extends React.Component {
         ...eCommerceDetail,
         status: [eCommerceDetail.status],
         sort_id: [eCommerceDetail.sort_id],
-        stort_id: [eCommerceDetail.stort_id],
         goods_type: [eCommerceDetail.goods_type],
-        in_group: [eCommerceDetail.in_group],
-        is_fx: eCommerceDetail.is_fx === '1',
-        fx_type: [eCommerceDetail.fx_type],
         freight_type: [eCommerceDetail.freight_type],
         freight_template: [eCommerceDetail.freight_template],
         pic: picArr,
-        cat_id: [eCommerceDetail.cat_id],
       })
-
       // this.setState({
       //   specification: eCommerceDetail.spec_list,
       // })
@@ -89,33 +94,68 @@ class ECommerceAdd extends React.Component {
     })
   }
 
+  getMenuList = () => {
+    const { commodity } = this.props
+    const { eCommerceDetail, goodsCategory } = commodity
+    const { goods } = this.state
+    const cateGoryLabel = []
+    if (!goodsCategory.length || !Object.keys(eCommerceDetail).length) return false
+    goodsCategory.forEach(item => {
+      if (item.value === goods[0]) {
+        cateGoryLabel.push(item.label)
+        if (item.children.length) {
+          item.children.forEach(child => {
+            if (child.value === goods[1]) {
+              cateGoryLabel.push(child.label)
+            }
+          })
+        }
+      }
+    })
+    return (
+      <Flex justify="end">
+        {cateGoryLabel.map((item, index) => (
+          <PrimaryTag
+            key={index}
+            style={{ marginLeft: 2 }}
+            onClick={() => {
+              document.body.style.position = 'fixed'
+              this.setState({ open: true })
+            }}
+          >
+            {item}
+          </PrimaryTag>
+        ))}
+      </Flex>
+    )
+  }
+
   submit = () => {
     const {
       commodity, form, match, history,
     } = this.props
-    const { editorContent, editor, specification } = this.state
-    console.log(editorContent)
+    const { specification, goods } = this.state
+    console.log(specification)
     form.validateFields((error, value) => {
       // if (error) {
       //   Toast.info('请输入完整信息')
       //   return
       // }
-      console.log(value)
       const obj = {
         ...value,
         status: value.status[0],
         sort_id: value.sort_id[0],
         goods_type: value.goods_type[0],
         is_fx: value.is_fx ? '1' : '0',
-        fx_type: value.fx_type[0],
         freight_type: value.freight_type[0],
         freight_template: value.freight_template[0],
-        cat_id: value.cat_id[0],
+        cat_fid: goods[0],
+        cat_id: goods[1],
         pic: value.pic.map(item => item.url),
-        des: editor.txt.html(),
+        des: this.editor.current.state.editor.txt.html(),
         spec_list: specification,
+        store_id: value.store_id[0],
       }
-      console.log(value)
       console.log(obj)
       if (match.params.id) {
         console.log(match.params.id)
@@ -137,7 +177,7 @@ class ECommerceAdd extends React.Component {
     const { specification } = this.state
     // console.log(specification)
     return specification.map((item, index) => (
-      <React.Fragment key={item.value}>
+      <React.Fragment key={index}>
         <InputItem
           defaultValue={item.spec_name}
           placeholder="请输入规则名称"
@@ -185,15 +225,35 @@ class ECommerceAdd extends React.Component {
     })
   }
 
+  onChange = arr => {
+    this.setState({
+      goods: arr,
+    })
+  }
+
   render() {
     const {
       match, commodity, form, history,
     } = this.props
     const {
-      eCommerceValues, eCommerceMeal, goodsSort, expressLists,
+      eCommerceValues,
+      eCommerceMeal,
+      goodsCategory,
+      expressLists,
+      eCommerceDetail,
     } = commodity
     const { getFieldProps } = form
-    const { pic, specification } = this.state
+    const { des } = eCommerceDetail
+    const { pic, open, goods } = this.state
+    const menuEl = (
+      <Menu
+        className="menu-position"
+        data={goodsCategory}
+        value={goods}
+        onChange={this.onChange}
+        height={document.documentElement.clientHeight * 0.6}
+      />
+    )
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}电商商品`} goBack />
@@ -344,32 +404,10 @@ class ECommerceAdd extends React.Component {
             <List.Item arrow="horizontal">选择添加到的分类</List.Item>
           </Picker>
           <List.Item
-            extra={
-              <Flex justify="between">
-                <Button
-                  size="small"
-                  type="ghost"
-                  onClick={() => this.setState({
-                    specification: specification.concat({ spec_name: '', spec_val: '' }),
-                  })
-                  }
-                >
-                  添加
-                </Button>
-                <Button
-                  size="small"
-                  type="warning"
-                  onClick={() => this.setState({
-                    specification: specification.slice(0, specification.length - 1),
-                  })
-                  }
-                >
-                  删除
-                </Button>
-              </Flex>
-            }
+            arrow="horizontal"
+            onClick={() => history.push('/management/commodity/eCommerceSpecification')}
           >
-            添加规格
+            规格设置
           </List.Item>
           {this.mapSpecification()}
           <Picker
@@ -384,7 +422,7 @@ class ECommerceAdd extends React.Component {
           </Picker>
           <List.Item
             arrow="horizontal"
-            extra="新建"
+            extra="编辑"
             onClick={() => history.push('/management/commodity/eCommerceDeliveryTemplate')}
           >
             运费模板
@@ -408,16 +446,13 @@ class ECommerceAdd extends React.Component {
           >
             <List.Item arrow="horizontal">运费计算方式</List.Item>
           </Picker>
-          <Picker
-            {...getFieldProps('cat_fid', {
-              rules: [{ required: true }],
-            })}
-            data={goodsSort}
-            cols={1}
-            extra="请选择"
+          <List.Item
+            arrow="horizontal"
+            extra={this.getMenuList()}
+            onClick={() => this.setState({ open: true })}
           >
-            <List.Item arrow="horizontal">商城商品分类</List.Item>
-          </Picker>
+            商城商品分类
+          </List.Item>
           <List.Item arrow="empty">
             店铺图片
             <ImagePicker
@@ -431,7 +466,7 @@ class ECommerceAdd extends React.Component {
           </List.Item>
           <Item>
             商品描述
-            <Editor ref={this.editor} />
+            <Editor ref={this.editor} content={des} />
           </Item>
         </List>
         <Button
@@ -446,6 +481,8 @@ class ECommerceAdd extends React.Component {
         >
           确定
         </Button>
+        {open ? menuEl : null}
+        {open ? <MenuMask onClick={() => this.setState({ open: false })} /> : null}
       </React.Fragment>
     )
   }
