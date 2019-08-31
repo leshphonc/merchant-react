@@ -94,8 +94,8 @@ class RedEnvelope extends React.Component {
           <Card.Body style={{ minHeight: '22px' }}>
             <Flex>
               <Flex.Item>总金额: {item.item_sum}</Flex.Item>
-              <Flex.Item>上限: {item.item_max}</Flex.Item>
-              <Flex.Item>下限: {item.item_min}</Flex.Item>
+              <Flex.Item>金额上限: {item.item_max}</Flex.Item>
+              <Flex.Item>金额下限: {item.item_min}</Flex.Item>
             </Flex>
             <Flex style={{ marginTop: '10px' }}>
               <Flex.Item>领取人数: {item.people}</Flex.Item>
