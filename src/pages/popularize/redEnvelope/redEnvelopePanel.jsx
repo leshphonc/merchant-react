@@ -312,19 +312,36 @@ class RetailAdd extends React.Component {
             活动介绍
             <TextareaItem {...getFieldProps('desc')} rows={3} placeholder="请填写简短描述" />
           </List.Item>
-          <Picker
-            {...getFieldProps('cascade', {
-              rules: [{ required: true }],
-            })}
-            title="选择地区"
-            extra="请选择"
-            cols={3}
-            data={cascadeOption}
-            value={asyncCascadeValue}
-            onPickerChange={this.onPickerChange}
-          >
-            <List.Item arrow="horizontal">活动地区</List.Item>
-          </Picker>
+          {getRedPacket.is_fabu === '0' ? (
+            <Picker
+              {...getFieldProps('cascade', {
+                rules: [{ required: true }],
+              })}
+              title="选择地区"
+              extra="请选择"
+              cols={3}
+              data={cascadeOption}
+              value={asyncCascadeValue}
+              onPickerChange={this.onPickerChange}
+            >
+              <List.Item arrow="horizontal">活动地区</List.Item>
+            </Picker>
+          ) : (
+            <Picker
+              {...getFieldProps('cascade', {
+                rules: [{ required: true }],
+              })}
+              title="选择地区"
+              extra="请选择"
+              cols={3}
+              data={cascadeOption}
+              value={asyncCascadeValue}
+              onPickerChange={this.onPickerChange}
+              disabled
+            >
+              <List.Item arrow="horizontal">活动地区</List.Item>
+            </Picker>
+          )}
           <InputItem
             {...getFieldProps('share_url', {
               rules: [{ required: true }],
@@ -333,55 +350,116 @@ class RetailAdd extends React.Component {
           >
             分享链接
           </InputItem>
-          <InputItem
-            {...getFieldProps('people', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请填写人数"
-          >
-            领取人数
-          </InputItem>
-          <InputItem
-            {...getFieldProps('get_number', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请填写次数"
-          >
-            领取次数
-            <Tooltip
-              trigger="click"
-              placement="topLeft"
-              overlay="用户可以领取红包的次数,超过后无法领取"
-              onClick={e => {
-                e.stopPropagation()
-              }}
+          {getRedPacket.is_fabu === '0' ? (
+            <InputItem
+              {...getFieldProps('people', {
+                rules: [{ required: true }],
+              })}
+              placeholder="请填写人数"
             >
-              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                &#xe628;
-              </i>
-            </Tooltip>
-          </InputItem>
-          <InputItem
-            {...getFieldProps('day_number', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请填写次数"
-            labelNumber="7"
-          >
-            每天领取次数
-            <Tooltip
-              trigger="click"
-              placement="topLeft"
-              overlay="每天领取次数，0表示不限制"
-              onClick={e => {
-                e.stopPropagation()
-              }}
+              领取人数
+            </InputItem>
+          ) : (
+            <InputItem
+              {...getFieldProps('people', {
+                rules: [{ required: true }],
+              })}
+              placeholder="请填写人数"
+              disabled
             >
-              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                &#xe628;
-              </i>
-            </Tooltip>
-          </InputItem>
+              领取人数
+            </InputItem>
+          )}
+          {getRedPacket.is_fabu === '0' ? (
+            <InputItem
+              {...getFieldProps('get_number', {
+                rules: [{ required: true }],
+              })}
+              placeholder="请填写次数"
+            >
+              领取次数
+              <Tooltip
+                trigger="click"
+                placement="topLeft"
+                overlay="用户可以领取红包的次数,超过后无法领取"
+                onClick={e => {
+                  e.stopPropagation()
+                }}
+              >
+                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  &#xe628;
+                </i>
+              </Tooltip>
+            </InputItem>
+          ) : (
+            <InputItem
+              {...getFieldProps('get_number', {
+                rules: [{ required: true }],
+              })}
+              placeholder="请填写次数"
+              disabled
+            >
+              领取次数
+              <Tooltip
+                trigger="click"
+                placement="topLeft"
+                overlay="用户可以领取红包的次数,超过后无法领取"
+                onClick={e => {
+                  e.stopPropagation()
+                }}
+              >
+                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  &#xe628;
+                </i>
+              </Tooltip>
+            </InputItem>
+          )}
+          {getRedPacket.is_fabu === '0' ? (
+            <InputItem
+              {...getFieldProps('day_number', {
+                rules: [{ required: true }],
+              })}
+              placeholder="请填写次数"
+              labelNumber="7"
+            >
+              每天领取次数
+              <Tooltip
+                trigger="click"
+                placement="topLeft"
+                overlay="每天领取次数，0表示不限制"
+                onClick={e => {
+                  e.stopPropagation()
+                }}
+              >
+                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  &#xe628;
+                </i>
+              </Tooltip>
+            </InputItem>
+          ) : (
+            <InputItem
+              {...getFieldProps('day_number', {
+                rules: [{ required: true }],
+              })}
+              placeholder="请填写次数"
+              labelNumber="7"
+              disabled
+            >
+              每天领取次数
+              <Tooltip
+                trigger="click"
+                placement="topLeft"
+                overlay="每天领取次数，0表示不限制"
+                onClick={e => {
+                  e.stopPropagation()
+                }}
+              >
+                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  &#xe628;
+                </i>
+              </Tooltip>
+            </InputItem>
+          )}
           {getRedPacket.is_fabu === '0' ? (
             <Picker
               {...getFieldProps('packet_type', {
@@ -478,92 +556,188 @@ class RetailAdd extends React.Component {
                   </Tooltip>
                 </InputItem>
               )}
-              <InputItem
-                {...getFieldProps('item_max', {
-                  rules: [{ required: true }],
-                })}
-                placeholder="请填写金额"
-              >
-                面额上限
-                <Tooltip
-                  trigger="click"
-                  placement="topLeft"
-                  overlay="单个红包可被抽取的最大值"
-                  onClick={e => {
-                    e.stopPropagation()
-                  }}
+              {getRedPacket.is_fabu === '0' ? (
+                <InputItem
+                  {...getFieldProps('item_max', {
+                    rules: [{ required: true }],
+                  })}
+                  placeholder="请填写金额"
                 >
-                  <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                    &#xe628;
-                  </i>
-                </Tooltip>
-              </InputItem>
-              <InputItem
-                {...getFieldProps('item_min', {
-                  rules: [{ required: true }],
-                })}
-                placeholder="请填写金额"
-              >
-                面额下限
-                <Tooltip
-                  trigger="click"
-                  placement="topLeft"
-                  overlay="单个红包可被抽取的最小值"
-                  onClick={e => {
-                    e.stopPropagation()
-                  }}
+                  面额上限
+                  <Tooltip
+                    trigger="click"
+                    placement="topLeft"
+                    overlay="单个红包可被抽取的最大值"
+                    onClick={e => {
+                      e.stopPropagation()
+                    }}
+                  >
+                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                      &#xe628;
+                    </i>
+                  </Tooltip>
+                </InputItem>
+              ) : (
+                <InputItem
+                  {...getFieldProps('item_max', {
+                    rules: [{ required: true }],
+                  })}
+                  placeholder="请填写金额"
+                  disabled
                 >
-                  <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                    &#xe628;
-                  </i>
-                </Tooltip>
-              </InputItem>
+                  面额上限
+                  <Tooltip
+                    trigger="click"
+                    placement="topLeft"
+                    overlay="单个红包可被抽取的最大值"
+                    onClick={e => {
+                      e.stopPropagation()
+                    }}
+                  >
+                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                      &#xe628;
+                    </i>
+                  </Tooltip>
+                </InputItem>
+              )}
+              {getRedPacket.is_fabu === '0' ? (
+                <InputItem
+                  {...getFieldProps('item_min', {
+                    rules: [{ required: true }],
+                  })}
+                  placeholder="请填写金额"
+                >
+                  面额下限
+                  <Tooltip
+                    trigger="click"
+                    placement="topLeft"
+                    overlay="单个红包可被抽取的最小值"
+                    onClick={e => {
+                      e.stopPropagation()
+                    }}
+                  >
+                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                      &#xe628;
+                    </i>
+                  </Tooltip>
+                </InputItem>
+              ) : (
+                <InputItem
+                  {...getFieldProps('item_min', {
+                    rules: [{ required: true }],
+                  })}
+                  placeholder="请填写金额"
+                  disabled
+                >
+                  面额下限
+                  <Tooltip
+                    trigger="click"
+                    placement="topLeft"
+                    overlay="单个红包可被抽取的最小值"
+                    onClick={e => {
+                      e.stopPropagation()
+                    }}
+                  >
+                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                      &#xe628;
+                    </i>
+                  </Tooltip>
+                </InputItem>
+              )}
             </React.Fragment>
           ) : (
             ''
           )}
           {packettype === '2' ? (
             <React.Fragment>
-              <InputItem
-                {...getFieldProps('item_num', {
-                  rules: [{ required: true }],
-                })}
-                placeholder="请填写个数"
-              >
-                发放个数
-                <Tooltip
-                  trigger="click"
-                  placement="topLeft"
-                  overlay="可被领取的红包个数，超过后将无法领取红包"
-                  onClick={e => {
-                    e.stopPropagation()
-                  }}
+              {getRedPacket.is_fabu === '0' ? (
+                <InputItem
+                  {...getFieldProps('item_num', {
+                    rules: [{ required: true }],
+                  })}
+                  placeholder="请填写个数"
                 >
-                  <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                    &#xe628;
-                  </i>
-                </Tooltip>
-              </InputItem>
-              <InputItem
-                {...getFieldProps('item_unit', {
-                  rules: [{ required: true }],
-                })}
-                placeholder="请填写金额"
-              >
-                红包面额
-                <Tooltip
-                  trigger="click"
-                  placement="topLeft"
-                  overlay="请填写整数或者不大于2位的小数"
-                  onClick={e => {
-                    e.stopPropagation()
-                  }}
+                  发放个数
+                  <Tooltip
+                    trigger="click"
+                    placement="topLeft"
+                    overlay="可被领取的红包个数，超过后将无法领取红包"
+                    onClick={e => {
+                      e.stopPropagation()
+                    }}
+                  >
+                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                      &#xe628;
+                    </i>
+                  </Tooltip>
+                </InputItem>
+              ) : (
+                <InputItem
+                  {...getFieldProps('item_num', {
+                    rules: [{ required: true }],
+                  })}
+                  placeholder="请填写个数"
+                  disabled
                 >
-                  <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                    &#xe628;
-                  </i>
-                </Tooltip>
-              </InputItem>
+                  发放个数
+                  <Tooltip
+                    trigger="click"
+                    placement="topLeft"
+                    overlay="可被领取的红包个数，超过后将无法领取红包"
+                    onClick={e => {
+                      e.stopPropagation()
+                    }}
+                  >
+                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                      &#xe628;
+                    </i>
+                  </Tooltip>
+                </InputItem>
+              )}
+              {getRedPacket.is_fabu === '0' ? (
+                <InputItem
+                  {...getFieldProps('item_unit', {
+                    rules: [{ required: true }],
+                  })}
+                  placeholder="请填写金额"
+                >
+                  红包面额
+                  <Tooltip
+                    trigger="click"
+                    placement="topLeft"
+                    overlay="请填写整数或者不大于2位的小数"
+                    onClick={e => {
+                      e.stopPropagation()
+                    }}
+                  >
+                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                      &#xe628;
+                    </i>
+                  </Tooltip>
+                </InputItem>
+              ) : (
+                <InputItem
+                  {...getFieldProps('item_unit', {
+                    rules: [{ required: true }],
+                  })}
+                  placeholder="请填写金额"
+                  disabled
+                >
+                  红包面额
+                  <Tooltip
+                    trigger="click"
+                    placement="topLeft"
+                    overlay="请填写整数或者不大于2位的小数"
+                    onClick={e => {
+                      e.stopPropagation()
+                    }}
+                  >
+                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                      &#xe628;
+                    </i>
+                  </Tooltip>
+                </InputItem>
+              )}
             </React.Fragment>
           ) : (
             ''
