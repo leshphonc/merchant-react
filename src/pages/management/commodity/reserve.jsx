@@ -33,6 +33,9 @@ class Reserve extends React.Component {
       height: hei,
     })
   }
+  alertTo = () => {
+
+  }
 
   mapList = () => {
     const { commodity } = this.props
@@ -49,10 +52,20 @@ class Reserve extends React.Component {
               <WhiteSpace />
               <div
                 className="top-features"
-                style={{ position: 'initial', fontSize: '14px', color: '#fb6a41' }}
+                style={{ position: 'initial', fontSize: '14px' }}
               >
-                定金: {item.payment_money}元
+                定金状态: {item.payment_status === '1' ? '收定金' : '不收定金'}
               </div>
+              {item.payment_status === '1' ? (
+                <div
+                  className="top-features"
+                  style={{ position: 'initial', fontSize: '14px', color: '#fb6a41' }}
+                >
+                      定金: {item.payment_money}元
+                </div>
+              ) : ''
+              }
+
               {item.appoint_type === 1 ? (
                 <div
                   className="top-features"
@@ -92,6 +105,40 @@ class Reserve extends React.Component {
                 }}
               >
                 已预约: {item.appoint_sum}
+              </div>
+              <div
+                className="top-features"
+                style={{
+                  position: 'initial',
+                  display: 'block',
+                  fontSize: '14px',
+                  marginBottom: '10px',
+                }}
+              >
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '50%',
+                  }}
+                >
+                    活动状态：{item.appoint_status === '1' ? '关闭' : '开启'}
+                </span>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '50%',
+                  }}
+                >
+                    审核状态：{item.check_status ? '通过' : '待审核'}
+                </span>
+              </div>
+              <div
+                style={{ display: 'inline-block', color: '#333', marginRight: '30px' }}
+              >
+                <i className="iconfont" style={{ color: '#ffb000' }}>
+                      &#xe6fd;
+                </i>
+                        订单列表
               </div>
               <Link
                 to={`/management/commodity/reservePanel/编辑/${item.appoint_id}`}

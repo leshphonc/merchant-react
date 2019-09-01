@@ -253,8 +253,9 @@ export const fetchECommerceDelete = (storeId, goodsId) => axios.post('/appapi.ph
 })
 
 // 店铺列表
-export const fetchShopList = () => axios.get('/appapi.php?c=Merchantapp&a=get_store', {
+export const fetchShopList = appointType => axios.get('/appapi.php?c=Merchantapp&a=get_store', {
   params: {
+    appoint_type: appointType,
     ticket: localStorage.getItem('ticket'),
   },
 })
@@ -281,6 +282,28 @@ export const fetchExpressDetail = tid => axios.get('/appapi.php?c=Merchantapp&a=
   },
 })
 
+
+// 新增团购产品
+export const fetchAddGroup = groupAddDetail => axios.post('/appapi.php?c=Merchantapp&a=add_group', {
+  ...groupAddDetail,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取服务者
+export const fetchGetWorker = storeId => axios.get('/appapi.php?c=Merchantapp&a=add_group', {
+  params: {
+    storeId,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 修改团购产品
+export const fetchEditGroup = (groupEditDetail, groupId) => axios.post('/appapi.php?c=Merchantapp&a=edit_group', {
+  ...groupEditDetail,
+  group_id: groupId,
+  ticket: localStorage.getItem('ticket'),
+})
+
 // 新增模版
 export const addExpress = payload => axios.post('/appapi.php?c=Merchantapp&a=add_express', {
   ...payload,
@@ -292,3 +315,4 @@ export const editExpress = payload => axios.post('/appapi.php?c=Merchantapp&a=ed
   ...payload,
   ticket: localStorage.getItem('ticket'),
 })
+
