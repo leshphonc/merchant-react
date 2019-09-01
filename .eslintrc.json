@@ -29,6 +29,8 @@
     // 允许在只有一个参数时省略parens
     "arrow-parens": [2, "as-needed"],
     // 关闭prop-types
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    // return语句总是或永远不指定值
+    "consistent-return": 0
   }
 }

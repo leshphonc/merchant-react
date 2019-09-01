@@ -8,6 +8,7 @@ import {
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
+import {toJS} from 'mobx'
 
 const { Item } = List
 const levelSet = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
@@ -26,6 +27,7 @@ class ECommerceSpread extends React.Component {
     const { commodity, match, form } = this.props
     commodity.fetchUserLevel(match.params.id, match.params.goodid).then(() => {
       const { userLevels } = commodity
+      console.log(toJS(userLevels))
       this.setState({
         userLevels,
       })
@@ -81,9 +83,10 @@ class ECommerceSpread extends React.Component {
     const { form } = this.props
     const { userLevels } = this.state
     const { getFieldProps } = form
-    console.log(userLevels)
+    console.log(toJS(userLevels))
+    debugger
     return userLevels.map((item, index) => (
-      <React.Fragment key={item.value}>
+      <React.Fragment key={index}>
         <Item>
           {item.name}
           <InputItem

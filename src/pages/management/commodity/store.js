@@ -29,21 +29,23 @@ class MastSotre {
 
   @observable reserveCategoryOption = []
 
-  @observable cateringDetail = {}
+  @observable takeAwayDetail = {}
 
-  @observable cateringList = []
+  @observable takeAwayList = []
 
-  @observable cateringListPage = 1
+  @observable takeAwayListPage = 1
 
-  @observable cateringListSize = 10
+  @observable takeAwayListSize = 10
 
-  @observable cateringListTotal = null
+  @observable takeAwayListTotal = null
 
   @observable eCommerceDetail = {}
 
-  @observable eCommerceMeal = []
+  // 所有商铺列表
+  @observable storeValues = []
 
-  @observable eCommerceValues = []
+  // 商品下所属分类
+  @observable categoryValues = []
 
   @observable cardGroupAll = []
 
@@ -55,13 +57,9 @@ class MastSotre {
 
   @observable eCommerceListTotal = null
 
-  @observable cateringValues = []
+  @observable takeAwayDelete = {}
 
-  @observable cateringMeal = []
-
-  @observable cateringDelete = {}
-
-  @observable cateringStand = {}
+  @observable takeAwayStand = {}
 
   @observable eCommerceDelete = {}
 
@@ -205,36 +203,37 @@ class MastSotre {
   }
 
   @action
-  fetchCateringList = async storeId => {
+  fetchTakeAwayList = async (storeId, str) => {
     let hasMore = true
-    if (this.cateringListTotal !== null) {
-      hasMore = this.cateringListPage * this.cateringListSize < this.cateringListTotal
+    if (this.takeAwayListTotal !== null) {
+      hasMore = this.takeAwayListPage * this.takeAwayListSize < this.takeAwayListTotal
       if (hasMore) {
-        this.cateringListPage += 1
+        this.takeAwayListPage += 1
       }
     }
-    const response = await services.fetchCateringList(
-      this.cateringListPage,
-      this.cateringListSize,
+    const response = await services.fetchTakeAwayList(
+      this.takeAwayListPage,
+      this.takeAwayListSize,
       storeId,
+      str,
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
-          const arr = this.cateringList
+          const arr = this.takeAwayList
           arr.push(...response.data.result.lists)
-          this.cateringList = arr
-          this.cateringListTotal = response.data.result.total - 0
+          this.takeAwayList = arr
+          this.takeAwayListTotal = response.data.result.total - 0
         })
       } else {
-        const remainder = this.cateringListTotal % this.cateringListSize
+        const remainder = this.takeAwayListTotal % this.takeAwayListSize
         if (remainder) {
           runInAction(() => {
-            this.cateringList.splice(this.cateringListTotal - remainder, remainder)
-            const arr = this.cateringList
+            this.takeAwayList.splice(this.takeAwayListTotal - remainder, remainder)
+            const arr = this.takeAwayList
             arr.push(...response.data.result.lists)
-            this.cateringList = arr
-            this.cateringListTotal = response.data.result.total - 0
+            this.takeAwayList = arr
+            this.takeAwayListTotal = response.data.result.total - 0
           })
         }
       }
@@ -242,11 +241,32 @@ class MastSotre {
   }
 
   @action
-  fetchCateringDetail = async goodid => {
-    const response = await services.fetchCateringDetail(goodid)
+  resetAndFetchTakeAwayList = async storeId => {
+    runInAction(() => {
+      this.takeAwayList = []
+      this.takeAwayListPage = 1
+      this.takeAwayListTotal = null
+      this.fetchTakeAwayList(storeId)
+    })
+  }
+
+  @action
+  searchTakeAwayList = async (id, keyword) => {
+    const response = await services.fetchTakeAwayList(1, this.takeAwayListSize, id, keyword)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.cateringDetail = response.data.result
+        this.takeAwayList = response.data.result.lists
+        this.takeAwayListTotal = response.data.result.total - 0
+      })
+    }
+  }
+
+  @action
+  fetchTakeAwayDetail = async goodid => {
+    const response = await services.fetchTakeAwayDetail(goodid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.takeAwayDetail = response.data.result
       })
     }
   }
@@ -298,16 +318,16 @@ class MastSotre {
   }
 
   @action
-  addCategory = async payload => {
-    const response = await services.addCategory(payload)
+  addTakeAway = async payload => {
+    const response = await services.addTakeAway(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }
   }
 
   @action
-  modifyCategory = async payload => {
-    const response = await services.modifyCategory(payload)
+  modifyTakeAway = async payload => {
+    const response = await services.modifyTakeAway(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }
@@ -324,7 +344,7 @@ class MastSotre {
   // }
 
   @action
-  fetchECommerceList = async storeId => {
+  fetchECommerceList = async (storeId, str) => {
     let hasMore = true
     if (this.eCommerceListTotal !== null) {
       hasMore = this.eCommerceListPage * this.eCommerceListSize < this.eCommerceListTotal
@@ -336,6 +356,7 @@ class MastSotre {
       this.eCommerceListPage,
       this.eCommerceListSize,
       storeId,
+      str,
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
@@ -357,6 +378,27 @@ class MastSotre {
           })
         }
       }
+    }
+  }
+
+  @action
+  resetAndFetchECommerceList = async storeId => {
+    runInAction(() => {
+      this.eCommerceList = []
+      this.eCommerceListPage = 1
+      this.eCommerceListTotal = null
+      this.fetchECommerceList(storeId)
+    })
+  }
+
+  @action
+  searchECommerceList = async (id, keyword) => {
+    const response = await services.fetchECommerceList(1, this.eCommerceListSize, id, keyword)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.eCommerceList = response.data.result.lists
+        this.eCommerceListTotal = response.data.result.total - 0
+      })
     }
   }
 
@@ -403,38 +445,27 @@ class MastSotre {
   }
 
   @action
-  fetchCateringMeal = async storeId => {
-    const response = await services.fetchCateringMeal(storeId)
+  fetchTakeAwayDelete = async (storeId, mealId) => {
+    const response = await services.fetchTakeAwayDelete(storeId, mealId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        this.cateringMeal = response.data.result
-      })
+      return Promise.resolve(true)
     }
   }
 
   @action
-  fetchCateringValues = async () => {
-    const response = await services.fetchCateringValues()
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        this.cateringValues = response.data.result
-      })
+  takeAwayStandStatus = async (storeId, mealId, status) => {
+    const responst = await services.takeAwayStandStatus(storeId, mealId, status)
+    if (responst.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
     }
-  }
-
-  @action
-  fetchCateringDelete = async (storeId, mealId) => {
-    await services.fetchCateringDelete(storeId, mealId)
-  }
-
-  @action
-  fetchCateringStand = async (storeId, mealId, status) => {
-    await services.fetchCateringStand(storeId, mealId, status)
   }
 
   @action
   fetchECommerceDelete = async (storeId, goodsId) => {
-    await services.fetchECommerceDelete(storeId, goodsId)
+    const response = await services.fetchECommerceDelete(storeId, goodsId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
   }
 
   @action
@@ -464,21 +495,21 @@ class MastSotre {
   }
 
   @action
-  fetchECommerceMeal = async storeId => {
-    const response = await services.fetchECommerceMeal(storeId)
+  fetchCategoryValues = async storeId => {
+    const response = await services.fetchCategoryValues(storeId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.eCommerceMeal = response.data.result
+        this.categoryValues = response.data.result
       })
     }
   }
 
   @action
-  fetchECommerceValues = async () => {
-    const response = await services.fetchECommerceValues()
+  fetchStoreValues = async () => {
+    const response = await services.fetchStoreValues()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.eCommerceValues = response.data.result
+        this.storeValues = response.data.result
       })
     }
   }

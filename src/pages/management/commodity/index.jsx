@@ -3,24 +3,27 @@ import NavBar from '@/common/NavBar'
 import { Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import { WhiteSpace, List } from 'antd-mobile'
-import CateringPanel from './cateringPanel'
 import Group from './group'
 import GroupPanel from './groupPanel'
 import GroupMealAdd from './groupMealAdd'
 import Reserve from './reserve'
 import reservePanel from './reservePanel'
 // import ReserveEdit from './reserveEdit'
-import Catering from './catering'
+import TakeAway from './takeAway'
+import TakeAwayPanel from './takeAwayPanel'
 import ECommerce from './eCommerce'
 import ECommercePanel from './eCommercePanel'
 import ECommerceSpread from './eCommerceSpread'
 import ECommerceDiscounts from './eCommerceDiscounts'
 import ECommerceDeliveryTemplate from './eCommerceDeliveryTemplate'
 import ECommerceDeliveryTemplatePanel from './eCommerceDeliveryTemplatePanel'
-import ECommerceSpecification from './eCommerceSpecification'
+// import ECommerceSpecification from './eCommerceSpecification'
 import EditSpread from './editSpread'
 import GroupDiscounts from './groupDiscounts'
 import AppointDiscounts from './appointDiscounts'
+import CommoditySpecification from './commoditySpecification'
+
+
 const { Item } = List
 @inject('commodity')
 @observer
@@ -59,7 +62,7 @@ class Commodity extends React.Component {
           <Item
             arrow="horizontal"
             onClick={() => {
-              history.push('/management/commodity/eCommerce')
+              history.push('/management/commodity/takeAway')
             }}
           >
             外卖商品
@@ -72,10 +75,6 @@ class Commodity extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/management/commodity" exact component={Commodity} />
-    <Route
-      path="/management/commodity/cateringPanel/:str/:id?/:goodid?"
-      component={CateringPanel}
-    />
     <Route path="/management/commodity/group" component={Group} />
     <Route path="/management/commodity/groupPanel/:str/:id?" component={GroupPanel} />
     {/* <Route path="/management/commodity/groupEdit" component={GroupEdit} /> */}
@@ -83,7 +82,9 @@ export default () => (
     <Route path="/management/commodity/reserve" component={Reserve} />
     <Route path="/management/commodity/reservePanel/:str/:id?" component={reservePanel} />
     {/* <Route path="/management/commodity/reserveEdit" component={ReserveEdit} /> */}
-    <Route path="/management/commodity/catering" component={Catering} />
+    <Route path="/management/commodity/takeAway" component={TakeAway} />
+    <Route path="/management/commodity/takeAwayPanel/:str/:id?/:goodid?" component={TakeAwayPanel} />
+
     <Route path="/management/commodity/eCommerce" component={ECommerce} />
     <Route
       path="/management/commodity/eCommercePanel/:str/:id?/:goodid?"
@@ -117,6 +118,6 @@ export default () => (
       path="/management/commodity/eCommerceDeliveryTemplatePanel/:id?"
       component={ECommerceDeliveryTemplatePanel}
     />
-    <Route path="/management/commodity/eCommerceSpecification" component={ECommerceSpecification} />
+    <Route path="/management/commodity/commoditySpecification" component={CommoditySpecification} />
   </React.Fragment>
 )

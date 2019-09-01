@@ -50,6 +50,7 @@ class Editor extends React.Component {
       'redo', // 重复
     ]
     editor.create()
+    console.log(content)
     editor.txt.html(content)
   }
 
