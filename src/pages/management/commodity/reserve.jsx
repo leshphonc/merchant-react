@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  SearchBar, List, WhiteSpace, WingBlank, PullToRefresh,
+  SearchBar, List, WhiteSpace, WingBlank, PullToRefresh, Flex, Button,
 } from 'antd-mobile'
 import { ListItem, ItemTop, TopContent } from '@/styled'
 // import CardList from './components/Reserve'
@@ -38,7 +38,7 @@ class Reserve extends React.Component {
   }
 
   mapList = () => {
-    const { commodity } = this.props
+    const { commodity, history } = this.props
     const { reserveList } = commodity
     return reserveList.map(item => (
       <React.Fragment key={item.appoint_id}>
@@ -140,19 +140,43 @@ class Reserve extends React.Component {
                 </i>
                         订单列表
               </div>
-              <Link
-                to={`/management/commodity/reservePanel/编辑/${item.appoint_id}`}
-                style={{ color: '#333' }}
-              >
-                <div style={{ display: 'inline-block' }}>
-                  <i className="iconfont" style={{ color: '#ffb000' }}>
-                    &#xe645;
-                  </i>
-                  编辑
-                </div>
-              </Link>
             </TopContent>
           </ItemTop>
+          <Flex style={{ marginTop: '8px' }}>
+            <Flex.Item>
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => history.push(
+                  `/management/commodity/reservePanel/编辑/${item.appoint_id}`,
+                )}
+              >
+                编辑
+              </Button>
+            </Flex.Item>
+            <Flex.Item>
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => history.push(
+                  `/management/commodity/AppointDiscounts/edit/${item.appoint_id}/`,
+                )}
+              >
+                        优惠
+              </Button>
+            </Flex.Item>
+            <Flex.Item>
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => history.push(
+                  `/management/commodity/editSpread/appoint_id/${item.appoint_id}/`,
+                )}
+              >
+                        佣金
+              </Button>
+            </Flex.Item>
+          </Flex>
         </ListItem>
         <WhiteSpace size="sm" />
       </React.Fragment>

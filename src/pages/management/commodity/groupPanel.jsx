@@ -116,6 +116,7 @@ class GroupPanel extends React.Component {
     if(match.params.id) {
         commodity.fetchGroupDetail(match.params.id).then(()=>{
             const { groupDetail } = commodity
+            console.log(toJS(groupDetail).level_spread)
             this.setState({
                 files:groupDetail.pic_arr,
                 cat_fid:groupDetail.cat_fid,
@@ -636,7 +637,7 @@ class GroupPanel extends React.Component {
                 getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
                 rules: [{ required: true }],
                 })}
-                selectable={pic_arr.length < 4}
+                selectable={pic_arr.length < 5}
               />
             </Item>
           </div>

@@ -18,7 +18,9 @@ import ECommerceDiscounts from './eCommerceDiscounts'
 import ECommerceDeliveryTemplate from './eCommerceDeliveryTemplate'
 import ECommerceDeliveryTemplatePanel from './eCommerceDeliveryTemplatePanel'
 import ECommerceSpecification from './eCommerceSpecification'
-
+import EditSpread from './editSpread'
+import GroupDiscounts from './groupDiscounts'
+import AppointDiscounts from './appointDiscounts'
 const { Item } = List
 @inject('commodity')
 @observer
@@ -90,6 +92,18 @@ export default () => (
     <Route
       path="/management/commodity/eCommerceSpread/:str/:id?/:goodid?"
       component={ECommerceSpread}
+    />
+    <Route
+      path="/management/commodity/editSpread/:str/:id?"
+      component={EditSpread}
+    />
+    <Route
+      path="/management/commodity/groupDiscounts/:str/:id?"
+      component={GroupDiscounts}
+    />
+    <Route
+      path="/management/commodity/AppointDiscounts/:str/:id?"
+      component={AppointDiscounts}
     />
     <Route
       path="/management/commodity/eCommerceDiscounts/:str/:id?/:goodid?"

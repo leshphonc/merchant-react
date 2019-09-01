@@ -328,7 +328,7 @@ class ReservePanel extends React.Component {
     const { files, menu, category , store , custom_name, custom_payment_price,custom_price,custom_content,use_time} = this.state
     const { getFieldProps } = form
     const { shopList } = this.state
-
+    const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const { reserveCategoryOption } = commodity
     const paymentValue = form.getFieldValue('payment_status')
     const storeChecked = form.getFieldValue('is_store')
@@ -556,7 +556,7 @@ class ReservePanel extends React.Component {
                 getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
                 rules: [{ required: true }],
               })}
-              selectable={files.length < 5}
+              selectable={pic_arr.length < 5}
               accept="image/gif,image/jpeg,image/jpg,image/png"
             />
           </Item>

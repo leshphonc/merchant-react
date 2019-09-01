@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  SearchBar, List, WhiteSpace, WingBlank, PullToRefresh,
+  SearchBar, List, WhiteSpace, WingBlank, PullToRefresh, Flex, Button,
 } from 'antd-mobile'
 import { ListItem, ItemTop, TopContent } from '@/styled'
 
@@ -34,7 +34,7 @@ class Group extends React.Component {
   }
 
   mapList = () => {
-    const { commodity } = this.props
+    const { commodity, history } = this.props
     const { groupList } = commodity
     const styleSpan = {
       spaner: {
@@ -112,20 +112,44 @@ class Group extends React.Component {
                   </i>
                       订单列表
                 </div>
-                <Link
-                  to={`/management/commodity/groupPanel/编辑/${item.group_id}`}
-                  style={{ color: '#333', width: '50%' }}
-                >
-                  <div style={styleSpan.spaner}>
-                    <i className="iconfont" style={{ color: '#ffb000' }}>
-                        &#xe645;
-                    </i>
-                      编辑
-                  </div>
-                </Link>
               </div>
             </TopContent>
           </ItemTop>
+          <Flex style={{ marginTop: '8px' }}>
+            <Flex.Item>
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => history.push(
+                  `/management/commodity/groupPanel/编辑/${item.group_id}`,
+                )}
+              >
+                        编辑
+              </Button>
+            </Flex.Item>
+            <Flex.Item>
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => history.push(
+                  `/management/commodity/GroupDiscounts/团购/${item.group_id}/`,
+                )}
+              >
+                        优惠
+              </Button>
+            </Flex.Item>
+            <Flex.Item>
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => history.push(
+                  `/management/commodity/editSpread/group_id/${item.group_id}/`,
+                )}
+              >
+                        佣金
+              </Button>
+            </Flex.Item>
+          </Flex>
         </ListItem>
         <WhiteSpace size="sm" />
       </React.Fragment>
