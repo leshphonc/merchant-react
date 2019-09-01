@@ -21,6 +21,8 @@ class RedEnvelopStore {
 
   @observable getRedPacket = {}
 
+  @observable getLists = {}
+
   @action
   fetchRedEnvelopList = async () => {
     let hasMore = true
@@ -107,6 +109,16 @@ class RedEnvelopStore {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.getRedPacket = response.data.result
+      })
+    }
+  }
+
+  @action
+  fetchGetLists = async id => {
+    const response = await services.fetchGetLists(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.getLists = response.data.result
       })
     }
   }

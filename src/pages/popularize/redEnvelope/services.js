@@ -17,6 +17,13 @@ export const fetchGetList = (page, size, id) => axios.get('/appapi.php?c=Merchan
   },
 })
 
+export const fetchGetLists = id => axios.get('/appapi.php?c=Merchantapp&a=prize_log', {
+  params: {
+    id,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
 export const fetchPacketDel = id => axios.post('/appapi.php?c=Merchantapp&a=red_packet_del', {
   id,
   ticket: localStorage.getItem('ticket'),

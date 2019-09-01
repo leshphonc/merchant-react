@@ -264,7 +264,7 @@ class RetailAdd extends React.Component {
               </ListContent>
             </CustomizeList>
           </List.Item>
-          {getRedPacket.is_fabu === '0' ? (
+          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
             <DatePicker
               {...getFieldProps('start_time', {
                 rules: [{ required: true }],
@@ -286,7 +286,7 @@ class RetailAdd extends React.Component {
               <List.Item arrow="horizontal">开始时间</List.Item>
             </DatePicker>
           )}
-          {getRedPacket.is_fabu === '0' ? (
+          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
             <DatePicker
               {...getFieldProps('end_time', {
                 rules: [{ required: true }],
@@ -312,7 +312,7 @@ class RetailAdd extends React.Component {
             活动介绍
             <TextareaItem {...getFieldProps('desc')} rows={3} placeholder="请填写简短描述" />
           </List.Item>
-          {getRedPacket.is_fabu === '0' ? (
+          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
             <Picker
               {...getFieldProps('cascade', {
                 rules: [{ required: true }],
@@ -350,7 +350,7 @@ class RetailAdd extends React.Component {
           >
             分享链接
           </InputItem>
-          {getRedPacket.is_fabu === '0' ? (
+          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
             <InputItem
               {...getFieldProps('people', {
                 rules: [{ required: true }],
@@ -370,7 +370,7 @@ class RetailAdd extends React.Component {
               领取人数
             </InputItem>
           )}
-          {getRedPacket.is_fabu === '0' ? (
+          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
             <InputItem
               {...getFieldProps('get_number', {
                 rules: [{ required: true }],
@@ -414,7 +414,7 @@ class RetailAdd extends React.Component {
               </Tooltip>
             </InputItem>
           )}
-          {getRedPacket.is_fabu === '0' ? (
+          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
             <InputItem
               {...getFieldProps('day_number', {
                 rules: [{ required: true }],
@@ -460,7 +460,7 @@ class RetailAdd extends React.Component {
               </Tooltip>
             </InputItem>
           )}
-          {getRedPacket.is_fabu === '0' ? (
+          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
             <Picker
               {...getFieldProps('packet_type', {
                 rules: [{ required: true }],
@@ -512,7 +512,7 @@ class RetailAdd extends React.Component {
           )}
           {packettype === '1' ? (
             <React.Fragment>
-              {getRedPacket.is_fabu === '0' ? (
+              {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
                 <InputItem
                   {...getFieldProps('item_sum', {
                     rules: [{ required: true }],
@@ -556,7 +556,7 @@ class RetailAdd extends React.Component {
                   </Tooltip>
                 </InputItem>
               )}
-              {getRedPacket.is_fabu === '0' ? (
+              {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
                 <InputItem
                   {...getFieldProps('item_max', {
                     rules: [{ required: true }],
@@ -600,7 +600,7 @@ class RetailAdd extends React.Component {
                   </Tooltip>
                 </InputItem>
               )}
-              {getRedPacket.is_fabu === '0' ? (
+              {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
                 <InputItem
                   {...getFieldProps('item_min', {
                     rules: [{ required: true }],
@@ -650,7 +650,7 @@ class RetailAdd extends React.Component {
           )}
           {packettype === '2' ? (
             <React.Fragment>
-              {getRedPacket.is_fabu === '0' ? (
+              {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
                 <InputItem
                   {...getFieldProps('item_num', {
                     rules: [{ required: true }],
@@ -694,7 +694,7 @@ class RetailAdd extends React.Component {
                   </Tooltip>
                 </InputItem>
               )}
-              {getRedPacket.is_fabu === '0' ? (
+              {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
                 <InputItem
                   {...getFieldProps('item_unit', {
                     rules: [{ required: true }],
