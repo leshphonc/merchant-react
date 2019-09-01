@@ -3,7 +3,7 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
 import {
-  List, InputItem, WingBlank, Button, Toast, Picker, DatePicker, Flex,
+  List, InputItem, Button, Toast, Picker, DatePicker, Flex,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -253,16 +253,19 @@ class ECommerceDiscounts extends React.Component {
           >
             <List.Item arrow="horizontal">选择会员分组</List.Item>
           </Picker>
-          <WingBlank style={{ padding: '10px 0' }}>
-            <Button
-              type="primary"
-              style={{ color: '#333', fontWeight: 'bold' }}
-              onClick={this.submit}
-            >
-              确定
-            </Button>
-          </WingBlank>
         </List>
+        <Button
+          type="primary"
+          style={{
+            width: '90%',
+            marginLeft: '5%',
+            marginTop: 20,
+            marginBottom: 20,
+          }}
+          onClick={this.submit}
+        >
+          确定
+        </Button>
       </React.Fragment>
     )
   }

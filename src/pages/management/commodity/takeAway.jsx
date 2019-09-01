@@ -3,25 +3,22 @@ import NavBar from '@/common/NavBar'
 import { Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
-import { createForm } from 'rc-form'
 import {
   SearchBar,
   Picker,
   WhiteSpace,
-  PullToRefresh,
   WingBlank,
+  PullToRefresh,
   Button,
-  Switch,
   Card,
   Flex,
   Toast,
 } from 'antd-mobile'
 import { FilterBox } from '@/styled'
 
-@createForm()
 @inject('commodity')
 @observer
-class ECommerce extends React.Component {
+class TakeAway extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -35,7 +32,6 @@ class ECommerce extends React.Component {
 
   componentDidMount() {
     const { commodity } = this.props
-    const { eCommerceList } = commodity
     const { height } = this.state
     commodity.fetchStoreValues()
     if (this.refresh.current) {
@@ -45,35 +41,38 @@ class ECommerce extends React.Component {
         height: hei,
       })
     }
-    if (!eCommerceList.length) commodity.fetchECommerceList()
+    commodity.fetchTakeAwayList()
   }
 
   detele = (id, storeId) => {
     const { commodity } = this.props
-    commodity.fetchECommerceDelete(storeId, id).then(res => {
+    commodity.fetchTakeAwayDelete(storeId, id).then(res => {
       if (res) {
-        const { storeValue } = this.state
-        Toast.success('删除成功', 1, () => commodity.resetAndFetchECommerceList(storeValue))
+        Toast.success('删除成功', 1, () => commodity.resetAndFetchTakeAwayList())
       }
     })
   }
 
   stand = (id, status, storeId) => {
     const { commodity } = this.props
-    commodity.changeECommerceStand(storeId, id, status === '0' ? 1 : 0)
+    commodity.takeAwayStandStatus(storeId, id, status === '0' ? 1 : 0).then(res => {
+      if (res) {
+        Toast.success('状态变更成功', 1, () => commodity.fetchTakeAwayList())
+      }
+    })
   }
 
   mapList = () => {
     const { commodity, history } = this.props
-    const { eCommerceList } = commodity
-    return eCommerceList.map(item => (
+    const { takeAwayList } = commodity
+    return takeAwayList.map(item => (
       <React.Fragment key={item.goods_id}>
         <Card>
-          <Card.Header title={item.s_name} thumb={item.list_pic} />
+          <Card.Header title={item.name} thumb={item.list_pic} />
           <Card.Body>
             <Flex style={{ color: '#666' }}>
               <Flex.Item>售价: {item.price} 元</Flex.Item>
-              <Flex.Item> 库存: {item.stock_num}</Flex.Item>
+              <Flex.Item> 状态: {item.statusstr}</Flex.Item>
               <Flex.Item>已售出: {item.sell_count}</Flex.Item>
             </Flex>
             <WhiteSpace />
@@ -92,7 +91,7 @@ class ECommerce extends React.Component {
                   type="primary"
                   size="small"
                   onClick={() => history.push(
-                    `/management/commodity/eCommercePanel/编辑/${item.store_id}/${item.goods_id}`,
+                    `/management/commodity/takeAwayPanel/编辑/${item.store_id}/${item.goods_id}`,
                   )
                   }
                 >
@@ -103,44 +102,13 @@ class ECommerce extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(
-                    `/management/commodity/eCommerceDiscounts/编辑/${item.store_id}/${
-                      item.goods_id
-                    }/`,
-                  )
-                  }
+                  onClick={() => this.stand(item.goods_id, item.status, item.store_id)}
                 >
-                  优惠
-                </Button>
-              </Flex.Item>
-              <Flex.Item>
-                <Button
-                  type="primary"
-                  size="small"
-                  onClick={() => history.push(
-                    `/management/commodity/eCommerceSpread/编辑/${item.store_id}/${
-                      item.goods_id
-                    }/`,
-                  )
-                  }
-                >
-                  佣金
+                  {item.statusoptstr}
                 </Button>
               </Flex.Item>
             </Flex>
           </Card.Body>
-          <WhiteSpace />
-          <Card.Footer
-            extra={
-              <React.Fragment>
-                状态：
-                <Switch
-                  checked={item.status === '1'}
-                  onClick={() => this.stand(item.goods_id, item.status, item.store_id)}
-                />
-              </React.Fragment>
-            }
-          />
           <WhiteSpace />
         </Card>
         <WhiteSpace />
@@ -151,7 +119,7 @@ class ECommerce extends React.Component {
   loadMore = async () => {
     const { commodity } = this.props
     this.setState({ refreshing: true })
-    await commodity.fetchECommerceList()
+    await commodity.fetchTakeAwayList()
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
@@ -165,29 +133,29 @@ class ECommerce extends React.Component {
       store: result.label,
       storeValue: result.value,
     })
-    commodity.fetchECommerceList(result.value)
+    commodity.fetchTakeAwayList(result.value)
   }
 
   render() {
     const {
-      storeValue, store, refreshing, height,
+      refreshing, height, store, storeValue,
     } = this.state
     const { commodity } = this.props
     const { storeValues } = commodity
     return (
       <React.Fragment>
         <NavBar
-          title="电商商品管理"
+          title="外卖商品管理"
           goBack
           right={
-            <Link style={{ color: '#fff' }} to="/management/commodity/eCommercePanel/添加">
+            <Link style={{ color: '#fff' }} to="/management/commodity/takeAwayPanel/添加">
               添加
             </Link>
           }
         />
         <SearchBar
           placeholder="商品名称"
-          onChange={name => commodity.searchECommerceList(storeValue, name)}
+          onChange={name => commodity.searchTakeAwayList(storeValue, name)}
         />
         <WhiteSpace />
         <WingBlank size="sm">
@@ -225,4 +193,4 @@ class ECommerce extends React.Component {
     )
   }
 }
-export default ECommerce
+export default TakeAway

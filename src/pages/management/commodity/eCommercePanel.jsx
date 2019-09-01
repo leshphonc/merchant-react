@@ -19,14 +19,14 @@ import Utils from '@/utils'
 import Editor from '@/common/Editor'
 import { MenuMask, PrimaryTag } from '@/styled'
 
-const { Item } = List
-const seasons = [{ label: '正常', value: '1' }, { label: '停售', value: '0' }]
+const statusData = [{ label: '正常', value: '1' }, { label: '停售', value: '0' }]
 const freightType = [{ label: '按最大值算', value: '0' }, { label: '单独计算', value: '1' }]
 const category = [
   { label: '实体商品', value: '0' },
   { label: '虚拟商品', value: '1' },
   { label: '虚拟商品(需配送)', value: '2' },
 ]
+
 @createForm()
 @inject('commodity')
 @observer
@@ -44,9 +44,9 @@ class ECommerceAdd extends React.Component {
 
   componentDidMount() {
     const { commodity, match, form } = this.props
-    if (!commodity.eCommerceValues.length) commodity.fetchECommerceValues()
+    if (!commodity.storeValues.length) commodity.fetchStoreValues()
     // 获取
-    commodity.fetchECommerceMeal(match.params.id)
+    commodity.fetchCategoryValues(match.params.id)
     commodity.fetchGoodsCategory()
     commodity.fetchExpressLists()
 
@@ -56,9 +56,16 @@ class ECommerceAdd extends React.Component {
       const picArr = eCommerceDetail.pic.map(item => ({
         url: item.url,
       }))
-      this.setState({
-        pic: picArr,
-      })
+      this.editor.current.state.editor.txt.html(eCommerceDetail.des)
+      this.setState(
+        {
+          pic: picArr,
+          goods: [eCommerceDetail.cat_fid, eCommerceDetail.cat_id],
+        },
+        () => {
+          this.getMenuList()
+        },
+      )
       form.setFieldsValue({
         ...eCommerceDetail,
         status: [eCommerceDetail.status],
@@ -99,19 +106,21 @@ class ECommerceAdd extends React.Component {
     const { eCommerceDetail, goodsCategory } = commodity
     const { goods } = this.state
     const cateGoryLabel = []
-    if (!goodsCategory.length || !Object.keys(eCommerceDetail).length) return false
-    goodsCategory.forEach(item => {
-      if (item.value === goods[0]) {
-        cateGoryLabel.push(item.label)
-        if (item.children.length) {
-          item.children.forEach(child => {
-            if (child.value === goods[1]) {
-              cateGoryLabel.push(child.label)
-            }
-          })
+    if (goodsCategory.length && Object.keys(eCommerceDetail).length) {
+      goodsCategory.forEach(item => {
+        if (item.value === goods[0]) {
+          cateGoryLabel.push(item.label)
+          if (item.children.length) {
+            item.children.forEach(child => {
+              if (child.value === goods[1]) {
+                cateGoryLabel.push(child.label)
+              }
+            })
+          }
         }
-      }
-    })
+      })
+    }
+
     return (
       <Flex justify="end">
         {cateGoryLabel.map((item, index) => (
@@ -135,12 +144,11 @@ class ECommerceAdd extends React.Component {
       commodity, form, match, history,
     } = this.props
     const { specification, goods } = this.state
-    console.log(specification)
     form.validateFields((error, value) => {
-      // if (error) {
-      //   Toast.info('请输入完整信息')
-      //   return
-      // }
+      if (error) {
+        Toast.info('请输入完整信息')
+        return
+      }
       const obj = {
         ...value,
         status: value.status[0],
@@ -154,18 +162,15 @@ class ECommerceAdd extends React.Component {
         pic: value.pic.map(item => item.url),
         des: this.editor.current.state.editor.txt.html(),
         spec_list: specification,
-        store_id: value.store_id[0],
+        store_id: value.store_id ? value.store_id[0] : '',
       }
-      console.log(obj)
       if (match.params.id) {
-        console.log(match.params.id)
         commodity
           .modifyECommerce({ ...obj, store_id: match.params.id, goods_id: match.params.goodid })
           .then(res => {
             if (res) Toast.success('编辑成功', 1, () => history.goBack())
           })
       } else {
-        console.log(value.store_id[0])
         commodity.addECommerce({ ...obj, store_id: value.store_id[0] }).then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
         })
@@ -236,14 +241,9 @@ class ECommerceAdd extends React.Component {
       match, commodity, form, history,
     } = this.props
     const {
-      eCommerceValues,
-      eCommerceMeal,
-      goodsCategory,
-      expressLists,
-      eCommerceDetail,
+      storeValues, CategoryValues, goodsCategory, expressLists,
     } = commodity
     const { getFieldProps } = form
-    const { des } = eCommerceDetail
     const { pic, open, goods } = this.state
     const menuEl = (
       <Menu
@@ -362,7 +362,7 @@ class ECommerceAdd extends React.Component {
             {...getFieldProps('status', {
               rules: [{ required: true }],
             })}
-            data={seasons}
+            data={statusData}
             cols={1}
           >
             <List.Item arrow="horizontal">商品状态</List.Item>
@@ -381,11 +381,11 @@ class ECommerceAdd extends React.Component {
               {...getFieldProps('store_id', {
                 rules: [{ required: true }],
                 getValueFromEvent: item => {
-                  commodity.fetchECommerceMeal(item[0])
+                  commodity.fetchCategoryValues(item[0])
                   return item
                 },
               })}
-              data={eCommerceValues}
+              data={storeValues}
               cols={1}
               extra="请选择"
             >
@@ -397,7 +397,7 @@ class ECommerceAdd extends React.Component {
             {...getFieldProps('sort_id', {
               rules: [{ required: true }],
             })}
-            data={eCommerceMeal}
+            data={CategoryValues}
             cols={1}
             extra="请选择"
           >
@@ -405,7 +405,7 @@ class ECommerceAdd extends React.Component {
           </Picker>
           <List.Item
             arrow="horizontal"
-            onClick={() => history.push('/management/commodity/eCommerceSpecification')}
+            onClick={() => history.push('/management/commodity/commoditySpecification')}
           >
             规格设置
           </List.Item>
@@ -464,10 +464,10 @@ class ECommerceAdd extends React.Component {
               selectable={pic.length < 4}
             />
           </List.Item>
-          <Item>
+          <List.Item>
             商品描述
-            <Editor ref={this.editor} content={des} />
-          </Item>
+            <Editor ref={this.editor} />
+          </List.Item>
         </List>
         <Button
           type="primary"

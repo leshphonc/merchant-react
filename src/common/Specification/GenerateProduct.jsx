@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React from 'react'
 import { List } from 'antd-mobile'
 
@@ -6,16 +7,17 @@ class GenerateProduct extends React.Component {
 
   mapList = () => {
     const { specification, attribute } = this.props
+    console.log(attribute)
     const result = []
     specification.forEach(item => {
       result.push(item.spec_val)
     })
     const len = result.length
-    const i = 0
+    let i = 0
     if (len > 1) {
       result[0].map(item => {
         const arr = []
-        i+=1
+        i += 1
         arr.push(item, ...this.forEachItem(result, i, len))
       })
     } else {
