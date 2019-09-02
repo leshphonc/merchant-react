@@ -245,6 +245,7 @@ class ReservePanel extends React.Component {
         custom_use_time:this.state.use_time,
         custom_id:this.state.custom_id
       }
+
       if (match.params.id) {
         commodity.modifyReserve({ ...obj, appoint_id: match.params.id }).then(res => {
             if(res) Toast.success('修改成功', 1, () => history.goBack())

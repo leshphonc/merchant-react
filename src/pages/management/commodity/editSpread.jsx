@@ -141,9 +141,6 @@ class EditSpread extends React.Component {
                 <Item>
                     {item.name}
                     <InputItem
-                        {...getFieldProps('spread_sale', {
-                            rules: [{ required: false }],
-                        })}
                         extra="%"
                         value={item.spread_sale}
                         onChange={val => {
@@ -155,9 +152,6 @@ class EditSpread extends React.Component {
                         销售佣金比例
                     </InputItem>
                     <InputItem
-                        {...getFieldProps('spread_rate', {
-                            rules: [{ required: false }],
-                        })}
                         extra="%"
                         value={item.spread_rate}
                         onChange={val => this.changeUserLevelsItem(val, index, 'spread_rate')}
