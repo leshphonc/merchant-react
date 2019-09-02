@@ -258,8 +258,8 @@ class MastSotre {
   }
 
   @action
-  fetchTakeAwayDetail = async goodid => {
-    const response = await services.fetchTakeAwayDetail(goodid)
+  fetchTakeAwayDetail = async (id, goodid) => {
+    const response = await services.fetchTakeAwayDetail(id, goodid)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.takeAwayDetail = response.data.result
@@ -267,37 +267,35 @@ class MastSotre {
     }
   }
 
+  @action
+  fetchGroupDetail = async goodid => {
+    const response = await services.fetchGroupDetail(goodid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.groupDetail = response.data.result
+      })
+    }
+  }
 
-   @action
-   fetchGroupDetail = async goodid => {
-     const response = await services.fetchGroupDetail(goodid)
-     if (response.data.errorCode === ErrorCode.SUCCESS) {
-       runInAction(() => {
-         this.groupDetail = response.data.result
-       })
-     }
-   }
-
-   @action
-   fetchShopList = async appointType => {
-     const response = await services.fetchShopList(appointType)
-     if (response.data.errorCode === ErrorCode.SUCCESS) {
-       runInAction(() => {
-         const shopList = response.data.result.store_list
-         shopList.shift(0)
-         shopList.forEach(item => {
-           if (item.worker_list) {
-             item.worker_list.forEach(i => {
-               i.value = i.merchant_worker_id
-               i.label = i.name
-             })
-           }
-         })
-         this.shopList = shopList
-       })
-     }
-   }
-
+  @action
+  fetchShopList = async appointType => {
+    const response = await services.fetchShopList(appointType)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        const shopList = response.data.result.store_list
+        shopList.shift(0)
+        shopList.forEach(item => {
+          if (item.worker_list) {
+            item.worker_list.forEach(i => {
+              i.value = i.merchant_worker_id
+              i.label = i.name
+            })
+          }
+        })
+        this.shopList = shopList
+      })
+    }
+  }
 
   @action
   fetchGroupCat = async catfid => {
@@ -605,7 +603,6 @@ class MastSotre {
     }
   }
 
-
   @action
   fetchGetWorker = async storeId => {
     const response = await services.fetchGetWorker(storeId)
@@ -613,8 +610,6 @@ class MastSotre {
       console.log(response.data)
     }
   }
-
 }
-
 
 export default new MastSotre()

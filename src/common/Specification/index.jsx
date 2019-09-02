@@ -11,6 +11,31 @@ class Specification extends React.Component {
     product: false,
   }
 
+  componentDidMount() {
+    if (sessionStorage.getItem('spec')) {
+      const spec = JSON.parse(sessionStorage.getItem('spec'))
+      const specification = []
+      const attribute = []
+      spec.spec.map(item => {
+        specification.push({
+          spec_name: item.name,
+          spec_val: item.list.map(item2 => item2.name),
+        })
+      })
+      spec.attr.map(item => {
+        attribute.push({
+          attr_name: item.name,
+          attr_val: item.val_status.map(item2 => item2[0]),
+          attr_count: item.num,
+        })
+      })
+      this.setState({
+        specification,
+        attribute,
+      })
+    }
+  }
+
   mapSpecification = () => {
     const { specification } = this.state
     // console.log(specification)
@@ -79,7 +104,7 @@ class Specification extends React.Component {
     return attribute.map((item, index) => (
       <React.Fragment key={index}>
         <InputItem
-          defaultValue={item.spec_name}
+          defaultValue={item.attr_name}
           placeholder="请输入属性名称"
           cols={1}
           extra={
@@ -97,7 +122,7 @@ class Specification extends React.Component {
           属性名称{index + 1}
         </InputItem>
         <InputItem
-          defaultValue={item.spec_name}
+          defaultValue={item.attr_count}
           placeholder="请输入可选个数"
           cols={1}
           onChange={val => this.changeAttributeCount(val, index)}
@@ -189,8 +214,7 @@ class Specification extends React.Component {
   }
 
   submit = () => {
-    const { specification, attribute } = this.state
-    console.log(specification)
+    const { specification } = this.state
     if (!specification.length) {
       Toast.info('至少配置一项规格')
       return false
@@ -213,10 +237,10 @@ class Specification extends React.Component {
     this.setState({
       product: true,
     })
-    console.log(attribute)
   }
 
   render() {
+    const { type } = this.props
     const { specification, attribute, product } = this.state
     return (
       <React.Fragment>
@@ -311,7 +335,7 @@ class Specification extends React.Component {
             </Button>
           </React.Fragment>
         ) : (
-          <GenerateProduct specification={specification} attribute={attribute} />
+          <GenerateProduct specification={specification} attribute={attribute} type={type} />
         )}
       </React.Fragment>
     )

@@ -289,13 +289,11 @@ class StorePanel extends React.Component {
       console.log(obj)
       if (match.params.id) {
         storeFront.modifyStoreFront({ ...obj, store_id: match.params.id }).then(res => {
-          return
           if (res) Toast.success('编辑成功', 1, () => history.goBack())
         })
       } else {
         storeFront.insertStoreFront(obj).then(res => {
-            return
-            if (res) Toast.success('新增成功', 1, () => history.goBack())
+          if (res) Toast.success('新增成功', 1, () => history.goBack())
         })
       }
     })
@@ -314,7 +312,7 @@ class StorePanel extends React.Component {
     const { match, form, storeFront } = this.props
     const { getFieldProps } = form
     const { cascadeOption, circleOption } = storeFront
-      console.log(circleOption)
+    console.log(circleOption)
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     /* eslint camelcase: 0 */
     const discount_type = form.getFieldValue('discount_type')

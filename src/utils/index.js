@@ -152,6 +152,12 @@ export default {
     }
     return new RegExp(REGS[rule]).test(value)
   },
+  getCacheData() {
+    if (sessionStorage.getItem('cacheData')) {
+      return JSON.parse(sessionStorage.getItem('cacheData'))
+    }
+    return false
+  },
   cacheData(data) {
     sessionStorage.setItem('cacheData', JSON.stringify(data))
   },

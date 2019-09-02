@@ -2,13 +2,7 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 import {
-  Picker,
-  List,
-  InputItem,
-  Button,
-  ImagePicker,
-  Toast,
-  WhiteSpace,
+  Picker, List, InputItem, Button, ImagePicker, Toast, WhiteSpace,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -30,125 +24,140 @@ class TakeAwayPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      // checked: false,
-      // recom: false,
-      storeValue: '',
-      classifyValue: '',
-      editorContent: '',
-      sortName: '',
-      number: '',
-      des: '',
-      unit: '',
-      price: '',
-      oldPrice: '',
-      sort: '',
       pic: [],
     }
     this.editor = React.createRef()
   }
 
   componentDidMount() {
-    const { commodity, match } = this.props
+    const { commodity, match, form } = this.props
     commodity.fetchStoreValues()
-    commodity.fetchCategoryValues()
+    if (Utils.getCacheData()) {
+      const cacheData = Utils.getCacheData()
+      form.setFieldsValue({
+        ...cacheData,
+      })
+      commodity.fetchCategoryValues(cacheData.store_id[0]).then(() => {
+        setTimeout(() => {
+          form.setFieldsValue({
+            sort_id: cacheData.sort_id,
+          })
+          this.editor.current.state.editor.txt.html(cacheData.des)
+        }, 50)
+      })
+      Utils.clearCacheData()
+      commodity.fetchTakeAwayDetail(match.params.id, match.params.goodid)
+      return false
+    }
     if (!match.params.goodid) return
     commodity.fetchTakeAwayDetail(match.params.id, match.params.goodid).then(() => {
       const { takeAwayDetail } = commodity
-      this.setState({
-        sortName: takeAwayDetail.name,
+      const picArr = takeAwayDetail.pic.map(item => ({
+        url: item.url,
+      }))
+      form.setFieldsValue({
+        name: takeAwayDetail.name,
         number: takeAwayDetail.number,
-        des: takeAwayDetail.des,
         unit: takeAwayDetail.unit,
+        old_price: takeAwayDetail.old_price,
         price: takeAwayDetail.price,
-        oldPrice: takeAwayDetail.old_price,
+        packing_charge: takeAwayDetail.packing_charge,
+        stock_num: takeAwayDetail.stock_num,
         sort: takeAwayDetail.sort,
-        pic: takeAwayDetail.pic_arr,
+        status: [takeAwayDetail.status],
+        goods_type: [takeAwayDetail.goods_type],
+        store_id: [takeAwayDetail.store_id],
+        sort_id: [takeAwayDetail.sort_id],
+        pic: picArr,
+      })
+      commodity.fetchCategoryValues(takeAwayDetail.store_id).then(() => {
+        setTimeout(() => {
+          form.setFieldsValue({
+            sort_id: [takeAwayDetail.sort_id],
+          })
+          this.editor.current.state.editor.txt.html(takeAwayDetail.des)
+        }, 50)
       })
     })
   }
 
   submit = () => {
-    const { commodity, match, history } = this.props
     const {
-      sortName, number, sort, des, unit, price, oldPrice, pic,
-    } = this.state
-    if (!sortName && !sort && !sortName) {
-      Toast.info('请填写完整信息')
-      return
-    }
-    if (match.params.goodid) {
-      commodity
-        .modifyTakeAway({
-          name: sortName,
-          sort,
-          number,
-          des,
-          unit,
-          price,
-          pic_arr: pic,
-          old_price: oldPrice,
-          goods_id: match.params.goodid,
-          store_id: match.params.id,
-        })
-        .then(res => {
-          if (res) Toast.success('编辑成功', 1, () => history.goBack())
-        })
-    } else {
-      commodity
-        .addTakeAway({
-          name: sortName,
-          sort,
-          number,
-          des,
-          unit,
-          price,
-          pic_arr: pic,
-          old_price: oldPrice,
-          store_id: commodity.takeAwayValues[0].value,
-          // goods_id: match.params.goodid,
-        })
-        .then(res => {
-          if (res) Toast.success('新增成功', 1, () => history.goBack())
-        })
-    }
-  }
-
-  submits = async () => {
-    const { editorContent } = this.state
-    console.log(editorContent)
-  }
-
-  imgChange = (arr, type) => {
-    if (type === 'remove') {
-      this.setState({
-        pic: arr,
-      })
-      return
-    }
-    arr.forEach((item, index) => {
-      if (item.file) {
-        Utils.compressionAndUploadImg(item.file)
-          .then(res => {
-            const picArr = arr
-            picArr.splice(index, 1, { url: res })
-            this.setState({
-              pic: picArr,
-            })
+      commodity, match, history, form,
+    } = this.props
+    form.validateFields((error, value) => {
+      // if (error) {
+      //   Toast.info('请填写完整信息')
+      //   return
+      // }
+      console.log(value)
+      if (match.params.goodid) {
+        commodity
+          .modifyTakeAway({
+            name: value.name,
+            number: value.number,
+            unit: value.unit,
+            old_price: value.old_price,
+            price: value.price,
+            packing_charge: value.packing_charge,
+            stock_num: value.stock_num,
+            sort: value.sort,
+            status: value.status[0],
+            goods_type: value.goods_type[0],
+            store_id: value.store_id[0],
+            sort_id: value.sort_id[0],
+            pic: value.pic.map(item => item.url),
+            des: this.editor.current.state.editor.txt.html(),
+            goods_id: match.params.goodid,
           })
-          .catch(e => Toast.fail(e))
+          .then(res => {
+            if (res) Toast.success('编辑成功', 1, () => history.goBack())
+          })
+      } else {
+        let spec = null
+        if (sessionStorage.getItem('spec')) {
+          spec = JSON.parse(sessionStorage.getItem('spec'))
+        }
+        commodity
+          .addTakeAway({
+            name: value.name,
+            number: value.number,
+            unit: value.unit,
+            old_price: value.old_price,
+            price: value.price,
+            packing_charge: value.packing_charge,
+            stock_num: value.stock_num,
+            sort: value.sort,
+            status: value.status[0],
+            goods_type: value.goods_type[0],
+            store_id: value.store_id[0],
+            sort_id: value.sort_id[0],
+            pic: value.pic.map(item => item.url),
+            des: this.editor.current.state.editor.txt.html(),
+            ...spec,
+          })
+          .then(res => {
+            if (res) Toast.success('新增成功', 1, () => history.goBack())
+          })
       }
     })
   }
 
-  changePermission = bool => {
-    const { basicInformation } = this.props
-    basicInformation.modifyPermission(bool ? '1' : '0')
+  goSpec = () => {
+    const { form, history, commodity } = this.props
+    const formData = form.getFieldsValue()
+    formData.des = this.editor.current.state.editor.txt.html()
+    Utils.cacheData(formData)
+    const obj = {
+      spec: commodity.takeAwayDetail.spec_list || [],
+      attr: commodity.takeAwayDetail.properties_status_list || [],
+    }
+    sessionStorage.setItem('spec', JSON.stringify(obj))
+    history.push('/management/commodity/commoditySpecification')
   }
 
   render() {
-    const {
-      commodity, match, form, history,
-    } = this.props
+    const { commodity, match, form } = this.props
     const { getFieldProps } = form
     const { storeValues, categoryValues } = commodity
     const { pic } = this.state
@@ -282,22 +291,20 @@ class TakeAwayPanel extends React.Component {
           >
             <List.Item arrow="horizontal">商品类型</List.Item>
           </Picker>
-          {match.params.goodid ? null : (
-            <Picker
-              {...getFieldProps('store_id', {
-                rules: [{ required: true }],
-                getValueFromEvent: item => {
-                  commodity.fetchCategoryValues(item[0])
-                  return item
-                },
-              })}
-              data={storeValues}
-              cols={1}
-              extra="请选择"
-            >
-              <List.Item arrow="horizontal">选择添加到的店铺</List.Item>
-            </Picker>
-          )}
+          <Picker
+            {...getFieldProps('store_id', {
+              rules: [{ required: true }],
+              getValueFromEvent: item => {
+                commodity.fetchCategoryValues(item[0])
+                return item
+              },
+            })}
+            data={storeValues}
+            cols={1}
+            extra="请选择"
+          >
+            <List.Item arrow="horizontal">选择添加到的店铺</List.Item>
+          </Picker>
 
           <Picker
             {...getFieldProps('sort_id', {
@@ -309,10 +316,7 @@ class TakeAwayPanel extends React.Component {
           >
             <List.Item arrow="horizontal">选择添加到的分类</List.Item>
           </Picker>
-          <List.Item
-            arrow="horizontal"
-            onClick={() => history.push('/management/commodity/commoditySpecification')}
-          >
+          <List.Item arrow="horizontal" onClick={() => this.goSpec()}>
             规格设置
           </List.Item>
           <List.Item arrow="empty">
