@@ -34,10 +34,11 @@ export const fetchGroupCat = catfid => axios.get('/appapi.php?c=Merchantapp&a=gr
 })
 
 // 预定列表
-export const fetchReserveList = (page, size) => axios.get('/appapi.php?c=Merchantapp&a=apro', {
+export const fetchReserveList = (page, size, str) => axios.get('/appapi.php?c=Merchantapp&a=apro', {
   params: {
     page,
     size,
+    keyword: str,
     ticket: localStorage.getItem('ticket'),
   },
 })

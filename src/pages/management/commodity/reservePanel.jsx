@@ -557,7 +557,6 @@ class ReservePanel extends React.Component {
                 rules: [{ required: true }],
               })}
               selectable={pic_arr.length < 5}
-              accept="image/gif,image/jpeg,image/jpg,image/png"
             />
           </Item>
           <Item>

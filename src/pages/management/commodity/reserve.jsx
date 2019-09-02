@@ -19,24 +19,21 @@ class Reserve extends React.Component {
     this.state = {
       refreshing: false,
       height: document.documentElement.clientHeight,
+      keyword: '',
     }
     this.refresh = React.createRef()
   }
 
   componentDidMount() {
     const { commodity } = this.props
-    const { height } = this.state
-    commodity.fetchReserveList()
+    const { height, keyword } = this.state
+    commodity.fetchReserveList(keyword)
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
     this.setState({
       height: hei,
     })
   }
-  alertTo = () => {
-
-  }
-
   mapList = () => {
     const { commodity, history } = this.props
     const { reserveList } = commodity
@@ -185,19 +182,33 @@ class Reserve extends React.Component {
 
   loadMore = async () => {
     const { commodity } = this.props
+    const { keyword } = this.state
     this.setState({ refreshing: true })
-    await commodity.fetchReserveList()
+    await commodity.fetchReserveList(keyword)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
   }
 
   render() {
-    const { refreshing, height } = this.state
+    const { history, commodity } = this.props
+    const { refreshing, height, keyword } = this.state
     return (
       <React.Fragment>
         <NavBar title="预约商品管理" goBack />
-        <SearchBar placeholder="商品名称" maxLength={8} />
+        <SearchBar
+          placeholder="商品名称"
+          value={keyword}
+          onChange={e => {
+            console.log(e)
+            this.setState({
+              keyword: e
+            })
+          }}
+          onSubmit={() => {
+            commodity.resetAndFetchGroupList(keyword)
+          }}
+        />
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}

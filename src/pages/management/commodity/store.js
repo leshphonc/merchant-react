@@ -129,12 +129,22 @@ class MastSotre {
   }
 
   @action
+  resetAndFetchGroupList = keyword => {
+    runInAction(() => {
+      this.reserveList = []
+      this.reserveListPage = 1
+      this.reserveListTotal = null
+      this.fetchReserveList(keyword)
+    })
+  }
+
+  @action
   fetchGroupMealAdd = async (title, description) => {
     await services.fetchGroupMealAdd(title, description)
   }
 
   @action
-  fetchReserveList = async () => {
+  fetchReserveList = async keyword => {
     let hasMore = true
     if (this.reserveListTotal !== null) {
       hasMore = this.reserveListPage * this.reserveListSize < this.reserveListTotal
@@ -142,7 +152,7 @@ class MastSotre {
         this.reserveListPage += 1
       }
     }
-    const response = await services.fetchReserveList(this.reserveListPage, this.reserveListSize)
+    const response = await services.fetchReserveList(this.reserveListPage, this.reserveListSize, keyword)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
