@@ -93,7 +93,7 @@ class OressGoods extends React.Component {
             结算价
           </Item>
           <Item
-            extra={moment(giftOrderDetail.order_time * 1000).format('YYYY-MM-DD hh:mm:ss')}
+            extra={moment(giftOrderDetail.order_time * 1000).format('YYYY-MM-DD hh:mm')}
             arrow="empty"
           >
             下单时间

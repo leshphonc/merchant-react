@@ -7,12 +7,11 @@ import {
   Button, Flex, Card, WhiteSpace, PullToRefresh, WingBlank,
 } from 'antd-mobile'
 import moment from 'moment'
-import { toJS } from 'mobx'
+// import { toJS } from 'mobx'
 import Utils from '@/utils'
 import RedEnvelopePanel from './redEnvelopePanel'
 import GetList from './getList'
 import RedAdd from './redAdd'
-
 
 const seasons = [{ label: '未开启', value: '0' }, { label: '已开启', value: '1' }]
 const isFabu = [
@@ -59,21 +58,21 @@ class RedEnvelope extends React.Component {
   detele = id => {
     const { redEnvelop } = this.props
     redEnvelop.fetchPacketDel(id).then(() => {
-      redEnvelop.fetchRedEnvelopList()
+      redEnvelop.resetAndFetchRedEnvelopList()
     })
   }
 
   fabu = id => {
     const { redEnvelop } = this.props
     redEnvelop.fetchFabu(id).then(() => {
-      // redEnvelop.fetchRedEnvelopList()
+      redEnvelop.resetAndFetchRedEnvelopList()
     })
   }
 
   mapList = () => {
     const { redEnvelop, history } = this.props
     const { redEnvelopList } = redEnvelop
-    console.log(toJS(redEnvelopList))
+    // console.log(toJS(redEnvelopList))
     return redEnvelopList.map(item => (
       <React.Fragment key={item.id}>
         <Card>
@@ -105,8 +104,8 @@ class RedEnvelope extends React.Component {
             </Flex>
             <Flex style={{ marginTop: '10px', marginBottom: '5px' }}>
               <Flex.Item>
-                活动时间:{moment(item.start_time * 1000).format('YYYY-MM-DD hh:mm')}~
-                {moment(item.end_time * 1000).format('YYYY-MM-DD hh:mm')}
+                活动时间:{moment(item.start_time * 1000).format('YYYY-MM-DD HH:mm')}~
+                {moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')}
               </Flex.Item>
             </Flex>
           </Card.Body>

@@ -9,7 +9,6 @@ import moment from 'moment'
 import { toJS } from 'mobx'
 import { List } from './styled'
 
-const { Item } = List
 @inject('redEnvelop')
 @observer
 class RedEnvelope extends React.Component {
@@ -37,19 +36,10 @@ class RedEnvelope extends React.Component {
     /* eslint react/no-find-dom-node: 0 */
   }
 
-  loadMore = async () => {
-    const { redEnvelop } = this.props
-    this.setState({ refreshing: true })
-    await redEnvelop.fetchGetList()
-    setTimeout(() => {
-      this.setState({ refreshing: false })
-    }, 100)
-  }
-
   mapList = () => {
     const { redEnvelop } = this.props
     const { getList } = redEnvelop
-    console.log(toJS(getList.lists))
+    // console.log(toJS(getList))
     return getList.map(item => (
       <React.Fragment key={item.id}>
         <div style={{ background: '#fff' }}>
@@ -76,6 +66,15 @@ class RedEnvelope extends React.Component {
     ))
   }
 
+  loadMore = async () => {
+    const { redEnvelop, match } = this.props
+    this.setState({ refreshing: true })
+    await redEnvelop.fetchGetList(match.params.id)
+    setTimeout(() => {
+      this.setState({ refreshing: false })
+    }, 100)
+  }
+
   render() {
     const { refreshing, height } = this.state
     const { redEnvelop } = this.props
@@ -87,8 +86,8 @@ class RedEnvelope extends React.Component {
         <WingBlank size="md" style={{ padding: '10px 0' }}>
           <Flex style={{ marginBottom: '10px' }}>
             <Flex.Item>红包总金额：{getLists.total_money || 0}</Flex.Item>
-            <Flex.Item>已领取红包金额：{getLists.used_money || 0}</Flex.Item>
-            <Flex.Item>剩余红包金额：{getLists.left_money || 0}</Flex.Item>
+            <Flex.Item>已领取金额：{getLists.used_money || 0}</Flex.Item>
+            <Flex.Item>剩余金额：{getLists.left_money || 0}</Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>已领取人数：{getLists.person_num || 0}</Flex.Item>
