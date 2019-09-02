@@ -20,6 +20,7 @@ class EditSpread extends React.Component {
         super(props)
         this.state = {
             userLevels: [],
+            userLevelList:[]
         }
     }
 
@@ -28,14 +29,14 @@ class EditSpread extends React.Component {
         commodity.getLevelList().then(() => {
             const { levelList } = commodity
             this.setState({
-                userLevels: levelList
+                userLevelList: levelList
             })
         })
-        console.log(match)
+
         if (match.params.str === 'group_id'){
            commodity.fetchGroupDetail(match.params.id).then(() => {
-               const { groupDetail } = commodity
-               console.log(toJS(groupDetail).level_set)
+               const { groupDetail ,levelList} = commodity
+               const { userLevels } = this.state
                form.setFieldsValue({
                    spread_sale: groupDetail.spread_sale,
                    spread_rate: groupDetail.spread_rate,
@@ -43,13 +44,22 @@ class EditSpread extends React.Component {
                    level_spread:groupDetail.level_spread,
                    spread:groupDetail.spread,
                })
+               levelList.forEach((item,index) => {
+                   if(groupDetail.spread[index]){
+                       userLevels.push({spread_sale:groupDetail.spread[index].spread_sale,spread_rate:groupDetail.spread[index].spread_sale,name:item.name})
+                   }else{
+                       userLevels.push({spread_sale:'',spread_rate:'',name:item.name})
+                   }
+
+               })
                this.setState({
-                   userLevels: groupDetail.spread,
-               },() => {console.log(this.state.userLevels)})
+                   userLevels: userLevels,
+               })
            })
         }else{
             commodity.fetchReserveDetail(match.params.id).then(() => {
-                const { appointDetail } = commodity
+                const { appointDetail , levelList } = commodity
+                const { userLevels } = this.state
                 form.setFieldsValue({
                     spread_sale: appointDetail.appoint_list.spread_sale,
                     spread_rate: appointDetail.appoint_list.spread_rate,
@@ -57,8 +67,17 @@ class EditSpread extends React.Component {
                     level_spread:appointDetail.appoint_list.level_spread,
                     spread:appointDetail.appoint_list.spread,
                 })
+                console.log(levelList)
+                levelList.forEach((item,index) => {
+                    if(appointDetail.appoint_list.spread[index]){
+                        userLevels.push({spread_sale:appointDetail.appoint_list.spread[index].spread_sale,spread_rate:appointDetail.appoint_list.spread[index].spread_sale,name:item.name})
+                    }else{
+                        userLevels.push({spread_sale:'',spread_rate:'',name:item.name})
+                    }
+
+                })
                 this.setState({
-                    userLevels: appointDetail.appoint_list.spread,
+                    userLevels
                 })
             })
         }
@@ -92,22 +111,15 @@ class EditSpread extends React.Component {
                 level_set: value.level_set[0],
                 spread: userLevels,
             }
-            console.log(value)
-            console.log(obj)
-            console.log(match)
             if(match.params.str === 'group_id'){
-                console.log('tuan')
                 commodity.groupSpreadEdit({ ...obj, group_id: match.params.id }).then(res => {
                     if (res) Toast.success('编辑成功', 1, () => history.goBack())
                 })
             }else{
-                console.log('yu')
+                commodity.appointSpreadEdit({ ...obj, appoint_id: match.params.id }).then(res => {
+                    if (res) Toast.success('编辑成功', 1, () => history.goBack())
+                })
             }
-            // commodity
-            //     .goodsSpread({ ...obj, store_id: match.params.id, goods_id: match.params.goodid })
-            //     .then(res => {
-            //         if (res) Toast.success('编辑成功', 1, () => history.goBack())
-            //     })
         })
     }
 
@@ -134,7 +146,9 @@ class EditSpread extends React.Component {
                         })}
                         extra="%"
                         value={item.spread_sale}
-                        onChange={val => this.changeUserLevelsItem(val, index, 'spread_sale')}
+                        onChange={val => {
+                            this.changeUserLevelsItem(val, index, 'spread_sale')
+                        }}
                         labelNumber={7}
                         placeholder=" 销售佣金比例"
                     >
@@ -162,7 +176,6 @@ class EditSpread extends React.Component {
         const { getFieldProps } = form
         // const { spread } = this.state
         const levelSetValue = form.getFieldValue('level_set') ? form.getFieldValue('level_set')[0] + '' : ''
-        console.log(typeof levelSetValue)
         return (
             <React.Fragment>
                 <NavBar title={`编辑推广分佣`} goBack />
