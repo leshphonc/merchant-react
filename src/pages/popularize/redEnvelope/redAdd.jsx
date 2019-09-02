@@ -268,7 +268,7 @@ class RetailAdd extends React.Component {
             {...getFieldProps('start_time', {
               rules: [{ required: true }],
             })}
-            mode="datetime"
+            mode="date"
             extra="选择时间"
           >
             <List.Item arrow="horizontal">开始时间</List.Item>
@@ -278,7 +278,7 @@ class RetailAdd extends React.Component {
             {...getFieldProps('end_time', {
               rules: [{ required: true }],
             })}
-            mode="datetime"
+            mode="date"
             extra="选择时间"
           >
             <List.Item arrow="horizontal">结束时间</List.Item>

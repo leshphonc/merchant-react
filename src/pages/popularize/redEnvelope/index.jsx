@@ -105,8 +105,8 @@ class RedEnvelope extends React.Component {
             </Flex>
             <Flex style={{ marginTop: '10px', marginBottom: '5px' }}>
               <Flex.Item>
-                活动时间:{moment(item.start_time * 1000).format('YYYY-MM-DD hh:mm')}~
-                {moment(item.end_time * 1000).format('YYYY-MM-DD hh:mm')}
+                活动时间:{moment(item.start_time * 1000).format('YYYY-MM-DD HH:mm')}~
+                {moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')}
               </Flex.Item>
             </Flex>
           </Card.Body>

@@ -19,6 +19,7 @@ import moment from 'moment'
 import { CustomizeList, ListTitle, ListContent } from '@/styled'
 import { toJS } from 'mobx'
 
+const { Item } = List
 const packetType = [{ label: '手气红包', value: '1' }, { label: '普通红包', value: '2' }]
 const isOpen = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
 @createForm()
@@ -30,6 +31,7 @@ class RetailAdd extends React.Component {
     this.state = {
       asyncCascadeValue: [],
       pics: '',
+      // start_time: '',
     }
   }
 
@@ -95,15 +97,15 @@ class RetailAdd extends React.Component {
             pics: getRedPacket.pic,
           })
         })
-      console.log(moment(getRedPacket.start_time).format('YYYY-MM-DD'))
+      console.log(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD hh:mm'))
       form.setFieldsValue({
         ...getRedPacket,
         title: getRedPacket.title,
         share_url: getRedPacket.share_url,
         desc: getRedPacket.desc,
         cascade: [getRedPacket.province_id, getRedPacket.city_id, getRedPacket.area_id],
-        start_time: new Date(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD hh:mm')),
-        end_time: new Date(moment(getRedPacket.end_time * 1000).format('YYYY-MM-DD hh:mm')),
+        start_time: new Date(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD HH:mm:ss')),
+        end_time: new Date(moment(getRedPacket.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')),
         is_open: [getRedPacket.is_open],
         packet_type: [getRedPacket.packet_type],
       })
@@ -200,8 +202,8 @@ class RetailAdd extends React.Component {
       }
       const obj = {
         ...value,
-        start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD hh:mm') : '',
-        end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD hh:mm') : '',
+        start_time: moment(value.start_time).format('YYYY-MM-DD HH:mm:ss'),
+        end_time: moment(value.end_time).format('YYYY-MM-DD HH:mm:ss'),
         is_open: value.is_open[0],
         province_id: value.cascade[0],
         city_id: value.cascade[1],
@@ -264,7 +266,19 @@ class RetailAdd extends React.Component {
               </ListContent>
             </CustomizeList>
           </List.Item>
-          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+          {/* <DatePicker
+            {...getFieldProps('start_time', {
+              rules: [{ required: true }],
+            })}
+            onOk={e => {
+              console.log(e)
+            }}
+          >
+            <Item arrow="horizontal">
+              开始时间
+            </Item>
+          </DatePicker> */}
+          {getRedPacket.is_fabu === '0' ? (
             <DatePicker
               {...getFieldProps('start_time', {
                 rules: [{ required: true }],
@@ -286,7 +300,7 @@ class RetailAdd extends React.Component {
               <List.Item arrow="horizontal">开始时间</List.Item>
             </DatePicker>
           )}
-          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+          {getRedPacket.is_fabu === '0' ? (
             <DatePicker
               {...getFieldProps('end_time', {
                 rules: [{ required: true }],
@@ -312,7 +326,7 @@ class RetailAdd extends React.Component {
             活动介绍
             <TextareaItem {...getFieldProps('desc')} rows={3} placeholder="请填写简短描述" />
           </List.Item>
-          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+          {getRedPacket.is_fabu === '0' ? (
             <Picker
               {...getFieldProps('cascade', {
                 rules: [{ required: true }],
@@ -350,7 +364,7 @@ class RetailAdd extends React.Component {
           >
             分享链接
           </InputItem>
-          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+          {getRedPacket.is_fabu === '0' ? (
             <InputItem
               {...getFieldProps('people', {
                 rules: [{ required: true }],
@@ -370,7 +384,7 @@ class RetailAdd extends React.Component {
               领取人数
             </InputItem>
           )}
-          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+          {getRedPacket.is_fabu === '0' ? (
             <InputItem
               {...getFieldProps('get_number', {
                 rules: [{ required: true }],
@@ -414,7 +428,7 @@ class RetailAdd extends React.Component {
               </Tooltip>
             </InputItem>
           )}
-          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+          {getRedPacket.is_fabu === '0' ? (
             <InputItem
               {...getFieldProps('day_number', {
                 rules: [{ required: true }],
@@ -460,7 +474,7 @@ class RetailAdd extends React.Component {
               </Tooltip>
             </InputItem>
           )}
-          {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+          {getRedPacket.is_fabu === '0' ? (
             <Picker
               {...getFieldProps('packet_type', {
                 rules: [{ required: true }],
@@ -512,7 +526,7 @@ class RetailAdd extends React.Component {
           )}
           {packettype === '1' ? (
             <React.Fragment>
-              {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+              {getRedPacket.is_fabu === '0' ? (
                 <InputItem
                   {...getFieldProps('item_sum', {
                     rules: [{ required: true }],
@@ -556,7 +570,7 @@ class RetailAdd extends React.Component {
                   </Tooltip>
                 </InputItem>
               )}
-              {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+              {getRedPacket.is_fabu === '0' ? (
                 <InputItem
                   {...getFieldProps('item_max', {
                     rules: [{ required: true }],
@@ -600,7 +614,7 @@ class RetailAdd extends React.Component {
                   </Tooltip>
                 </InputItem>
               )}
-              {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+              {getRedPacket.is_fabu === '0' ? (
                 <InputItem
                   {...getFieldProps('item_min', {
                     rules: [{ required: true }],
@@ -650,7 +664,7 @@ class RetailAdd extends React.Component {
           )}
           {packettype === '2' ? (
             <React.Fragment>
-              {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+              {getRedPacket.is_fabu === '0' ? (
                 <InputItem
                   {...getFieldProps('item_num', {
                     rules: [{ required: true }],
@@ -694,7 +708,7 @@ class RetailAdd extends React.Component {
                   </Tooltip>
                 </InputItem>
               )}
-              {getRedPacket.is_fabu === '0' || getRedPacket.is_fabu == null ? (
+              {getRedPacket.is_fabu === '0' ? (
                 <InputItem
                   {...getFieldProps('item_unit', {
                     rules: [{ required: true }],
