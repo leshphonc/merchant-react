@@ -3,7 +3,7 @@ import NavBar from '@/common/NavBar'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  WhiteSpace, PullToRefresh, WingBlank,
+  WhiteSpace, PullToRefresh, WingBlank, Flex,
 } from 'antd-mobile'
 import moment from 'moment'
 import { toJS } from 'mobx'
@@ -25,6 +25,7 @@ class RedEnvelope extends React.Component {
     const { redEnvelop, match } = this.props
     const { height } = this.state
     console.log(this.props)
+    redEnvelop.fetchGetLists(match.params.id)
     redEnvelop.fetchGetList(match.params.id)
     if (this.refresh.current) {
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
@@ -35,23 +36,22 @@ class RedEnvelope extends React.Component {
     /* eslint react/no-find-dom-node: 0 */
   }
 
-  loadMore = async () => {
-    const { redEnvelop } = this.props
-    this.setState({ refreshing: true })
-    await redEnvelop.fetchRedEnvelopList()
-    setTimeout(() => {
-      this.setState({ refreshing: false })
-    }, 100)
-  }
-
   mapList = () => {
     const { redEnvelop } = this.props
     const { getList } = redEnvelop
-    console.log(toJS(getList))
+    // console.log(toJS(getList))
     return getList.map(item => (
       <React.Fragment key={item.id}>
         <div style={{ background: '#fff' }}>
-          <List className="list" style={{ borderBottom: '1px solid #aaa', padding: '4px 0', display: 'flex', justifyContent: 'space-around' }}>
+          <List
+            className="list"
+            style={{
+              borderBottom: '1px solid #aaa',
+              padding: '4px 0',
+              display: 'flex',
+              justifyContent: 'space-around',
+            }}
+          >
             <span style={{ width: '24vw' }}>{item.nickname}</span>
             <span className="pic" style={{ width: '26vw' }}>
               {item.avatar ? <img src={item.avatar} alt="无" /> : null}
@@ -66,21 +66,51 @@ class RedEnvelope extends React.Component {
     ))
   }
 
+  loadMore = async () => {
+    const { redEnvelop, match } = this.props
+    this.setState({ refreshing: true })
+    await redEnvelop.fetchGetList(match.params.id)
+    setTimeout(() => {
+      this.setState({ refreshing: false })
+    }, 100)
+  }
+
   render() {
     const { refreshing, height } = this.state
     const { redEnvelop } = this.props
-    const { retailListTotal } = redEnvelop
+    const { getListTotal, getLists } = redEnvelop
+    console.log(getLists)
     return (
       <React.Fragment>
         <NavBar title="领取记录" goBack />
-        <div className="info" style={{ background: '#fff', display: 'flex', justifyContent: 'space-around', padding: '10px 0' }}>
+        <WingBlank size="md" style={{ padding: '10px 0' }}>
+          <Flex style={{ marginBottom: '10px' }}>
+            <Flex.Item>红包总金额：{getLists.total_money || 0}</Flex.Item>
+            <Flex.Item>已领取金额：{getLists.used_money || 0}</Flex.Item>
+            <Flex.Item>剩余金额：{getLists.left_money || 0}</Flex.Item>
+          </Flex>
+          <Flex>
+            <Flex.Item>已领取人数：{getLists.person_num || 0}</Flex.Item>
+            <Flex.Item>浏览次数：{getLists.read_num || 0}</Flex.Item>
+            <Flex.Item></Flex.Item>
+          </Flex>
+        </WingBlank>
+        <div
+          className="info"
+          style={{
+            background: '#fff',
+            display: 'flex',
+            justifyContent: 'space-around',
+            padding: '10px 0',
+          }}
+        >
           <span style={{ textAlign: 'center' }}>用户名称</span>
           <span style={{ textAlign: 'center' }}>用户头像</span>
           <span style={{ textAlign: 'center' }}>红包金额</span>
           <span style={{ textAlign: 'center' }}>领取时间</span>
         </div>
 
-        {retailListTotal < 10 ? (
+        {getListTotal < 10 ? (
           <React.Fragment>
             <WhiteSpace />
             <WingBlank size="sm">{this.mapList()}</WingBlank>

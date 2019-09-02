@@ -316,3 +316,70 @@ export const editExpress = payload => axios.post('/appapi.php?c=Merchantapp&a=ed
   ticket: localStorage.getItem('ticket'),
 })
 
+// 获取等级
+export const getLevelList = () => axios.get('/appapi.php?c=Merchantapp&a=user_level', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 团购分佣
+export const groupSpreadEdit = payload => {
+  const body = {}
+  Object.keys(payload).forEach(item => {
+    body[item] = payload[item]
+  })
+  return axios.post('/appapi.php?c=Merchantapp&a=group_spread', {
+    ...body,
+    ticket: localStorage.getItem('ticket'),
+  })
+}
+
+// 预约分佣
+export const appointSpreadEdit = payload => {
+  const body = {}
+  Object.keys(payload).forEach(item => {
+    body[item] = payload[item]
+  })
+  return axios.post('/appapi.php?c=Merchantapp&a=appoint_spread', {
+    ...body,
+    ticket: localStorage.getItem('ticket'),
+  })
+}
+
+// 获取团购套餐
+export const fetchGroupPackege = () => axios.get('/appapi.php?c=Merchantapp&a=group_packages', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 新增团购套餐
+export const addGroupPackage = payload => axios.post('/appapi.php?c=Merchantapp&a=add_mpackage', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 预约优惠
+export const editAppointDis = payload => {
+  const body = {}
+  Object.keys(payload).forEach(item => {
+    body[item] = payload[item]
+  })
+  return axios.post('/appapi.php?c=Merchantapp&a=appoint_other', {
+    ...body,
+    ticket: localStorage.getItem('ticket'),
+  })
+}
+
+// 团购优惠
+export const editGroupDis = payload => {
+  const body = {}
+  Object.keys(payload).forEach(item => {
+    body[item] = payload[item]
+  })
+  return axios.post('/appapi.php?c=Merchantapp&a=group_discount', {
+    ...body,
+    ticket: localStorage.getItem('ticket'),
+  })
+}

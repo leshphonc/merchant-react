@@ -3,12 +3,14 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
 import {
-  List, InputItem, WingBlank, Button, TextareaItem,
+  List, InputItem, WingBlank, Button, TextareaItem, Toast,
 } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
 // import ModifyPicture from './modify/picture'
 import { SizeBox } from './styled'
+import { createForm } from 'rc-form'
 
+@createForm()
 @inject('commodity')
 @observer
 class GroupMealAdd extends React.Component {
@@ -16,18 +18,25 @@ class GroupMealAdd extends React.Component {
     title: '',
     description: '',
   }
-
   submit = () => {
     const { title, description } = this.state
-    const { commodity } = this.props
-    console.log(title)
-    console.log(description)
-    commodity.fetchGroupMealAdd(title, description)
-    this.setState({ title: '', description: '' })
+    const { commodity, form, history} = this.props
+    form.validateFields((error,value) => {
+        if (error) {
+            Toast.info('请输入完整信息')
+            return
+        }
+        console.log(value)
+        commodity.addGroupPackage({title:value.title,description:value.description}).then(res => {
+          if (res) Toast.success('添加成功', 1, () => history.goBack())
+        })
+    })
+
   }
 
   render() {
-    const { title, description } = this.state
+    const { form } = this.props
+    const { getFieldProps } = form
     return (
       <React.Fragment>
         <NavBar title="添加套餐设置" goBack />
@@ -35,12 +44,9 @@ class GroupMealAdd extends React.Component {
           <List>
             <InputItem
               placeholder="请填写商品名称"
-              value={title}
-              onChange={e => {
-                this.setState({
-                  title: e,
-                })
-              }}
+              {...getFieldProps('title', {
+                  rules: [{ required: true }],
+              })}
             >
               商品标题
             </InputItem>
@@ -49,14 +55,11 @@ class GroupMealAdd extends React.Component {
                 <TextareaItem
                   title="商品简介"
                   placeholder="请填写商品简介"
+                  {...getFieldProps('description', {
+                      rules: [{ required: false }],
+                  })}
                   rows={5}
                   count={100}
-                  value={description}
-                  onChange={e => {
-                    this.setState({
-                      description: e,
-                    })
-                  }}
                 />
               </List>
             </SizeBox>

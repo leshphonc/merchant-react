@@ -95,15 +95,14 @@ class RetailAdd extends React.Component {
             pics: getRedPacket.pic,
           })
         })
-      console.log(moment(getRedPacket.start_time).format('YYYY-MM-DD'))
       form.setFieldsValue({
         ...getRedPacket,
         title: getRedPacket.title,
         share_url: getRedPacket.share_url,
         desc: getRedPacket.desc,
         cascade: [getRedPacket.province_id, getRedPacket.city_id, getRedPacket.area_id],
-        start_time: new Date(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD hh:mm')),
-        end_time: new Date(moment(getRedPacket.end_time * 1000).format('YYYY-MM-DD hh:mm')),
+        start_time: new Date(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD HH:mm:ss')),
+        end_time: new Date(moment(getRedPacket.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')),
         is_open: [getRedPacket.is_open],
         packet_type: [getRedPacket.packet_type],
       })
@@ -130,9 +129,8 @@ class RetailAdd extends React.Component {
     // debugger
     const { form } = this.props
     const { pics } = this.state
-    console.log(pics)
     const formData = form.getFieldsValue()
-    console.log(formData)
+    // console.log(formData)
     formData.pics = pics
     Utils.cacheData(formData)
   }
@@ -200,8 +198,8 @@ class RetailAdd extends React.Component {
       }
       const obj = {
         ...value,
-        start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD hh:mm') : '',
-        end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD hh:mm') : '',
+        start_time: moment(value.start_time).format('YYYY-MM-DD HH:mm:ss'),
+        end_time: moment(value.end_time).format('YYYY-MM-DD HH:mm:ss'),
         is_open: value.is_open[0],
         province_id: value.cascade[0],
         city_id: value.cascade[1],
@@ -218,9 +216,14 @@ class RetailAdd extends React.Component {
       console.log(value)
       console.log(obj)
       if (match.params.id) {
-        console.log(match.params.id)
+        // console.log(match.params.id)
         redEnvelop.modifyPacket({ ...obj, id: match.params.id }).then(res => {
-          if (res) Toast.success('编辑成功', 1, () => history.goBack())
+          if (res) {
+            Toast.success('编辑成功', 1, () => {
+              redEnvelop.resetAndFetchRedEnvelopList()
+              history.goBack()
+            })
+          }
         })
       } else {
         redEnvelop.addPacket({ ...obj }).then(res => {
@@ -260,7 +263,7 @@ class RetailAdd extends React.Component {
             <CustomizeList>
               <ListTitle>活动图片</ListTitle>
               <ListContent>
-                <img src={pics || ''} className="w40" alt="" />
+                <img src={pics || null} className="w40" alt="" />
               </ListContent>
             </CustomizeList>
           </List.Item>

@@ -81,6 +81,10 @@ class MastSotre {
 
   @observable workerList = []
 
+  @observable levelList = []
+
+  @observable groupPackage = []
+
   @action
   fetchGroupList = async keyword => {
     let hasMore = true
@@ -608,6 +612,66 @@ class MastSotre {
     const response = await services.fetchGetWorker(storeId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       console.log(response.data)
+    }
+  }
+
+  @action
+  getLevelList = async () => {
+    const response = await services.getLevelList()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.levelList = response.data.result
+      })
+    }
+  }
+
+  @action
+  groupSpreadEdit = async payload => {
+    const response = await services.groupSpreadEdit(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  appointSpreadEdit = async payload => {
+    const response = await services.appointSpreadEdit(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  fetchGroupPackege = async () => {
+    const response = await services.fetchGroupPackege()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.groupPackage = response.data.result
+      })
+    }
+  }
+
+  @action
+  addGroupPackage = async payload => {
+    const response = await services.addGroupPackage(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  editAppointDis = async payload => {
+    const response = await services.editAppointDis(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  editGroupDis = async payload => {
+    const response = await services.editGroupDis(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
     }
   }
 }
