@@ -19,7 +19,6 @@ import moment from 'moment'
 import { CustomizeList, ListTitle, ListContent } from '@/styled'
 import { toJS } from 'mobx'
 
-const { Item } = List
 const packetType = [{ label: '手气红包', value: '1' }, { label: '普通红包', value: '2' }]
 const isOpen = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
 @createForm()
@@ -31,7 +30,6 @@ class RetailAdd extends React.Component {
     this.state = {
       asyncCascadeValue: [],
       pics: '',
-      // start_time: '',
     }
   }
 
@@ -97,7 +95,6 @@ class RetailAdd extends React.Component {
             pics: getRedPacket.pic,
           })
         })
-      console.log(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD hh:mm'))
       form.setFieldsValue({
         ...getRedPacket,
         title: getRedPacket.title,
@@ -132,9 +129,8 @@ class RetailAdd extends React.Component {
     // debugger
     const { form } = this.props
     const { pics } = this.state
-    console.log(pics)
     const formData = form.getFieldsValue()
-    console.log(formData)
+    // console.log(formData)
     formData.pics = pics
     Utils.cacheData(formData)
   }
@@ -220,9 +216,14 @@ class RetailAdd extends React.Component {
       console.log(value)
       console.log(obj)
       if (match.params.id) {
-        console.log(match.params.id)
+        // console.log(match.params.id)
         redEnvelop.modifyPacket({ ...obj, id: match.params.id }).then(res => {
-          if (res) Toast.success('编辑成功', 1, () => history.goBack())
+          if (res) {
+            Toast.success('编辑成功', 1, () => {
+              redEnvelop.resetAndFetchRedEnvelopList()
+              history.goBack()
+            })
+          }
         })
       } else {
         redEnvelop.addPacket({ ...obj }).then(res => {
@@ -262,22 +263,10 @@ class RetailAdd extends React.Component {
             <CustomizeList>
               <ListTitle>活动图片</ListTitle>
               <ListContent>
-                <img src={pics || ''} className="w40" alt="" />
+                <img src={pics || null} className="w40" alt="" />
               </ListContent>
             </CustomizeList>
           </List.Item>
-          {/* <DatePicker
-            {...getFieldProps('start_time', {
-              rules: [{ required: true }],
-            })}
-            onOk={e => {
-              console.log(e)
-            }}
-          >
-            <Item arrow="horizontal">
-              开始时间
-            </Item>
-          </DatePicker> */}
           {getRedPacket.is_fabu === '0' ? (
             <DatePicker
               {...getFieldProps('start_time', {

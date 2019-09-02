@@ -17,7 +17,7 @@ class RedEnvelopStore {
 
   @observable getListSize = 10
 
-  @observable getListTotal = null
+  @observable getListTotal = 0
 
   @observable getRedPacket = {}
 
@@ -26,6 +26,7 @@ class RedEnvelopStore {
   @action
   fetchRedEnvelopList = async () => {
     let hasMore = true
+    // debugger
     if (this.redEnvelopListTotal !== null) {
       hasMore = this.redEnvelopListPage * this.redEnvelopListSize < this.redEnvelopListTotal
       if (hasMore) {
@@ -60,10 +61,20 @@ class RedEnvelopStore {
   }
 
   @action
+  resetAndFetchRedEnvelopList = async () => {
+    runInAction(() => {
+      this.redEnvelopList = []
+      this.redEnvelopListPage = 1
+      this.redEnvelopListTotal = null
+      this.fetchRedEnvelopList()
+    })
+  }
+
+  @action
   fetchGetList = async id => {
     let hasMore = true
     // debugger
-    if (this.getListTotal !== null) {
+    if (this.getListTotal !== 0) {
       hasMore = this.getListPage * this.getListSize < this.getListTotal
       if (hasMore) {
         this.getListPage += 1

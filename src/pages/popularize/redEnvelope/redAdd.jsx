@@ -95,15 +95,14 @@ class RetailAdd extends React.Component {
             pics: getRedPacket.pic,
           })
         })
-      console.log(moment(getRedPacket.start_time).format('YYYY-MM-DD'))
       form.setFieldsValue({
         ...getRedPacket,
         title: getRedPacket.title,
         share_url: getRedPacket.share_url,
         desc: getRedPacket.desc,
         cascade: [getRedPacket.province_id, getRedPacket.city_id, getRedPacket.area_id],
-        start_time: new Date(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD hh:mm')),
-        end_time: new Date(moment(getRedPacket.end_time * 1000).format('YYYY-MM-DD hh:mm')),
+        start_time: new Date(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD HH:mm')),
+        end_time: new Date(moment(getRedPacket.end_time * 1000).format('YYYY-MM-DD HH:mm')),
         is_open: [getRedPacket.is_open],
         packet_type: [getRedPacket.packet_type],
       })
@@ -200,8 +199,8 @@ class RetailAdd extends React.Component {
       }
       const obj = {
         ...value,
-        start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD hh:mm') : '',
-        end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD hh:mm') : '',
+        start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD HH:mm') : '',
+        end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD HH:mm') : '',
         is_open: value.is_open[0],
         province_id: value.cascade[0],
         city_id: value.cascade[1],
@@ -224,7 +223,12 @@ class RetailAdd extends React.Component {
         })
       } else {
         redEnvelop.addPacket({ ...obj }).then(res => {
-          if (res) Toast.success('新增成功', 1, () => history.goBack())
+          if (res) {
+            Toast.success('新增成功', 1, () => {
+              redEnvelop.resetAndFetchRedEnvelopList()
+              history.goBack()
+            })
+          }
         })
       }
     })
@@ -260,7 +264,7 @@ class RetailAdd extends React.Component {
             <CustomizeList>
               <ListTitle>活动图片</ListTitle>
               <ListContent>
-                <img src={pics || ''} className="w40" alt="" />
+                <img src={pics || null} className="w40" alt="" />
               </ListContent>
             </CustomizeList>
           </List.Item>
@@ -268,7 +272,7 @@ class RetailAdd extends React.Component {
             {...getFieldProps('start_time', {
               rules: [{ required: true }],
             })}
-            mode="date"
+            mode="datetime"
             extra="选择时间"
           >
             <List.Item arrow="horizontal">开始时间</List.Item>
@@ -278,7 +282,7 @@ class RetailAdd extends React.Component {
             {...getFieldProps('end_time', {
               rules: [{ required: true }],
             })}
-            mode="date"
+            mode="datetime"
             extra="选择时间"
           >
             <List.Item arrow="horizontal">结束时间</List.Item>
