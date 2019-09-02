@@ -11,6 +11,8 @@ import { toJS } from 'mobx'
 import Utils from '@/utils'
 import RedEnvelopePanel from './redEnvelopePanel'
 import GetList from './getList'
+import RedAdd from './redAdd'
+
 
 const seasons = [{ label: '未开启', value: '0' }, { label: '已开启', value: '1' }]
 const isFabu = [
@@ -168,7 +170,7 @@ class RedEnvelope extends React.Component {
           title="红包列表"
           goBack
           right={
-            <Link style={{ color: '#fff' }} to="/popularize/redEnvelope/redEnvelopePanel/添加">
+            <Link style={{ color: '#fff' }} to="/popularize/redEnvelope/redAdd/添加">
               添加
             </Link>
           }
@@ -205,5 +207,6 @@ export default () => (
     <Route path="/popularize/redEnvelope" exact component={RedEnvelope} />
     <Route path="/popularize/redEnvelope/redEnvelopePanel/:str/:id?" component={RedEnvelopePanel} />
     <Route path="/popularize/redEnvelope/getList/:id" component={GetList} />
+    <Route path="/popularize/redEnvelope/redAdd/:str/:id?" component={RedAdd} />
   </React.Fragment>
 )
