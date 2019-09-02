@@ -104,7 +104,7 @@ export const fetchECommerceLists = (page, size, name) => axios.get('/appapi.php?
 })
 
 // 外卖商品详情
-export const fetchTakeAwayDetail = (id, goodid) => axios.get('/appapi.php?c=Merchantapp&a=get_meal_detail', {
+export const fetchTakeAwayDetail = (id, goodid) => axios.get('/appapi.php?c=Merchantapp&a=goods_detail', {
   params: {
     store_id: id,
     goods_id: goodid,
@@ -117,7 +117,7 @@ export const addTakeAway = payload => {
   Object.keys(payload).forEach(item => {
     body[item] = payload[item]
   })
-  return axios.post('/appapi.php?c=Merchantapp&a=add_meal', {
+  return axios.post('/appapi.php?c=Merchantapp&a=goods_add', {
     ...body,
     ticket: localStorage.getItem('ticket'),
   })
@@ -128,7 +128,7 @@ export const modifyTakeAway = payload => {
   Object.keys(payload).forEach(item => {
     body[item] = payload[item]
   })
-  return axios.post('/appapi.php?c=Merchantapp&a=edit_meal', {
+  return axios.post('/appapi.php?c=Merchantapp&a=goods_edit', {
     ...body,
     ticket: localStorage.getItem('ticket'),
   })

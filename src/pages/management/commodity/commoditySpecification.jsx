@@ -5,11 +5,12 @@ import Specification from '@/common/Specification'
 
 class ECommerceSpecification extends React.Component {
   render() {
+    const { match } = this.props
     return (
       <React.Fragment>
         <NavBar title="规格属性设置" goBack />
         <WhiteSpace />
-        <Specification />
+        <Specification type={match.params.type} />
       </React.Fragment>
     )
   }
