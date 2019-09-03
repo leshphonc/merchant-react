@@ -8,7 +8,6 @@ import {
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
-import { toJS } from 'mobx'
 
 const { Item } = List
 const levelSet = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
@@ -133,9 +132,7 @@ class EditSpread extends React.Component {
     }
 
     mapList = () => {
-        const { form } = this.props
         const { userLevels } = this.state
-        const { getFieldProps } = form
         return userLevels.map((item, index) => (
             <React.Fragment key={index}>
                 <Item>
@@ -166,7 +163,7 @@ class EditSpread extends React.Component {
     }
 
     render() {
-        const { match, form } = this.props
+        const { form } = this.props
         const { getFieldProps } = form
         // const { spread } = this.state
         const levelSetValue = form.getFieldValue('level_set') ? form.getFieldValue('level_set')[0] + '' : ''

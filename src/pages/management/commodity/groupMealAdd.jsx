@@ -19,7 +19,6 @@ class GroupMealAdd extends React.Component {
     description: '',
   }
   submit = () => {
-    const { title, description } = this.state
     const { commodity, form, history} = this.props
     form.validateFields((error,value) => {
         if (error) {

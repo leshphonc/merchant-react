@@ -299,7 +299,6 @@ class GroupPanel extends React.Component {
     const { groupCatFir, groupCatSec } = commodity
     const { is_edit }  =this.state
     const {
-      checked,
       cat_fid,
       cat_id,
       tuan_type,

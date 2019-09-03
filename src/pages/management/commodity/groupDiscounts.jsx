@@ -3,16 +3,14 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
 import {
-    List, InputItem, WingBlank, Button, Toast, Picker, DatePicker, Flex,
+    List, InputItem, WingBlank, Button, Toast, Picker, Flex,
 } from 'antd-mobile'
-import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
-import moment from 'moment'
 import { createForm } from 'rc-form'
 import { toJS } from 'mobx'
 
 const { Item } = List
-const seckill = [{ label: '固定时间段', value: '1' }, { label: '每天的时间段', value: '0' }]
+// const seckill = [{ label: '固定时间段', value: '1' }, { label: '每天的时间段', value: '0' }]
 const disType = [{ label: '无优惠', value: '0' }, { label: '百分比(%)', value: '1'}, { label: '立减', value: '2'}]
 @createForm()
 @inject('commodity')
@@ -72,7 +70,7 @@ class GroupDiscounts extends React.Component {
         })
 
         commodity.fetchGroupPackege().then(() => {
-            const { groupPackage } = commodity
+            // const { groupPackage } = commodity
 
         })
     }
@@ -98,8 +96,8 @@ class GroupDiscounts extends React.Component {
     }
     levelDis = () => {
         const { userLevels ,levelType} = this.state
-        const {form } =this.props
-        const { getFieldProps } = form
+        // const {form } =this.props
+        // const { getFieldProps } = form
         if(userLevels) {
             return userLevels.map((item,index) => (
                 <React.Fragment key={index}>
@@ -196,7 +194,7 @@ class GroupDiscounts extends React.Component {
     }
 
     render() {
-        const { match, commodity, form } = this.props
+        const { commodity, form } = this.props
         const { getFieldProps } = form
         const { cardGroupAll, groupPackage } = commodity
         const { give } = this.state

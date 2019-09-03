@@ -3,11 +3,9 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
 import {
-    List, InputItem, WingBlank, Button, Toast, Picker, DatePicker, Flex, ImagePicker,
+    List, InputItem, WingBlank, Button, Toast, Picker, ImagePicker,
 } from 'antd-mobile'
-import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
-import moment from 'moment'
 import { createForm } from 'rc-form'
 import { toJS } from 'mobx'
 import Utils from '@/utils'
@@ -211,7 +209,6 @@ class AppointDiscounts extends React.Component {
         const {
             commodity, form, match, history,
         } = this.props
-        const { give } = this.state
         form.validateFields((error, value) => {
             if (error) {
                 Toast.info('请输入完整信息')
@@ -249,10 +246,8 @@ class AppointDiscounts extends React.Component {
     }
 
     render() {
-        const { match, commodity, form } = this.props
+        const { form } = this.props
         const { getFieldProps } = form
-        const { cardGroupAll } = commodity
-        const { give } = this.state
         return (
             <React.Fragment>
                 <NavBar title={`预约优惠设置`} goBack />

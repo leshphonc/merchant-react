@@ -1,6 +1,5 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import { Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {

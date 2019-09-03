@@ -260,7 +260,7 @@ class ReservePanel extends React.Component {
 
   render() {
     const { match, form, commodity } = this.props
-    const { files, menu, category , store , custom_name, custom_payment_price,custom_price,custom_content,use_time} = this.state
+    const { menu, category , store , custom_name, custom_payment_price,custom_price,custom_content,use_time} = this.state
     const { getFieldProps } = form
     const { shopList } = this.state
     const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []

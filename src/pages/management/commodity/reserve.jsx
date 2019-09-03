@@ -191,7 +191,7 @@ class Reserve extends React.Component {
   }
 
   render() {
-    const { history, commodity } = this.props
+    const { commodity } = this.props
     const { refreshing, height, keyword } = this.state
     return (
       <React.Fragment>
