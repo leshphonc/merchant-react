@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import E from 'wangeditor'
+// import E from 'wangeditor'
 import {
   List,
   InputItem,
@@ -18,15 +18,10 @@ import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import { toJS } from 'mobx'
-import { Editor } from './styled'
+import Editor from '@/common/Editor'
 
 const { Item } = List
 const { CheckboxItem } = Checkbox
-// const data = [
-//   { value: 0, label: 'Ph.D.' },
-//   { value: 1, label: 'Bachelor' },
-//   { value: 2, label: 'College diploma' },
-// ]
 @createForm()
 @inject('giftManagement')
 @observer
@@ -36,7 +31,6 @@ class RetailAdd extends React.Component {
     this.state = {
       pic: [],
       asyncCascadeValue: [],
-      editor: null,
       editorContent: '',
     }
     this.editor = React.createRef()
@@ -44,42 +38,9 @@ class RetailAdd extends React.Component {
 
   componentDidMount() {
     const { giftManagement, match, form } = this.props
-    const editor = new E(this.editor.current)
-    this.setState({
-      editor,
-    })
-    editor.customConfig.onchange = html => {
-      this.setState({
-        editorContent: html,
-      })
-    }
-    editor.customConfig.uploadImgShowBase64 = true
-    editor.customConfig.menus = [
-      'head', // 标题
-      'bold', // 粗体
-      'fontSize', // 字号
-      'fontName', // 字体
-      'italic', // 斜体
-      'underline', // 下划线
-      'strikeThrough', // 删除线
-      'foreColor', // 文字颜色
-      'backColor', // 背景颜色
-      'link', // 插入链接
-      'list', // 列表
-      'justify', // 对齐方式
-      'quote', // 引用
-      'emoticon', // 表情
-      'image', // 插入图片
-      'table', // 表格
-      'video', // 插入视频
-      'undo', // 撤销
-      'redo', // 重复
-    ]
-    editor.create()
-
     console.log(this.props)
     giftManagement.fetchGiftCategory()
-    giftManagement.fetchGiftCategorylist(match.params.catFid)
+    // giftManagement.fetchGiftCategorylist(match.params.catFid)
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
       if (cacheData.cascade) {
@@ -96,7 +57,15 @@ class RetailAdd extends React.Component {
         asyncCascadeValue: cacheData.cascade,
       })
     }
-    if (!match.params.giftId) return
+    if (!match.params.giftId) {
+      giftManagement.fetchCascadeOption().then(() => {
+        const { asyncCascadeValue } = giftManagement
+        this.setState({
+          asyncCascadeValue,
+        })
+      })
+      return
+    }
     giftManagement.fetchGetGiftDetail(match.params.giftId).then(() => {
       const { getGiftDetail } = giftManagement
       giftManagement
@@ -117,6 +86,7 @@ class RetailAdd extends React.Component {
       }))
       this.setState({
         pic: picArr,
+        editor: getGiftDetail.gift_content,
       })
       form.setFieldsValue({
         ...getGiftDetail,
@@ -127,7 +97,7 @@ class RetailAdd extends React.Component {
         cascade: [getGiftDetail.province_idss, getGiftDetail.city_idss, getGiftDetail.area_idss],
         circle_idss: [getGiftDetail.circle_idss],
       })
-      editor.txt.html(getGiftDetail.gift_content)
+      this.editor.current.state.editor.txt.html(getGiftDetail.gift_content)
     })
     giftManagement.fetchShopList().then(() => {
       const { shopList } = giftManagement
@@ -180,8 +150,6 @@ class RetailAdd extends React.Component {
     const {
       giftManagement, form, match, history,
     } = this.props
-    const { editorContent, editor } = this.state
-    console.log(editorContent)
     form.validateFields((error, value) => {
       // if (error) {
       //   Toast.info('请输入完整信息')
@@ -197,7 +165,7 @@ class RetailAdd extends React.Component {
         city_idss: value.cascade ? value.cascade[1] : value.city_idss,
         area_idss: value.cascade ? value.cascade[2] : value.area_idss,
         circle_idss: value.circle_idss ? value.circle_idss[0] : value.circle_idss,
-        gift_content: editor.txt.html(),
+        gift_content:this.editor.current.state.editor.txt.html(),
       }
       console.log(value)
       console.log(obj)
@@ -257,6 +225,7 @@ class RetailAdd extends React.Component {
     const { giftManagement, match, form } = this.props
     const { getFieldProps } = form
     const { giftCategory, giftCategorylist, shopList } = giftManagement
+    console.log(giftCategorylist)
     const { pic, asyncCascadeValue } = this.state
     const { cascadeOption, circleOption } = giftManagement
     console.log(circleOption)
@@ -349,7 +318,7 @@ class RetailAdd extends React.Component {
               选择店铺
               {shopList.map(i => (
                 <CheckboxItem key={i.value} onChange={() => this.onChange(i.value)}>
-                  {i.label}
+                  {i.adress}
                 </CheckboxItem>
               ))}
             </List.Item>
@@ -399,17 +368,9 @@ class RetailAdd extends React.Component {
               placeholder="请填写发货清单"
             />
           </List.Item>
-          {/* <Item>
-            礼品详情
-            <Editor>
-              <div ref={this.editor} className="editor" />
-            </Editor>
-          </Item> */}
           <Item>
-            商品描述
-            <Editor>
-              <div ref={this.editor} className="editor" />
-            </Editor>
+            礼品描述
+            <Editor  ref={this.editor}/>
           </Item>
           <WingBlank style={{ padding: '10px 0' }}>
             <Button
