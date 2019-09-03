@@ -45,7 +45,7 @@ export default {
     }
     return val.substr(1)
   },
-  // 富文本编辑器上传图片
+  // 富文本编辑器上传图片 [{file: blob}]
   edtiorUploadImg(arr) {
     return new Promise(resolve => {
       arr.forEach((item, index) => {
@@ -60,7 +60,7 @@ export default {
       })
     })
   },
-  // 上传数组图片
+  // 上传数组图片 [{file: blob}]
   compressionAndUploadImgArr(arr) {
     arr.forEach((item, index) => {
       if (item.file) {
@@ -74,9 +74,8 @@ export default {
     })
     return arr
   },
-  // 上传单个图片
+  // 上传单个图片 blob
   compressionAndUploadImg(blob) {
-    console.log(blob)
     return new Promise((resolve, reject) => {
       /* eslint no-new: 0 */
       new Compressor(blob, {
@@ -137,6 +136,7 @@ export default {
     // 分享到QQ空间（即将废弃 now:2019.6.22）
     wx.onMenuShareQZone(shareInfo)
   },
+  // MD5加密数据
   md5(str) {
     const md5 = crypto.createHash('md5')
     md5.update(str)
@@ -154,20 +154,24 @@ export default {
     }
     return new RegExp(REGS[rule]).test(value)
   },
+  // 获取缓存的表单数据
   getCacheData() {
     if (sessionStorage.getItem('cacheData')) {
       return JSON.parse(sessionStorage.getItem('cacheData'))
     }
     return false
   },
+  // 缓存表单数据
   cacheData(data) {
     sessionStorage.setItem('cacheData', JSON.stringify(data))
   },
+  // 缓存单个值到cacheData
   cacheItemToData(key, value) {
     const data = JSON.parse(sessionStorage.getItem('cacheData'))
     data[key] = value
     sessionStorage.setItem('cacheData', JSON.stringify(data))
   },
+  // 清空缓存的表单数据
   clearCacheData() {
     sessionStorage.removeItem('cacheData')
   },

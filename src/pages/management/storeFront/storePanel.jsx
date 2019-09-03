@@ -48,7 +48,7 @@ class StorePanel extends React.Component {
         storeFront.fetchCascadeOption(
           cacheData.cascade[0],
           cacheData.cascade[1],
-          cacheData.cascade[2],
+          cacheData.cascade[2]
         )
       } else {
         storeFront.fetchCascadeOption()
@@ -114,7 +114,11 @@ class StorePanel extends React.Component {
       const { storeDetail } = storeFront
       // 获取级联数据
       storeFront
-        .fetchCascadeOption(storeDetail.province_id, storeDetail.city_id, storeDetail.area_id)
+        .fetchCascadeOption(
+          storeDetail.province_id,
+          storeDetail.city_id,
+          storeDetail.area_id
+        )
         .then(() => {
           const { asyncCascadeValue } = storeFront
           // 整理默认数据存入state
@@ -132,12 +136,19 @@ class StorePanel extends React.Component {
         name: storeDetail.name,
         ismain: storeDetail.ismain === '1',
         phone: storeDetail.phone,
-        cascade: [storeDetail.province_id, storeDetail.city_id, storeDetail.area_id],
+        cascade: [
+          storeDetail.province_id,
+          storeDetail.city_id,
+          storeDetail.area_id,
+        ],
         circle_id: [storeDetail.circle_id],
         adress: storeDetail.adress,
         sort: storeDetail.sort,
         have_mall: storeDetail.have_mall === '1',
-        have_peisong: storeDetail.have_peisong === '1',
+        have_peisong:
+          storeDetail.have_mall === '1'
+            ? false
+            : storeDetail.have_peisong === '1',
         have_meal: storeDetail.have_meal === '1',
         have_hotel: storeDetail.have_hotel === '1',
         have_auto_parts: storeDetail.have_auto_parts === '1',
@@ -167,9 +178,7 @@ class StorePanel extends React.Component {
 
   cacheData = () => {
     const { form } = this.props
-    const {
-      long, lat, shopLogo, qrcode, asyncCascadeValue,
-    } = this.state
+    const { long, lat, shopLogo, qrcode, asyncCascadeValue } = this.state
     const formData = form.getFieldsValue()
     console.log(formData)
     form.asyncCascadeValue = asyncCascadeValue
@@ -241,12 +250,8 @@ class StorePanel extends React.Component {
   }
 
   submit = () => {
-    const {
-      storeFront, form, match, history,
-    } = this.props
-    const {
-      long, lat, shopLogo, qrcode,
-    } = this.state
+    const { storeFront, form, match, history } = this.props
+    const { long, lat, shopLogo, qrcode } = this.state
     if (!long || !lat || !shopLogo) {
       Toast.info('请输入完整信息')
       return
@@ -288,9 +293,11 @@ class StorePanel extends React.Component {
       console.log(value)
       console.log(obj)
       if (match.params.id) {
-        storeFront.modifyStoreFront({ ...obj, store_id: match.params.id }).then(res => {
-          if (res) Toast.success('编辑成功', 1, () => history.goBack())
-        })
+        storeFront
+          .modifyStoreFront({ ...obj, store_id: match.params.id })
+          .then(res => {
+            if (res) Toast.success('编辑成功', 1, () => history.goBack())
+          })
       } else {
         storeFront.insertStoreFront(obj).then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
@@ -312,16 +319,12 @@ class StorePanel extends React.Component {
     const { match, form, storeFront } = this.props
     const { getFieldProps } = form
     const { cascadeOption, circleOption } = storeFront
-    console.log(circleOption)
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     /* eslint camelcase: 0 */
     const discount_type = form.getFieldValue('discount_type')
       ? form.getFieldValue('discount_type')[0]
       : ''
-    const {
-      long, lat, asyncCascadeValue, shopLogo, qrcode,
-    } = this.state
-    console.log(form.getFieldValue('have_auto_parts'))
+    const { long, lat, asyncCascadeValue, shopLogo, qrcode } = this.state
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}店铺`} goBack />
@@ -389,7 +392,11 @@ class StorePanel extends React.Component {
             title="详细地址"
             rows={2}
           />
-          <List.Item extra={`${long}, ${lat}`} arrow="horizontal" onClick={this.goMapPicker}>
+          <List.Item
+            extra={`${long}, ${lat}`}
+            arrow="horizontal"
+            onClick={this.goMapPicker}
+          >
             地图位置
           </List.Item>
           <InputItem
@@ -417,6 +424,20 @@ class StorePanel extends React.Component {
                   valuePropName: 'checked',
                   rules: [{ required: true }],
                 })}
+                onChange={val => {
+                  const bool = form.getFieldValue('have_peisong')
+                  if (val && bool) {
+                    form.setFieldsValue({
+                      have_mall: true,
+                      have_peisong: false,
+                    })
+                  } else {
+                    form.setFieldsValue({
+                      have_mall: val,
+                    })
+                  }
+                  console.log(bool)
+                }}
               />
             }
           >
@@ -430,6 +451,20 @@ class StorePanel extends React.Component {
                   valuePropName: 'checked',
                   rules: [{ required: true }],
                 })}
+                onChange={val => {
+                  const bool = form.getFieldValue('have_mall')
+                  if (val && bool) {
+                    form.setFieldsValue({
+                      have_mall: false,
+                      have_peisong: true,
+                    })
+                  } else {
+                    form.setFieldsValue({
+                      have_peisong: val,
+                    })
+                  }
+                  console.log(bool)
+                }}
               />
             }
           >
@@ -534,7 +569,11 @@ class StorePanel extends React.Component {
               </ListContent>
             </CustomizeList>
           </List.Item>
-          <Picker {...getFieldProps('discount_type')} data={DiscountOptions} cols={1}>
+          <Picker
+            {...getFieldProps('discount_type')}
+            data={DiscountOptions}
+            cols={1}
+          >
             <List.Item arrow="horizontal">优惠类型</List.Item>
           </Picker>
           {discount_type === '1' ? (

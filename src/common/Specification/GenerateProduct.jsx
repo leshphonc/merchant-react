@@ -1,8 +1,6 @@
-/* eslint-disable array-callback-return */
+/* eslint-disable camelcase */
 import React from 'react'
-import {
-  List, InputItem, Button, Toast,
-} from 'antd-mobile'
+import { List, InputItem, Button, Toast } from 'antd-mobile'
 import { withRouter } from 'react-router-dom'
 import { createForm } from 'rc-form'
 
@@ -25,10 +23,31 @@ class GenerateProduct extends React.Component {
 
   propertiesNum = []
 
+  cost_prices = []
+
+  prices = []
+
+  seckill_prices = []
+
+  stock_nums = []
+
+  numbers = []
+
+  num0 = []
+
+  num1 = []
+
+  num2 = []
+
+  num3 = []
+
+  num4 = []
+
+  num5 = []
+
   mapList = () => {
-    const { specification, attribute, form } = this.props
-    console.log(specification)
-    console.log(attribute)
+    const { specification, attribute, form, json } = this.props
+    console.log(specification, attribute, json)
     const { getFieldProps } = form
     const result = []
     const specs = []
@@ -42,23 +61,19 @@ class GenerateProduct extends React.Component {
     specification.forEach(item => {
       result.push(item.spec_val)
       specs.push(item.spec_name)
-      specId.push(0)
+      specId.push(item.id || 0)
       specVal.push(item.spec_val)
       const arr = []
-      item.spec_val.forEach(() => {
-        arr.push(0)
+      item.spec_val.forEach((item2, index) => {
+        arr.push(item.spec_val_id ? item.spec_val_id[index] : 0)
       })
       specValId.push(arr)
     })
     attribute.forEach(item => {
       properties.push(item.attr_name)
-      propertiesId.push(0)
+      propertiesId.push(item.id || 0)
       propertiesVal.push(item.attr_val)
-      const arr = []
-      item.attr_val.forEach(() => {
-        arr.push(0)
-      })
-      propertiesNum.push(arr)
+      propertiesNum.push(item.attr_count)
     })
     this.specs = specs
     this.specId = specId
@@ -69,7 +84,6 @@ class GenerateProduct extends React.Component {
     this.propertiesVal = propertiesVal
     this.propertiesNum = propertiesNum
     const renderList = this.forEachItem(specification)
-    console.log(renderList)
     // const len = result.length
     // const i = 0
     // if (len > 1) {
@@ -82,13 +96,27 @@ class GenerateProduct extends React.Component {
     //     this.renderList.push(item)
     //   })
     // }
-
-    return renderList.map((item, index) => (
-      <React.Fragment key={item.name}>
-        <List renderHeader={item.name}>
+    json.forEach(item => {
+      const arr = Object.keys(item)
+      arr.forEach(item2 => {
+        const str = item2.substr(0, item2.length - 2)
+        this[str].push(item[item2])
+      })
+    })
+    let resultList = []
+    if (!Array.isArray(renderList)) {
+      resultList = [renderList]
+    } else {
+      resultList = renderList
+    }
+    console.log(resultList)
+    return resultList.map((item, index) => (
+      <React.Fragment key={item.spec_name}>
+        <List renderHeader={item.spec_name}>
           <InputItem
             {...getFieldProps(`cost_prices${index}`, {
               rules: [{ required: true }],
+              initialValue: this.cost_prices[index],
             })}
             placeholder="请填写进价"
           >
@@ -97,6 +125,7 @@ class GenerateProduct extends React.Component {
           <InputItem
             {...getFieldProps(`prices${index}`, {
               rules: [{ required: true }],
+              initialValue: this.prices[index],
             })}
             placeholder="请填写现价"
           >
@@ -105,17 +134,24 @@ class GenerateProduct extends React.Component {
           <InputItem
             {...getFieldProps(`seckill_prices${index}`, {
               rules: [{ required: true }],
+              initialValue: this.seckill_prices[index],
             })}
             placeholder="请填写限时价"
           >
             限时价
           </InputItem>
-          <InputItem {...getFieldProps(`numbers${index}`, {})} placeholder="请填写商品条形码">
+          <InputItem
+            {...getFieldProps(`numbers${index}`, {
+              initialValue: this.numbers[index],
+            })}
+            placeholder="请填写商品条形码"
+          >
             商品条形码
           </InputItem>
           <InputItem
             {...getFieldProps(`stock_nums${index}`, {
               rules: [{ required: true }],
+              initialValue: this.stock_nums[index],
             })}
             placeholder="请填写库存"
           >
@@ -125,6 +161,7 @@ class GenerateProduct extends React.Component {
             <InputItem
               {...getFieldProps(`num${index2}${index}`, {
                 rules: [{ required: true }],
+                initialValue: this[`num${index2}`][index],
               })}
               key={index2}
               placeholder="请填写可选个数"
@@ -137,18 +174,18 @@ class GenerateProduct extends React.Component {
     ))
   }
 
-  forEachItem = arrs => arrs.reduce((a, b) => {
-    const arr = []
-    console.log(a)
-    a.spec_val.forEach(i => {
-      b.spec_val.forEach(j => {
-        arr.push({
-          name: `${i}_${j}`,
+  forEachItem = arrs =>
+    arrs.reduce((a, b) => {
+      const arr = []
+      a.spec_val.forEach(i => {
+        b.spec_val.forEach(j => {
+          arr.push({
+            spec_name: `${i}_${j}`,
+          })
         })
       })
+      return arr
     })
-    return arr
-  })
 
   submit = () => {
     const { attribute, form, history } = this.props
@@ -157,20 +194,12 @@ class GenerateProduct extends React.Component {
         Toast.info('请填写完整信息')
         return false
       }
-      console.log(value)
       const numbers = []
       const costPrices = []
       const prices = []
       const seckillPrices = []
       const stockNums = []
-      const num0 = []
-      const num1 = []
-      const num2 = []
-      const num3 = []
-      const num4 = []
-      const num5 = []
       const keys = Object.keys(value)
-      console.log(keys)
       keys.forEach(item => {
         const str = item.substr(0, item.length - 1)
         if (str === 'numbers') {
@@ -190,7 +219,7 @@ class GenerateProduct extends React.Component {
         }
         attribute.forEach((item2, index) => {
           if (str === `num${index}`) {
-            eval(`num${index}`).push(value[item])
+            this[`num${index}`].push(value[item])
           }
         })
       })
@@ -210,7 +239,7 @@ class GenerateProduct extends React.Component {
         stock_nums: stockNums,
       }
       attribute.forEach((item, index) => {
-        obj[`num${index}`] = eval(`num${index}`)
+        obj[`num${index}`] = this[`num${index}`]
         item.attr_val.forEach((item2, index2) => {
           obj[`propertise_val_status_${index}_${index2}`] = 1
         })

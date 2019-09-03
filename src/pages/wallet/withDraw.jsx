@@ -39,6 +39,7 @@ class WithDraw extends React.Component {
 
   componentDidMount() {
     const { wallet } = this.props
+    // 获取可提现账户列表
     wallet.fetchWithDrawInfo().then(() => {
       const { withDrawInfo } = wallet
       if (!withDrawInfo.bind_wxlist) return

@@ -7,9 +7,11 @@ class HomeStore {
 
   @observable indexData = {}
 
+  @observable storeList = []
+
   @action
-  fetchEchartData = async (type, date, search) => {
-    const response = await services.fetchEchartData(type, date, search)
+  fetchEchartData = async (type, date, search, id) => {
+    const response = await services.fetchEchartData(type, date, search, id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.echartData = response.data.result
@@ -23,6 +25,16 @@ class HomeStore {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.indexData = response.data.result
+      })
+    }
+  }
+
+  @action
+  fetchStoreList = async id => {
+    const response = await services.fetchStoreList(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.storeList = response.data.result.store_list
       })
     }
   }

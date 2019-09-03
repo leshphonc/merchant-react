@@ -21,6 +21,7 @@ class Index extends React.Component {
       history.replace('/login')
       return
     }
+    // 获取余额轮播等首页数据
     home.fetchIndexData()
   }
 

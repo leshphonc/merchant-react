@@ -2,7 +2,7 @@ import React from 'react'
 import { configure } from 'mobx'
 import { Provider } from 'mobx-react'
 import store from '@/pages/store'
-import { HashRouter, Route } from 'react-router-dom'
+import { HashRouter, Route, Switch } from 'react-router-dom'
 import IconFont from '@/assets/iconfont/iconfont'
 import Index from '@/pages'
 import Login from '@/pages/login'
@@ -23,6 +23,8 @@ import CoordinatePicker from '@/common/CoordinatePicker'
 import ShopAssistant from '@/pages/popularize/shopAssistant'
 import RedEnvelope from '@/pages/popularize/redEnvelope'
 import GiftManagement from '@/pages/popularize/giftManagement'
+import Specification from '@/common/Specification'
+import NotFound from '@/common/NotFound'
 
 // mobx严格模式 生产环境使用observed 开发使用always
 configure({ enforceActions: 'always' })
@@ -31,31 +33,48 @@ export default () => (
   <Provider {...store}>
     <HashRouter>
       <IconFont />
-      <Route path="/" exact component={Index} />
-      {/* 登录页面 */}
-      <Route path="/login" component={Login} />
-      {/* 钱包页面 -> wallet */}
-      <Route path="/wallet" component={Wallet} />
-      {/* 管理页面 -> management */}
-      <Route path="/management/storefront" component={StoreFront} />
-      <Route path="/management/member" exact component={Member} />
-      <Route path="/management/member/miniProgram" component={MiniProgram} />
-      <Route path="/management/member/publicMember" component={PublicMember} />
-      <Route path="/management/member/cardGroup" component={CardGroup} />
-      <Route path="/management/member/coupon" component={Coupon} />
-      <Route path="/management/commodity" component={Commodity} />
-      <Route path="/management/shopManager" component={ShopManager} />
-      {/* 基本信息 -> setting */}
-      <Route path="/setting/basicInformation" component={BasicInformation} />
-      {/* 商家推广 ->  popularize */}
-      <Route path="/popularize/shopAssistant" component={ShopAssistant} />
-      <Route path="/popularize/redEnvelope" component={RedEnvelope} />
-      <Route path="/popularize/giftManagement" component={GiftManagement} />
-      {/* 上传图片页面 */}
-      <Route path="/uploadSingleImg/:title/:key/:ratio" component={UploadSingleImg} />
-      <Route path="/uploadMultipleImg/:title/:key/:ratio" component={UploadMultipleImg} />
-      {/* 坐标拾取页面 */}
-      <Route path="/coordinatePicker/:lng?/:lat?" component={CoordinatePicker} />
+      <Switch>
+        <Route path="/" exact component={Index} />
+        {/* 登录页面 */}
+        <Route path="/login" component={Login} />
+        {/* 钱包页面 -> wallet */}
+        <Route path="/wallet" component={Wallet} />
+        {/* 管理页面 -> management */}
+        <Route path="/management/storefront" component={StoreFront} />
+        <Route path="/management/member" exact component={Member} />
+        <Route path="/management/member/miniProgram" component={MiniProgram} />
+        <Route
+          path="/management/member/publicMember"
+          component={PublicMember}
+        />
+        <Route path="/management/member/cardGroup" component={CardGroup} />
+        <Route path="/management/member/coupon" component={Coupon} />
+        <Route path="/management/commodity" component={Commodity} />
+        <Route path="/management/shopManager" component={ShopManager} />
+        {/* 基本信息 -> setting */}
+        <Route path="/setting/basicInformation" component={BasicInformation} />
+        {/* 商家推广 ->  popularize */}
+        <Route path="/popularize/shopAssistant" component={ShopAssistant} />
+        <Route path="/popularize/redEnvelope" component={RedEnvelope} />
+        <Route path="/popularize/giftManagement" component={GiftManagement} />
+        {/* 上传图片页面 */}
+        <Route
+          path="/uploadSingleImg/:title/:key/:ratio"
+          component={UploadSingleImg}
+        />
+        <Route
+          path="/uploadMultipleImg/:title/:key/:ratio"
+          component={UploadMultipleImg}
+        />
+        {/* 坐标拾取页面 */}
+        <Route
+          path="/coordinatePicker/:lng?/:lat?"
+          component={CoordinatePicker}
+        />
+        {/* 规格属性 */}
+        <Route path="/specification" component={Specification} />
+        <Route component={NotFound}></Route>
+      </Switch>
     </HashRouter>
   </Provider>
 )

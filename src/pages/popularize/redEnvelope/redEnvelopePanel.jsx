@@ -17,7 +17,6 @@ import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import moment from 'moment'
 import { CustomizeList, ListTitle, ListContent } from '@/styled'
-import { toJS } from 'mobx'
 
 const packetType = [{ label: '手气红包', value: '1' }, { label: '普通红包', value: '2' }]
 const isOpen = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
@@ -35,9 +34,8 @@ class RetailAdd extends React.Component {
 
   componentDidMount() {
     const { redEnvelop, match, form } = this.props
-    console.log(this.props)
-    const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
-    if (cacheData && Object.keys(cacheData).length) {
+    if (Utils.getCacheData()) {
+      const cacheData = Utils.getCacheData()
       if (cacheData.cascade) {
         redEnvelop.fetchCascadeOption(
           cacheData.cascade[0],
@@ -95,14 +93,15 @@ class RetailAdd extends React.Component {
             pics: getRedPacket.pic,
           })
         })
+      console.log(getRedPacket.start_time)
       form.setFieldsValue({
         ...getRedPacket,
         title: getRedPacket.title,
         share_url: getRedPacket.share_url,
         desc: getRedPacket.desc,
         cascade: [getRedPacket.province_id, getRedPacket.city_id, getRedPacket.area_id],
-        start_time: new Date(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD HH:mm:ss')),
-        end_time: new Date(moment(getRedPacket.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')),
+        start_time: new Date(moment(getRedPacket.start_time * 1000)),
+        end_time: new Date(moment(getRedPacket.end_time * 1000)),
         is_open: [getRedPacket.is_open],
         packet_type: [getRedPacket.packet_type],
       })
@@ -126,7 +125,6 @@ class RetailAdd extends React.Component {
   }
 
   cacheData = () => {
-    // debugger
     const { form } = this.props
     const { pics } = this.state
     const formData = form.getFieldsValue()

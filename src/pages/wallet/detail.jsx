@@ -16,8 +16,11 @@ export default () => (
         { title: '收支记录', sub: '3' },
       ]}
     >
+      {/* 充值记录 */}
       <AddCreditRecord />
+      {/* 提现记录 */}
       <WithdrawRecord />
+      {/* 收支记录 */}
       <IncomeRecord />
     </Tabs>
   </React.Fragment>
