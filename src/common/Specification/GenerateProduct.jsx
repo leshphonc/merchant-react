@@ -1,8 +1,6 @@
-/* eslint-disable array-callback-return */
+/* eslint-disable camelcase */
 import React from 'react'
-import {
-  List, InputItem, Button, Toast,
-} from 'antd-mobile'
+import { List, InputItem, Button, Toast } from 'antd-mobile'
 import { withRouter } from 'react-router-dom'
 import { createForm } from 'rc-form'
 
@@ -48,9 +46,7 @@ class GenerateProduct extends React.Component {
   num5 = []
 
   mapList = () => {
-    const {
-      specification, attribute, form, json,
-    } = this.props
+    const { specification, attribute, form, json } = this.props
     const { getFieldProps } = form
     const result = []
     const specs = []
@@ -99,9 +95,9 @@ class GenerateProduct extends React.Component {
     //     this.renderList.push(item)
     //   })
     // }
-    json.map(item => {
+    json.forEach(item => {
       const arr = Object.keys(item)
-      arr.map(item2 => {
+      arr.forEach(item2 => {
         const str = item2.substr(0, item2.length - 2)
         this[str].push(item[item2])
       })
@@ -171,17 +167,18 @@ class GenerateProduct extends React.Component {
     ))
   }
 
-  forEachItem = arrs => arrs.reduce((a, b) => {
-    const arr = []
-    a.spec_val.forEach(i => {
-      b.spec_val.forEach(j => {
-        arr.push({
-          name: `${i}_${j}`,
+  forEachItem = arrs =>
+    arrs.reduce((a, b) => {
+      const arr = []
+      a.spec_val.forEach(i => {
+        b.spec_val.forEach(j => {
+          arr.push({
+            name: `${i}_${j}`,
+          })
         })
       })
+      return arr
     })
-    return arr
-  })
 
   submit = () => {
     const { attribute, form, history } = this.props

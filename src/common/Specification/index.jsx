@@ -18,7 +18,7 @@ class Specification extends React.Component {
       const spec = JSON.parse(sessionStorage.getItem('spec'))
       const specification = []
       const attribute = []
-      spec.spec.map(item => {
+      spec.spec.forEach(item => {
         specification.push({
           spec_name: item.name,
           id: item.id,
@@ -26,7 +26,7 @@ class Specification extends React.Component {
           spec_val_id: item.list.map(item2 => item2.id) || [],
         })
       })
-      spec.attr.map(item => {
+      spec.attr.forEach(item => {
         attribute.push({
           attr_name: item.name,
           id: item.id,
