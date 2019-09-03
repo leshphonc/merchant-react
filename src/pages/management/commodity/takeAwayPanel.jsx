@@ -31,22 +31,26 @@ class TakeAwayPanel extends React.Component {
 
   componentDidMount() {
     const { commodity, match, form } = this.props
-    commodity.fetchStoreValues()
+    if (!commodity.storeValues.length) commodity.fetchStoreValues()
     if (Utils.getCacheData()) {
       const cacheData = Utils.getCacheData()
       form.setFieldsValue({
         ...cacheData,
       })
-      commodity.fetchCategoryValues(cacheData.store_id[0]).then(() => {
-        setTimeout(() => {
-          form.setFieldsValue({
-            sort_id: cacheData.sort_id,
-          })
-          this.editor.current.state.editor.txt.html(cacheData.des)
-        }, 50)
-      })
+      if (cacheData.store_id) {
+        commodity.fetchCategoryValues(cacheData.store_id[0]).then(() => {
+          setTimeout(() => {
+            form.setFieldsValue({
+              sort_id: cacheData.sort_id,
+            })
+            this.editor.current.state.editor.txt.html(cacheData.des)
+          }, 500)
+        })
+      }
       Utils.clearCacheData()
-      commodity.fetchTakeAwayDetail(match.params.id, match.params.goodid)
+      if (match.params.goodid) {
+        commodity.fetchTakeAwayDetail(match.params.id, match.params.goodid)
+      }
       return false
     }
     if (!match.params.goodid) return
@@ -76,7 +80,7 @@ class TakeAwayPanel extends React.Component {
             sort_id: [takeAwayDetail.sort_id],
           })
           this.editor.current.state.editor.txt.html(takeAwayDetail.des)
-        }, 50)
+        }, 500)
       })
     })
   }
@@ -86,58 +90,58 @@ class TakeAwayPanel extends React.Component {
       commodity, match, history, form,
     } = this.props
     form.validateFields((error, value) => {
-      // if (error) {
-      //   Toast.info('请填写完整信息')
-      //   return
-      // }
-      console.log(value)
+      if (error) {
+        Toast.info('请填写完整信息')
+        return
+      }
+      let spec = null
+      if (sessionStorage.getItem('spec')) {
+        spec = JSON.parse(sessionStorage.getItem('spec'))
+      }
+      const obj = {
+        name: value.name,
+        number: value.number,
+        unit: value.unit,
+        old_price: value.old_price,
+        price: value.price,
+        packing_charge: value.packing_charge,
+        stock_num: value.stock_num,
+        sort: value.sort,
+        status: value.status[0],
+        goods_type: value.goods_type[0],
+        store_id: value.store_id[0],
+        sort_id: value.sort_id[0],
+        pic: value.pic.map(item => item.url),
+        des: this.editor.current.state.editor.txt.html(),
+      }
       if (match.params.goodid) {
         commodity
           .modifyTakeAway({
-            name: value.name,
-            number: value.number,
-            unit: value.unit,
-            old_price: value.old_price,
-            price: value.price,
-            packing_charge: value.packing_charge,
-            stock_num: value.stock_num,
-            sort: value.sort,
-            status: value.status[0],
-            goods_type: value.goods_type[0],
-            store_id: value.store_id[0],
-            sort_id: value.sort_id[0],
-            pic: value.pic.map(item => item.url),
-            des: this.editor.current.state.editor.txt.html(),
+            ...spec,
+            ...obj,
             goods_id: match.params.goodid,
           })
           .then(res => {
-            if (res) Toast.success('编辑成功', 1, () => history.goBack())
+            if (res) {
+              Toast.success('编辑成功', 1, () => {
+                sessionStorage.removeItem('spec')
+                history.goBack()
+              })
+            }
           })
       } else {
-        let spec = null
-        if (sessionStorage.getItem('spec')) {
-          spec = JSON.parse(sessionStorage.getItem('spec'))
-        }
         commodity
           .addTakeAway({
-            name: value.name,
-            number: value.number,
-            unit: value.unit,
-            old_price: value.old_price,
-            price: value.price,
-            packing_charge: value.packing_charge,
-            stock_num: value.stock_num,
-            sort: value.sort,
-            status: value.status[0],
-            goods_type: value.goods_type[0],
-            store_id: value.store_id[0],
-            sort_id: value.sort_id[0],
-            pic: value.pic.map(item => item.url),
-            des: this.editor.current.state.editor.txt.html(),
+            ...obj,
             ...spec,
           })
           .then(res => {
-            if (res) Toast.success('新增成功', 1, () => history.goBack())
+            if (res) {
+              Toast.success('新增成功', 1, () => {
+                sessionStorage.removeItem('spec')
+                history.goBack()
+              })
+            }
           })
       }
     })
@@ -151,9 +155,10 @@ class TakeAwayPanel extends React.Component {
     const obj = {
       spec: commodity.takeAwayDetail.spec_list || [],
       attr: commodity.takeAwayDetail.properties_status_list || [],
+      json: commodity.takeAwayDetail.json || [],
     }
     sessionStorage.setItem('spec', JSON.stringify(obj))
-    history.push('/management/commodity/commoditySpecification')
+    history.push('/specification')
   }
 
   render() {
