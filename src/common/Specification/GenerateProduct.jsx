@@ -102,10 +102,16 @@ class GenerateProduct extends React.Component {
         this[str].push(item[item2])
       })
     })
-
-    return renderList.map((item, index) => (
-      <React.Fragment key={item.name}>
-        <List renderHeader={item.name}>
+    let resultList = []
+    if (!Array.isArray(renderList)) {
+      resultList = [renderList]
+    } else {
+      resultList = renderList
+    }
+    console.log(resultList)
+    return resultList.map((item, index) => (
+      <React.Fragment key={item.spec_name}>
+        <List renderHeader={item.spec_name}>
           <InputItem
             {...getFieldProps(`cost_prices${index}`, {
               rules: [{ required: true }],
@@ -173,7 +179,7 @@ class GenerateProduct extends React.Component {
       a.spec_val.forEach(i => {
         b.spec_val.forEach(j => {
           arr.push({
-            name: `${i}_${j}`,
+            spec_name: `${i}_${j}`,
           })
         })
       })

@@ -31,7 +31,7 @@ class TakeAwayPanel extends React.Component {
 
   componentDidMount() {
     const { commodity, match, form } = this.props
-    if (!commodity.storeValues.length) commodity.fetchStoreValues()
+    commodity.fetchStoreValues('2')
     if (Utils.getCacheData()) {
       const cacheData = Utils.getCacheData()
       form.setFieldsValue({

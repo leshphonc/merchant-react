@@ -28,6 +28,7 @@ class ECommerce extends React.Component {
       store: '全部店铺',
       storeValue: '',
       refreshing: false,
+      keyword: '',
       height: document.documentElement.clientHeight,
     }
     this.refresh = React.createRef()
@@ -37,7 +38,7 @@ class ECommerce extends React.Component {
     const { commodity } = this.props
     const { eCommerceList } = commodity
     const { height } = this.state
-    commodity.fetchStoreValues()
+    commodity.fetchStoreValues('1')
     if (this.refresh.current) {
       /* eslint react/no-find-dom-node: 0 */
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
@@ -50,10 +51,12 @@ class ECommerce extends React.Component {
 
   detele = (id, storeId) => {
     const { commodity } = this.props
+    const { storeValue, keyword } = this.state
     commodity.fetchECommerceDelete(storeId, id).then(res => {
       if (res) {
-        const { storeValue } = this.state
-        Toast.success('删除成功', 1, () => commodity.resetAndFetchECommerceList(storeValue))
+        Toast.success('删除成功', 1, () =>
+          commodity.resetAndFetchECommerceList(storeValue, keyword)
+        )
       }
     })
   }
@@ -91,9 +94,10 @@ class ECommerce extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(
-                    `/management/commodity/eCommercePanel/编辑/${item.store_id}/${item.goods_id}`,
-                  )
+                  onClick={() =>
+                    history.push(
+                      `/management/commodity/eCommercePanel/编辑/${item.store_id}/${item.goods_id}`
+                    )
                   }
                 >
                   编辑
@@ -103,11 +107,10 @@ class ECommerce extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(
-                    `/management/commodity/eCommerceDiscounts/编辑/${item.store_id}/${
-                      item.goods_id
-                    }/`,
-                  )
+                  onClick={() =>
+                    history.push(
+                      `/management/commodity/eCommerceDiscounts/编辑/${item.store_id}/${item.goods_id}`
+                    )
                   }
                 >
                   优惠
@@ -117,11 +120,10 @@ class ECommerce extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(
-                    `/management/commodity/eCommerceSpread/编辑/${item.store_id}/${
-                      item.goods_id
-                    }/`,
-                  )
+                  onClick={() =>
+                    history.push(
+                      `/management/commodity/eCommerceSpread/编辑/${item.store_id}/${item.goods_id}`
+                    )
                   }
                 >
                   佣金
@@ -136,7 +138,9 @@ class ECommerce extends React.Component {
                 状态：
                 <Switch
                   checked={item.status === '1'}
-                  onClick={() => this.stand(item.goods_id, item.status, item.store_id)}
+                  onClick={() =>
+                    this.stand(item.goods_id, item.status, item.store_id)
+                  }
                 />
               </React.Fragment>
             }
@@ -150,8 +154,9 @@ class ECommerce extends React.Component {
 
   loadMore = async () => {
     const { commodity } = this.props
+    const { storeValue, keyword } = this.state
     this.setState({ refreshing: true })
-    await commodity.fetchECommerceList()
+    await commodity.fetchECommerceList(storeValue, keyword)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
@@ -159,19 +164,18 @@ class ECommerce extends React.Component {
 
   findStoreLabelAndFetch = value => {
     const { commodity } = this.props
+    const { keyword } = this.state
     const { storeValues } = commodity
     const result = storeValues.find(item => item.value === value[0])
     this.setState({
       store: result.label,
       storeValue: result.value,
     })
-    commodity.fetchECommerceList(result.value)
+    commodity.resetAndFetchECommerceList(result.value, keyword)
   }
 
   render() {
-    const {
-      storeValue, store, refreshing, height,
-    } = this.state
+    const { storeValue, store, refreshing, height } = this.state
     const { commodity } = this.props
     const { storeValues } = commodity
     return (
@@ -180,14 +184,22 @@ class ECommerce extends React.Component {
           title="电商商品管理"
           goBack
           right={
-            <Link style={{ color: '#fff' }} to="/management/commodity/eCommercePanel/添加">
+            <Link
+              style={{ color: '#fff' }}
+              to="/management/commodity/eCommercePanel/添加"
+            >
               添加
             </Link>
           }
         />
         <SearchBar
           placeholder="商品名称"
-          onChange={name => commodity.searchECommerceList(storeValue, name)}
+          onChange={name => {
+            this.setState({
+              keyword: name,
+            })
+            commodity.searchECommerceList(storeValue, name)
+          }}
         />
         <WhiteSpace />
         <WingBlank size="sm">
@@ -200,7 +212,10 @@ class ECommerce extends React.Component {
             >
               <div>
                 <span>{store}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>

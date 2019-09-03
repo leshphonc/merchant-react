@@ -6,7 +6,12 @@ import { Paper, FilterBox } from '@/styled'
 import { observer, inject } from 'mobx-react'
 import { ManagementGrid, PopularizeGrid, AllianceGrid } from '@/config/grid'
 import {
-  WingBlank, WhiteSpace, Carousel, Flex, Picker, DatePicker,
+  WingBlank,
+  WhiteSpace,
+  Carousel,
+  Flex,
+  Picker,
+  DatePicker,
 } from 'antd-mobile'
 import moment from 'moment'
 import FlexBox from './styled'
@@ -23,6 +28,8 @@ const FilterData1 = [
 @observer
 class Home extends React.Component {
   state = {
+    filterStoreLabel: '全部店铺',
+    filterStoreValue: '',
     filterValue1: '1',
     filterLabel1: '日',
     filterLabel2: '2019-08-07',
@@ -34,12 +41,22 @@ class Home extends React.Component {
 
   componentDidMount() {
     const { home } = this.props
-    const { filterValue1, filterLabel2, searchType } = this.state
+    const {
+      filterValue1,
+      filterLabel2,
+      searchType,
+      filterStoreValue,
+    } = this.state
     const ticket = localStorage.getItem('ticket')
     if (!ticket) return
-    home.fetchEchartData(filterValue1, filterLabel2, searchType).then(() => this.setState({
-      echartData: home.echartData,
-    }))
+    home.fetchStoreList()
+    home
+      .fetchEchartData(filterValue1, filterLabel2, searchType, filterStoreValue)
+      .then(() =>
+        this.setState({
+          echartData: home.echartData,
+        })
+      )
   }
 
   getOption = () => {
@@ -105,37 +122,83 @@ class Home extends React.Component {
 
   changeYear = val => {
     const { home } = this.props
-    const { filterValue1, searchType } = this.state
-    home.fetchEchartData(filterValue1, moment(val).format('YYYY'), searchType).then(() => this.setState({
-      echartData: home.echartData,
-      filterLabel2: `${moment(val).format('YYYY')}年`,
-    }))
+    const { filterValue1, searchType, filterStoreValue } = this.state
+    home
+      .fetchEchartData(
+        filterValue1,
+        moment(val).format('YYYY'),
+        searchType,
+        filterStoreValue
+      )
+      .then(() =>
+        this.setState({
+          echartData: home.echartData,
+          filterLabel2: `${moment(val).format('YYYY')}年`,
+        })
+      )
   }
 
   changeMonth = val => {
     const { home } = this.props
-    const { filterValue1, searchType } = this.state
-    home.fetchEchartData(filterValue1, moment(val).format('YYYY-MM'), searchType).then(() => this.setState({
-      echartData: home.echartData,
-      filterLabel2: moment(val).format('YYYY-MM'),
-    }))
+    const { filterValue1, searchType, filterStoreValue } = this.state
+    home
+      .fetchEchartData(
+        filterValue1,
+        moment(val).format('YYYY-MM'),
+        searchType,
+        filterStoreValue
+      )
+      .then(() =>
+        this.setState({
+          echartData: home.echartData,
+          filterLabel2: moment(val).format('YYYY-MM'),
+        })
+      )
   }
 
   changeDay = val => {
     const { home } = this.props
-    const { filterValue1, searchType } = this.state
-    home.fetchEchartData(filterValue1, moment(val).format('YYYY-MM-DD'), searchType).then(() => this.setState({
-      echartData: home.echartData,
-      filterLabel2: moment(val).format('YYYY-MM-DD'),
-    }))
+    const { filterValue1, searchType, filterStoreValue } = this.state
+    home
+      .fetchEchartData(
+        filterValue1,
+        moment(val).format('YYYY-MM-DD'),
+        searchType,
+        filterStoreValue
+      )
+      .then(() =>
+        this.setState({
+          echartData: home.echartData,
+          filterLabel2: moment(val).format('YYYY-MM-DD'),
+        })
+      )
+  }
+
+  changeFilterStore = val => {
+    const { home } = this.props
+    const { filterValue1, filterLabel2, searchType } = this.state
+    const result = home.storeList.find(item => item.value === val[0])
+    home
+      .fetchEchartData(filterValue1, filterLabel2, searchType, val[0])
+      .then(() =>
+        this.setState({
+          echartData: home.echartData,
+          filterStoreLabel: result.label,
+          filterStoreValue: val[0],
+        })
+      )
   }
 
   changeEchartType = (num, type) => {
     const { home } = this.props
-    const { filterValue1, filterLabel2 } = this.state
-    home.fetchEchartData(filterValue1, filterLabel2, type).then(() => this.setState({
-      echartData: home.echartData,
-    }))
+    const { filterValue1, filterLabel2, filterStoreValue } = this.state
+    home
+      .fetchEchartData(filterValue1, filterLabel2, type, filterStoreValue)
+      .then(() =>
+        this.setState({
+          echartData: home.echartData,
+        })
+      )
     let label = ''
     switch (num) {
       case '1':
@@ -183,23 +246,18 @@ class Home extends React.Component {
 
   render() {
     const { home } = this.props
+    const { storeList } = home
     const {
-      filterValue1, filterLabel1, filterLabel2, cur,
+      filterValue1,
+      filterLabel1,
+      filterLabel2,
+      cur,
+      filterStoreLabel,
+      filterStoreValue,
     } = this.state
     return (
       <React.Fragment>
         {this.mapAd()}
-        {/* <img
-            src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565972301653&di=cadc8eb6cb7d3a25cb455d27ee8342d0&imgtype=0&src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farticle%2F62e712378860c2e9ac3bf8186f8ecf6a3cb24c07.jpg"
-            style={{ height: 230 }}
-            alt=""
-          />
-          <img
-            src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565972301652&di=86ecc8c335b139f0c52413c3dedbb1dd&imgtype=0&src=http%3A%2F%2Fpic26.nipic.com%2F20130122%2F5056611_155036805000_2.jpg"
-            style={{ height: 230 }}
-            alt=""
-          /> */}
-
         <UserCard />
         <WhiteSpace />
         <WingBlank size="md">
@@ -250,6 +308,24 @@ class Home extends React.Component {
             <WhiteSpace />
             <FilterBox style={{ marginRight: 5 }}>
               <Picker
+                data={storeList}
+                value={[filterStoreValue]}
+                cols={1}
+                onChange={this.changeFilterStore}
+              >
+                <div>
+                  <span>{filterStoreLabel}</span>
+                  <i
+                    className="iconfont"
+                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                  >
+                    &#xe6f0;
+                  </i>
+                </div>
+              </Picker>
+            </FilterBox>
+            <FilterBox style={{ marginRight: 5 }}>
+              <Picker
                 data={FilterData1}
                 value={[filterValue1]}
                 cols={1}
@@ -257,7 +333,10 @@ class Home extends React.Component {
               >
                 <div>
                   <span>{filterLabel1}</span>
-                  <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                  <i
+                    className="iconfont"
+                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                  >
                     &#xe6f0;
                   </i>
                 </div>
@@ -269,7 +348,10 @@ class Home extends React.Component {
                 <DatePicker mode="year" onChange={this.changeYear}>
                   <div>
                     <span>{filterLabel2}</span>
-                    <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                    >
                       &#xe6f0;
                     </i>
                   </div>
@@ -281,7 +363,10 @@ class Home extends React.Component {
                 <DatePicker mode="month" onChange={this.changeMonth}>
                   <div>
                     <span>{filterLabel2}</span>
-                    <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                    >
                       &#xe6f0;
                     </i>
                   </div>
@@ -293,7 +378,10 @@ class Home extends React.Component {
                 <DatePicker mode="date" onChange={this.changeDay}>
                   <div>
                     <span>{filterLabel2}</span>
-                    <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                    >
                       &#xe6f0;
                     </i>
                   </div>

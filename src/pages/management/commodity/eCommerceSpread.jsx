@@ -2,13 +2,10 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
-import {
-  List, InputItem, WingBlank, Button, Toast, Picker,
-} from 'antd-mobile'
+import { List, InputItem, WingBlank, Button, Toast, Picker } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
-import {toJS} from 'mobx'
 
 const { Item } = List
 const levelSet = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
@@ -27,28 +24,28 @@ class ECommerceSpread extends React.Component {
     const { commodity, match, form } = this.props
     commodity.fetchUserLevel(match.params.id, match.params.goodid).then(() => {
       const { userLevels } = commodity
-      console.log(toJS(userLevels))
       this.setState({
         userLevels,
       })
     })
     if (!match.params.goodid) return
-    commodity.fetchECommerceDetail(match.params.id, match.params.goodid).then(() => {
-      const { eCommerceDetail } = commodity
-      form.setFieldsValue({
-        ...eCommerceDetail,
-        level_set: [eCommerceDetail.level_set],
+    commodity
+      .fetchECommerceDetail(match.params.id, match.params.goodid)
+      .then(() => {
+        const { eCommerceDetail } = commodity
+        form.setFieldsValue({
+          spread_sale: eCommerceDetail.spread_sale,
+          spread_rate: eCommerceDetail.spread_rate,
+          level_set: [eCommerceDetail.level_set],
+        })
+        this.setState({
+          userLevels: eCommerceDetail.spread,
+        })
       })
-      this.setState({
-        userLevels: eCommerceDetail.spread,
-      })
-    })
   }
 
   submit = () => {
-    const {
-      commodity, form, match, history,
-    } = this.props
+    const { commodity, form, match, history } = this.props
     const { userLevels } = this.state
     form.validateFields((error, value) => {
       if (error) {
@@ -57,13 +54,15 @@ class ECommerceSpread extends React.Component {
       }
       const obj = {
         ...value,
-        level_set: value.level_set[0],
+        level_set: value.level_set[0] + '',
         spread: userLevels,
       }
-      console.log(value)
-      console.log(obj)
       commodity
-        .goodsSpread({ ...obj, store_id: match.params.id, goods_id: match.params.goodid })
+        .goodsSpread({
+          ...obj,
+          store_id: match.params.id,
+          goods_id: match.params.goodid,
+        })
         .then(res => {
           if (res) Toast.success('编辑成功', 1, () => history.goBack())
         })
@@ -80,34 +79,28 @@ class ECommerceSpread extends React.Component {
   }
 
   mapList = () => {
-    const { form } = this.props
     const { userLevels } = this.state
-    const { getFieldProps } = form
-    console.log(toJS(userLevels))
-    debugger
     return userLevels.map((item, index) => (
       <React.Fragment key={index}>
         <Item>
           {item.name}
           <InputItem
-            {...getFieldProps('spread_sale', {
-              rules: [{ required: false }],
-            })}
             extra="%"
             value={item.spread_sale}
-            onChange={val => this.changeUserLevelsItem(val, index, 'spread_sale')}
+            onChange={val =>
+              this.changeUserLevelsItem(val, index, 'spread_sale')
+            }
             labelNumber={7}
             placeholder=" 销售佣金比例"
           >
             销售佣金比例
           </InputItem>
           <InputItem
-            {...getFieldProps('spread_rate', {
-              rules: [{ required: false }],
-            })}
             extra="%"
             value={item.spread_rate}
-            onChange={val => this.changeUserLevelsItem(val, index, 'spread_rate')}
+            onChange={val =>
+              this.changeUserLevelsItem(val, index, 'spread_rate')
+            }
             labelNumber={7}
             placeholder=" 推广佣金比例"
           >
@@ -122,7 +115,9 @@ class ECommerceSpread extends React.Component {
     const { match, form } = this.props
     const { getFieldProps } = form
     // const { spread } = this.state
-    const levelSetValue = form.getFieldValue('level_set') ? form.getFieldValue('level_set')[0] : ''
+    const levelSetValue = form.getFieldValue('level_set')
+      ? form.getFieldValue('level_set')[0]
+      : ''
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}推广分佣`} goBack />
@@ -170,13 +165,7 @@ class ECommerceSpread extends React.Component {
               </i>
             </Tooltip>
           </InputItem>
-          <Picker
-            {...getFieldProps('level_set', {
-              rules: [{ required: false }],
-            })}
-            data={levelSet}
-            cols={1}
-          >
+          <Picker {...getFieldProps('level_set')} data={levelSet} cols={1}>
             <List.Item arrow="horizontal">等级会员分佣设置</List.Item>
           </Picker>
           {levelSetValue === '0' ? null : (
@@ -184,16 +173,19 @@ class ECommerceSpread extends React.Component {
               {this.mapList()}
             </WingBlank>
           )}
-          <WingBlank style={{ padding: '10px 0' }}>
-            <Button
-              type="primary"
-              style={{ color: '#333', fontWeight: 'bold' }}
-              onClick={this.submit}
-            >
-              确定
-            </Button>
-          </WingBlank>
         </List>
+        <Button
+          type="primary"
+          style={{
+            width: '90%',
+            marginLeft: '5%',
+            marginTop: 20,
+            marginBottom: 20,
+          }}
+          onClick={this.submit}
+        >
+          确定
+        </Button>
       </React.Fragment>
     )
   }

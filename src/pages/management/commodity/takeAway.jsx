@@ -25,6 +25,7 @@ class TakeAway extends React.Component {
       store: '全部店铺',
       storeValue: '',
       refreshing: false,
+      keyword: '',
       height: document.documentElement.clientHeight,
     }
     this.refresh = React.createRef()
@@ -33,7 +34,7 @@ class TakeAway extends React.Component {
   componentDidMount() {
     const { commodity } = this.props
     const { height } = this.state
-    commodity.fetchStoreValues()
+    commodity.fetchStoreValues('2')
     sessionStorage.removeItem('spec')
     if (this.refresh.current) {
       /* eslint react/no-find-dom-node: 0 */
@@ -47,20 +48,28 @@ class TakeAway extends React.Component {
 
   detele = (id, storeId) => {
     const { commodity } = this.props
+    const { storeValue, keyword } = this.state
     commodity.fetchTakeAwayDelete(storeId, id).then(res => {
       if (res) {
-        Toast.success('删除成功', 1, () => commodity.resetAndFetchTakeAwayList())
+        Toast.success('删除成功', 1, () =>
+          commodity.resetAndFetchTakeAwayList(storeValue, keyword)
+        )
       }
     })
   }
 
   stand = (id, status, storeId) => {
     const { commodity } = this.props
-    commodity.takeAwayStandStatus(storeId, id, status === '0' ? 1 : 0).then(res => {
-      if (res) {
-        Toast.success('状态变更成功', 1, () => commodity.fetchTakeAwayList())
-      }
-    })
+    const { storeValue, keyword } = this.state
+    commodity
+      .takeAwayStandStatus(storeId, id, status === '0' ? 1 : 0)
+      .then(res => {
+        if (res) {
+          Toast.success('状态变更成功', 1, () =>
+            commodity.fetchTakeAwayList(storeValue, keyword)
+          )
+        }
+      })
   }
 
   mapList = () => {
@@ -91,9 +100,10 @@ class TakeAway extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(
-                    `/management/commodity/takeAwayPanel/编辑/${item.store_id}/${item.goods_id}`,
-                  )
+                  onClick={() =>
+                    history.push(
+                      `/management/commodity/takeAwayPanel/编辑/${item.store_id}/${item.goods_id}`
+                    )
                   }
                 >
                   编辑
@@ -103,7 +113,9 @@ class TakeAway extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => this.stand(item.goods_id, item.status, item.store_id)}
+                  onClick={() =>
+                    this.stand(item.goods_id, item.status, item.store_id)
+                  }
                 >
                   {item.statusoptstr}
                 </Button>
@@ -119,8 +131,9 @@ class TakeAway extends React.Component {
 
   loadMore = async () => {
     const { commodity } = this.props
+    const { storeValue, keyword } = this.state
     this.setState({ refreshing: true })
-    await commodity.fetchTakeAwayList()
+    await commodity.fetchTakeAwayList(storeValue, keyword)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
@@ -128,19 +141,18 @@ class TakeAway extends React.Component {
 
   findStoreLabelAndFetch = value => {
     const { commodity } = this.props
+    const { keyword } = this.state
     const { storeValues } = commodity
     const result = storeValues.find(item => item.value === value[0])
     this.setState({
       store: result.label,
       storeValue: result.value,
     })
-    commodity.fetchTakeAwayList(result.value)
+    commodity.resetAndFetchTakeAwayList(result.value, keyword)
   }
 
   render() {
-    const {
-      refreshing, height, store, storeValue,
-    } = this.state
+    const { refreshing, height, store, storeValue } = this.state
     const { commodity } = this.props
     const { storeValues } = commodity
     return (
@@ -149,14 +161,22 @@ class TakeAway extends React.Component {
           title="外卖商品管理"
           goBack
           right={
-            <Link style={{ color: '#fff' }} to="/management/commodity/takeAwayPanel/添加">
+            <Link
+              style={{ color: '#fff' }}
+              to="/management/commodity/takeAwayPanel/添加"
+            >
               添加
             </Link>
           }
         />
         <SearchBar
           placeholder="商品名称"
-          onChange={name => commodity.searchTakeAwayList(storeValue, name)}
+          onChange={name => {
+            this.setState({
+              keyword: name,
+            })
+            commodity.searchTakeAwayList(storeValue, name)
+          }}
         />
         <WhiteSpace />
         <WingBlank size="sm">
@@ -169,7 +189,10 @@ class TakeAway extends React.Component {
             >
               <div>
                 <span>{store}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
