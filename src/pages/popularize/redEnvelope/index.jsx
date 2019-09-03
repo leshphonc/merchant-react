@@ -34,7 +34,7 @@ class RedEnvelope extends React.Component {
   componentDidMount() {
     const { redEnvelop } = this.props
     const { height } = this.state
-    if (!redEnvelop.redEnvelopList.length) redEnvelop.fetchRedEnvelopList()
+    if (!redEnvelop.redEnvelopList.length) redEnvelop.fetchRedEnvelopList() 
     if (this.refresh.current) {
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
       this.setState({
@@ -58,13 +58,15 @@ class RedEnvelope extends React.Component {
     const { redEnvelop } = this.props
     redEnvelop.fetchPacketDel(id).then(() => {
       redEnvelop.resetAndFetchRedEnvelopList()
+      redEnvelop.fetchRedEnvelopList()
     })
   }
 
   fabu = id => {
-    const { redEnvelop } = this.props
+    const { redEnvelop, history } = this.props
     redEnvelop.fetchFabu(id).then(() => {
       redEnvelop.resetAndFetchRedEnvelopList()
+      redEnvelop.fetchRedEnvelopList()
     })
   }
 
