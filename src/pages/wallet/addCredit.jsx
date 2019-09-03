@@ -18,6 +18,7 @@ class AddCredit extends React.Component {
     const code = utils.getUrlParam('code')
     console.log(code)
     if (!code) {
+      // 获取微信code
       wallet.getWxCode()
     }
   }

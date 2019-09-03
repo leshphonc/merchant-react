@@ -16,21 +16,20 @@ import shopManager from '@/pages/management/shopManager/store'
 import redEnvelop from '@/pages/popularize/redEnvelope/store'
 import giftManagement from '@/pages/popularize/giftManagement/store'
 
-
 class CommonStore {
   @observable openid = ''
 
+  // 获取微信code
   @action
   getWxCode = async () => {
     const response = await services.getWxConfig()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       const url = encodeURIComponent(window.location.href)
-      window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${
-        response.data.result.appId
-      }&redirect_uri=${url}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`
+      window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${response.data.result.appId}&redirect_uri=${url}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`
     }
   }
 
+  // 用code换取openid
   @action
   fetchOpenId = async code => {
     const response = await services.fetchOpenId(code)
