@@ -17,7 +17,6 @@ import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import moment from 'moment'
 import { CustomizeList, ListTitle, ListContent } from '@/styled'
-import { toJS } from 'mobx'
 
 const packetType = [{ label: '手气红包', value: '1' }, { label: '普通红包', value: '2' }]
 const isOpen = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]

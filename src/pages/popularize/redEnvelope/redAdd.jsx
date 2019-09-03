@@ -17,7 +17,6 @@ import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import moment from 'moment'
 import { CustomizeList, ListTitle, ListContent } from '@/styled'
-import { toJS } from 'mobx'
 
 const packetType = [{ label: '手气红包', value: '1' }, { label: '普通红包', value: '2' }]
 const isOpen = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
@@ -81,48 +80,7 @@ class RetailAdd extends React.Component {
           asyncCascadeValue,
         })
       })
-      return
     }
-    redEnvelop.fetchGetRedPacket(match.params.id).then(() => {
-      const { getRedPacket } = redEnvelop
-      redEnvelop
-        .fetchCascadeOption(getRedPacket.province_id, getRedPacket.city_id, getRedPacket.area_id)
-        .then(() => {
-          const { asyncCascadeValue } = redEnvelop
-          // 整理默认数据存入state
-          this.setState({
-            asyncCascadeValue,
-            pics: getRedPacket.pic,
-          })
-        })
-      form.setFieldsValue({
-        ...getRedPacket,
-        title: getRedPacket.title,
-        share_url: getRedPacket.share_url,
-        desc: getRedPacket.desc,
-        cascade: [getRedPacket.province_id, getRedPacket.city_id, getRedPacket.area_id],
-        start_time: new Date(moment(getRedPacket.start_time * 1000).format('YYYY-MM-DD HH:mm')),
-        end_time: new Date(moment(getRedPacket.end_time * 1000).format('YYYY-MM-DD HH:mm')),
-        is_open: [getRedPacket.is_open],
-        packet_type: [getRedPacket.packet_type],
-      })
-      if (getRedPacket.packet_type) {
-        setTimeout(() => {
-          if (getRedPacket.packet_type[0] === '1') {
-            form.setFieldsValue({
-              item_sum: getRedPacket.item_sum,
-              item_max: getRedPacket.item_max,
-              item_min: getRedPacket.item_min,
-            })
-          } else {
-            form.setFieldsValue({
-              item_num: getRedPacket.item_num,
-              item_unit: getRedPacket.item_unit,
-            })
-          }
-        }, 20)
-      }
-    })
   }
 
   cacheData = () => {
@@ -216,21 +174,14 @@ class RetailAdd extends React.Component {
       }
       console.log(value)
       console.log(obj)
-      if (match.params.id) {
-        console.log(match.params.id)
-        redEnvelop.modifyPacket({ ...obj, id: match.params.id }).then(res => {
-          if (res) Toast.success('编辑成功', 1, () => history.goBack())
-        })
-      } else {
-        redEnvelop.addPacket({ ...obj }).then(res => {
-          if (res) {
-            Toast.success('新增成功', 1, () => {
-              redEnvelop.resetAndFetchRedEnvelopList()
-              history.goBack()
-            })
-          }
-        })
-      }
+      redEnvelop.addPacket({ ...obj }).then(res => {
+        if (res) {
+          Toast.success('新增成功', 1, () => {
+            redEnvelop.resetAndFetchRedEnvelopList()
+            history.goBack()
+          })
+        }
+      })
     })
   }
 

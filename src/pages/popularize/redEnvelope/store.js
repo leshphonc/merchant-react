@@ -66,7 +66,6 @@ class RedEnvelopStore {
       this.redEnvelopList = []
       this.redEnvelopListPage = 1
       this.redEnvelopListTotal = null
-      this.fetchRedEnvelopList()
     })
   }
 

@@ -6,7 +6,6 @@ import {
   WhiteSpace, PullToRefresh, WingBlank, Flex,
 } from 'antd-mobile'
 import moment from 'moment'
-import { toJS } from 'mobx'
 import { List } from './styled'
 
 @inject('redEnvelop')
@@ -16,7 +15,7 @@ class RedEnvelope extends React.Component {
     super(props)
     this.state = {
       refreshing: false,
-      height: document.documentElement.clientHeight,
+      height: document.documentElement.clientHeight - 160,
     }
     this.refresh = React.createRef()
   }
@@ -24,10 +23,11 @@ class RedEnvelope extends React.Component {
   componentDidMount() {
     const { redEnvelop, match } = this.props
     const { height } = this.state
-    console.log(this.props)
+    console.log(height)
     redEnvelop.fetchGetLists(match.params.id)
     redEnvelop.fetchGetList(match.params.id)
     if (this.refresh.current) {
+      /* eslint react/no-find-dom-node: 0 */
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
       this.setState({
         height: hei,
@@ -58,7 +58,7 @@ class RedEnvelope extends React.Component {
             </span>
             <span style={{ width: '26vw' }}>{item.worth}元</span>
             <span style={{ width: '24vw' }}>
-              {moment(item.add_time * 1000).format('YYYY-MM-DD hh:mm:ss')}
+              {moment(item.add_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </span>
           </List>
         </div>
@@ -77,6 +77,7 @@ class RedEnvelope extends React.Component {
 
   render() {
     const { refreshing, height } = this.state
+    console.log(height)
     const { redEnvelop } = this.props
     const { getListTotal, getLists } = redEnvelop
     console.log(getLists)
@@ -86,13 +87,12 @@ class RedEnvelope extends React.Component {
         <WingBlank size="md" style={{ padding: '10px 0' }}>
           <Flex style={{ marginBottom: '10px' }}>
             <Flex.Item>红包总金额：{getLists.total_money || 0}</Flex.Item>
-            <Flex.Item>已领取金额：{getLists.used_money || 0}</Flex.Item>
-            <Flex.Item>剩余金额：{getLists.left_money || 0}</Flex.Item>
+            <Flex.Item>已领取：{getLists.used_money || 0}</Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item>已领取人数：{getLists.person_num || 0}</Flex.Item>
+            <Flex.Item>剩余：{getLists.left_money || 0}</Flex.Item>
+            <Flex.Item>已领人数：{getLists.person_num || 0}</Flex.Item>
             <Flex.Item>浏览次数：{getLists.read_num || 0}</Flex.Item>
-            <Flex.Item></Flex.Item>
           </Flex>
         </WingBlank>
         <div
