@@ -7,7 +7,6 @@ import {
   Button, Flex, Card, WhiteSpace, PullToRefresh, WingBlank,
 } from 'antd-mobile'
 import moment from 'moment'
-// import { toJS } from 'mobx'
 import Utils from '@/utils'
 import RedEnvelopePanel from './redEnvelopePanel'
 import GetList from './getList'
@@ -35,7 +34,7 @@ class RedEnvelope extends React.Component {
   componentDidMount() {
     const { redEnvelop } = this.props
     const { height } = this.state
-    redEnvelop.fetchRedEnvelopList()
+    if (!redEnvelop.redEnvelopList.length) redEnvelop.fetchRedEnvelopList()
     if (this.refresh.current) {
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
       this.setState({
