@@ -195,12 +195,6 @@ class GenerateProduct extends React.Component {
       const prices = []
       const seckillPrices = []
       const stockNums = []
-      const num0 = []
-      const num1 = []
-      const num2 = []
-      const num3 = []
-      const num4 = []
-      const num5 = []
       const keys = Object.keys(value)
       keys.forEach(item => {
         const str = item.substr(0, item.length - 1)
@@ -221,7 +215,7 @@ class GenerateProduct extends React.Component {
         }
         attribute.forEach((item2, index) => {
           if (str === `num${index}`) {
-            eval(`num${index}`).push(value[item])
+            this[`num${index}`].push(value[item])
           }
         })
       })
@@ -241,7 +235,7 @@ class GenerateProduct extends React.Component {
         stock_nums: stockNums,
       }
       attribute.forEach((item, index) => {
-        obj[`num${index}`] = eval(`num${index}`)
+        obj[`num${index}`] = this[`num${index}`]
         item.attr_val.forEach((item2, index2) => {
           obj[`propertise_val_status_${index}_${index2}`] = 1
         })
