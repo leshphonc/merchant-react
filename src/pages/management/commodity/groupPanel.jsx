@@ -16,14 +16,16 @@ import {
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { observer, inject } from 'mobx-react'
-import E from 'wangeditor'
+
 import { createForm } from 'rc-form'
 import {
- Team, Editor,
+ Team,
 } from './styled'
 import { toJS } from 'mobx'
 import Utils from '@/utils'
 import moment from 'moment'
+import Editor from '@/common/Editor'
+
 const { Item } = List
 const { CheckboxItem } = Checkbox
 const type = [
@@ -103,7 +105,7 @@ class GroupPanel extends React.Component {
       is_general: '0',
       store: [],
       content: '',
-      editor: null,
+      // editor: null,
       stock_reduce_method: '0',
       start_discount:'',
       is_edit:''
@@ -154,43 +156,15 @@ class GroupPanel extends React.Component {
                 no_refund: (groupDetail.no_refund === "0") ? true : false,
                 status:groupDetail.status === '0' ? false : true
             })
+            console.log(groupDetail.content)
+            this.editor.current.state.editor.txt.html(groupDetail.content)
             setTimeout(() => {
-                console.log((groupDetail.no_refund === "0") ? true : false)
+
                 form.setFieldsValue({
                     no_refund: (groupDetail.no_refund === "0") ? true : false
                 })
             },100)
-            const editor = new E(this.editor.current)
-            // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
-            editor.customConfig.onchange = html => {
-                this.setState({
-                    editor: html,
-                })
-            }
-            editor.customConfig.uploadImgShowBase64 = true
-            editor.customConfig.menus = [
-                'head', // 标题
-                'bold', // 粗体
-                'fontSize', // 字号
-                'fontName', // 字体
-                'italic', // 斜体
-                'underline', // 下划线
-                'strikeThrough', // 删除线
-                'foreColor', // 文字颜色
-                'backColor', // 背景颜色
-                'link', // 插入链接
-                'list', // 列表
-                'justify', // 对齐方式
-                'quote', // 引用
-                'emoticon', // 表情
-                'image', // 插入图片
-                'table', // 表格
-                'video', // 插入视频
-                'undo', // 撤销
-                'redo', // 重复
-            ]
-            editor.create()
-            editor.txt.html(toJS(groupDetail).content)
+
             commodity.fetchGroupCat(this.state.cat_fid).then(()=>{
                 const { groupCatSec } = commodity
                 this.setState({
@@ -247,37 +221,6 @@ class GroupPanel extends React.Component {
             no_refund: false,
             status: false
         })
-        const editor = new E(this.editor.current)
-        // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
-        editor.customConfig.onchange = html => {
-            this.setState({
-                editor: html,
-            })
-        }
-        editor.customConfig.uploadImgShowBase64 = true
-        editor.customConfig.menus = [
-            'head', // 标题
-            'bold', // 粗体
-            'fontSize', // 字号
-            'fontName', // 字体
-            'italic', // 斜体
-            'underline', // 下划线
-            'strikeThrough', // 删除线
-            'foreColor', // 文字颜色
-            'backColor', // 背景颜色
-            'link', // 插入链接
-            'list', // 列表
-            'justify', // 对齐方式
-            'quote', // 引用
-            'emoticon', // 表情
-            'image', // 插入图片
-            'table', // 表格
-            'video', // 插入视频
-            'undo', // 撤销
-            'redo', // 重复
-        ]
-        editor.create()
-        editor.txt.html()
     }
 
 
@@ -315,7 +258,7 @@ class GroupPanel extends React.Component {
             pin_num: value.pin_num,
             price: value.price,
             start_discount: value.start_discount,
-            content:this.state.editor,
+            content:this.editor.current.state.editor.txt.html(),
             store:this.state.store,
             cat_fid:this.state.cat_fid,
             cat_id:this.state.cat_id,
@@ -504,9 +447,17 @@ class GroupPanel extends React.Component {
                             })}
                             checked={pick_in_store}
                             onChange={e => {
-                                this.setState({
-                                    pick_in_store: (e?1:0),
-                                })
+                                const { tuan_type } = this.state
+                               if(e && tuan_type === '2') {
+                                   this.setState({
+                                       tuan_type:'0',
+                                       pick_in_store:0,
+                                   })
+                               }else {
+                                   this.setState({
+                                       pick_in_store: (e?1:0),
+                                   })
+                               }
                             }}
                         />
                     }
@@ -621,12 +572,7 @@ class GroupPanel extends React.Component {
           })}
           <Item>
             本单详情
-            <Editor>
-              <div
-                  ref={this.editor}
-                  className="editor"
-              />
-            </Editor>
+            <Editor  ref={this.editor}/>
           </Item>
           <div>
             <Item>

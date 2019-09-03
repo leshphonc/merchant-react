@@ -2,18 +2,49 @@ import React from 'react'
 import {
   List, Flex, Button, InputItem, WhiteSpace, Toast,
 } from 'antd-mobile'
+import NavBar from '@/common/NavBar'
 import GenerateProduct from './GenerateProduct'
 
 class Specification extends React.Component {
   state = {
     specification: [],
     attribute: [],
+    json: [],
     product: false,
+  }
+
+  componentDidMount() {
+    if (sessionStorage.getItem('spec')) {
+      const spec = JSON.parse(sessionStorage.getItem('spec'))
+      const specification = []
+      const attribute = []
+      spec.spec.map(item => {
+        specification.push({
+          spec_name: item.name,
+          id: item.id,
+          spec_val: item.list.map(item2 => item2.name),
+          spec_val_id: item.list.map(item2 => item2.id) || [],
+        })
+      })
+      spec.attr.map(item => {
+        attribute.push({
+          attr_name: item.name,
+          id: item.id,
+          attr_val: item.val_status.map(item2 => item2[0]),
+          attr_val_id: item.id,
+          attr_count: item.num,
+        })
+      })
+      this.setState({
+        specification,
+        attribute,
+        json: spec.json,
+      })
+    }
   }
 
   mapSpecification = () => {
     const { specification } = this.state
-    // console.log(specification)
     return specification.map((item, index) => (
       <React.Fragment key={index}>
         <InputItem
@@ -75,11 +106,10 @@ class Specification extends React.Component {
 
   mapAttribute = () => {
     const { attribute } = this.state
-    // console.log(specification)
     return attribute.map((item, index) => (
       <React.Fragment key={index}>
         <InputItem
-          defaultValue={item.spec_name}
+          defaultValue={item.attr_name}
           placeholder="请输入属性名称"
           cols={1}
           extra={
@@ -97,7 +127,7 @@ class Specification extends React.Component {
           属性名称{index + 1}
         </InputItem>
         <InputItem
-          defaultValue={item.spec_name}
+          defaultValue={item.attr_count}
           placeholder="请输入可选个数"
           cols={1}
           onChange={val => this.changeAttributeCount(val, index)}
@@ -147,7 +177,6 @@ class Specification extends React.Component {
   }
 
   changeSpecAttrName = (val, index, index2) => {
-    console.log(val)
     const { specification } = this.state
     const cache = JSON.parse(JSON.stringify(specification))
     // eslint-disable-next-line prefer-destructuring
@@ -178,7 +207,6 @@ class Specification extends React.Component {
   }
 
   changeAttributeAttrName = (val, index, index2) => {
-    console.log(val)
     const { attribute } = this.state
     const cache = JSON.parse(JSON.stringify(attribute))
     // eslint-disable-next-line prefer-destructuring
@@ -189,8 +217,7 @@ class Specification extends React.Component {
   }
 
   submit = () => {
-    const { specification, attribute } = this.state
-    console.log(specification)
+    const { specification } = this.state
     if (!specification.length) {
       Toast.info('至少配置一项规格')
       return false
@@ -213,13 +240,16 @@ class Specification extends React.Component {
     this.setState({
       product: true,
     })
-    console.log(attribute)
   }
 
   render() {
-    const { specification, attribute, product } = this.state
+    const {
+      specification, attribute, json, product,
+    } = this.state
     return (
       <React.Fragment>
+        <NavBar title="规格属性设置" goBack />
+        <WhiteSpace />
         {!product ? (
           <React.Fragment>
             <List>
@@ -311,7 +341,7 @@ class Specification extends React.Component {
             </Button>
           </React.Fragment>
         ) : (
-          <GenerateProduct specification={specification} attribute={attribute} />
+          <GenerateProduct specification={specification} attribute={attribute} json={json} />
         )}
       </React.Fragment>
     )

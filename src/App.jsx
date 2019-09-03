@@ -23,6 +23,7 @@ import CoordinatePicker from '@/common/CoordinatePicker'
 import ShopAssistant from '@/pages/popularize/shopAssistant'
 import RedEnvelope from '@/pages/popularize/redEnvelope'
 import GiftManagement from '@/pages/popularize/giftManagement'
+import Specification from '@/common/Specification'
 
 // mobx严格模式 生产环境使用observed 开发使用always
 configure({ enforceActions: 'always' })
@@ -56,6 +57,8 @@ export default () => (
       <Route path="/uploadMultipleImg/:title/:key/:ratio" component={UploadMultipleImg} />
       {/* 坐标拾取页面 */}
       <Route path="/coordinatePicker/:lng?/:lat?" component={CoordinatePicker} />
+      {/* 规格属性 */}
+      <Route path="/specification" component={Specification} />
     </HashRouter>
   </Provider>
 )

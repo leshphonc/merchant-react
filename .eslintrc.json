@@ -31,6 +31,8 @@
     // 关闭prop-types
     "react/prop-types": 0,
     // return语句总是或永远不指定值
-    "consistent-return": 0
+    "consistent-return": 0,
+    // https://cloud.tencent.com/developer/section/1135583
+    "array-callback-return": 0
   }
 }

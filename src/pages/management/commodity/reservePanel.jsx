@@ -17,13 +17,11 @@ import {
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
-import E from 'wangeditor'
 import { createForm } from 'rc-form'
 import { observer, inject } from 'mobx-react'
-// import Editor from '@/common/Editor'
+import Editor from '@/common/Editor'
 import moment from 'moment'
 import { MenuMask } from '@/styled'
-import { Editor } from './styled'
 import Utils from '@/utils'
 import { toJS } from 'mobx'
 const { Item } = List
@@ -95,6 +93,7 @@ class ReservePanel extends React.Component {
                   workerSele.push(item.merchant_worker_id)
               })
           }
+          this.editor.current.state.editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
         this.setState({
             files: appointDetail.appoint_list.pic_arr,
             category:[appointDetail.appoint_list.cat_fid,appointDetail.appoint_list.cat_id],
@@ -142,39 +141,7 @@ class ReservePanel extends React.Component {
           this.setState({
               editor:appointDetail.appoint_list.appoint_pic_content
           })
-          console.log(this.state.editor)
-          const editor = new E(this.editor.current)
-          // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
-          editor.customConfig.onchange = html => {
-              this.setState({
-                  editor: html,
-              })
-          }
-          editor.customConfig.uploadImgShowBase64 = true
-          editor.customConfig.menus = [
-              'head', // 标题
-              'bold', // 粗体
-              'fontSize', // 字号
-              'fontName', // 字体
-              'italic', // 斜体
-              'underline', // 下划线
-              'strikeThrough', // 删除线
-              'foreColor', // 文字颜色
-              'backColor', // 背景颜色
-              'link', // 插入链接
-              'list', // 列表
-              'justify', // 对齐方式
-              'quote', // 引用
-              'emoticon', // 表情
-              'image', // 插入图片
-              'table', // 表格
-              'video', // 插入视频
-              'undo', // 撤销
-              'redo', // 重复
-          ]
-          editor.create()
-          console.log(appointDetail.appoint_list.appoint_pic_content)
-          editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
+
           setTimeout(() => {
               form.setFieldsValue({
                   payment_money: appointDetail.appoint_list.payment_money,
@@ -204,39 +171,6 @@ class ReservePanel extends React.Component {
             appoint_type: appointDetail.appoint_list.appoint_type
         })
       })
-    }else{
-        const editor = new E(this.editor.current)
-        // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
-        editor.customConfig.onchange = html => {
-            console.log(html)
-            this.setState({
-                editor: html,
-            })
-        }
-        editor.customConfig.uploadImgShowBase64 = true
-        editor.customConfig.menus = [
-            'head', // 标题
-            'bold', // 粗体
-            'fontSize', // 字号
-            'fontName', // 字体
-            'italic', // 斜体
-            'underline', // 下划线
-            'strikeThrough', // 删除线
-            'foreColor', // 文字颜色
-            'backColor', // 背景颜色
-            'link', // 插入链接
-            'list', // 列表
-            'justify', // 对齐方式
-            'quote', // 引用
-            'emoticon', // 表情
-            'image', // 插入图片
-            'table', // 表格
-            'video', // 插入视频
-            'undo', // 撤销
-            'redo', // 重复
-        ]
-        editor.create()
-        editor.txt.html()
     }
     // editor.txt.html(history.location.state.value)
 
@@ -286,7 +220,7 @@ class ReservePanel extends React.Component {
         ...value,
         cat_fid: category[0],
         cat_id: category[1],
-        appoint_pic_content: this.state.editor,
+        appoint_pic_content: this.editor.current.state.editor.txt.html(),
         start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD') : '',
         end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD') : '',
         office_start_time: value.office_start_time
@@ -311,6 +245,7 @@ class ReservePanel extends React.Component {
         custom_use_time:this.state.use_time,
         custom_id:this.state.custom_id
       }
+
       if (match.params.id) {
         commodity.modifyReserve({ ...obj, appoint_id: match.params.id }).then(res => {
             if(res) Toast.success('修改成功', 1, () => history.goBack())
@@ -557,17 +492,12 @@ class ReservePanel extends React.Component {
                 rules: [{ required: true }],
               })}
               selectable={pic_arr.length < 5}
-              accept="image/gif,image/jpeg,image/jpg,image/png"
             />
           </Item>
           <Item>
             服务详情
-            <Editor>
-                <div
-                    ref={this.editor}
-                    className="editor"
-                />
-            </Editor>
+            <Editor ref={this.editor}/>
+
           </Item>
           <List.Item
             extra={

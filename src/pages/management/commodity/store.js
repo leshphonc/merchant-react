@@ -129,12 +129,22 @@ class MastSotre {
   }
 
   @action
+  resetAndFetchGroupList = keyword => {
+    runInAction(() => {
+      this.reserveList = []
+      this.reserveListPage = 1
+      this.reserveListTotal = null
+      this.fetchReserveList(keyword)
+    })
+  }
+
+  @action
   fetchGroupMealAdd = async (title, description) => {
     await services.fetchGroupMealAdd(title, description)
   }
 
   @action
-  fetchReserveList = async () => {
+  fetchReserveList = async keyword => {
     let hasMore = true
     if (this.reserveListTotal !== null) {
       hasMore = this.reserveListPage * this.reserveListSize < this.reserveListTotal
@@ -142,7 +152,7 @@ class MastSotre {
         this.reserveListPage += 1
       }
     }
-    const response = await services.fetchReserveList(this.reserveListPage, this.reserveListSize)
+    const response = await services.fetchReserveList(this.reserveListPage, this.reserveListSize, keyword)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
@@ -262,8 +272,8 @@ class MastSotre {
   }
 
   @action
-  fetchTakeAwayDetail = async goodid => {
-    const response = await services.fetchTakeAwayDetail(goodid)
+  fetchTakeAwayDetail = async (id, goodid) => {
+    const response = await services.fetchTakeAwayDetail(id, goodid)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.takeAwayDetail = response.data.result
@@ -271,37 +281,35 @@ class MastSotre {
     }
   }
 
+  @action
+  fetchGroupDetail = async goodid => {
+    const response = await services.fetchGroupDetail(goodid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.groupDetail = response.data.result
+      })
+    }
+  }
 
-   @action
-   fetchGroupDetail = async goodid => {
-     const response = await services.fetchGroupDetail(goodid)
-     if (response.data.errorCode === ErrorCode.SUCCESS) {
-       runInAction(() => {
-         this.groupDetail = response.data.result
-       })
-     }
-   }
-
-   @action
-   fetchShopList = async appointType => {
-     const response = await services.fetchShopList(appointType)
-     if (response.data.errorCode === ErrorCode.SUCCESS) {
-       runInAction(() => {
-         const shopList = response.data.result.store_list
-         shopList.shift(0)
-         shopList.forEach(item => {
-           if (item.worker_list) {
-             item.worker_list.forEach(i => {
-               i.value = i.merchant_worker_id
-               i.label = i.name
-             })
-           }
-         })
-         this.shopList = shopList
-       })
-     }
-   }
-
+  @action
+  fetchShopList = async appointType => {
+    const response = await services.fetchShopList(appointType)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        const shopList = response.data.result.store_list
+        shopList.shift(0)
+        shopList.forEach(item => {
+          if (item.worker_list) {
+            item.worker_list.forEach(i => {
+              i.value = i.merchant_worker_id
+              i.label = i.name
+            })
+          }
+        })
+        this.shopList = shopList
+      })
+    }
+  }
 
   @action
   fetchGroupCat = async catfid => {
@@ -608,7 +616,6 @@ class MastSotre {
       return Promise.resolve(true)
     }
   }
-
 
   @action
   fetchGetWorker = async storeId => {

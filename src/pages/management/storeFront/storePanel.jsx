@@ -312,7 +312,7 @@ class StorePanel extends React.Component {
     const { match, form, storeFront } = this.props
     const { getFieldProps } = form
     const { cascadeOption, circleOption } = storeFront
-      console.log(circleOption)
+    console.log(circleOption)
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     /* eslint camelcase: 0 */
     const discount_type = form.getFieldValue('discount_type')

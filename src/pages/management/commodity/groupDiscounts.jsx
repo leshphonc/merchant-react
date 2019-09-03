@@ -35,7 +35,6 @@ class GroupDiscounts extends React.Component {
         commodity.fetchGiftVoucher()
         commodity.fetchGroupDetail(match.params.id).then(() => {
             const { groupDetail } = commodity
-            console.log(toJS(groupDetail.give))
             form.setFieldsValue({
                 tagname:groupDetail.tagname,
                 packageid:[groupDetail.packageid],
@@ -64,10 +63,10 @@ class GroupDiscounts extends React.Component {
                         levelType.push((item.type?item.type : '0'))
                     })
                 }
-
                 this.setState({
                     userLevels,
-                    levelType
+                    levelType,
+                    give:(groupDetail.give || [])
                 })
             })
         })
@@ -80,7 +79,7 @@ class GroupDiscounts extends React.Component {
 
     changeGiveValue = (val, index) => {
         const { give } = this.state
-        const cache = Object.assign([], give)
+        const cache = Object.assign([], toJS(give))
         // eslint-disable-next-line prefer-destructuring
         cache[index].goods = val[0]
         this.setState({
@@ -90,7 +89,7 @@ class GroupDiscounts extends React.Component {
 
     changeGiveNum = (val, index) => {
         const { give } = this.state
-        const cache = Object.assign([], give)
+        const cache = Object.assign([], toJS(give))
         // eslint-disable-next-line prefer-destructuring
         cache[index].goods_num = val
         this.setState({
@@ -158,6 +157,7 @@ class GroupDiscounts extends React.Component {
             commodity, form, match, history,
         } = this.props
         const { give , userLevels , levelType} = this.state
+        const goods_num = [] ,goods = [], giveArr = []
         form.validateFields((error, value) => {
             const obj_other = []
             if (error) {
@@ -170,8 +170,16 @@ class GroupDiscounts extends React.Component {
                     obj_other[html] = item[html]
                 })
             })
+            if(give.length > 0){
+                give.forEach(item => {
+                    goods_num.push(item.goods_num)
+                    goods.push(item.goods)
+                })
+            }
+            giveArr['give[goods]']=goods
+            giveArr['give[goods_num]'] = goods_num
             const obj = {
-                ...give,
+                ...giveArr,
                 ...obj_other,
                 dhb_get_num: value.dhb_get_num,
                 in_group:value.in_group[0],

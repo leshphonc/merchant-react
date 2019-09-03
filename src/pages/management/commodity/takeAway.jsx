@@ -34,6 +34,7 @@ class TakeAway extends React.Component {
     const { commodity } = this.props
     const { height } = this.state
     commodity.fetchStoreValues()
+    sessionStorage.removeItem('spec')
     if (this.refresh.current) {
       /* eslint react/no-find-dom-node: 0 */
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
