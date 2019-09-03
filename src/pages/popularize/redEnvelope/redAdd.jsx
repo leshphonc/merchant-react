@@ -34,7 +34,7 @@ class RetailAdd extends React.Component {
 
   componentDidMount() {
     const { redEnvelop, match, form } = this.props
-    console.log(this.props)
+    // console.log(this.props)
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
       if (cacheData.cascade) {
@@ -143,7 +143,7 @@ class RetailAdd extends React.Component {
 
   submit = () => {
     const {
-      redEnvelop, form, match, history,
+      redEnvelop, form, history,
     } = this.props
     const { pics } = this.state
     if (!pics) {

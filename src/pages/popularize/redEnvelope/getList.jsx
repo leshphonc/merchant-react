@@ -23,7 +23,6 @@ class RedEnvelope extends React.Component {
   componentDidMount() {
     const { redEnvelop, match } = this.props
     const { height } = this.state
-    console.log(height)
     redEnvelop.fetchGetLists(match.params.id)
     redEnvelop.fetchGetList(match.params.id)
     if (this.refresh.current) {

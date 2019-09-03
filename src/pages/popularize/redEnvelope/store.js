@@ -72,7 +72,6 @@ class RedEnvelopStore {
   @action
   fetchGetList = async id => {
     let hasMore = true
-    // debugger
     if (this.getListTotal !== 0) {
       hasMore = this.getListPage * this.getListSize < this.getListTotal
       if (hasMore) {
