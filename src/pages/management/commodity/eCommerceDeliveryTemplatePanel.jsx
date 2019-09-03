@@ -1,12 +1,11 @@
 /* eslint-disable array-callback-return */
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import {
-  List, InputItem, WhiteSpace, Button, Menu, Toast,
-} from 'antd-mobile'
+import { List, InputItem, WhiteSpace, Button, Menu, Toast } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import { TemplateArea } from '@/config/constant'
 import { MenuMask } from '@/styled'
+import Tooltip from 'rc-tooltip'
 
 @inject('commodity')
 @observer
@@ -135,7 +134,11 @@ class ECommerceDeliveryTemplatePanel extends React.Component {
         <List.Item
           wrap
           extra={
-            <Button size="small" type="warning" onClick={() => this.resetArr(item, index)}>
+            <Button
+              size="small"
+              type="warning"
+              onClick={() => this.resetArr(item, index)}
+            >
               删除
             </Button>
           }
@@ -162,7 +165,19 @@ class ECommerceDeliveryTemplatePanel extends React.Component {
             })
           }}
         >
-          满减
+          满免
+          <Tooltip
+            trigger="click"
+            placement="topLeft"
+            overlay="满多少元免邮费, 0表示不免邮"
+            onClick={e => {
+              e.stopPropagation()
+            }}
+          >
+            <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+              &#xe628;
+            </i>
+          </Tooltip>
         </InputItem>
       </React.Fragment>
     ))
@@ -211,9 +226,10 @@ class ECommerceDeliveryTemplatePanel extends React.Component {
         data={data}
         level={1}
         onOk={this.onOk}
-        onCancel={() => this.setState({
-          open: false,
-        })
+        onCancel={() =>
+          this.setState({
+            open: false,
+          })
         }
         height={document.documentElement.clientHeight * 0.6}
         multiSelect
@@ -227,9 +243,10 @@ class ECommerceDeliveryTemplatePanel extends React.Component {
           <InputItem
             placeholder="请输入模版名称"
             value={name}
-            onChange={val => this.setState({
-              name: val,
-            })
+            onChange={val =>
+              this.setState({
+                name: val,
+              })
             }
           >
             模版名称
@@ -237,7 +254,11 @@ class ECommerceDeliveryTemplatePanel extends React.Component {
           <List.Item
             extra={
               <React.Fragment>
-                <Button type="ghost" size="small" onClick={() => this.setState({ open: true })}>
+                <Button
+                  type="ghost"
+                  size="small"
+                  onClick={() => this.setState({ open: true })}
+                >
                   添加
                 </Button>
               </React.Fragment>

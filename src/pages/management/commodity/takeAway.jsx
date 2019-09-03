@@ -78,7 +78,11 @@ class TakeAway extends React.Component {
     return takeAwayList.map(item => (
       <React.Fragment key={item.goods_id}>
         <Card>
-          <Card.Header title={item.name} thumb={item.list_pic} />
+          <Card.Header
+            title={item.name}
+            thumb={item.list_pic}
+            extra={item.store_name}
+          />
           <Card.Body>
             <Flex style={{ color: '#666' }}>
               <Flex.Item>售价: {item.price} 元</Flex.Item>
@@ -175,8 +179,8 @@ class TakeAway extends React.Component {
             this.setState({
               keyword: name,
             })
-            commodity.searchTakeAwayList(storeValue, name)
           }}
+          onSubmit={name => commodity.searchTakeAwayList(storeValue, name)}
         />
         <WhiteSpace />
         <WingBlank size="sm">

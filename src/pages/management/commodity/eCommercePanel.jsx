@@ -65,7 +65,9 @@ class ECommerceAdd extends React.Component {
             form.setFieldsValue({
               sort_id: cacheData.sort_id,
             })
-            this.editor.current.state.editor.txt.html(cacheData.des)
+            if (this.editor.current) {
+              this.editor.current.state.editor.txt.html(cacheData.des)
+            }
           }, 500)
         })
       }
@@ -90,7 +92,9 @@ class ECommerceAdd extends React.Component {
             form.setFieldsValue({
               sort_id: [eCommerceDetail.sort_id],
             })
-            this.editor.current.state.editor.txt.html(eCommerceDetail.des)
+            if (this.editor.current) {
+              this.editor.current.state.editor.txt.html(eCommerceDetail.des)
+            }
           }, 500)
         })
         this.setState(
@@ -218,13 +222,21 @@ class ECommerceAdd extends React.Component {
             goods_id: match.params.goodid,
           })
           .then(res => {
-            if (res) Toast.success('编辑成功', 1, () => history.goBack())
+            if (res)
+              Toast.success('编辑成功', 1, () => {
+                sessionStorage.removeItem('spec')
+                history.goBack()
+              })
           })
       } else {
         commodity
           .addECommerce({ ...obj, spec, store_id: value.store_id[0] })
           .then(res => {
-            if (res) Toast.success('新增成功', 1, () => history.goBack())
+            if (res)
+              Toast.success('新增成功', 1, () => {
+                sessionStorage.removeItem('spec')
+                history.goBack()
+              })
           })
       }
     })

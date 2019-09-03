@@ -1,7 +1,5 @@
 import React from 'react'
-import {
-  List, Flex, Button, InputItem, WhiteSpace, Toast,
-} from 'antd-mobile'
+import { List, Flex, Button, InputItem, WhiteSpace, Toast } from 'antd-mobile'
 import NavBar from '@/common/NavBar'
 import GenerateProduct from './GenerateProduct'
 
@@ -16,6 +14,7 @@ class Specification extends React.Component {
   componentDidMount() {
     if (sessionStorage.getItem('spec')) {
       const spec = JSON.parse(sessionStorage.getItem('spec'))
+      console.log(spec)
       const specification = []
       const attribute = []
       spec.spec.forEach(item => {
@@ -53,7 +52,11 @@ class Specification extends React.Component {
           cols={1}
           extra={
             <Flex justify="between">
-              <Button size="small" type="ghost" onClick={() => this.addSpecificationChild(index)}>
+              <Button
+                size="small"
+                type="ghost"
+                onClick={() => this.addSpecificationChild(index)}
+              >
                 添加
               </Button>
               <Button
@@ -114,10 +117,18 @@ class Specification extends React.Component {
           cols={1}
           extra={
             <Flex justify="between">
-              <Button size="small" type="ghost" onClick={() => this.addAttributeChild(index)}>
+              <Button
+                size="small"
+                type="ghost"
+                onClick={() => this.addAttributeChild(index)}
+              >
                 添加
               </Button>
-              <Button size="small" type="warning" onClick={() => this.removeAttributeChild(index)}>
+              <Button
+                size="small"
+                type="warning"
+                onClick={() => this.removeAttributeChild(index)}
+              >
                 删除
               </Button>
             </Flex>
@@ -243,9 +254,7 @@ class Specification extends React.Component {
   }
 
   render() {
-    const {
-      specification, attribute, json, product,
-    } = this.state
+    const { specification, attribute, json, product } = this.state
     return (
       <React.Fragment>
         <NavBar title="规格属性设置" goBack />
@@ -259,12 +268,13 @@ class Specification extends React.Component {
                     <Button
                       size="small"
                       type="ghost"
-                      onClick={() => this.setState({
-                        specification: specification.concat({
-                          spec_name: '',
-                          spec_val: [''],
-                        }),
-                      })
+                      onClick={() =>
+                        this.setState({
+                          specification: specification.concat({
+                            spec_name: '',
+                            spec_val: [''],
+                          }),
+                        })
                       }
                     >
                       添加
@@ -273,9 +283,13 @@ class Specification extends React.Component {
                       <Button
                         size="small"
                         type="warning"
-                        onClick={() => this.setState({
-                          specification: specification.slice(0, specification.length - 1),
-                        })
+                        onClick={() =>
+                          this.setState({
+                            specification: specification.slice(
+                              0,
+                              specification.length - 1
+                            ),
+                          })
                         }
                       >
                         删除
@@ -297,13 +311,14 @@ class Specification extends React.Component {
                     <Button
                       size="small"
                       type="ghost"
-                      onClick={() => this.setState({
-                        attribute: attribute.concat({
-                          attr_name: '',
-                          attr_count: '',
-                          attr_val: [''],
-                        }),
-                      })
+                      onClick={() =>
+                        this.setState({
+                          attribute: attribute.concat({
+                            attr_name: '',
+                            attr_count: '',
+                            attr_val: [''],
+                          }),
+                        })
                       }
                     >
                       添加
@@ -312,9 +327,10 @@ class Specification extends React.Component {
                       <Button
                         size="small"
                         type="warning"
-                        onClick={() => this.setState({
-                          attribute: attribute.slice(0, attribute.length - 1),
-                        })
+                        onClick={() =>
+                          this.setState({
+                            attribute: attribute.slice(0, attribute.length - 1),
+                          })
                         }
                       >
                         删除
@@ -341,7 +357,11 @@ class Specification extends React.Component {
             </Button>
           </React.Fragment>
         ) : (
-          <GenerateProduct specification={specification} attribute={attribute} json={json} />
+          <GenerateProduct
+            specification={specification}
+            attribute={attribute}
+            json={json}
+          />
         )}
       </React.Fragment>
     )

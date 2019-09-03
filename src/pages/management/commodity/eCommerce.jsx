@@ -39,6 +39,7 @@ class ECommerce extends React.Component {
     const { eCommerceList } = commodity
     const { height } = this.state
     commodity.fetchStoreValues('1')
+    sessionStorage.removeItem('spec')
     if (this.refresh.current) {
       /* eslint react/no-find-dom-node: 0 */
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
@@ -72,7 +73,7 @@ class ECommerce extends React.Component {
     return eCommerceList.map(item => (
       <React.Fragment key={item.goods_id}>
         <Card>
-          <Card.Header title={item.s_name} thumb={item.list_pic} />
+          <Card.Header title={item.s_name} thumb={item.list_pic} extra={item.store_name}/>
           <Card.Body>
             <Flex style={{ color: '#666' }}>
               <Flex.Item>售价: {item.price} 元</Flex.Item>
@@ -198,8 +199,8 @@ class ECommerce extends React.Component {
             this.setState({
               keyword: name,
             })
-            commodity.searchECommerceList(storeValue, name)
           }}
+          onSubmit={name => commodity.searchECommerceList(storeValue, name)}
         />
         <WhiteSpace />
         <WingBlank size="sm">

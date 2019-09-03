@@ -38,9 +38,11 @@ class ECommerceSpread extends React.Component {
           spread_rate: eCommerceDetail.spread_rate,
           level_set: [eCommerceDetail.level_set],
         })
-        this.setState({
-          userLevels: eCommerceDetail.spread,
-        })
+        if (eCommerceDetail.spread.length) {
+          this.setState({
+            userLevels: eCommerceDetail.spread,
+          })
+        }
       })
   }
 

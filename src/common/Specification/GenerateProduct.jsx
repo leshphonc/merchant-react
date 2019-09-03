@@ -47,6 +47,7 @@ class GenerateProduct extends React.Component {
 
   mapList = () => {
     const { specification, attribute, form, json } = this.props
+    console.log(specification, attribute, json)
     const { getFieldProps } = form
     const result = []
     const specs = []
