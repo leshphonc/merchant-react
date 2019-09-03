@@ -69,7 +69,7 @@ class Group extends React.Component {
                   width: '100%',
                 }}
               >
-                <span style={styleSpan.spaner}>库存：{item.count_num}</span>
+                <span style={styleSpan.spaner}>库存：{ item.count_num - item.sale_count }</span>
                 <span style={styleSpan.spaner}>销量: {item.sale_count}</span>
               </div>
               <div
