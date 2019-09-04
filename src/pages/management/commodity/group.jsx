@@ -33,6 +33,7 @@ class Group extends React.Component {
   }
 
   mapList = () => {
+    console.log(121)
     const { commodity, history } = this.props
     const { groupList } = commodity
     const styleSpan = {

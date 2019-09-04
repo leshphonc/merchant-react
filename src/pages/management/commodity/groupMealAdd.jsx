@@ -7,8 +7,8 @@ import {
 } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
 // import ModifyPicture from './modify/picture'
-import { SizeBox } from './styled'
 import { createForm } from 'rc-form'
+import { SizeBox } from './styled'
 
 @createForm()
 @inject('commodity')
@@ -18,19 +18,21 @@ class GroupMealAdd extends React.Component {
     title: '',
     description: '',
   }
+
   submit = () => {
-    const { commodity, form, history} = this.props
-    form.validateFields((error,value) => {
-        if (error) {
-            Toast.info('请输入完整信息')
-            return
-        }
-        console.log(value)
-        commodity.addGroupPackage({title:value.title,description:value.description}).then(res => {
+    const { commodity, form, history } = this.props
+    form.validateFields((error, value) => {
+      if (error) {
+        Toast.info('请输入完整信息')
+        return
+      }
+      console.log(value)
+      commodity
+        .addGroupPackage({ title: value.title, description: value.description })
+        .then(res => {
           if (res) Toast.success('添加成功', 1, () => history.goBack())
         })
     })
-
   }
 
   render() {
@@ -44,7 +46,7 @@ class GroupMealAdd extends React.Component {
             <InputItem
               placeholder="请填写商品名称"
               {...getFieldProps('title', {
-                  rules: [{ required: true }],
+                rules: [{ required: true }],
               })}
             >
               商品标题
@@ -55,7 +57,7 @@ class GroupMealAdd extends React.Component {
                   title="商品简介"
                   placeholder="请填写商品简介"
                   {...getFieldProps('description', {
-                      rules: [{ required: false }],
+                    rules: [{ required: false }],
                   })}
                   rows={5}
                   count={100}

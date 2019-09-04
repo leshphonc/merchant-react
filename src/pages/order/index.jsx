@@ -23,9 +23,13 @@ class Order extends React.Component {
             arrow="horizontal"
             extra={item.count}
             onClick={() => {
+              const { history } = this.props
               if (item.name === '零售订单') {
-                const { history } = this.props
                 history.push('/order/retail')
+                return false
+              }
+              if (item.name === '团购订单') { 
+                history.push('/order/groupList/0')
                 return false
               }
               Toast.info('暂无权限，请联系管理员')
