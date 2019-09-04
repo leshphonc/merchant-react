@@ -23,7 +23,7 @@ export const fetchStaffDetail = (storeId, staffId) => axios.get('/appapi.php?c=M
   },
 })
 
-// 店员添加、编辑
+// 店员添加
 export const addECommerce = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
@@ -35,6 +35,7 @@ export const addECommerce = payload => {
   })
 }
 
+//店员编辑
 export const modifyECommerce = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
@@ -77,7 +78,7 @@ export const fetchClassify = storeId => axios.get('/appapi.php?c=Merchantapp&a=s
   },
 })
 
-// 管理分类添加、编辑
+// 管理分类添加
 export const addClassify = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
@@ -89,6 +90,7 @@ export const addClassify = payload => {
   })
 }
 
+//管理分类编辑
 export const modifyClassify = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {

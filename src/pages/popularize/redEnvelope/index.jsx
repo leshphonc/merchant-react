@@ -73,7 +73,6 @@ class RedEnvelope extends React.Component {
   mapList = () => {
     const { redEnvelop, history } = this.props
     const { redEnvelopList } = redEnvelop
-    // console.log(toJS(redEnvelopList))
     return redEnvelopList.map(item => (
       <React.Fragment key={item.id}>
         <Card>
@@ -113,6 +112,7 @@ class RedEnvelope extends React.Component {
           <Card.Footer
             content={
               <Flex>
+                {item.is_fabu !== '0' ? (
                 <Flex.Item>
                   <Button
                     type="primary"
@@ -123,6 +123,9 @@ class RedEnvelope extends React.Component {
                     领取记录
                   </Button>
                 </Flex.Item>
+                ) : (
+                  ''
+                )}
                 <Flex.Item>
                   <Button
                     type="primary"
@@ -200,8 +203,6 @@ class RedEnvelope extends React.Component {
     )
   }
 }
-
-// export default RedEnvelop
 export default () => (
   <React.Fragment>
     <Route path="/popularize/redEnvelope" exact component={RedEnvelope} />

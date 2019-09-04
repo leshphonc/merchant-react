@@ -191,14 +191,11 @@ class RetailAdd extends React.Component {
 
   render() {
     const { redEnvelop, match, form } = this.props
-    // const { getRedPacket } = redEnvelop
     const { getFieldProps } = form
     const { asyncCascadeValue } = this.state
     const { cascadeOption } = redEnvelop
-    // console.log(circleOption)
     const { pics } = this.state
     const packettype = form.getFieldValue('packet_type') ? form.getFieldValue('packet_type')[0] : ''
-    // console.log(shopList)
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}活动`} goBack />

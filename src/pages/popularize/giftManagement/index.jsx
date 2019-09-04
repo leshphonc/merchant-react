@@ -3,9 +3,9 @@ import NavBar from '@/common/NavBar'
 import { Route, Link } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  Button, Flex, WingBlank, Card, WhiteSpace, SearchBar,
+  Button, Flex, WingBlank, Card, WhiteSpace, SearchBar, PullToRefresh,
 } from 'antd-mobile'
-import { toJS } from 'mobx'
+import ReactDOM from 'react-dom'
 import GiftPanel from './giftPanel'
 import OrdersGoods from './ordersGoods'
 import OrderDetails from './orderDetails'
@@ -18,19 +18,27 @@ class GiftManagement extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      refreshing: false,
+      height: document.documentElement.clientHeight,
       keyword: '',
     }
+    this.refresh = React.createRef()
   }
 
   componentDidMount() {
     const { giftManagement } = this.props
-    const { keyword } = this.state
+    const { height, keyword } = this.state
     giftManagement.fetchGetGift(keyword)
+    const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
+    this.setState({
+      height: hei,
+    })
   }
 
   detele = id => {
     const { giftManagement } = this.props
     giftManagement.fetchDelGift(id).then(() => {
+      giftManagement.resetAndFetchRedEnvelopList()
       giftManagement.fetchGetGift()
     })
   }
@@ -38,7 +46,6 @@ class GiftManagement extends React.Component {
   mapList = () => {
     const { giftManagement, history } = this.props
     const { getGift } = giftManagement
-    console.log(toJS(getGift))
     return getGift.map(item => (
       <React.Fragment key={item.gift_id}>
         <Card>
@@ -66,7 +73,7 @@ class GiftManagement extends React.Component {
                     type="primary"
                     size="small"
                     onClick={() => history.push(
-                      `/popularize/giftManagement/ordersGoods/商品订单/${item.gift_id}`,
+                      `/popularize/giftManagement/ordersGoods/${item.gift_id}`,
                     )
                     }
                   >
@@ -100,9 +107,19 @@ class GiftManagement extends React.Component {
     ))
   }
 
-  render() {
+  loadMore = async () => {
     const { giftManagement } = this.props
     const { keyword } = this.state
+    this.setState({ refreshing: true })
+    await giftManagement.fetchGetGift(keyword)
+    setTimeout(() => {
+      this.setState({ refreshing: false })
+    }, 100)
+  }
+
+  render() {
+    const { giftManagement } = this.props
+    const { keyword, height, refreshing } = this.state
     return (
       <React.Fragment>
         <NavBar
@@ -118,11 +135,22 @@ class GiftManagement extends React.Component {
           placeholder="礼品名称"
           value={keyword}
           onChange={val => this.setState({ keyword: val })}
-          onSubmit={() => giftManagement.resetAndFetchGroupList(keyword)}
+          onSubmit={() => giftManagement.resetAndFetchGiftList(keyword)}
         />
-        <WingBlank size="sm" style={{ marginTop: '10px' }}>
-          {this.mapList()}
-        </WingBlank>
+        <PullToRefresh
+          ref={this.refresh}
+          refreshing={refreshing}
+          style={{
+            height,
+            overflow: 'auto',
+          }}
+          indicator={{ deactivate: '上拉可以刷新' }}
+          direction="up"
+          onRefresh={this.loadMore}
+        >
+          <WhiteSpace />
+          <WingBlank size="sm">{this.mapList()}</WingBlank>
+        </PullToRefresh>
       </React.Fragment>
     )
   }
@@ -134,7 +162,7 @@ export default () => (
       path="/popularize/giftManagement/giftPanel/:str/:giftId?/:catFid?"
       component={GiftPanel}
     />
-    <Route path="/popularize/giftManagement/ordersGoods/:str/:giftId?" component={OrdersGoods} />
+    <Route path="/popularize/giftManagement/ordersGoods/:giftId?" component={OrdersGoods} />
     <Route path="/popularize/giftManagement/deliverGoods/:orderId?" component={DeliverGoods} />
     <Route path="/popularize/giftManagement/orderDetails/:orderId?" component={OrderDetails} />
   </React.Fragment>

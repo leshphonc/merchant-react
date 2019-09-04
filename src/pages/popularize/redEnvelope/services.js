@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+//获取红包广场列表
 export const fetchRedEnvelopList = (page, size) => axios.get('/appapi.php?c=Merchantapp&a=red_packet', {
   params: {
     page,
@@ -8,6 +9,7 @@ export const fetchRedEnvelopList = (page, size) => axios.get('/appapi.php?c=Merc
   },
 })
 
+//获取领取记录列表
 export const fetchGetList = (page, size, id) => axios.get('/appapi.php?c=Merchantapp&a=prize_log', {
   params: {
     page,
@@ -17,6 +19,7 @@ export const fetchGetList = (page, size, id) => axios.get('/appapi.php?c=Merchan
   },
 })
 
+//获取领取记录头部信息
 export const fetchGetLists = id => axios.get('/appapi.php?c=Merchantapp&a=prize_log', {
   params: {
     id,
@@ -24,16 +27,19 @@ export const fetchGetLists = id => axios.get('/appapi.php?c=Merchantapp&a=prize_
   },
 })
 
+//删除红包列表
 export const fetchPacketDel = id => axios.post('/appapi.php?c=Merchantapp&a=red_packet_del', {
   id,
   ticket: localStorage.getItem('ticket'),
 })
 
+// 发布红包
 export const fetchFabu = id => axios.post('/appapi.php?c=Merchantapp&a=fabu', {
   id,
   ticket: localStorage.getItem('ticket'),
 })
 
+//获取红包列表详细信息
 export const fetchGetRedPacket = id => axios.get('/appapi.php?c=Merchantapp&a=get_red_packet', {
   params: {
     id,
@@ -41,6 +47,7 @@ export const fetchGetRedPacket = id => axios.get('/appapi.php?c=Merchantapp&a=ge
   },
 })
 
+// 添加红包
 export const addPacket = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
@@ -52,6 +59,7 @@ export const addPacket = payload => {
   })
 }
 
+//修改红包
 export const modifyPacket = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
