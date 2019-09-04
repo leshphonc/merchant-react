@@ -11,6 +11,7 @@ import {
   Flex,
   WhiteSpace,
   Menu,
+  Modal,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -279,14 +280,35 @@ class ECommerceAdd extends React.Component {
     const { form, history, commodity } = this.props
     const formData = form.getFieldsValue()
     formData.des = this.editor.current.state.editor.txt.html()
-    Utils.cacheData(formData)
     const obj = {
       spec: commodity.eCommerceDetail.spec_list || [],
       attr: commodity.eCommerceDetail.properties_status_list || [],
       json: commodity.eCommerceDetail.json || [],
     }
-    sessionStorage.setItem('spec', JSON.stringify(obj))
-    history.push('/specification')
+    if (sessionStorage.getItem('spec')) {
+      const spec = JSON.parse(sessionStorage.getItem('spec'))
+      if (spec.cost_prices) {
+        Modal.alert('已编辑过规格', '是否重新编辑？', [
+          { text: '取消' },
+          {
+            text: '重新编辑',
+            onPress: () => {
+              Utils.cacheData(formData)
+              sessionStorage.setItem('spec', JSON.stringify(obj))
+              history.push('/specification')
+            },
+          },
+        ])
+      } else {
+        Utils.cacheData(formData)
+        sessionStorage.setItem('spec', JSON.stringify(obj))
+        history.push('/specification')
+      }
+    } else {
+      Utils.cacheData(formData)
+      sessionStorage.setItem('spec', JSON.stringify(obj))
+      history.push('/specification')
+    }
   }
 
   goTemplate = () => {

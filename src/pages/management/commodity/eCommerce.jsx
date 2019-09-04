@@ -73,11 +73,20 @@ class ECommerce extends React.Component {
     return eCommerceList.map(item => (
       <React.Fragment key={item.goods_id}>
         <Card>
-          <Card.Header title={item.s_name} thumb={item.list_pic} extra={item.store_name}/>
+          <Card.Header
+            title={item.s_name}
+            thumb={item.list_pic}
+            extra={item.store_name}
+          />
           <Card.Body>
             <Flex style={{ color: '#666' }}>
               <Flex.Item>售价: {item.price} 元</Flex.Item>
-              <Flex.Item> 库存: {item.stock_num}</Flex.Item>
+              <Flex.Item>
+                库存:
+                {item.stock_num !== '-1'
+                  ? item.stock_num - item.sell_count
+                  : '不限'}
+              </Flex.Item>
               <Flex.Item>已售出: {item.sell_count}</Flex.Item>
             </Flex>
             <WhiteSpace />

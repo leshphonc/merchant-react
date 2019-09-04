@@ -227,9 +227,9 @@ export const fetchStoreValues = type =>
 
 // 外卖商品上、下架
 export const takeAwayStandStatus = (storeId, mealId, status) =>
-  axios.post('/appapi.php?c=Merchantapp&a=mstatusopt', {
+  axios.post('/appapi.php?c=Merchantapp&a=mstatusopt_shop', {
     store_id: storeId,
-    meal_id: mealId,
+    goods_id: mealId,
     status,
     ticket: localStorage.getItem('ticket'),
   })

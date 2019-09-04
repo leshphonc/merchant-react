@@ -2,7 +2,14 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 import {
-  Picker, List, InputItem, Button, ImagePicker, Toast, WhiteSpace,
+  Picker,
+  List,
+  InputItem,
+  Button,
+  ImagePicker,
+  Toast,
+  WhiteSpace,
+  Modal,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -10,7 +17,10 @@ import Utils from '@/utils'
 import { createForm } from 'rc-form'
 import Editor from '@/common/Editor'
 
-const statusData = [{ label: '正常', value: '1' }, { label: '停售', value: '0' }]
+const statusData = [
+  { label: '正常', value: '1' },
+  { label: '停售', value: '0' },
+]
 const category = [
   { label: '实体商品', value: '0' },
   { label: '虚拟商品', value: '1' },
@@ -54,41 +64,41 @@ class TakeAwayPanel extends React.Component {
       return false
     }
     if (!match.params.goodid) return
-    commodity.fetchTakeAwayDetail(match.params.id, match.params.goodid).then(() => {
-      const { takeAwayDetail } = commodity
-      const picArr = takeAwayDetail.pic.map(item => ({
-        url: item.url,
-      }))
-      form.setFieldsValue({
-        name: takeAwayDetail.name,
-        number: takeAwayDetail.number,
-        unit: takeAwayDetail.unit,
-        old_price: takeAwayDetail.old_price,
-        price: takeAwayDetail.price,
-        packing_charge: takeAwayDetail.packing_charge,
-        stock_num: takeAwayDetail.stock_num,
-        sort: takeAwayDetail.sort,
-        status: [takeAwayDetail.status],
-        goods_type: [takeAwayDetail.goods_type],
-        store_id: [takeAwayDetail.store_id],
-        sort_id: [takeAwayDetail.sort_id],
-        pic: picArr,
+    commodity
+      .fetchTakeAwayDetail(match.params.id, match.params.goodid)
+      .then(() => {
+        const { takeAwayDetail } = commodity
+        const picArr = takeAwayDetail.pic.map(item => ({
+          url: item.url,
+        }))
+        form.setFieldsValue({
+          name: takeAwayDetail.name,
+          number: takeAwayDetail.number,
+          unit: takeAwayDetail.unit,
+          old_price: takeAwayDetail.old_price,
+          price: takeAwayDetail.price,
+          packing_charge: takeAwayDetail.packing_charge,
+          stock_num: takeAwayDetail.stock_num,
+          sort: takeAwayDetail.sort,
+          status: [takeAwayDetail.status],
+          goods_type: [takeAwayDetail.goods_type],
+          store_id: [takeAwayDetail.store_id],
+          sort_id: [takeAwayDetail.sort_id],
+          pic: picArr,
+        })
+        commodity.fetchCategoryValues(takeAwayDetail.store_id).then(() => {
+          setTimeout(() => {
+            form.setFieldsValue({
+              sort_id: [takeAwayDetail.sort_id],
+            })
+            this.editor.current.state.editor.txt.html(takeAwayDetail.des)
+          }, 500)
+        })
       })
-      commodity.fetchCategoryValues(takeAwayDetail.store_id).then(() => {
-        setTimeout(() => {
-          form.setFieldsValue({
-            sort_id: [takeAwayDetail.sort_id],
-          })
-          this.editor.current.state.editor.txt.html(takeAwayDetail.des)
-        }, 500)
-      })
-    })
   }
 
   submit = () => {
-    const {
-      commodity, match, history, form,
-    } = this.props
+    const { commodity, match, history, form } = this.props
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请填写完整信息')
@@ -157,8 +167,30 @@ class TakeAwayPanel extends React.Component {
       attr: commodity.takeAwayDetail.properties_status_list || [],
       json: commodity.takeAwayDetail.json || [],
     }
-    sessionStorage.setItem('spec', JSON.stringify(obj))
-    history.push('/specification')
+    if (sessionStorage.getItem('spec')) {
+      const spec = JSON.parse(sessionStorage.getItem('spec'))
+      if (spec.cost_prices) {
+        Modal.alert('已编辑过规格', '是否重新编辑？', [
+          { text: '取消' },
+          {
+            text: '重新编辑',
+            onPress: () => {
+              Utils.cacheData(formData)
+              sessionStorage.setItem('spec', JSON.stringify(obj))
+              history.push('/specification')
+            },
+          },
+        ])
+      } else {
+        Utils.cacheData(formData)
+        sessionStorage.setItem('spec', JSON.stringify(obj))
+        history.push('/specification')
+      }
+    } else {
+      Utils.cacheData(formData)
+      sessionStorage.setItem('spec', JSON.stringify(obj))
+      history.push('/specification')
+    }
   }
 
   render() {
@@ -179,7 +211,10 @@ class TakeAwayPanel extends React.Component {
           >
             商品名称
           </InputItem>
-          <InputItem {...getFieldProps('number')} placeholder="请填写商品条形码">
+          <InputItem
+            {...getFieldProps('number')}
+            placeholder="请填写商品条形码"
+          >
             商品条形码
           </InputItem>
           <InputItem

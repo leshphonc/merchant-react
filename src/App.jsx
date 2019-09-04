@@ -6,6 +6,7 @@ import { HashRouter, Route, Switch } from 'react-router-dom'
 import IconFont from '@/assets/iconfont/iconfont'
 import Index from '@/pages'
 import Login from '@/pages/login'
+import Order from '@/pages/order/orderRouter'
 import Wallet from '@/pages/wallet'
 import StoreFront from '@/pages/management/storeFront'
 import Member from '@/pages/management/member'
@@ -34,9 +35,12 @@ export default () => (
     <HashRouter>
       <IconFont />
       <Switch>
+        {/* 首页 */}
         <Route path="/" exact component={Index} />
         {/* 登录页面 */}
         <Route path="/login" component={Login} />
+        {/* 订单页面 */}
+        <Route path="/order" component={Order} />
         {/* 钱包页面 -> wallet */}
         <Route path="/wallet" component={Wallet} />
         {/* 管理页面 -> management */}

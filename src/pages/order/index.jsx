@@ -1,8 +1,10 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
+import { withRouter } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
 import { WhiteSpace, List, Toast } from 'antd-mobile'
 
+@withRouter
 @inject('order')
 @observer
 class Order extends React.Component {
@@ -21,6 +23,11 @@ class Order extends React.Component {
             arrow="horizontal"
             extra={item.count}
             onClick={() => {
+              if (item.name === '零售订单') {
+                const { history } = this.props
+                history.push('/order/retail')
+                return false
+              }
               Toast.info('暂无权限，请联系管理员')
             }}
           >
