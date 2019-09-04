@@ -1,7 +1,6 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-// import E from 'wangeditor'
 import {
   List,
   InputItem,
@@ -25,22 +24,21 @@ const { CheckboxItem } = Checkbox
 @createForm()
 @inject('giftManagement')
 @observer
-class RetailAdd extends React.Component {
+class GiftPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       pic: [],
+      store: [],
       asyncCascadeValue: [],
-      editorContent: '',
+      gift_content: '',
     }
     this.editor = React.createRef()
   }
 
   componentDidMount() {
     const { giftManagement, match, form } = this.props
-    console.log(this.props)
     giftManagement.fetchGiftCategory()
-    // giftManagement.fetchGiftCategorylist(match.params.catFid)
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
       if (cacheData.cascade) {
@@ -64,6 +62,10 @@ class RetailAdd extends React.Component {
           asyncCascadeValue,
         })
       })
+      giftManagement.fetchShopList().then(() => {
+        const { shopList } = giftManagement
+        console.log(shopList)
+      })
       return
     }
     giftManagement.fetchGetGiftDetail(match.params.giftId).then(() => {
@@ -86,14 +88,19 @@ class RetailAdd extends React.Component {
       }))
       this.setState({
         pic: picArr,
-        editor: getGiftDetail.gift_content,
+        store: getGiftDetail.store_arr,
       })
       form.setFieldsValue({
-        ...getGiftDetail,
+        gift_name: getGiftDetail.gift_name,
         cat_fid: [getGiftDetail.cat_fid],
         cat_id: [getGiftDetail.cat_id],
         pick_in_store: getGiftDetail.pick_in_store === '1',
         pic: picArr,
+        worth: getGiftDetail.worth,
+        sku: getGiftDetail.sku,
+        intro: getGiftDetail.intro,
+        specification: getGiftDetail.specification,
+        invoice_content: getGiftDetail.invoice_content,
         cascade: [getGiftDetail.province_idss, getGiftDetail.city_idss, getGiftDetail.area_idss],
         circle_idss: [getGiftDetail.circle_idss],
       })
@@ -101,7 +108,7 @@ class RetailAdd extends React.Component {
     })
     giftManagement.fetchShopList().then(() => {
       const { shopList } = giftManagement
-      console.log(toJS(shopList))
+      console.log(shopList)
     })
   }
 
@@ -151,10 +158,10 @@ class RetailAdd extends React.Component {
       giftManagement, form, match, history,
     } = this.props
     form.validateFields((error, value) => {
-      // if (error) {
-      //   Toast.info('请输入完整信息')
-      //   return
-      // }
+      if (error) {
+        Toast.info('请输入完整信息')
+        return
+      }
       const obj = {
         ...value,
         cat_fid: value.cat_fid[0],
@@ -165,12 +172,12 @@ class RetailAdd extends React.Component {
         city_idss: value.cascade ? value.cascade[1] : value.city_idss,
         area_idss: value.cascade ? value.cascade[2] : value.area_idss,
         circle_idss: value.circle_idss ? value.circle_idss[0] : value.circle_idss,
-        gift_content:this.editor.current.state.editor.txt.html(),
+        gift_content: this.editor.current.state.editor.txt.html(),
+        store: this.state.store,
       }
-      console.log(value)
-      console.log(obj)
+      // console.log(value)
+      // console.log(obj)
       if (match.params.giftId) {
-        console.log(match.params.giftId)
         giftManagement.modifyGift({ ...obj, gift_id: match.params.giftId }).then(res => {
           if (res) Toast.success('编辑成功', 1, () => history.goBack())
         })
@@ -194,7 +201,6 @@ class RetailAdd extends React.Component {
   imgChange = (arr, type) => {
     const { form } = this.props
     if (type === 'remove') {
-      console.log(arr)
       form.setFieldsValue({
         pic: arr,
       })
@@ -225,12 +231,9 @@ class RetailAdd extends React.Component {
     const { giftManagement, match, form } = this.props
     const { getFieldProps } = form
     const { giftCategory, giftCategorylist, shopList } = giftManagement
-    console.log(giftCategorylist)
-    const { pic, asyncCascadeValue } = this.state
+    const { pic, asyncCascadeValue, store, } = this.state
     const { cascadeOption, circleOption } = giftManagement
-    console.log(circleOption)
     const pickinstore = form.getFieldValue('pick_in_store')
-    console.log(pickinstore)
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}礼品`} goBack />
@@ -316,11 +319,34 @@ class RetailAdd extends React.Component {
           {pickinstore === true ? (
             <List.Item>
               选择店铺
-              {shopList.map(i => (
-                <CheckboxItem key={i.value} onChange={() => this.onChange(i.value)}>
-                  {i.adress}
-                </CheckboxItem>
-              ))}
+              {shopList.map(i => {
+                return (
+                    <CheckboxItem key={i.value}
+                                  checked={store.indexOf(i.value) === -1?false:true}
+                                  onChange={e => {
+                                      const new_store = toJS(store)
+                                    try{
+                                        if(store.indexOf(i.value) === -1){
+                                            new_store.push(i.value)
+                                            this.setState({
+                                                store:new_store
+                                            })
+
+                                        }else{
+                                            new_store.splice(new_store.indexOf(i.value),1)
+                                            this.setState({
+                                                store: new_store
+                                            })
+                                        }
+                                    }catch (e){
+                                        console.log(e)
+                                    }
+                                  }}>
+                        <div style={{ whiteSpace: 'pre-wrap' }}>{i.label} - {i.adress}</div>
+                    </CheckboxItem>
+                )
+              }
+          )}
             </List.Item>
           ) : (
             ''
@@ -370,7 +396,7 @@ class RetailAdd extends React.Component {
           </List.Item>
           <Item>
             礼品描述
-            <Editor  ref={this.editor}/>
+            <Editor ref={this.editor}/>
           </Item>
           <WingBlank style={{ padding: '10px 0' }}>
             <Button
@@ -386,4 +412,4 @@ class RetailAdd extends React.Component {
     )
   }
 }
-export default RetailAdd
+export default GiftPanel

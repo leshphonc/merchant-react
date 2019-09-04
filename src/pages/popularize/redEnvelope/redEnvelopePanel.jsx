@@ -93,9 +93,8 @@ class RetailAdd extends React.Component {
             pics: getRedPacket.pic,
           })
         })
-      console.log(getRedPacket.start_time)
       form.setFieldsValue({
-        ...getRedPacket,
+        // ...getRedPacket,
         title: getRedPacket.title,
         share_url: getRedPacket.share_url,
         desc: getRedPacket.desc,
@@ -104,6 +103,9 @@ class RetailAdd extends React.Component {
         end_time: new Date(moment(getRedPacket.end_time * 1000)),
         is_open: [getRedPacket.is_open],
         packet_type: [getRedPacket.packet_type],
+        people: getRedPacket.people,
+        get_number: getRedPacket.get_number,
+        day_number: getRedPacket.day_number,
       })
       if (getRedPacket.packet_type) {
         setTimeout(() => {
@@ -241,10 +243,8 @@ class RetailAdd extends React.Component {
     const { getFieldProps } = form
     const { asyncCascadeValue } = this.state
     const { cascadeOption } = redEnvelop
-    // console.log(circleOption)
     const { pics } = this.state
     const packettype = form.getFieldValue('packet_type') ? form.getFieldValue('packet_type')[0] : ''
-    // console.log(shopList)
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}活动`} goBack />
@@ -318,7 +318,6 @@ class RetailAdd extends React.Component {
               {...getFieldProps('cascade', {
                 rules: [{ required: true }],
               })}
-              title="选择地区"
               extra="请选择"
               cols={3}
               data={cascadeOption}
@@ -332,7 +331,6 @@ class RetailAdd extends React.Component {
               {...getFieldProps('cascade', {
                 rules: [{ required: true }],
               })}
-              title="选择地区"
               extra="请选择"
               cols={3}
               data={cascadeOption}

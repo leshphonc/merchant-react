@@ -26,19 +26,16 @@ class RedEnvelope extends React.Component {
     redEnvelop.fetchGetLists(match.params.id)
     redEnvelop.fetchGetList(match.params.id)
     if (this.refresh.current) {
-      /* eslint react/no-find-dom-node: 0 */
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
       this.setState({
         height: hei,
       })
     }
-    /* eslint react/no-find-dom-node: 0 */
   }
 
   mapList = () => {
     const { redEnvelop } = this.props
     const { getList } = redEnvelop
-    // console.log(toJS(getList))
     return getList.map(item => (
       <React.Fragment key={item.id}>
         <div style={{ background: '#fff' }}>
@@ -76,10 +73,8 @@ class RedEnvelope extends React.Component {
 
   render() {
     const { refreshing, height } = this.state
-    console.log(height)
     const { redEnvelop } = this.props
     const { getListTotal, getLists } = redEnvelop
-    console.log(getLists)
     return (
       <React.Fragment>
         <NavBar title="领取记录" goBack />

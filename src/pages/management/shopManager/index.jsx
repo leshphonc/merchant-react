@@ -2,16 +2,13 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { Link, Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
-// import CardList from './components/Manager'
-// import { ShopManager } from '@/config/list'
 import { WingBlank, WhiteSpace, Button } from 'antd-mobile'
 import {
   ListItem, ItemTop, TopContent, List,
 } from '@/styled'
-import { toJS } from 'mobx'
+// import { toJS } from 'mobx'
 import moment from 'moment'
 import ShopPanel from './shopPanel'
-// import ShopEdit from './shopEdit'
 import { Btn } from './styled'
 import Classify from './classify'
 import ClassifyPanel from './classifyPanel'
@@ -39,7 +36,7 @@ class ShopManager extends React.Component {
   mapList = () => {
     const { shopManager, history } = this.props
     const { staffList } = shopManager
-    console.log(toJS(staffList))
+    // console.log(toJS(staffList))
     return staffList.map(item => (
       <React.Fragment key={item.staff_id}>
         <ListItem>
@@ -55,7 +52,7 @@ class ShopManager extends React.Component {
               <WhiteSpace />
               <div>所属店铺: {item.storename}</div>
               <WhiteSpace />
-              <div>添加时间: {moment(item.time * 1000).format('YYYY-MM-DD hh:mm')}</div>
+              <div>添加时间: {moment(item.time * 1000).format('YYYY-MM-DD HH:mm')}</div>
               {/* <WhiteSpace />
               <div>能否修改订单价格: {item.is_change === '0' ? '不能' : '能'}</div>
               <WhiteSpace /> */}
@@ -97,6 +94,7 @@ class ShopManager extends React.Component {
           goBack
           right={
             <Link
+              to= ""
               style={{ color: '#fff' }}
               onClick={() => (window.location.href = 'http://cs.7youke.com/packapp/storestaff/index.html')
               }
