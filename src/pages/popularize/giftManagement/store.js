@@ -43,7 +43,7 @@ class MastSotre {
 
   @observable express = {}
 
-  //获取商品订单列表
+  // 获取商品订单列表
   @action
   fetchGiftOrder = async giftId => {
     let hasMore = true
@@ -77,7 +77,7 @@ class MastSotre {
     }
   }
 
-  //获取礼品列表
+  // 获取礼品列表
   @action
   fetchGetGift = async keyword => {
     let hasMore = true
@@ -111,7 +111,7 @@ class MastSotre {
     }
   }
 
-  //重置礼品列表
+  // 重置礼品列表
   @action
   resetAndFetchRedEnvelopList = async () => {
     runInAction(() => {
@@ -121,7 +121,7 @@ class MastSotre {
     })
   }
 
-  //添加礼品
+  // 添加礼品
   @action
   addGift = async payload => {
     const response = await services.addGift(payload)
@@ -130,7 +130,7 @@ class MastSotre {
     }
   }
 
-  //编辑礼品
+  // 编辑礼品
   @action
   modifyGift = async payload => {
     const response = await services.modifyGift(payload)
@@ -150,7 +150,7 @@ class MastSotre {
     }
   }
 
- // 金币商城分类
+  // 金币商城分类
   @action
   fetchGiftCategory = async catFid => {
     const response = await services.fetchGiftCategory(catFid)
@@ -345,7 +345,6 @@ class MastSotre {
             item.worker_list.forEach(i => {
               i.value = i.merchant_worker_id
               i.label = i.name
-              i.adress = i.adress
             })
           }
         })
@@ -365,7 +364,7 @@ class MastSotre {
     }
   }
 
-  //从新获取礼品列表（搜索）
+  // 从新获取礼品列表（搜索）
   @action
   resetAndFetchGiftList = keyword => {
     runInAction(() => {
@@ -378,7 +377,7 @@ class MastSotre {
 
   // 发货选择快递
   @action
-  fetchExpressList = async (orderId) => {
+  fetchExpressList = async orderId => {
     const response = await services.fetchExpressList(orderId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
@@ -386,10 +385,10 @@ class MastSotre {
       })
     }
   }
-  
+
   // 发货详情列表
   @action
-  fetchExpress = async (orderId) => {
+  fetchExpress = async orderId => {
     const response = await services.fetchExpress(orderId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
@@ -407,7 +406,7 @@ class MastSotre {
     }
   }
 
-  //从新获取订单详情列表
+  // 从新获取订单详情列表
   @action
   resetAndFetchGiftOrderList = async () => {
     runInAction(() => {

@@ -63,7 +63,7 @@ class RedEnvelope extends React.Component {
   }
 
   fabu = id => {
-    const { redEnvelop, history } = this.props
+    const { redEnvelop } = this.props
     redEnvelop.fetchFabu(id).then(() => {
       redEnvelop.resetAndFetchRedEnvelopList()
       redEnvelop.fetchRedEnvelopList()

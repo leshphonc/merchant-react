@@ -6,7 +6,6 @@ import { WingBlank, WhiteSpace, Button } from 'antd-mobile'
 import {
   ListItem, ItemTop, TopContent,
 } from '@/styled'
-import { toJS } from 'mobx'
 import { Btn } from './styled'
 
 @inject('shopManager')
