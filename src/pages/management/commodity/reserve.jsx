@@ -34,6 +34,7 @@ class Reserve extends React.Component {
       height: hei,
     })
   }
+
   mapList = () => {
     const { commodity, history } = this.props
     const { reserveList } = commodity
@@ -47,10 +48,7 @@ class Reserve extends React.Component {
                 {item.appoint_name}
               </div>
               <WhiteSpace />
-              <div
-                className="top-features"
-                style={{ position: 'initial', fontSize: '14px' }}
-              >
+              <div className="top-features" style={{ position: 'initial', fontSize: '14px' }}>
                 定金状态: {item.payment_status === '1' ? '收定金' : '不收定金'}
               </div>
               {item.payment_status === '1' ? (
@@ -58,10 +56,11 @@ class Reserve extends React.Component {
                   className="top-features"
                   style={{ position: 'initial', fontSize: '14px', color: '#fb6a41' }}
                 >
-                      定金: {item.payment_money}元
+                  定金: {item.payment_money}元
                 </div>
-              ) : ''
-              }
+              ) : (
+                ''
+              )}
 
               {item.appoint_type === 1 ? (
                 <div
@@ -118,7 +117,7 @@ class Reserve extends React.Component {
                     width: '50%',
                   }}
                 >
-                    活动状态：{item.appoint_status === '1' ? '关闭' : '开启'}
+                  活动状态：{item.appoint_status === '1' ? '关闭' : '开启'}
                 </span>
                 <span
                   style={{
@@ -126,16 +125,14 @@ class Reserve extends React.Component {
                     width: '50%',
                   }}
                 >
-                    审核状态：{item.check_status ? '通过' : '待审核'}
+                  审核状态：{item.check_status ? '通过' : '待审核'}
                 </span>
               </div>
-              <div
-                style={{ display: 'inline-block', color: '#333', marginRight: '30px' }}
-              >
+              <div style={{ display: 'inline-block', color: '#333', marginRight: '30px' }}>
                 <i className="iconfont" style={{ color: '#ffb000' }}>
-                      &#xe6fd;
+                  &#xe6fd;
                 </i>
-                        订单列表
+                订单列表
               </div>
             </TopContent>
           </ItemTop>
@@ -144,9 +141,8 @@ class Reserve extends React.Component {
               <Button
                 type="primary"
                 size="small"
-                onClick={() => history.push(
-                  `/management/commodity/reservePanel/编辑/${item.appoint_id}`,
-                )}
+                onClick={() => history.push(`/management/commodity/reservePanel/编辑/${item.appoint_id}`)
+                }
               >
                 编辑
               </Button>
@@ -155,22 +151,20 @@ class Reserve extends React.Component {
               <Button
                 type="primary"
                 size="small"
-                onClick={() => history.push(
-                  `/management/commodity/AppointDiscounts/edit/${item.appoint_id}/`,
-                )}
+                onClick={() => history.push(`/management/commodity/AppointDiscounts/edit/${item.appoint_id}/`)
+                }
               >
-                        优惠
+                优惠
               </Button>
             </Flex.Item>
             <Flex.Item>
               <Button
                 type="primary"
                 size="small"
-                onClick={() => history.push(
-                  `/management/commodity/editSpread/appoint_id/${item.appoint_id}/`,
-                )}
+                onClick={() => history.push(`/management/commodity/editSpread/appoint_id/${item.appoint_id}/`)
+                }
               >
-                        佣金
+                佣金
               </Button>
             </Flex.Item>
           </Flex>
@@ -202,7 +196,7 @@ class Reserve extends React.Component {
           onChange={e => {
             console.log(e)
             this.setState({
-              keyword: e
+              keyword: e,
             })
           }}
           onSubmit={() => {
