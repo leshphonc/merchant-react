@@ -413,7 +413,6 @@ class MastSotre {
       this.giftOrder = []
       this.giftOrderPage = 1
       this.giftOrderTotal = null
-      // this.fetchGiftOrder()
     })
   }
 }

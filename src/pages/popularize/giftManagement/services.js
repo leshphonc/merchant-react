@@ -65,7 +65,7 @@ export const modifyGift = payload => {
   })
 }
 
-// 获取详情信息
+// 获取
 export const fetchGetGiftDetail = giftId => axios.get('/appapi.php?c=Merchantapp&a=get_gift_detail', {
   params: {
     gift_id: giftId,

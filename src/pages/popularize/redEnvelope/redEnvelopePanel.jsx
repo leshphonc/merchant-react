@@ -94,7 +94,6 @@ class RetailAdd extends React.Component {
           })
         })
       form.setFieldsValue({
-        // ...getRedPacket,
         title: getRedPacket.title,
         share_url: getRedPacket.share_url,
         desc: getRedPacket.desc,
@@ -213,10 +212,9 @@ class RetailAdd extends React.Component {
         keyword: value.title,
         pic: pics,
       }
-      console.log(value)
-      console.log(obj)
+      // console.log(value)
+      // console.log(obj)
       if (match.params.id) {
-        // console.log(match.params.id)
         redEnvelop.modifyPacket({ ...obj, id: match.params.id }).then(res => {
           if (res) {
             Toast.success('编辑成功', 1, () => {
