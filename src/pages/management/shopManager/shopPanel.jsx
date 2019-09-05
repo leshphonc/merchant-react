@@ -1,7 +1,6 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-// import { Route } from 'react-router-dom'
 import {
   List, InputItem, WingBlank, Button, Picker, Toast,
 } from 'antd-mobile'
@@ -29,7 +28,6 @@ class ECommerceAdd extends React.Component {
     shopManager.fetchStaffDetail(match.params.id, match.params.staffId).then(() => {
       const { staffDetail } = shopManager
       form.setFieldsValue({
-        // ...staffDetail,
         name: staffDetail.name,
         username: staffDetail.username,
         password: '',

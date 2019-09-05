@@ -107,8 +107,8 @@ class GiftPanel extends React.Component {
       this.editor.current.state.editor.txt.html(getGiftDetail.gift_content)
     })
     giftManagement.fetchShopList().then(() => {
-      const { shopList } = giftManagement
-      console.log(shopList)
+      // const { shopList } = giftManagement
+      // console.log(shopList)
     })
   }
 

@@ -29,10 +29,13 @@ class GiftManagement extends React.Component {
     const { giftManagement } = this.props
     const { height, keyword } = this.state
     giftManagement.fetchGetGift(keyword)
-    const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
-    this.setState({
-      height: hei,
-    })
+    if (this.refresh.current) {
+      /* eslint react/no-find-dom-node: 0 */
+      const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
+      this.setState({
+        height: hei,
+      })
+    }
   }
 
   detele = id => {
@@ -72,9 +75,7 @@ class GiftManagement extends React.Component {
                   <Button
                     type="primary"
                     size="small"
-                    onClick={() => history.push(
-                      `/popularize/giftManagement/ordersGoods/${item.gift_id}`,
-                    )
+                    onClick={() => history.push(`/popularize/giftManagement/ordersGoods/${item.gift_id}`)
                     }
                   >
                     商品订单

@@ -34,7 +34,7 @@ class RedEnvelope extends React.Component {
   componentDidMount() {
     const { redEnvelop } = this.props
     const { height } = this.state
-    if (!redEnvelop.redEnvelopList.length) redEnvelop.fetchRedEnvelopList() 
+    if (!redEnvelop.redEnvelopList.length) redEnvelop.fetchRedEnvelopList()
     if (this.refresh.current) {
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
       this.setState({
@@ -113,16 +113,16 @@ class RedEnvelope extends React.Component {
             content={
               <Flex>
                 {item.is_fabu !== '0' ? (
-                <Flex.Item>
-                  <Button
-                    type="primary"
-                    size="small"
-                    style={{ padding: '0 10px' }}
-                    onClick={() => history.push(`/popularize/redEnvelope/getList/${item.id}`)}
-                  >
-                    领取记录
-                  </Button>
-                </Flex.Item>
+                  <Flex.Item>
+                    <Button
+                      type="primary"
+                      size="small"
+                      style={{ padding: '0 10px' }}
+                      onClick={() => history.push(`/popularize/redEnvelope/getList/${item.id}`)}
+                    >
+                      领取记录
+                    </Button>
+                  </Flex.Item>
                 ) : (
                   ''
                 )}

@@ -103,7 +103,7 @@ class MastSotre {
     }
   }
 
-  //管理分类添加
+  // 管理分类添加
   @action
   addClassify = async payload => {
     const response = await services.addClassify(payload)
@@ -112,7 +112,7 @@ class MastSotre {
     }
   }
 
-  //管理分类编辑
+  // 管理分类编辑
   @action
   modifyClassify = async payload => {
     const response = await services.modifyClassify(payload)

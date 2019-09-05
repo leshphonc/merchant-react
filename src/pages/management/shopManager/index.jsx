@@ -6,7 +6,6 @@ import { WingBlank, WhiteSpace, Button } from 'antd-mobile'
 import {
   ListItem, ItemTop, TopContent, List,
 } from '@/styled'
-// import { toJS } from 'mobx'
 import moment from 'moment'
 import ShopPanel from './shopPanel'
 import { Btn } from './styled'
@@ -36,7 +35,6 @@ class ShopManager extends React.Component {
   mapList = () => {
     const { shopManager, history } = this.props
     const { staffList } = shopManager
-    // console.log(toJS(staffList))
     return staffList.map(item => (
       <React.Fragment key={item.staff_id}>
         <ListItem>
@@ -53,9 +51,6 @@ class ShopManager extends React.Component {
               <div>所属店铺: {item.storename}</div>
               <WhiteSpace />
               <div>添加时间: {moment(item.time * 1000).format('YYYY-MM-DD HH:mm')}</div>
-              {/* <WhiteSpace />
-              <div>能否修改订单价格: {item.is_change === '0' ? '不能' : '能'}</div>
-              <WhiteSpace /> */}
             </TopContent>
           </ItemTop>
           <div style={{ width: '20%', display: 'inline-block', float: 'right' }}>
@@ -94,7 +89,7 @@ class ShopManager extends React.Component {
           goBack
           right={
             <Link
-              to= ""
+              to="/"
               style={{ color: '#fff' }}
               onClick={() => (window.location.href = 'http://cs.7youke.com/packapp/storestaff/index.html')
               }
@@ -157,7 +152,6 @@ class ShopManager extends React.Component {
     )
   }
 }
-
 export default () => (
   <React.Fragment>
     <Route path="/management/shopManager" exact component={ShopManager} />

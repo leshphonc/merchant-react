@@ -13,12 +13,10 @@ import { createForm } from 'rc-form'
 class ECommerceAdd extends React.Component {
   componentDidMount() {
     const { shopManager, match, form } = this.props
-    // console.log(this.props)
     if (!match.params.id) return
     shopManager.fetchClassifyDetail(match.params.id).then(() => {
       const { classifyDetail } = shopManager
       form.setFieldsValue({
-        // ...classifyDetail,
         name: classifyDetail.name,
       })
     })

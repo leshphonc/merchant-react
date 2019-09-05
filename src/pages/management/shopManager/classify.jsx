@@ -31,7 +31,6 @@ class Classify extends React.Component {
   mapList = () => {
     const { shopManager, history } = this.props
     const { classify } = shopManager
-    // console.log(toJS(classify))
     return classify.map(item => (
       <React.Fragment key={item.id}>
         <ListItem>

@@ -27,6 +27,7 @@ class OressGoods extends React.Component {
       giftManagement.fetchGiftOrder(match.params.giftId)
     })
     if (this.refresh.current) {
+      /* eslint react/no-find-dom-node: 0 */
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
       this.setState({
         height: hei,
