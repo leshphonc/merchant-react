@@ -133,7 +133,7 @@ class MastSotre {
   }
 
   @action
-  resetAndFetchGroupList = keyword => {
+  resetAndFetchReserveList = keyword => {
     runInAction(() => {
       this.reserveList = []
       this.reserveListPage = 1

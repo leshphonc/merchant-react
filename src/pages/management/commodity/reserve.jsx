@@ -194,13 +194,12 @@ class Reserve extends React.Component {
           placeholder="商品名称"
           value={keyword}
           onChange={e => {
-            console.log(e)
             this.setState({
               keyword: e,
             })
           }}
           onSubmit={() => {
-            commodity.resetAndFetchGroupList(keyword)
+            commodity.resetAndFetchReserveList(keyword)
           }}
         />
         <PullToRefresh

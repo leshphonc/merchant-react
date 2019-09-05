@@ -78,3 +78,10 @@ export const TemplateArea = {
   3239: ['澳门', 0],
   3242: ['台湾', 0],
 }
+
+export const DeliverType = {
+  0: '系统配送',
+  1: '商家配送',
+  2: '用户自提',
+  3: '快递配送',
+}
