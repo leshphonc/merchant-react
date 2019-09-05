@@ -3,7 +3,7 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 import ReactDOM from 'react-dom'
 import {
-  Button, Flex, WingBlank, Card, WhiteSpace, PullToRefresh, SearchBar,
+  Button, Flex, WingBlank, Card, WhiteSpace, PullToRefresh,
 } from 'antd-mobile'
 import moment from 'moment'
 
