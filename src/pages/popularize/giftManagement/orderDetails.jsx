@@ -114,7 +114,7 @@ class OressGoods extends React.Component {
           <Item extra={giftOrderDetail.zipcode} arrow="empty">
             邮编
           </Item>
-          <Item extra={giftOrderDetail.adress} arrow="empty">
+          <Item extra={giftOrderDetail.address} arrow="empty">
             收货地址
           </Item>
         </List>

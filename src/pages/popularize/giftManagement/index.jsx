@@ -1,11 +1,11 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { Route, Link } from 'react-router-dom'
+import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
   Button, Flex, WingBlank, Card, WhiteSpace, SearchBar, PullToRefresh,
 } from 'antd-mobile'
-import ReactDOM from 'react-dom'
 import GiftPanel from './giftPanel'
 import OrdersGoods from './ordersGoods'
 import OrderDetails from './orderDetails'

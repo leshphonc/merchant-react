@@ -231,7 +231,7 @@ class GiftPanel extends React.Component {
     const { giftManagement, match, form } = this.props
     const { getFieldProps } = form
     const { giftCategory, giftCategorylist, shopList } = giftManagement
-    const { pic, asyncCascadeValue, store, } = this.state
+    const { pic, asyncCascadeValue, store } = this.state
     const { cascadeOption, circleOption } = giftManagement
     const pickinstore = form.getFieldValue('pick_in_store')
     return (
@@ -319,34 +319,34 @@ class GiftPanel extends React.Component {
           {pickinstore === true ? (
             <List.Item>
               选择店铺
-              {shopList.map(i => {
-                return (
-                    <CheckboxItem key={i.value}
-                                  checked={store.indexOf(i.value) === -1?false:true}
-                                  onChange={e => {
-                                      const new_store = toJS(store)
-                                    try{
-                                        if(store.indexOf(i.value) === -1){
-                                            new_store.push(i.value)
-                                            this.setState({
-                                                store:new_store
-                                            })
-
-                                        }else{
-                                            new_store.splice(new_store.indexOf(i.value),1)
-                                            this.setState({
-                                                store: new_store
-                                            })
-                                        }
-                                    }catch (e){
-                                        console.log(e)
-                                    }
-                                  }}>
-                        <div style={{ whiteSpace: 'pre-wrap' }}>{i.label} - {i.adress}</div>
-                    </CheckboxItem>
-                )
-              }
-          )}
+              {shopList.map(i => (
+                <CheckboxItem
+                  key={i.value}
+                  checked={store.indexOf(i.value) !== -1}
+                  onChange={e => {
+                    const new_store = toJS(store)
+                    try {
+                      if (store.indexOf(i.value) === -1) {
+                        new_store.push(i.value)
+                        this.setState({
+                          store: new_store,
+                        })
+                      } else {
+                        new_store.splice(new_store.indexOf(i.value), 1)
+                        this.setState({
+                          store: new_store,
+                        })
+                      }
+                    } catch (e) {
+                      console.log(e)
+                    }
+                  }}
+                >
+                  <div style={{ whiteSpace: 'pre-wrap' }}>
+                    {i.label} - {i.adress}
+                  </div>
+                </CheckboxItem>
+              ))}
             </List.Item>
           ) : (
             ''
@@ -396,7 +396,7 @@ class GiftPanel extends React.Component {
           </List.Item>
           <Item>
             礼品描述
-            <Editor ref={this.editor}/>
+            <Editor ref={this.editor} />
           </Item>
           <WingBlank style={{ padding: '10px 0' }}>
             <Button
