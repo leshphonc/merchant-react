@@ -2,7 +2,6 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 import { List } from 'antd-mobile'
-import { toJS } from 'mobx'
 import moment from 'moment'
 
 const { Item } = List
@@ -24,34 +23,15 @@ class OressGoods extends React.Component {
 
   componentDidMount() {
     const { giftManagement, match } = this.props
-    console.log(this.props)
     giftManagement.fetchGiftOrderDetail(match.params.orderId)
   }
-
-  // mapList = () => {
-  //   const { giftManagement } = this.props
-  //   const { giftOrderDetail } = giftManagement
-  //   console.log(toJS(giftOrderDetail))
-  //   return giftOrderDetail.map(item => (
-  //     <React.Fragment key={item.order_id}>
-  //       {/* <List>
-  //         <Item extra={item.order_id}>Title</Item>
-  //       </List> */}
-  //       item.order_id
-  //     </React.Fragment>
-  //   ))
-  // }
 
   render() {
     const { giftManagement } = this.props
     const { giftOrderDetail } = giftManagement
-    console.log(toJS(giftOrderDetail))
     return (
       <React.Fragment>
         <NavBar title="订单详情" goBack />
-        {/* <WingBlank size="sm" style={{ marginTop: '10px' }}>
-          {this.mapList()}
-        </WingBlank> */}
         <List>
           <Item extra={giftOrderDetail.order_id} arrow="empty">
             订单编号
@@ -134,7 +114,7 @@ class OressGoods extends React.Component {
           <Item extra={giftOrderDetail.zipcode} arrow="empty">
             邮编
           </Item>
-          <Item extra={giftOrderDetail.adress} arrow="empty">
+          <Item extra={giftOrderDetail.address} arrow="empty">
             收货地址
           </Item>
         </List>

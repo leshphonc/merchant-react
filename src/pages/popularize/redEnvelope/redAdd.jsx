@@ -34,7 +34,6 @@ class RetailAdd extends React.Component {
 
   componentDidMount() {
     const { redEnvelop, match, form } = this.props
-    // console.log(this.props)
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
       if (cacheData.cascade) {
@@ -84,12 +83,11 @@ class RetailAdd extends React.Component {
   }
 
   cacheData = () => {
-    // debugger
     const { form } = this.props
     const { pics } = this.state
-    console.log(pics)
+    // console.log(pics)
     const formData = form.getFieldsValue()
-    console.log(formData)
+    // console.log(formData)
     formData.pics = pics
     Utils.cacheData(formData)
   }
@@ -172,8 +170,8 @@ class RetailAdd extends React.Component {
         keyword: value.title,
         pic: pics,
       }
-      console.log(value)
-      console.log(obj)
+      // console.log(value)
+      // console.log(obj)
       redEnvelop.addPacket({ ...obj }).then(res => {
         if (res) {
           Toast.success('新增成功', 1, () => {
@@ -191,14 +189,11 @@ class RetailAdd extends React.Component {
 
   render() {
     const { redEnvelop, match, form } = this.props
-    // const { getRedPacket } = redEnvelop
     const { getFieldProps } = form
     const { asyncCascadeValue } = this.state
     const { cascadeOption } = redEnvelop
-    // console.log(circleOption)
     const { pics } = this.state
     const packettype = form.getFieldValue('packet_type') ? form.getFieldValue('packet_type')[0] : ''
-    // console.log(shopList)
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}活动`} goBack />

@@ -39,6 +39,11 @@ class MastSotre {
 
   @observable giftOrderDetail = {}
 
+  @observable expressList = []
+
+  @observable express = {}
+
+  // 获取商品订单列表
   @action
   fetchGiftOrder = async giftId => {
     let hasMore = true
@@ -72,6 +77,7 @@ class MastSotre {
     }
   }
 
+  // 获取礼品列表
   @action
   fetchGetGift = async keyword => {
     let hasMore = true
@@ -105,6 +111,17 @@ class MastSotre {
     }
   }
 
+  // 重置礼品列表
+  @action
+  resetAndFetchRedEnvelopList = async () => {
+    runInAction(() => {
+      this.getGift = []
+      this.getGiftPage = 1
+      this.getGiftTotal = null
+    })
+  }
+
+  // 添加礼品
   @action
   addGift = async payload => {
     const response = await services.addGift(payload)
@@ -113,6 +130,7 @@ class MastSotre {
     }
   }
 
+  // 编辑礼品
   @action
   modifyGift = async payload => {
     const response = await services.modifyGift(payload)
@@ -121,6 +139,7 @@ class MastSotre {
     }
   }
 
+  // 获取详情信息
   @action
   fetchGetGiftDetail = async giftId => {
     const response = await services.fetchGetGiftDetail(giftId)
@@ -131,6 +150,7 @@ class MastSotre {
     }
   }
 
+  // 金币商城分类
   @action
   fetchGiftCategory = async catFid => {
     const response = await services.fetchGiftCategory(catFid)
@@ -151,6 +171,7 @@ class MastSotre {
     }
   }
 
+  // 删除礼品
   @action
   fetchDelGift = async giftId => {
     await services.fetchDelGift(giftId)
@@ -311,20 +332,28 @@ class MastSotre {
     this.circleOption = []
   }
 
+  // 店铺列表
   @action
-  fetchShopList = async () => {
-    const response = await services.fetchShopList()
+  fetchShopList = async appointType => {
+    const response = await services.fetchShopList(appointType)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        response.data.result.store_list.forEach(item => {
-          if (item.value > 0) {
-            this.shopList.push(item)
+        const shopList = response.data.result.store_list
+        shopList.shift(0)
+        shopList.forEach(item => {
+          if (item.worker_list) {
+            item.worker_list.forEach(i => {
+              i.value = i.merchant_worker_id
+              i.label = i.name
+            })
           }
         })
+        this.shopList = shopList
       })
     }
   }
 
+  // 金币商城详情
   @action
   fetchGiftOrderDetail = async orderId => {
     const response = await services.fetchGiftOrderDetail(orderId)
@@ -335,13 +364,55 @@ class MastSotre {
     }
   }
 
+  // 从新获取礼品列表（搜索）
   @action
-  resetAndFetchGroupList = keyword => {
+  resetAndFetchGiftList = keyword => {
     runInAction(() => {
       this.getGift = []
       this.getGiftPage = 1
       this.getGiftTotal = null
       this.fetchGetGift(keyword)
+    })
+  }
+
+  // 发货选择快递
+  @action
+  fetchExpressList = async orderId => {
+    const response = await services.fetchExpressList(orderId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.expressList = response.data.result.express_list
+      })
+    }
+  }
+
+  // 发货详情列表
+  @action
+  fetchExpress = async orderId => {
+    const response = await services.fetchExpress(orderId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.express = response.data.result
+      })
+    }
+  }
+
+  // 确认发货
+  @action
+  modifyExpress = async payload => {
+    const response = await services.modifyExpress(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 从新获取订单详情列表
+  @action
+  resetAndFetchGiftOrderList = async () => {
+    runInAction(() => {
+      this.giftOrder = []
+      this.giftOrderPage = 1
+      this.giftOrderTotal = null
     })
   }
 }
