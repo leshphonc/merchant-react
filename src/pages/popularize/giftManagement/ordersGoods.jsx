@@ -55,7 +55,7 @@ class OressGoods extends React.Component {
               <Flex.Item>订单数量 {item.num}</Flex.Item>
             </Flex>
             <Flex style={{ marginTop: '10px', marginBottom: '5px' }}>
-              <Flex.Item>订单时间 {moment(item.order_time * 1000).format('YYYY-MM-DD')}</Flex.Item>
+              <Flex.Item>订单时间 {moment(item.order_time * 1000).format('YYYY-MM-DD HH:mm')}</Flex.Item>
               <Flex.Item>状态 {item.paid === '1' ? '已支付' : '未支付'} {item.status === '1' ? '已发货' : '未发货'}</Flex.Item>
             </Flex>
           </Card.Body>
