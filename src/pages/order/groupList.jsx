@@ -156,7 +156,7 @@ class GroupList extends React.Component {
             <Card.Header style={{ fontSize: 13, color: '#999' }} title={item.s_name}></Card.Header>
             <Card.Body style={{ color: '#666', fontSize: 12 }}>
               <Flex>
-                <img src={item.pic} style={{ width: '20%' }} />
+                <img src={item.pic} style={{ width: '20%', height: '20vw' }} />
                 <div style={{ width: '75%', marginLeft: '5%' }}>
                   <p>
                     <span style={styleSpan.spanLeft}>总价:{item.total_money}</span>

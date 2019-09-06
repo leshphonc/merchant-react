@@ -28,6 +28,8 @@ class OrderStore {
 
   @observable groupOrderDetail = []
 
+  @observable groupOrderPass = []
+
   // 获取订单种类列表
   @action
   fetchOrderList = async () => {
@@ -165,8 +167,34 @@ class OrderStore {
   }
 
   // 团购快递
-  modifyGroupExpress = async (expressType, expressId, orderId) => {
-    const response = await services.modifyGroupExpress(expressType, expressId, orderId)
+  modifyGroupExpress = async (expressType, expressId, orderId, storeId) => {
+    const response = await services.modifyGroupExpress(expressType, expressId, orderId, storeId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 团购获取核销码
+  fecthGroupPassArray = async orderId => {
+    const response = await services.fecthGroupPassArray(orderId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.groupOrderPass = response.data.result
+      })
+    }
+  }
+
+  // 团购全部核销
+  verificGroupAll = async (orderId, storeId) => {
+    const response = await services.verificGroupAll(orderId, storeId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 团购单个核销
+  verificGroup = async (orderId, groupPass) => {
+    const response = await services.verificGroup(orderId, groupPass)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }

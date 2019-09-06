@@ -6,7 +6,6 @@ import {
 } from 'antd-mobile'
 // import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
-import { toJS } from 'mobx'
 
 const styleSpan = {
   spaner: {
@@ -37,6 +36,14 @@ const styleSpan = {
     width: '50%',
     textAlign: 'right',
   },
+  passLeft: {
+    display: 'inline-block',
+    width: '65%',
+  },
+  passRight: {
+    display: 'inline-block',
+    width: '35%',
+  },
 }
 
 @inject('order')
@@ -55,6 +62,8 @@ class GroupOrderDetail extends React.Component {
       expressId: '',
       expressName: '',
       expressNum: '',
+      groupPass: '',
+      groupPassArr: [],
     }
     this.refresh = React.createRef()
   }
@@ -84,6 +93,14 @@ class GroupOrderDetail extends React.Component {
           storeNmae: storeList[0].label,
         })
       }
+      if (groupOrderDetail.now_order.pass_array === '1') {
+        order.fecthGroupPassArray(match.params.orderId).then(() => {
+          const { groupOrderPass } = order
+          this.setState({
+            groupPassArr: groupOrderPass.pass_array,
+          })
+        })
+      }
       this.setState({
         detail: groupOrderDetail.now_order,
         user: groupOrderDetail.user,
@@ -92,9 +109,43 @@ class GroupOrderDetail extends React.Component {
         expressId: groupOrderDetail.distribution.express_type || expressList[0].value,
         expressName: expressList[groupOrderDetail.distribution.express_type].label,
         expressNum: groupOrderDetail.distribution.express_id,
+        groupPass: groupOrderDetail.now_order.group_pass,
       })
     })
   }
+
+  verificBtn = orderId => {
+    const { order } = this.props
+    window.wx.scanQRCode({
+      needResult: 1,
+      scanType: ['qrCode', 'barCode'],
+      success(res) {
+        order.verificGroup(orderId, res.resultStr).then(res => {
+          if (res) Toast.success('验证成功', 1, () => window.location.reload())
+        })
+      },
+    })
+  }
+
+  groupPassList = passArr => passArr.map((item, index) => (
+    <Flex style={styleSpan.topDis} key={index}>
+      <div style={styleSpan.passLeft}>核销码:{item.group_pass}</div>
+      <div style={styleSpan.passRight}>
+        {item.status === '1' ? (
+          '已验证'
+        ) : (
+          <Button
+            type="primary"
+            size="small"
+            style={{ width: '60%', margin: '10px auto 0' }}
+            onClick={() => this.verificBtn(this.state.detail.order_id)}
+          >
+              验证
+          </Button>
+        )}
+      </div>
+    </Flex>
+  ))
 
   render() {
     const {
@@ -108,6 +159,8 @@ class GroupOrderDetail extends React.Component {
       expressId,
       expressName,
       expressNum,
+      groupPass,
+      groupPassArr,
     } = this.state
     const { order } = this.props
     let statusText = ''
@@ -140,7 +193,7 @@ class GroupOrderDetail extends React.Component {
           <Card.Header style={{ fontSize: 15, color: '#999' }} title="商品信息"></Card.Header>
           <Card.Body style={{ color: '#666', fontSize: 15 }}>
             <Flex>
-              <img src={detail.pic} style={{ width: '20%' }} />
+              <img src={detail.pic} style={{ width: '20%', height: '20vw' }} />
               <div style={{ width: '75%', marginLeft: '5%' }}>
                 <div>
                   <p style={{ fontSize: 14 }}>{detail.s_name}</p>
@@ -174,7 +227,7 @@ class GroupOrderDetail extends React.Component {
             </Flex>
           </Card.Body>
         </Card>
-        {detail.order_type === '实物' && detail.store_id === '0' && storeList.length > 0 && (
+        {detail.store_id === '0' && storeList.length > 0 && (
           <Card style={{ marginTop: '10px' }}>
             <Card.Header
               style={{ fontSize: 15, color: '#999' }}
@@ -274,9 +327,11 @@ class GroupOrderDetail extends React.Component {
                   size="small"
                   style={{ width: '30%', margin: '10px auto 0' }}
                   onClick={() => {
-                    order.modifyGroupExpress(expressId, expressNum, detail.order_id).then(res => {
-                      if (res) Toast.success('更改成功', 1, () => window.location.reload())
-                    })
+                    order
+                      .modifyGroupExpress(expressId, expressNum, detail.order_id, detail.store_id)
+                      .then(res => {
+                        if (res) Toast.success('更改成功', 1, () => window.location.reload())
+                      })
                   }}
                 >
                   保存
@@ -305,6 +360,64 @@ class GroupOrderDetail extends React.Component {
                 <div style={styleSpan.spanLeft}>付款时间:</div>
                 <div style={styleSpan.spanRight}>{detail.pay_time}</div>
               </Flex>
+            )}
+            {detail.store_id !== '0'
+              && detail.type === 1
+              && detail.tuan_type !== 2
+              && groupPassArr.length < 1 
+              && groupPass
+              && (
+                <Flex style={styleSpan.topDis}>
+                  <div style={styleSpan.passLeft}>核销码:{groupPass}</div>
+                  <div style={styleSpan.passRight}>
+                    <Button
+                      type="primary"
+                      size="small"
+                      style={{ width: '60%', margin: '10px auto 0' }}
+                      onClick={() => {
+                        window.wx.scanQRCode({
+                          needResult: 1,
+                          scanType: ['qrCode', 'barCode'],
+                          success(res) {
+                            order.verificGroup(detail.order_id, res.resultStr).then(res => {
+                              if (res) Toast.success('验证成功', 1, () => window.location.reload())
+                            })
+                          },
+                        })
+                      }}
+                    >
+                      验证
+                    </Button>
+                  </div>
+                </Flex>
+            )}
+
+            {detail.store_id !== '0'
+              && detail.type === 1
+              && detail.tuan_type !== 2
+              && groupPassArr.length > 1
+              && this.groupPassList(groupPassArr)}
+
+            {detail.store_id !== '0'
+              && detail.type === 1
+              && detail.tuan_type !== 2
+              && groupPassArr.length > 1 && (
+                <Flex style={styleSpan.topDis}>
+                  <div style={{ width: '100%' }}>
+                    <Button
+                      type="primary"
+                      size="small"
+                      style={{ width: '50%', margin: '10px auto 0' }}
+                      onClick={() => {
+                        order.verificGroupAll(detail.order_id, detail.store_id).then(res => {
+                          if (res) Toast.success('验证成功', 1, () => window.location.reload())
+                        })
+                      }}
+                    >
+                      全部验证
+                    </Button>
+                  </div>
+                </Flex>
             )}
           </Card.Body>
         </Card>

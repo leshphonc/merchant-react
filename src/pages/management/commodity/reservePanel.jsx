@@ -494,7 +494,7 @@ class ReservePanel extends React.Component {
             cols={1}
             extra="请选择"
             onOk={e => {
-              commodity.fetchShopList(e[0]).then(() => {
+              commodity.fetchShopList(e[0],1).then(() => {
                 const { shopList } = commodity
                 this.setState({
                   shopList,

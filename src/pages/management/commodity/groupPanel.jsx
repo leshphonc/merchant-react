@@ -156,7 +156,6 @@ class GroupPanel extends React.Component {
           no_refund: groupDetail.no_refund === '0',
           status: groupDetail.status !== '0',
         })
-        console.log(groupDetail.content)
         this.editor.current.state.editor.txt.html(groupDetail.content)
         setTimeout(() => {
           form.setFieldsValue({
@@ -182,7 +181,7 @@ class GroupPanel extends React.Component {
           groupCatFir,
         })
       })
-      commodity.fetchShopList(1).then(() => {
+      commodity.fetchShopList(1, 2).then(() => {
         const { shopList } = commodity
         this.setState({
           shopList,
@@ -195,7 +194,7 @@ class GroupPanel extends React.Component {
           groupCatFir: toJS(groupCatFir),
         })
       })
-      commodity.fetchShopList(1).then(() => {
+      commodity.fetchShopList(1, 2).then(() => {
         const { shopList } = commodity
         this.setState({
           shopList,
