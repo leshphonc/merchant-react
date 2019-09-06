@@ -282,7 +282,7 @@ class MastSotre {
       1,
       this.takeAwayListSize,
       id,
-      keyword
+      keyword,
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {

@@ -17,6 +17,10 @@ class OrderStore {
 
   @observable shopOrderStatus = []
 
+  @observable shopOrderDetail = {}
+
+  @observable pickAddress = []
+
   // 获取订单种类列表
   @action
   fetchOrderList = async () => {
@@ -80,7 +84,7 @@ class OrderStore {
     }
   }
 
-  // 重置页数请求零售列表
+  // 重置页数请求零售订单列表
   @action
   resetAndFetchShopOrderList = async (status, paytype, searchtype, keyword) => {
     runInAction(() => {
@@ -89,6 +93,36 @@ class OrderStore {
       this.shopOrderListTotal = null
       this.fetchShopOrderList(status, paytype, searchtype, keyword)
     })
+  }
+
+  // 获取零售订单详情
+  @action
+  fetchShopOrderDetail = async id => {
+    const response = await services.fetchShopOrderDetail(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.shopOrderDetail = response.data.result
+      })
+    }
+  }
+
+  // 活动自提地址
+  @action
+  fetchPickAddress = async id => {
+    const response = await services.fetchPickAddress(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.pickAddress = response.data.result.pick_list
+      })
+    }
+  }
+
+  @action
+  pickerAddress = async (id, pickId) => {
+    const response = await services.pickerAddress(id, pickId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      console.log(response.data)
+    }
   }
 }
 

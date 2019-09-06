@@ -45,7 +45,6 @@ class Retail extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      orderName: '全部订单',
       orderStatus: '全部',
       orderStatusValue: '-1',
       payType: '全部方式',
@@ -62,9 +61,12 @@ class Retail extends React.Component {
   componentDidMount() {
     const { order } = this.props
     const { shopOrderList } = order
-    const { height } = this.state
+    const {
+      height, orderStatusValue, payTypeValue, searchtype, keyword,
+    } = this.state
+
     order.fetchShopOrderStatus()
-    if (!shopOrderList.length) order.fetchShopOrderList()
+    if (!shopOrderList.length) order.fetchShopOrderList(orderStatusValue, payTypeValue, searchtype, keyword)
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
@@ -73,14 +75,14 @@ class Retail extends React.Component {
   }
 
   mapList = () => {
-    const { order } = this.props
+    const { order, history } = this.props
     return order.shopOrderList.map(item => (
       <React.Fragment key={item.order_id}>
-        <Card>
+        <Card onClick={() => history.push(`/order/retail/detail/${item.order_id}`)}>
           <Card.Header
             style={{ fontSize: 13, color: '#999' }}
             title={`下单时间：${moment(item.create_time * 1000).format('YYYY-MM-DD HH:mm')}`}
-            extra={item.deliver_status_str}
+            extra={<div dangerouslySetInnerHTML={{ __html: item.pay_status }} />}
           />
           <Card.Body style={{ color: '#666', fontSize: 12 }}>
             <Flex>
@@ -124,9 +126,7 @@ class Retail extends React.Component {
 
   findSearchTypeLabelAndFetch = value => {
     const { order } = this.props
-    const {
-      orderStatusValue, payTypeValue, keyword,
-    } = this.state
+    const { orderStatusValue, payTypeValue, keyword } = this.state
     const result = SearchType.find(item => item.value === value[0])
     this.setState({
       searchtypeLabel: result.label,
@@ -140,12 +140,22 @@ class Retail extends React.Component {
     const { payTypeValue, searchtype, keyword } = this.state
     const { shopOrderStatus } = order
     const result = shopOrderStatus.find(item => item.value === value[0])
-    console.log(result.value)
     this.setState({
       orderStatus: result.label,
       orderStatusValue: result.value,
     })
     order.resetAndFetchShopOrderList(result.value, payTypeValue, searchtype, keyword)
+  }
+
+  findPayLabelAndFetch = value => {
+    const { order } = this.props
+    const { orderStatusValue, payTypeValue, searchtype } = this.state
+    const result = PayType.find(item => item.value === value[0])
+    this.setState({
+      payType: result.label,
+      payTypeValue: result.value,
+    })
+    order.resetAndFetchShopOrderList(orderStatusValue, payTypeValue, searchtype, result.value)
   }
 
   loadMore = async () => {
@@ -163,7 +173,6 @@ class Retail extends React.Component {
   render() {
     const { order } = this.props
     const {
-      orderName,
       orderStatus,
       payType,
       refreshing,
@@ -172,11 +181,18 @@ class Retail extends React.Component {
       payTypeValue,
       searchtype,
       searchtypeLabel,
+      keyword,
     } = this.state
     return (
       <React.Fragment>
         <NavBar title="零售订单" goBack />
-        <SearchBar placeholder={searchtypeLabel} />
+        <SearchBar
+          placeholder={searchtypeLabel}
+          value={keyword}
+          onChange={val => this.setState({ keyword: val })}
+          onSubmit={val => order.resetAndFetchShopOrderList(orderStatusValue, payTypeValue, searchtype, val)
+          }
+        />
         <WhiteSpace />
         <WingBlank size="sm">
           <FilterBox style={{ marginRight: 5 }}>
