@@ -295,7 +295,7 @@ class GiftPanel extends React.Component {
           {pickinstore === false ? (
             <Picker
               {...getFieldProps('cascade', {
-                rules: [{ required: true }],
+                rules: [{ required: false }],
               })}
               title="选择地区"
               extra="全部省"
