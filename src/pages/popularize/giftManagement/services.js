@@ -1,22 +1,13 @@
 import axios from 'axios'
 
 // 礼品列表
-export const fetchGetGift = (page, size, keyword) => axios.get('/appapi.php?c=Merchantapp&a=giftpro', {
+export const fetchGetGift = (page, size, str) => axios.get('/appapi.php?c=Merchantapp&a=giftpro', {
   params: {
     page,
     size,
-    keyword,
+    keyword: str,
     ticket: localStorage.getItem('ticket'),
   },
-})
-
-export const fetchGetGiftser = (page, size, keyword) => axios.post('/appapi.php?c=Merchantapp&a=giftpro', {
-  // params: {
-  page,
-  size,
-  keyword,
-  ticket: localStorage.getItem('ticket'),
-  // },
 })
 
 // 金币商城分类
@@ -50,6 +41,7 @@ export const fetchGiftOrderDetail = orderId => axios.get('/appapi.php?c=Merchant
   },
 })
 
+// 添加礼品
 export const addGift = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
@@ -61,6 +53,7 @@ export const addGift = payload => {
   })
 }
 
+// 编辑礼品
 export const modifyGift = payload => {
   const body = {}
   Object.keys(payload).forEach(item => {
@@ -116,9 +109,41 @@ export const fetchCircle = id => axios.get('/appapi.php?c=Merchantapp&a=ajax_cir
   },
 })
 
+// 商盟
+export const fetchMarket = id => axios.get('/appapi.php?c=Merchantapp&a=ajax_market', {
+  params: {
+    id,
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
 // 店铺列表
 export const fetchShopList = () => axios.get('/appapi.php?c=Merchantapp&a=get_store', {
   params: {
     ticket: localStorage.getItem('ticket'),
   },
 })
+
+// 发货选择快递
+export const fetchExpressList = orderId => axios.post('/appapi.php?c=Merchantapp&a=getGiftExpress', {
+  order_id: orderId,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 发货详情列表
+export const fetchExpress = orderId => axios.post('/appapi.php?c=Merchantapp&a=getGiftExpress', {
+  order_id: orderId,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 确认发货
+export const modifyExpress = payload => {
+  const body = {}
+  Object.keys(payload).forEach(item => {
+    body[item] = payload[item]
+  })
+  return axios.post('/appapi.php?c=Merchantapp&a=giftExpress', {
+    ...body,
+    ticket: localStorage.getItem('ticket'),
+  })
+}

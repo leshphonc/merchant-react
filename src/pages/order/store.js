@@ -17,6 +17,10 @@ class OrderStore {
 
   @observable shopOrderStatus = []
 
+  @observable shopOrderDetail = {}
+
+  @observable pickAddress = []
+
   // 团购订单列表
   @observable groupOrderList = []
 
@@ -93,7 +97,7 @@ class OrderStore {
     }
   }
 
-  // 重置页数请求零售列表
+  // 重置页数请求零售订单列表
   @action
   resetAndFetchShopOrderList = async (status, paytype, searchtype, keyword) => {
     runInAction(() => {
@@ -157,6 +161,7 @@ class OrderStore {
   }
 
   // 获取团购详情
+  @action
   fetchGroupOrderDetai = async orderId => {
     const response = await services.fetchGroupOrderDetai(orderId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -166,7 +171,19 @@ class OrderStore {
     }
   }
 
+  // 获取零售订单详情
+  @action
+  fetchShopOrderDetail = async id => {
+    const response = await services.fetchShopOrderDetail(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.shopOrderDetail = response.data.result
+      })
+    }
+  }
+
   // 团购快递
+  @action
   modifyGroupExpress = async (expressType, expressId, orderId, storeId) => {
     const response = await services.modifyGroupExpress(expressType, expressId, orderId, storeId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -175,6 +192,7 @@ class OrderStore {
   }
 
   // 团购获取核销码
+  @action
   fecthGroupPassArray = async orderId => {
     const response = await services.fecthGroupPassArray(orderId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -184,7 +202,19 @@ class OrderStore {
     }
   }
 
+  // 活动自提地址
+  @action
+  fetchPickAddress = async id => {
+    const response = await services.fetchPickAddress(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.pickAddress = response.data.result.pick_list
+      })
+    }
+  }
+
   // 团购全部核销
+  @action
   verificGroupAll = async (orderId, storeId) => {
     const response = await services.verificGroupAll(orderId, storeId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -193,6 +223,7 @@ class OrderStore {
   }
 
   // 团购单个核销
+  @action
   verificGroup = async (orderId, groupPass) => {
     const response = await services.verificGroup(orderId, groupPass)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -201,10 +232,19 @@ class OrderStore {
   }
 
   // 选择店铺
+  @action
   modifyStore = async (orderId, storeId) => {
     const response = await services.modifyStore(orderId, storeId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
+    }
+  }
+
+  @action
+  pickerAddress = async (id, pickId) => {
+    const response = await services.pickerAddress(id, pickId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      console.log(response.data)
     }
   }
 }

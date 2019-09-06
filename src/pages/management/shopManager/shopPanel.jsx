@@ -1,7 +1,6 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-// import { Route } from 'react-router-dom'
 import {
   List, InputItem, WingBlank, Button, Picker, Toast,
 } from 'antd-mobile'
@@ -17,8 +16,6 @@ class ECommerceAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      // shopsValue: ['2015'],
-      // hasError: false,
     }
   }
 
@@ -31,11 +28,14 @@ class ECommerceAdd extends React.Component {
     shopManager.fetchStaffDetail(match.params.id, match.params.staffId).then(() => {
       const { staffDetail } = shopManager
       form.setFieldsValue({
-        ...staffDetail,
+        name: staffDetail.name,
+        username: staffDetail.username,
         password: '',
+        tel: staffDetail.tel,
         is_change: [staffDetail.is_change],
         business_id: [staffDetail.business_id],
         type: [staffDetail.type],
+        spread_rato: staffDetail.spread_rato,
       })
     })
   }

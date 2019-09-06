@@ -62,6 +62,7 @@ class MastSotre {
     }
   }
 
+  // 店员类型
   fetchStaffType = async () => {
     const response = await services.fetchStaffType()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -71,6 +72,7 @@ class MastSotre {
     }
   }
 
+  // 所属连锁机构
   fetchBusinessList = async () => {
     const response = await services.fetchBusinessList()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -80,6 +82,7 @@ class MastSotre {
     }
   }
 
+  // 商品店铺
   @action
   fetchECommerceValues = async () => {
     const response = await services.fetchECommerceValues()
@@ -90,6 +93,7 @@ class MastSotre {
     }
   }
 
+  // 管理分类列表
   fetchClassify = async () => {
     const response = await services.fetchClassify()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -99,6 +103,7 @@ class MastSotre {
     }
   }
 
+  // 管理分类添加
   @action
   addClassify = async payload => {
     const response = await services.addClassify(payload)
@@ -107,7 +112,7 @@ class MastSotre {
     }
   }
 
-  // 店员编辑
+  // 管理分类编辑
   @action
   modifyClassify = async payload => {
     const response = await services.modifyClassify(payload)

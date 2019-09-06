@@ -23,6 +23,7 @@ class RedEnvelopStore {
 
   @observable getLists = {}
 
+  // 获取红包广场列表
   @action
   fetchRedEnvelopList = async () => {
     let hasMore = true
@@ -60,6 +61,7 @@ class RedEnvelopStore {
     }
   }
 
+  // 重置红包列表
   @action
   resetAndFetchRedEnvelopList = async () => {
     runInAction(() => {
@@ -69,6 +71,7 @@ class RedEnvelopStore {
     })
   }
 
+  // 获取领取记录列表
   @action
   fetchGetList = async id => {
     let hasMore = true
@@ -102,16 +105,19 @@ class RedEnvelopStore {
     }
   }
 
+  // 删除红包列表
   @action
   fetchPacketDel = async id => {
     await services.fetchPacketDel(id)
   }
 
+  // 发布红包
   @action
   fetchFabu = async id => {
     await services.fetchFabu(id)
   }
 
+  // 获取红包列表详细信息
   @action
   fetchGetRedPacket = async id => {
     const response = await services.fetchGetRedPacket(id)
@@ -122,6 +128,7 @@ class RedEnvelopStore {
     }
   }
 
+  // 获取领取记录头部信息
   @action
   fetchGetLists = async id => {
     const response = await services.fetchGetLists(id)
@@ -132,6 +139,7 @@ class RedEnvelopStore {
     }
   }
 
+  // 添加红包
   @action
   addPacket = async payload => {
     const response = await services.addPacket(payload)
@@ -140,6 +148,7 @@ class RedEnvelopStore {
     }
   }
 
+  // 修改红包
   @action
   modifyPacket = async payload => {
     const response = await services.modifyPacket(payload)

@@ -6,7 +6,6 @@ import { WingBlank, WhiteSpace, Button } from 'antd-mobile'
 import {
   ListItem, ItemTop, TopContent,
 } from '@/styled'
-import { toJS } from 'mobx'
 import { Btn } from './styled'
 
 @inject('shopManager')
@@ -32,7 +31,6 @@ class Classify extends React.Component {
   mapList = () => {
     const { shopManager, history } = this.props
     const { classify } = shopManager
-    console.log(toJS(classify))
     return classify.map(item => (
       <React.Fragment key={item.id}>
         <ListItem>
