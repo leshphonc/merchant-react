@@ -181,7 +181,7 @@ class MastSotre {
 
   // 省市区级联
   @action
-  fetchCascadeOption = async (provinceId, cityId, areaId, circleId) => {
+  fetchCascadeOption = async (provinceId, cityId, areaId) => {
     const asyncCascadeValue = [provinceId]
     const province = await services.fetchProvince()
     if (province.data.errorCode === ErrorCode.SUCCESS) {
