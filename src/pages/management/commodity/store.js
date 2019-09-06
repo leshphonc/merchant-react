@@ -266,16 +266,12 @@ class MastSotre {
 
   @action
   searchTakeAwayList = async (id, keyword) => {
-<<<<<<< HEAD
-    const response = await services.fetchTakeAwayList(1, this.takeAwayListSize, id, keyword)
-=======
     const response = await services.fetchTakeAwayList(
       1,
       this.takeAwayListSize,
       id,
       keyword,
     )
->>>>>>> dev
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.takeAwayList = response.data.result.lists
