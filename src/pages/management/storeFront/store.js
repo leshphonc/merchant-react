@@ -37,6 +37,8 @@ class StoreFrontStore {
 
   @observable qrCode = ''
 
+  @observable allCategory = []
+
   // 商铺列表
   @action
   fetchStoreList = async () => {
@@ -84,6 +86,17 @@ class StoreFrontStore {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.storeBusiness = response.data.result
+      })
+    }
+  }
+
+  // 获取店铺全部分类
+  @action
+  fetchAllCategory = async () => {
+    const response = await services.fetchAllCategory()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.allCategory = response.data.result
       })
     }
   }

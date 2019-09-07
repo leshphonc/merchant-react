@@ -20,7 +20,6 @@ class Detail extends React.Component {
     const { basicInformation } = this.props
     basicInformation.fetchBasicInfo().then(async () => {
       const { basicInfo } = basicInformation
-      console.log(this.editor)
       const editor = new E(this.editor.current)
       this.setState({
         editor,

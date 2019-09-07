@@ -31,6 +31,14 @@ export const fetchBusinessList = id => axios.post('/appapi.php?c=Merchantapp&a=e
     ticket: localStorage.getItem('ticket'),
   },
 })
+
+// 获取店铺全部分类
+export const fetchAllCategory = () => axios.get('/appapi.php?c=Merchantapp&a=get_all_category', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
 // 分类列表
 export const fetchCategoryList = (id, type) => axios.get('/appapi.php?c=Merchantapp&a=sortlist', {
   params: {

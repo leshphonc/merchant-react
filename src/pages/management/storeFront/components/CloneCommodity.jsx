@@ -1,7 +1,9 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import { List, Checkbox, Button } from 'antd-mobile'
+import {
+  List, Checkbox, Button, Toast,
+} from 'antd-mobile'
 
 const { CheckboxItem } = Checkbox
 
@@ -46,10 +48,11 @@ class CloneCommodity extends React.Component {
   }
 
   submit = () => {
-    const { storeFront, match } = this.props
+    const { storeFront, history, match } = this.props
     const { ids } = this.state
-    console.log(ids)
-    storeFront.cloneCommodity(match.params.id, ids)
+    storeFront.cloneCommodity(match.params.id, ids).then(res => {
+      if (res) Toast.success('克隆成功', 1, () => history.goBack())
+    })
   }
 
   render() {

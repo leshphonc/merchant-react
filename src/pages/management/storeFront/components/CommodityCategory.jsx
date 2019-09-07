@@ -7,7 +7,9 @@ class ECommerceCategory extends React.Component {
   }
 
   componentDidMount() {
+    console.log('cun')
     const { check } = this.props
+    console.log(check)
     this.setState({
       check,
     })

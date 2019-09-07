@@ -147,10 +147,42 @@ class RetailDetail extends React.Component {
     ) {
       return (
         <Flex.Item>
-          <Button type="primary">确认消费</Button>
+          <Button type="primary" onClick={() => this.confirmConsumption(orderDetails.order_id)}>
+            确认消费
+          </Button>
         </Flex.Item>
       )
     }
+  }
+
+  // 确认消费
+  confirmConsumption = id => {
+    const { order } = this.props
+    Modal.alert('重要提示', '确认消费后，订单将设为已消费且不能恢复，请确认用户收货后再操作！', [
+      { text: '取消', onPress: () => console.log('cancel') },
+      {
+        text: '确认',
+        onPress: () => order.confirmConsumption(id),
+      },
+    ])
+  }
+
+  // 取消订单
+  cancelOrder = id => {
+    const { order } = this.props
+    Modal.alert('取消订单', '确认取消订单？', [
+      { text: '取消', onPress: () => console.log('cancel') },
+      {
+        text: '确认',
+        onPress: () => order.cancelOrder(id),
+      },
+    ])
+  }
+
+  // 发货到自提
+  shipToSelfLifting = id => {
+    const { order } = this.props
+    order.shipToSelfLifting(id)
   }
 
   render() {
@@ -160,7 +192,7 @@ class RetailDetail extends React.Component {
     const orderDetails = shopOrderDetail.order_details || {}
     return (
       <React.Fragment>
-        <NavBar title="订单详情" goBack />
+        <NavBar title="零售订单详情" goBack />
         <List renderHeader="订单信息">
           <List.Item extra={orderDetails.fetch_number}>取单编号</List.Item>
           <List.Item extra={orderDetails.real_orderid}>订单编号</List.Item>
@@ -203,7 +235,12 @@ class RetailDetail extends React.Component {
             {this.showSelfLifting()}
             {orderDetails.status === '7' && orderDetails.paid === '1' ? (
               <Flex.Item>
-                <Button type="primary">发货到自提</Button>
+                <Button
+                  type="primary"
+                  onClick={() => this.shipToSelfLifting(orderDetails.order_id)}
+                >
+                  发货到自提
+                </Button>
               </Flex.Item>
             ) : null}
             {this.showConfirm()}
@@ -213,7 +250,9 @@ class RetailDetail extends React.Component {
             && orderDetails.status !== '5'
             && orderDetails.sure ? (
               <Flex.Item>
-                <Button type="warning">取消订单</Button>
+                <Button type="warning" onClick={() => this.cancelOrder(orderDetails.order_id)}>
+                  取消订单
+                </Button>
               </Flex.Item>
               ) : null}
           </Flex>

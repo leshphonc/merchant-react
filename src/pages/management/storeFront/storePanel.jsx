@@ -11,6 +11,8 @@ import {
   Toast,
   TextareaItem,
   Switch,
+  Flex,
+  Menu,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import Tooltip from 'rc-tooltip'
@@ -18,7 +20,10 @@ import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import moment from 'moment'
 import { toJS } from 'mobx'
-import { CustomizeList, ListTitle, ListContent } from '@/styled'
+import Editor from '@/common/Editor'
+import {
+  CustomizeList, ListTitle, ListContent, MenuMask, PrimaryTag,
+} from '@/styled'
 
 const DiscountOptions = [
   { label: '无优惠', value: '0' },
@@ -30,17 +35,23 @@ const DiscountOptions = [
 @inject('storeFront', 'common')
 @observer
 class StorePanel extends React.Component {
-  state = {
-    asyncCascadeValue: [],
-    long: '',
-    lat: '',
-    shopLogo: '',
-    qrcode: '',
+  constructor(props) {
+    super(props)
+    this.state = {
+      asyncCascadeValue: [],
+      long: '',
+      lat: '',
+      shopLogo: '',
+      qrcode: '',
+      open: false,
+      goods: [],
+    }
+    this.editor = React.createRef()
   }
 
   componentDidMount() {
     const { storeFront, match, form } = this.props
-
+    storeFront.fetchAllCategory()
     // 首先判断是否有缓存
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
@@ -48,7 +59,7 @@ class StorePanel extends React.Component {
         storeFront.fetchCascadeOption(
           cacheData.cascade[0],
           cacheData.cascade[1],
-          cacheData.cascade[2]
+          cacheData.cascade[2],
         )
       } else {
         storeFront.fetchCascadeOption()
@@ -60,6 +71,7 @@ class StorePanel extends React.Component {
         qrcode: cacheData.qrcode,
         long: cacheData.long,
         lat: cacheData.lat,
+        goods: cacheData.goods,
       })
       // 整理默认数据放入表单
       form.setFieldsValue({
@@ -76,12 +88,16 @@ class StorePanel extends React.Component {
         have_hotel: cacheData.have_hotel,
         have_auto_parts: cacheData.have_auto_parts,
         txt_info: cacheData.txt_info,
-        context: cacheData.context,
         pic: cacheData.pic,
         discount_type: cacheData.discount_type,
         open_1: cacheData.open_1 && new Date(cacheData.open_1),
         close_1: cacheData.open_1 && new Date(cacheData.close_1),
       })
+      setTimeout(() => {
+        if (this.editor.current) {
+          this.editor.current.state.editor.txt.html(cacheData.context)
+        }
+      }, 500)
       if (cacheData.discount_type) {
         setTimeout(() => {
           if (cacheData.discount_type[0] === '1') {
@@ -114,11 +130,7 @@ class StorePanel extends React.Component {
       const { storeDetail } = storeFront
       // 获取级联数据
       storeFront
-        .fetchCascadeOption(
-          storeDetail.province_id,
-          storeDetail.city_id,
-          storeDetail.area_id
-        )
+        .fetchCascadeOption(storeDetail.province_id, storeDetail.city_id, storeDetail.area_id)
         .then(() => {
           const { asyncCascadeValue } = storeFront
           // 整理默认数据存入state
@@ -136,29 +148,26 @@ class StorePanel extends React.Component {
         name: storeDetail.name,
         ismain: storeDetail.ismain === '1',
         phone: storeDetail.phone,
-        cascade: [
-          storeDetail.province_id,
-          storeDetail.city_id,
-          storeDetail.area_id,
-        ],
+        cascade: [storeDetail.province_id, storeDetail.city_id, storeDetail.area_id],
         circle_id: [storeDetail.circle_id],
         adress: storeDetail.adress,
         sort: storeDetail.sort,
         have_mall: storeDetail.have_mall === '1',
-        have_peisong:
-          storeDetail.have_mall === '1'
-            ? false
-            : storeDetail.have_peisong === '1',
+        have_peisong: storeDetail.have_mall === '1' ? false : storeDetail.have_peisong === '1',
         have_meal: storeDetail.have_meal === '1',
         have_hotel: storeDetail.have_hotel === '1',
         have_auto_parts: storeDetail.have_auto_parts === '1',
         open_1: Utils.conversionTimeStringToDate(storeDetail.open_1),
         close_1: Utils.conversionTimeStringToDate(storeDetail.close_1),
         txt_info: storeDetail.txt_info,
-        context: storeDetail.context,
         pic: storeDetail.pic,
         discount_type: [storeDetail.discount_type],
       })
+      setTimeout(() => {
+        if (this.editor.current) {
+          this.editor.current.state.editor.txt.html(storeDetail.context)
+        }
+      }, 500)
       if (storeDetail.discount_type) {
         setTimeout(() => {
           if (storeDetail.discount_type[0] === '1') {
@@ -178,14 +187,17 @@ class StorePanel extends React.Component {
 
   cacheData = () => {
     const { form } = this.props
-    const { long, lat, shopLogo, qrcode, asyncCascadeValue } = this.state
+    const {
+      long, lat, shopLogo, qrcode, asyncCascadeValue, goods,
+    } = this.state
     const formData = form.getFieldsValue()
-    console.log(formData)
     form.asyncCascadeValue = asyncCascadeValue
     formData.long = long
     formData.lat = lat
     formData.shopLogo = shopLogo
     formData.qrcode = qrcode
+    formData.goods = goods
+    formData.context = this.editor.current.state.editor.txt.html()
     Utils.cacheData(formData)
   }
 
@@ -249,11 +261,58 @@ class StorePanel extends React.Component {
     })
   }
 
+  getMenuList = () => {
+    const { storeFront } = this.props
+    const { allCategory } = storeFront
+    const { goods } = this.state
+    const cateGoryLabel = []
+    console.log(goods)
+    console.log(toJS(allCategory))
+    if (allCategory.length) {
+      allCategory.forEach(item => {
+        if (item.value === goods[0]) {
+          cateGoryLabel.push(item.label)
+          if (item.children.length) {
+            item.children.forEach(child => {
+              if (child.value === goods[1]) {
+                cateGoryLabel.push(child.label)
+              }
+            })
+          }
+        }
+      })
+    }
+    return (
+      <Flex justify="end">
+        {cateGoryLabel.map((item, index) => (
+          <PrimaryTag
+            key={index}
+            style={{ marginLeft: 2 }}
+            onClick={() => {
+              document.body.style.position = 'fixed'
+              this.setState({ open: true })
+            }}
+          >
+            {item}
+          </PrimaryTag>
+        ))}
+      </Flex>
+    )
+  }
+
   submit = () => {
-    const { storeFront, form, match, history } = this.props
-    const { long, lat, shopLogo, qrcode } = this.state
+    const {
+      storeFront, form, match, history,
+    } = this.props
+    const {
+      long, lat, shopLogo, qrcode, goods,
+    } = this.state
     if (!long || !lat || !shopLogo) {
       Toast.info('请输入完整信息')
+      return
+    }
+    if (!goods.length) {
+      Toast.info('请选择店铺分类')
       return
     }
     form.validateFields((error, value) => {
@@ -271,6 +330,8 @@ class StorePanel extends React.Component {
         circle_id: value.circle_id[0],
         adress: value.adress,
         sort: value.sort,
+        cat_fid: goods[0],
+        cat_id: goods[1],
         have_mall: value.have_mall ? '1' : '0',
         have_peisong: value.have_peisong ? '1' : '0',
         have_meal: value.have_meal ? '1' : '0',
@@ -279,7 +340,7 @@ class StorePanel extends React.Component {
         open_1: moment(value.open_1).format('HH:mm:ss'),
         close_1: moment(value.close_1).format('HH:mm:ss'),
         txt_info: value.txt_info,
-        context: value.context,
+        context: this.editor.current.state.editor.txt.html(),
         pic: value.pic.map(item => item.url),
         discount_type: value.discount_type[0],
         discount_percent: value.discount_percent,
@@ -293,11 +354,9 @@ class StorePanel extends React.Component {
       console.log(value)
       console.log(obj)
       if (match.params.id) {
-        storeFront
-          .modifyStoreFront({ ...obj, store_id: match.params.id })
-          .then(res => {
-            if (res) Toast.success('编辑成功', 1, () => history.goBack())
-          })
+        storeFront.modifyStoreFront({ ...obj, store_id: match.params.id }).then(res => {
+          if (res) Toast.success('编辑成功', 1, () => history.goBack())
+        })
       } else {
         storeFront.insertStoreFront(obj).then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
@@ -318,13 +377,27 @@ class StorePanel extends React.Component {
   render() {
     const { match, form, storeFront } = this.props
     const { getFieldProps } = form
-    const { cascadeOption, circleOption } = storeFront
+    const { cascadeOption, circleOption, allCategory } = storeFront
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     /* eslint camelcase: 0 */
     const discount_type = form.getFieldValue('discount_type')
       ? form.getFieldValue('discount_type')[0]
       : ''
-    const { long, lat, asyncCascadeValue, shopLogo, qrcode } = this.state
+    const {
+      long, lat, asyncCascadeValue, shopLogo, qrcode, open, goods,
+    } = this.state
+    const menuEl = (
+      <Menu
+        className="menu-position"
+        data={allCategory}
+        value={goods}
+        onChange={arr => this.setState({
+          goods: arr,
+        })
+        }
+        height={document.documentElement.clientHeight * 0.6}
+      />
+    )
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}店铺`} goBack />
@@ -392,11 +465,7 @@ class StorePanel extends React.Component {
             title="详细地址"
             rows={2}
           />
-          <List.Item
-            extra={`${long}, ${lat}`}
-            arrow="horizontal"
-            onClick={this.goMapPicker}
-          >
+          <List.Item extra={`${long}, ${lat}`} arrow="horizontal" onClick={this.goMapPicker}>
             地图位置
           </List.Item>
           <InputItem
@@ -525,23 +594,22 @@ class StorePanel extends React.Component {
           >
             <List.Item arrow="horizontal">营业结束时间</List.Item>
           </DatePicker>
-          <InputItem
+          <TextareaItem
+            placeholder="请输入店铺描述"
             {...getFieldProps('txt_info', {
               rules: [{ required: true }],
             })}
-            placeholder="请输入店铺描述"
-          >
-            店铺描述
-          </InputItem>
-          <TextareaItem
-            {...getFieldProps('context', {
-              rules: [{ required: true }],
-            })}
-            placeholder="店铺详细介绍"
-            title="店铺详情"
+            title="店铺描述"
             rows={3}
             count={100}
           />
+          <List.Item
+            arrow="horizontal"
+            extra={this.getMenuList()}
+            onClick={() => this.setState({ open: true })}
+          >
+            店铺分类
+          </List.Item>
           <List.Item arrow="horizontal" onClick={this.goLogoPicker}>
             <CustomizeList>
               <ListTitle>商户LOGO</ListTitle>
@@ -570,7 +638,10 @@ class StorePanel extends React.Component {
             </CustomizeList>
           </List.Item>
           <Picker
-            {...getFieldProps('discount_type')}
+            {...getFieldProps('discount_type', {
+              rules: [{ required: true }],
+              initialValue: '0',
+            })}
             data={DiscountOptions}
             cols={1}
           >
@@ -606,6 +677,10 @@ class StorePanel extends React.Component {
               </InputItem>
             </React.Fragment>
           ) : null}
+          <List.Item>
+            店铺详情
+            <Editor ref={this.editor} />
+          </List.Item>
         </List>
         <Button
           type="primary"
@@ -619,6 +694,8 @@ class StorePanel extends React.Component {
         >
           确定
         </Button>
+        {open ? menuEl : null}
+        {open ? <MenuMask onClick={() => this.setState({ open: false })} /> : null}
       </React.Fragment>
     )
   }
