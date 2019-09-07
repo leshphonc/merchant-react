@@ -101,7 +101,7 @@ class AppointDiscounts extends React.Component {
             defaultValue={item.envo_screen_num}
             onChange={e => {
               const now_envoList = toJS(envoList)
-              now_envoList[index].envo_name = e
+              now_envoList[index].envo_screen_num = e
               this.setState({
                 envoList: now_envoList,
               })
