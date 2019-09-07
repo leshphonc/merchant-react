@@ -94,7 +94,7 @@ class ReservePanel extends React.Component {
             workerSele.push(item.merchant_worker_id)
           })
         }
-           this.editor.current.state.editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
+        this.editor.current.state.editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
         this.setState({
           files: appointDetail.appoint_list.pic_arr,
           category: [appointDetail.appoint_list.cat_fid, appointDetail.appoint_list.cat_id],
@@ -124,8 +124,8 @@ class ReservePanel extends React.Component {
           appoint_name: appointDetail.appoint_list.appoint_name,
           appoint_content: appointDetail.appoint_list.appoint_content,
           old_price: appointDetail.appoint_list.old_price,
-          payment_status: appointDetail.appoint_list.payment_status,
-          appoint_date_type: appointDetail.appoint_list.appoint_date_type,
+          payment_status: appointDetail.appoint_list.payment_status === '1',
+          appoint_date_type: appointDetail.appoint_list.appoint_date_type === '1',
           appoint_date_num: appointDetail.appoint_list.appoint_date_num,
           expend_time: appointDetail.appoint_list.expend_time,
           sort: appointDetail.appoint_list.sort,
@@ -135,7 +135,7 @@ class ReservePanel extends React.Component {
           end_time: appointDetail.appoint_list.end_time
             ? new Date(appointDetail.appoint_list.end_time * 1000)
             : '',
-          is_store: appointDetail.appoint_list.is_store,
+          is_store: appointDetail.appoint_list.is_store === '1',
           office_start_time: Utils.conversionTimeStringToDate(appointDetail.office_time.open),
           office_stop_time: Utils.conversionTimeStringToDate(appointDetail.office_time.close),
           appoint_status: appointDetail.appoint_list.appoint_status === '0',
@@ -494,7 +494,7 @@ class ReservePanel extends React.Component {
             cols={1}
             extra="请选择"
             onOk={e => {
-              commodity.fetchShopList(e[0],1).then(() => {
+              commodity.fetchShopList(e[0], 1).then(() => {
                 const { shopList } = commodity
                 this.setState({
                   shopList,
@@ -781,32 +781,33 @@ class ReservePanel extends React.Component {
           >
             增加规格
           </Button>
-
-          <List.Item
-            extra={
-              <Switch
-                {...getFieldProps('appoint_status', {
-                  initialValue: false,
-                  valuePropName: 'checked',
-                  rules: [{ required: true }],
-                })}
-              />
-            }
-          >
-            预约状态
-            <Tooltip
-              trigger="click"
-              placement="topLeft"
-              overlay="为了方便用户能查到以前的订单，预约无法删除！"
-              onClick={e => {
-                e.stopPropagation()
-              }}
+          {match.params.id && (
+            <List.Item
+              extra={
+                <Switch
+                  {...getFieldProps('appoint_status', {
+                    initialValue: false,
+                    valuePropName: 'checked',
+                    rules: [{ required: true }],
+                  })}
+                />
+              }
             >
-              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                &#xe628;
-              </i>
-            </Tooltip>
-          </List.Item>
+              预约状态
+              <Tooltip
+                trigger="click"
+                placement="topLeft"
+                overlay="为了方便用户能查到以前的订单，预约无法删除！"
+                onClick={e => {
+                  e.stopPropagation()
+                }}
+              >
+                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  &#xe628;
+                </i>
+              </Tooltip>
+            </List.Item>
+          )}
         </List>
 
         <WingBlank>
