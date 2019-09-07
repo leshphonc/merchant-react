@@ -38,6 +38,7 @@ class GiftPanel extends React.Component {
 
   componentDidMount() {
     const { giftManagement, match, form } = this.props
+    // console.log(this.props)
     giftManagement.fetchGiftCategory()
     giftManagement.fetchGiftCategorylist(match.params.catFid)
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
@@ -104,8 +105,10 @@ class GiftPanel extends React.Component {
         invoice_content: getGiftDetail.invoice_content,
         cascade: [getGiftDetail.province_idss, getGiftDetail.city_idss, getGiftDetail.area_idss],
         circle_idss: [getGiftDetail.circle_idss],
+        market_idss: [getGiftDetail.market_idss],
       })
       this.editor.current.state.editor.txt.html(getGiftDetail.gift_content)
+      giftManagement.fetchMarket(getGiftDetail.circle_idss)
     })
     giftManagement.fetchShopList().then(() => {
       // const { shopList } = giftManagement
@@ -173,6 +176,7 @@ class GiftPanel extends React.Component {
         city_idss: value.cascade ? value.cascade[1] : value.city_idss,
         area_idss: value.cascade ? value.cascade[2] : value.area_idss,
         circle_idss: value.circle_idss ? value.circle_idss[0] : value.circle_idss,
+        market_idss: value.market_idss ? value.market_idss[0] : value.market_idss,
         gift_content: this.editor.current.state.editor.txt.html(),
         store: this.state.store,
       }
@@ -196,6 +200,16 @@ class GiftPanel extends React.Component {
       giftManagement.fetchCircle(val[2])
     } else {
       giftManagement.resetCircle()
+    }
+  }
+
+  fetchMarket = val => {
+    console.log(val[0])
+    const { giftManagement } = this.props
+    if (val[0]) {
+      giftManagement.fetchMarket(val[0])
+    } else {
+      giftManagement.resetMarket()
     }
   }
 
@@ -231,9 +245,12 @@ class GiftPanel extends React.Component {
   render() {
     const { giftManagement, match, form } = this.props
     const { getFieldProps } = form
-    const { giftCategory, giftCategorylist, shopList } = giftManagement
+    const {
+      giftCategory, giftCategorylist, shopList,
+    } = giftManagement
     const { pic, asyncCascadeValue, store } = this.state
-    const { cascadeOption, circleOption } = giftManagement
+    const { cascadeOption, circleOption, marketOption } = giftManagement
+    // console.log(marketOption)
     const pickinstore = form.getFieldValue('pick_in_store')
     return (
       <React.Fragment>
@@ -287,17 +304,18 @@ class GiftPanel extends React.Component {
           {pickinstore === false ? (
             <Picker
               {...getFieldProps('cascade', {
-                rules: [{ required: true }],
+                rules: [{ required: false }],
               })}
               title="选择地区"
-              extra="请选择"
+              extra="全部省"
               cols={3}
               data={cascadeOption}
               value={asyncCascadeValue}
               onPickerChange={this.onPickerChange}
               onOk={this.fetchCircle}
+              onChange={this.fetchMarket}
             >
-              <List.Item arrow="horizontal">店铺所在地</List.Item>
+              <List.Item arrow="horizontal">兑换地区</List.Item>
             </Picker>
           ) : (
             ''
@@ -305,7 +323,11 @@ class GiftPanel extends React.Component {
           {pickinstore === false ? (
             <Picker
               {...getFieldProps('circle_idss', {
-                rules: [{ required: true }],
+                rules: [{ required: false }],
+                getValueFromEvent: item => {
+                  giftManagement.fetchMarket(item[0])
+                  return item
+                },
               })}
               data={circleOption}
               title="选择商圈"
@@ -313,6 +335,21 @@ class GiftPanel extends React.Component {
               cols={1}
             >
               <List.Item arrow="horizontal">所在商圈</List.Item>
+            </Picker>
+          ) : (
+            ''
+          )}
+          {pickinstore === false ? (
+            <Picker
+              {...getFieldProps('market_idss', {
+                rules: [{ required: false }],
+              })}
+              data={marketOption}
+              title="选择商盟"
+              extra="请选择"
+              cols={1}
+            >
+              <List.Item arrow="horizontal">所在商盟</List.Item>
             </Picker>
           ) : (
             ''
