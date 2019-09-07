@@ -203,6 +203,16 @@ class GiftPanel extends React.Component {
     }
   }
 
+  fetchMarket = val => {
+    console.log(val[0])
+    const { giftManagement } = this.props
+    if (val[0]) {
+      giftManagement.fetchMarket(val[0])
+    } else {
+      giftManagement.resetMarket()
+    }
+  }
+
   imgChange = (arr, type) => {
     const { form } = this.props
     if (type === 'remove') {
@@ -242,7 +252,6 @@ class GiftPanel extends React.Component {
     const { cascadeOption, circleOption, marketOption } = giftManagement
     // console.log(marketOption)
     const pickinstore = form.getFieldValue('pick_in_store')
-    // console.log(pickinstore)
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}礼品`} goBack />
@@ -304,6 +313,7 @@ class GiftPanel extends React.Component {
               value={asyncCascadeValue}
               onPickerChange={this.onPickerChange}
               onOk={this.fetchCircle}
+              onChange={this.fetchMarket}
             >
               <List.Item arrow="horizontal">兑换地区</List.Item>
             </Picker>
