@@ -149,13 +149,13 @@ class Retail extends React.Component {
 
   findPayLabelAndFetch = value => {
     const { order } = this.props
-    const { orderStatusValue, payTypeValue, searchtype } = this.state
+    const { orderStatusValue, searchtype, keyword } = this.state
     const result = PayType.find(item => item.value === value[0])
     this.setState({
       payType: result.label,
       payTypeValue: result.value,
     })
-    order.resetAndFetchShopOrderList(orderStatusValue, payTypeValue, searchtype, result.value)
+    order.resetAndFetchShopOrderList(orderStatusValue, result.value, searchtype, keyword)
   }
 
   loadMore = async () => {

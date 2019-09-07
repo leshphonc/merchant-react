@@ -94,11 +94,7 @@ class MastSotre {
         this.groupListPage += 1
       }
     }
-    const response = await services.fetchGroupList(
-      this.groupListPage,
-      this.groupListSize,
-      keyword
-    )
+    const response = await services.fetchGroupList(this.groupListPage, this.groupListSize, keyword)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
@@ -151,8 +147,7 @@ class MastSotre {
   fetchReserveList = async keyword => {
     let hasMore = true
     if (this.reserveListTotal !== null) {
-      hasMore =
-        this.reserveListPage * this.reserveListSize < this.reserveListTotal
+      hasMore = this.reserveListPage * this.reserveListSize < this.reserveListTotal
       if (hasMore) {
         this.reserveListPage += 1
       }
@@ -160,7 +155,7 @@ class MastSotre {
     const response = await services.fetchReserveList(
       this.reserveListPage,
       this.reserveListSize,
-      keyword
+      keyword,
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
@@ -174,10 +169,7 @@ class MastSotre {
         const remainder = this.reserveListTotal % this.reserveListSize
         if (remainder) {
           runInAction(() => {
-            this.reserveList.splice(
-              this.reserveListTotal - remainder,
-              remainder
-            )
+            this.reserveList.splice(this.reserveListTotal - remainder, remainder)
             const arr = this.reserveList
             arr.push(...response.data.result.lists)
             this.reserveList = arr
@@ -228,8 +220,7 @@ class MastSotre {
   fetchTakeAwayList = async (storeId, str) => {
     let hasMore = true
     if (this.takeAwayListTotal !== null) {
-      hasMore =
-        this.takeAwayListPage * this.takeAwayListSize < this.takeAwayListTotal
+      hasMore = this.takeAwayListPage * this.takeAwayListSize < this.takeAwayListTotal
       if (hasMore) {
         this.takeAwayListPage += 1
       }
@@ -238,7 +229,7 @@ class MastSotre {
       this.takeAwayListPage,
       this.takeAwayListSize,
       storeId,
-      str
+      str,
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
@@ -252,10 +243,7 @@ class MastSotre {
         const remainder = this.takeAwayListTotal % this.takeAwayListSize
         if (remainder) {
           runInAction(() => {
-            this.takeAwayList.splice(
-              this.takeAwayListTotal - remainder,
-              remainder
-            )
+            this.takeAwayList.splice(this.takeAwayListTotal - remainder, remainder)
             const arr = this.takeAwayList
             arr.push(...response.data.result.lists)
             this.takeAwayList = arr
@@ -278,12 +266,7 @@ class MastSotre {
 
   @action
   searchTakeAwayList = async (id, keyword) => {
-    const response = await services.fetchTakeAwayList(
-      1,
-      this.takeAwayListSize,
-      id,
-      keyword,
-    )
+    const response = await services.fetchTakeAwayList(1, this.takeAwayListSize, id, keyword)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.takeAwayList = response.data.result.lists
@@ -376,9 +359,7 @@ class MastSotre {
   fetchECommerceList = async (storeId, str) => {
     let hasMore = true
     if (this.eCommerceListTotal !== null) {
-      hasMore =
-        this.eCommerceListPage * this.eCommerceListSize <
-        this.eCommerceListTotal
+      hasMore = this.eCommerceListPage * this.eCommerceListSize < this.eCommerceListTotal
       if (hasMore) {
         this.eCommerceListPage += 1
       }
@@ -387,7 +368,7 @@ class MastSotre {
       this.eCommerceListPage,
       this.eCommerceListSize,
       storeId,
-      str
+      str,
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
@@ -401,10 +382,7 @@ class MastSotre {
         const remainder = this.eCommerceListTotal % this.eCommerceListSize
         if (remainder) {
           runInAction(() => {
-            this.eCommerceList.splice(
-              this.eCommerceListTotal - remainder,
-              remainder
-            )
+            this.eCommerceList.splice(this.eCommerceListTotal - remainder, remainder)
             const arr = this.eCommerceList
             arr.push(...response.data.result.lists)
             this.eCommerceList = arr
@@ -427,12 +405,7 @@ class MastSotre {
 
   @action
   searchECommerceList = async (id, keyword) => {
-    const response = await services.fetchECommerceList(
-      1,
-      this.eCommerceListSize,
-      id,
-      keyword
-    )
+    const response = await services.fetchECommerceList(1, this.eCommerceListSize, id, keyword)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.eCommerceList = response.data.result.lists
@@ -509,11 +482,7 @@ class MastSotre {
 
   @action
   changeECommerceStand = async (storeId, goodsId, status) => {
-    const response = await services.changeECommerceStand(
-      storeId,
-      goodsId,
-      status
-    )
+    const response = await services.changeECommerceStand(storeId, goodsId, status)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       this.eCommerceList.forEach((item, index) => {
         if (item.goods_id === goodsId) {
@@ -548,8 +517,8 @@ class MastSotre {
   }
 
   @action
-  fetchStoreValues = async type => {
-    const response = await services.fetchStoreValues(type)
+  fetchStoreValues = async (type, show) => {
+    const response = await services.fetchStoreValues(type, show)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.storeValues = response.data.result

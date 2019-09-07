@@ -86,6 +86,31 @@ class TakeawayPanel extends React.Component {
     })
   }
 
+  mapCheck = () => {
+    const { storeFront } = this.props
+    if (Utils.getCacheData()) {
+      const cacheData = Utils.getCacheData()
+      return (
+        <CommodityCategory
+          data={storeFront.takeawayDetail.category_list || []}
+          check={cacheData.check}
+          type="2"
+          ref={this.categoryCheck}
+        />
+      )
+    }
+    if (storeFront.takeawayDetail.category_list) {
+      return (
+        <CommodityCategory
+          data={storeFront.takeawayDetail.category_list}
+          check={storeFront.takeawayDetail.relation_array}
+          type="2"
+          ref={this.categoryCheck}
+        />
+      )
+    }
+  }
+
   submit = () => {
     const {
       form, storeFront, match, history,
@@ -95,13 +120,12 @@ class TakeawayPanel extends React.Component {
         Toast.info('请填写完整信息')
         return
       }
-      console.log(value)
       const obj = {
         ...value,
-        is_open_pick: value.is_open_pick === '1',
-        is_mult_class: value.is_mult_class === '1',
-        is_auto_order: value.is_auto_order === '1',
-        is_invoice: value.is_invoice === '1',
+        is_open_pick: value.is_open_pick ? '1' : '0',
+        is_mult_class: value.is_mult_class ? '1' : '0',
+        is_auto_order: value.is_auto_order ? '1' : '0',
+        is_invoice: value.is_invoice ? '1' : '0',
         send_time_type: value.send_time_type[0],
         deliver_type: value.deliver_type[0],
         stock_type: value.stock_type[0],
@@ -123,9 +147,7 @@ class TakeawayPanel extends React.Component {
   }
 
   render() {
-    const {
-      form, storeFront, match, history,
-    } = this.props
+    const { form, storeFront } = this.props
     const { getFieldProps } = form
     const { qrcode, modal } = this.state
     const invoice = form.getFieldValue('is_invoice')
@@ -257,8 +279,8 @@ class TakeawayPanel extends React.Component {
             })}
             cols={1}
             data={[
-              { label: '商家配送', value: '0' },
-              { label: '系统配送', value: '1' },
+              { label: '系统配送', value: '0' },
+              { label: '商家配送', value: '1' },
               { label: '客户自提', value: '2' },
               { label: '系统配送或自提', value: '3' },
               { label: '商家配送或自提', value: '4' },
@@ -345,14 +367,7 @@ class TakeawayPanel extends React.Component {
           >
             免外送费金额
           </InputItem>
-          {storeFront.takeawayDetail.category_list ? (
-            <CommodityCategory
-              data={storeFront.takeawayDetail.category_list}
-              check={storeFront.takeawayDetail.relation_array}
-              type="1"
-              ref={this.categoryCheck}
-            />
-          ) : null}
+          {this.mapCheck()}
 
           <Picker
             {...getFieldProps('discount_type')}
@@ -426,24 +441,6 @@ class TakeawayPanel extends React.Component {
           {storeFront.takeawayDetail.store_shop ? (
             <MemberDiscount ref={this.memberDiscount} data={storeFront.takeawayDetail.store_shop} />
           ) : null}
-          <List.Item
-            arrow="horizontal"
-            onClick={() => history.push(
-              `/management/storefront/storeFrontBusiness/storeDiscount/${match.params.id}`,
-            )
-            }
-          >
-            店铺优惠
-          </List.Item>
-          <List.Item
-            arrow="horizontal"
-            onClick={() => history.push(
-              `/management/storefront/storeFrontBusiness/cloneCommodity/${match.params.id}`,
-            )
-            }
-          >
-            克隆商品
-          </List.Item>
           <List.Item
             arrow="horizontal"
             onClick={() => {

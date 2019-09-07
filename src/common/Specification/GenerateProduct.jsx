@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import React from 'react'
-import { List, InputItem, Button, Toast } from 'antd-mobile'
+import {
+  List, InputItem, Button, Toast,
+} from 'antd-mobile'
 import { withRouter } from 'react-router-dom'
 import { createForm } from 'rc-form'
 
@@ -46,7 +48,9 @@ class GenerateProduct extends React.Component {
   num5 = []
 
   mapList = () => {
-    const { specification, attribute, form, json } = this.props
+    const {
+      specification, attribute, form, json,
+    } = this.props
     console.log(specification, attribute, json)
     const { getFieldProps } = form
     const result = []
@@ -133,7 +137,7 @@ class GenerateProduct extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps(`seckill_prices${index}`, {
-              rules: [{ required: true }],
+              rules: [{ required: false }],
               initialValue: this.seckill_prices[index],
             })}
             placeholder="请填写限时价"
@@ -174,18 +178,17 @@ class GenerateProduct extends React.Component {
     ))
   }
 
-  forEachItem = arrs =>
-    arrs.reduce((a, b) => {
-      const arr = []
-      a.spec_val.forEach(i => {
-        b.spec_val.forEach(j => {
-          arr.push({
-            spec_name: `${i}_${j}`,
-          })
+  forEachItem = arrs => arrs.reduce((a, b) => {
+    const arr = []
+    a.spec_val.forEach(i => {
+      b.spec_val.forEach(j => {
+        arr.push({
+          spec_name: `${i}_${j}`,
         })
       })
-      return arr
     })
+    return arr
+  })
 
   submit = () => {
     const { attribute, form, history } = this.props
