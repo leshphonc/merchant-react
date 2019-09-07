@@ -85,7 +85,7 @@ class GroupPanel extends React.Component {
       distribution: false,
       files: [],
       editorContent: '',
-      stockreduce: [],
+      // stockreduce: [],
       groupCatFir: [],
       groupCatSec: [],
       cat_fid: '',
@@ -98,7 +98,6 @@ class GroupPanel extends React.Component {
       begin_time: '',
       end_time: '',
       tuan_type: '0',
-      pick_in_store: false,
       deadline_time: '',
       is_general: '0',
       store: [],
@@ -127,7 +126,6 @@ class GroupPanel extends React.Component {
           begin_time: groupDetail.begin_time,
           end_time: groupDetail.end_time,
           tuan_type: groupDetail.tuan_type,
-          pick_in_store: groupDetail.pick_in_store === '1',
           deadline_time: groupDetail.deadline_time,
           is_general: groupDetail.is_general,
           store: groupDetail.store_arr,
@@ -232,6 +230,7 @@ class GroupPanel extends React.Component {
         Toast.info('请输入完整信息')
         return
       }
+      // eslint-disable-next-line react/destructuring-assignment
       if (!this.state.cat_id || !this.state.cat_fid || this.state.store.length <= 0) {
         Toast.info('请输入完整信息')
         return
@@ -250,7 +249,7 @@ class GroupPanel extends React.Component {
         once_max: value.once_max,
         once_min: value.once_min,
         pic: value.pic.map(item => item.url),
-        pick_in_store: value.pick_in_store ? 1 : 0,
+        pick_in_store: 0,
         pin_effective_time: value.pin_effective_time,
         pin_num: value.pin_num,
         price: value.price,
@@ -270,7 +269,6 @@ class GroupPanel extends React.Component {
           if (res) Toast.success('修改成功', 1, () => history.goBack())
         })
       } else {
-        console.log(121)
         commodity.fetchAddGroup(obj).then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
         })
@@ -278,7 +276,7 @@ class GroupPanel extends React.Component {
     })
   }
 
-  onChange = (files, index) => {
+  onChange = files => {
     this.setState({
       files,
     })
@@ -294,23 +292,25 @@ class GroupPanel extends React.Component {
     const { getFieldProps } = form
     const { commodity } = this.props
     const { groupCatFir, groupCatSec } = commodity
+    // eslint-disable-next-line camelcase
     const { is_edit } = this.state
     const {
+      // eslint-disable-next-line camelcase
       cat_fid,
+      // eslint-disable-next-line camelcase
       cat_id,
+      // eslint-disable-next-line camelcase
       tuan_type,
-      pick_in_store,
+      // eslint-disable-next-line camelcase
       is_general,
       store,
+      // eslint-disable-next-line camelcase
       stock_reduce_method,
+      shopList,
     } = this.state
-    const { shopList } = commodity
-    const pic_arr = form.getFieldValue('pic')
-      ? form.getFieldValue('pic')
-      : this.state.files
-        ? this.state.files
-        : []
-
+    // eslint-disable-next-line camelcase
+    const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
+    console.log(match)
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}团购商品`} goBack />
@@ -434,7 +434,7 @@ class GroupPanel extends React.Component {
               </Tooltip>
             </List.Item>
           </Picker>
-          {this.state.tuan_type !== '0' && (
+          {/* {this.state.tuan_type !== '0' && (
             <List.Item
               extra={
                 <Switch
@@ -474,7 +474,7 @@ class GroupPanel extends React.Component {
                 </i>
               </Tooltip>
             </List.Item>
-          )}
+          )} */}
 
           <DatePicker
             {...getFieldProps('deadline_time', {
@@ -536,22 +536,19 @@ class GroupPanel extends React.Component {
             <CheckboxItem
               key={i.value}
               checked={store.indexOf(i.value) !== -1}
-              onChange={e => {
+              onChange={() => {
+                // eslint-disable-next-line camelcase
                 const new_store = toJS(store)
-                try {
-                  if (store.indexOf(i.value) === -1) {
-                    new_store.push(i.value)
-                    this.setState({
-                      store: new_store,
-                    })
-                  } else {
-                    new_store.splice(new_store.indexOf(i.value), 1)
-                    this.setState({
-                      store: new_store,
-                    })
-                  }
-                } catch (e) {
-                  console.log(e)
+                if (store.indexOf(i.value) === -1) {
+                  new_store.push(i.value)
+                  this.setState({
+                    store: new_store,
+                  })
+                } else {
+                  new_store.splice(new_store.indexOf(i.value), 1)
+                  this.setState({
+                    store: new_store,
+                  })
                 }
               }}
             >
@@ -641,25 +638,29 @@ class GroupPanel extends React.Component {
               </Tooltip>
             </InputItem>
           </Team>
-          <List.Item
-            extra={
-              <Switch
-                {...getFieldProps('status', {
-                  initialValue: false,
-                  valuePropName: 'checked',
-                  rules: [{ required: true }],
-                })}
-              />
-            }
-          >
-            团购状态
-          </List.Item>
+          {match.params.id && (
+            <List.Item
+              extra={
+                <Switch
+                  {...getFieldProps('status', {
+                    initialValue: false,
+                    valuePropName: 'checked',
+                    rules: [{ required: true }],
+                  })}
+                />
+              }
+            >
+              团购状态
+            </List.Item>
+          )}
+
           <Picker
             data={stockreduce}
             cascade={false}
             extra="请选择"
             value={[stock_reduce_method]}
             onChange={v => {
+              console.log(v)
               this.setState({
                 stock_reduce_method: v[0],
               })

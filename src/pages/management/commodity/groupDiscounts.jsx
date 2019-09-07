@@ -162,10 +162,12 @@ class GroupDiscounts extends React.Component {
       commodity, form, match, history,
     } = this.props
     const { give, userLevels, levelType } = this.state
+    // eslint-disable-next-line camelcase
     const goods_num = []
     const goods = []
     const giveArr = []
     form.validateFields((error, value) => {
+      // eslint-disable-next-line camelcase
       const obj_other = []
       if (error) {
         Toast.info('请输入完整信息')
