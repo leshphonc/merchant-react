@@ -28,8 +28,12 @@ class Order extends React.Component {
                 history.push('/order/retail')
                 return false
               }
-              if (item.name === '团购订单') { 
+              if (item.name === '团购订单') {
                 history.push('/order/groupList/0')
+                return false
+              }
+              if (item.name === '预定订单') {
+                history.push('/order/reservation')
                 return false
               }
               Toast.info('暂无权限，请联系管理员')

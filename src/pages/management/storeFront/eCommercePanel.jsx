@@ -36,6 +36,7 @@ class ECommercePanel extends React.Component {
       ? JSON.parse(sessionStorage.getItem('cacheData'))
       : null
     if (cacheData) {
+      storeFront.fetchECommerceDetail(match.params.id)
       this.setState({
         storeBackground: cacheData.storeBackground,
         qrcode: cacheData.qrcode,
@@ -87,8 +88,34 @@ class ECommercePanel extends React.Component {
     const data = form.getFieldsValue()
     data.storeBackground = storeBackground
     data.qrcode = qrcode
+    data.check = this.categoryCheck.current.state.check
     Utils.cacheData(data)
     history.push('/uploadSingleImg/店铺背景图/storeBackground/2')
+  }
+
+  mapCheck = () => {
+    const { storeFront } = this.props
+    if (Utils.getCacheData()) {
+      const cacheData = Utils.getCacheData()
+      return (
+        <CommodityCategory
+          data={storeFront.eCommerceDetail.category_list || []}
+          check={cacheData.check}
+          type="2"
+          ref={this.categoryCheck}
+        />
+      )
+    }
+    if (storeFront.eCommerceDetail.category_list) {
+      return (
+        <CommodityCategory
+          data={storeFront.eCommerceDetail.category_list}
+          check={storeFront.eCommerceDetail.relation_array}
+          type="2"
+          ref={this.categoryCheck}
+        />
+      )
+    }
   }
 
   submit = () => {
@@ -116,16 +143,17 @@ class ECommercePanel extends React.Component {
       }
       storeFront.modifyECommerceDetail(obj).then(res => {
         if (res) {
-          Toast.success('编辑成功', 1, () => history.goBack())
+          Toast.success('编辑成功', 1, () => {
+            Utils.clearCacheData()
+            history.goBack()
+          })
         }
       })
     })
   }
 
   render() {
-    const {
-      form, history, storeFront, match,
-    } = this.props
+    const { form, storeFront } = this.props
     const { getFieldProps } = form
     const { storeBackground, qrcode, modal } = this.state
     console.log(qrcode)
@@ -166,14 +194,7 @@ class ECommercePanel extends React.Component {
               开票条件
             </InputItem>
           ) : null}
-          {storeFront.eCommerceDetail.category_list ? (
-            <CommodityCategory
-              data={storeFront.eCommerceDetail.category_list}
-              check={storeFront.eCommerceDetail.relation_array}
-              type="2"
-              ref={this.categoryCheck}
-            />
-          ) : null}
+          {this.mapCheck()}
 
           <Picker
             {...getFieldProps('discount_type')}
@@ -250,25 +271,6 @@ class ECommercePanel extends React.Component {
               data={storeFront.eCommerceDetail.store_shop}
             />
           ) : null}
-
-          <List.Item
-            arrow="horizontal"
-            onClick={() => history.push(
-              `/management/storefront/storeFrontBusiness/storeDiscount/${match.params.id}`,
-            )
-            }
-          >
-            店铺优惠
-          </List.Item>
-          <List.Item
-            arrow="horizontal"
-            onClick={() => history.push(
-              `/management/storefront/storeFrontBusiness/cloneCommodity/${match.params.id}`,
-            )
-            }
-          >
-            克隆商品
-          </List.Item>
           <List.Item
             arrow="horizontal"
             onClick={() => {
