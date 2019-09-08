@@ -201,6 +201,7 @@ export const fetchTakeAwayDelete = (storeId, mealId) => axios.post('/appapi.php?
 })
 
 // 电商商店
+
 export const fetchStoreValues = (type, show) => axios.get('/appapi.php?c=Merchantapp&a=select_shop_store', {
   params: {
     good_type: type,
@@ -256,9 +257,10 @@ export const fetchECommerceDelete = (storeId, goodsId) => axios.post('/appapi.ph
 })
 
 // 店铺列表
-export const fetchShopList = appointType => axios.get('/appapi.php?c=Merchantapp&a=get_store', {
+export const fetchShopList = (appointType, showAll) => axios.get('/appapi.php?c=Merchantapp&a=get_store', {
   params: {
     appoint_type: appointType,
+    show_all: showAll,
     ticket: localStorage.getItem('ticket'),
   },
 })

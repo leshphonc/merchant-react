@@ -21,6 +21,21 @@ class OrderStore {
 
   @observable pickAddress = []
 
+
+  // 团购订单列表
+  @observable groupOrderList = []
+
+  @observable groupPage = 1
+
+  @observable groupOrderTotal = null
+
+  @observable groupOrderListSize = 10
+
+  @observable groupOrderDetail = []
+
+  @observable groupOrderPass = []
+
+  
   // 预约订单列表
   @observable reservationOrderList = []
 
@@ -31,6 +46,7 @@ class OrderStore {
   @observable reservationOrderListTotal = null
 
   @observable reservationOrderDetail = {}
+
 
   // 获取订单种类列表
   @action
@@ -106,6 +122,69 @@ class OrderStore {
     })
   }
 
+  // 获取团购订单列表
+  @action
+  fetchGroupOrderList = async (groupId, statu, findType, keyword) => {
+    let hasMore = true
+    if (this.groupOrderTotal !== null) {
+      hasMore = this.groupPage * this.groupOrderListSize < this.groupOrderTotal
+      if (hasMore) this.groupPage += 1
+    }
+    if (hasMore) {
+      const response = await services.fetchGroupOrderList(
+        groupId,
+        this.groupPage,
+        this.groupOrderListSize,
+        statu,
+        findType,
+        keyword,
+      )
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        if (hasMore) {
+          runInAction(() => {
+            this.groupOrderTotal = response.data.result.count - 0
+            const arr = this.groupOrderList
+            arr.push(...response.data.result.order_list)
+            this.groupOrderList = arr
+          })
+        }
+      } else {
+        const remainder = this.groupOrderTotal % this.groupOrderListSize
+        if (remainder) {
+          runInAction(() => {
+            this.groupOrderTotal = response.data.result.count - 0
+            this.groupOrderList.splice(this.groupOrderTotal - remainder, remainder)
+            const arr = this.groupOrderList
+            arr.push(...response.data.result.order_list)
+            this.groupOrderList = arr
+          })
+        }
+      }
+    }
+  }
+
+  // 重置团购订单列表
+  @action
+  resetAndFetchGroupOrderList = async (groupId, statu, findType, keyword) => {
+    runInAction(() => {
+      this.groupOrderList = []
+      this.groupPage = 1
+      this.groupOrderTotal = null
+      this.fetchGroupOrderList(groupId, statu, findType, keyword)
+    })
+  }
+
+  // 获取团购详情
+  @action
+  fetchGroupOrderDetai = async orderId => {
+    const response = await services.fetchGroupOrderDetai(orderId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.groupOrderDetail = response.data.result
+      })
+    }
+  }
+
   // 获取零售订单详情
   @action
   fetchShopOrderDetail = async id => {
@@ -113,6 +192,26 @@ class OrderStore {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.shopOrderDetail = response.data.result
+      })
+    }
+  }
+
+  // 团购快递
+  @action
+  modifyGroupExpress = async (expressType, expressId, orderId, storeId) => {
+    const response = await services.modifyGroupExpress(expressType, expressId, orderId, storeId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 团购获取核销码
+  @action
+  fecthGroupPassArray = async orderId => {
+    const response = await services.fecthGroupPassArray(orderId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.groupOrderPass = response.data.result
       })
     }
   }
@@ -125,6 +224,33 @@ class OrderStore {
       runInAction(() => {
         this.pickAddress = response.data.result.pick_list
       })
+    }
+  }
+
+  // 团购全部核销
+  @action
+  verificGroupAll = async (orderId, storeId) => {
+    const response = await services.verificGroupAll(orderId, storeId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 团购单个核销
+  @action
+  verificGroup = async (orderId, groupPass) => {
+    const response = await services.verificGroup(orderId, groupPass)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 选择店铺
+  @action
+  modifyStore = async (orderId, storeId) => {
+    const response = await services.modifyStore(orderId, storeId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
     }
   }
 

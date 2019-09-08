@@ -129,7 +129,7 @@ class MastSotre {
   }
 
   @action
-  resetAndFetchGroupList = keyword => {
+  resetAndFetchReserveList = keyword => {
     runInAction(() => {
       this.reserveList = []
       this.reserveListPage = 1
@@ -296,12 +296,11 @@ class MastSotre {
   }
 
   @action
-  fetchShopList = async appointType => {
-    const response = await services.fetchShopList(appointType)
+  fetchShopList = async (appointType, showAll) => {
+    const response = await services.fetchShopList(appointType, showAll)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         const shopList = response.data.result.store_list
-        shopList.shift(0)
         shopList.forEach(item => {
           if (item.worker_list) {
             item.worker_list.forEach(i => {

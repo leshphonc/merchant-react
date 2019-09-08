@@ -55,7 +55,7 @@ class Retail extends React.Component {
       keyword: '',
       height: document.documentElement.clientHeight,
     }
-    this.refresh = React.createRef()
+ 
   }
 
   componentDidMount() {

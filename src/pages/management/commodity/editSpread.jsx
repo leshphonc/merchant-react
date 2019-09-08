@@ -178,7 +178,7 @@ class EditSpread extends React.Component {
       <React.Fragment>
         <NavBar title="编辑推广分佣" goBack />
         <List>
-          <InputItem
+          {/* <InputItem
             {...getFieldProps('spread_sale', {
               rules: [{ required: true }],
             })}
@@ -220,7 +220,7 @@ class EditSpread extends React.Component {
                 &#xe628;
               </i>
             </Tooltip>
-          </InputItem>
+          </InputItem> */}
           <Picker
             {...getFieldProps('level_set', {
               rules: [{ required: false }],

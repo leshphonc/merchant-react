@@ -24,6 +24,7 @@ import moment from 'moment'
 import { MenuMask } from '@/styled'
 import Utils from '@/utils'
 import { toJS } from 'mobx'
+
 const { Item } = List
 const { CheckboxItem } = Checkbox
 const price = [
@@ -58,158 +59,179 @@ class ReservePanel extends React.Component {
       files: [],
       category: [],
       editor: null,
-      shopList:[],
-      store:[],
-      workerList:[],
+      shopList: [],
+      store: [],
+      workerList: [],
       appoint_type: 0,
-      workerSele:[],
+      workerSele: [],
       custom_name: [],
-      custom_payment_price:[],
+      custom_payment_price: [],
       custom_price: [],
       custom_content: [],
-      use_time:[],
+      use_time: [],
       custom_id: [],
     }
     this.editor = React.createRef()
   }
 
   componentDidMount() {
-    const { commodity, match , form } = this.props
+    const { commodity, match, form } = this.props
     const { appoint_type } = this.state
-      commodity.fetchShopList(appoint_type).then(() => {
-          const { shopList } = commodity
-          this.setState({
-              shopList:shopList
-          })
+    commodity.fetchShopList(appoint_type).then(() => {
+      const { shopList } = commodity
+      this.setState({
+        shopList,
       })
+    })
 
     commodity.fetchReserveCategoryOption()
     if (match.params.id) {
       commodity.fetchReserveDetail(match.params.id).then(res => {
         const { appointDetail } = commodity
         const workerSele = []
-          if(appointDetail.merchant_workers_appoint_list){
-              appointDetail.merchant_workers_appoint_list.forEach((item,index) => {
-                  workerSele.push(item.merchant_worker_id)
-              })
-          }
-          this.editor.current.state.editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
+        if (appointDetail.merchant_workers_appoint_list) {
+          appointDetail.merchant_workers_appoint_list.forEach((item, index) => {
+            workerSele.push(item.merchant_worker_id)
+          })
+        }
+        this.editor.current.state.editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
         this.setState({
-            files: appointDetail.appoint_list.pic_arr,
-            category:[appointDetail.appoint_list.cat_fid,appointDetail.appoint_list.cat_id],
-            store: appointDetail.store_arr,
-            workerSele
+          files: appointDetail.appoint_list.pic_arr,
+          category: [appointDetail.appoint_list.cat_fid, appointDetail.appoint_list.cat_id],
+          store: appointDetail.store_arr,
+          workerSele,
         })
-          commodity.fetchShopList(appoint_type).then(() => {
-              const { shopList } = commodity
-              this.setState({
-                  shopList:shopList
-              })
-              const start_workder = []
-              shopList.forEach(item => {
-                  if(item.worker_list){
-                      item.worker_list.forEach( t => {
-                          if(this.state.workerSele.indexOf(t.merchant_worker_id) !== -1){
-                              start_workder.push(item.value+','+t.merchant_worker_id)
-                          }
-                      })
-                      this.setState({
-                          workerList:start_workder
-                      })
-                  }
-              })
-          })
-        form.setFieldsValue({
-            appoint_name: appointDetail.appoint_list.appoint_name,
-            appoint_content: appointDetail.appoint_list.appoint_content,
-            old_price: appointDetail.appoint_list.old_price,
-            payment_status: appointDetail.appoint_list.payment_status,
-            appoint_date_type: appointDetail.appoint_list.appoint_date_type,
-            appoint_date_num: appointDetail.appoint_list.appoint_date_num,
-            expend_time: appointDetail.appoint_list.expend_time,
-            sort: appointDetail.appoint_list.sort,
-            start_time: appointDetail.appoint_list.start_time?new Date(appointDetail.appoint_list.start_time*1000):'',
-            end_time: appointDetail.appoint_list.end_time?new Date(appointDetail.appoint_list.end_time*1000):'',
-            is_store: appointDetail.appoint_list.is_store,
-            office_start_time: Utils.conversionTimeStringToDate(appointDetail.office_time.open),
-            office_stop_time: Utils.conversionTimeStringToDate(appointDetail.office_time.close),
-            appoint_status: (appointDetail.appoint_list.appoint_status === '0') ? true :false,
-            appoint_type: appointDetail.appoint_list.appoint_type,
-            is_appoint_price: appointDetail.appoint_list.is_appoint_price||0,
-            pic: appointDetail.appoint_list.pic_arr
-        })
+        commodity.fetchShopList(appoint_type).then(() => {
+          const { shopList } = commodity
           this.setState({
-              editor:appointDetail.appoint_list.appoint_pic_content
+            shopList,
           })
-
-          setTimeout(() => {
-              form.setFieldsValue({
-                  payment_money: appointDetail.appoint_list.payment_money,
-                  appoint_price: appointDetail.appoint_list.appoint_price,
+          const start_workder = []
+          shopList.forEach(item => {
+            if (item.worker_list) {
+              item.worker_list.forEach(t => {
+                if (this.state.workerSele.indexOf(t.merchant_worker_id) !== -1) {
+                  start_workder.push(`${item.value},${t.merchant_worker_id}`)
+                }
               })
-          },100)
-        if(appointDetail.product_list)  {
-          const custom_name = [],custom_payment_price = [],custom_price=[],custom_content=[],use_time=[],custom_id=[]
-           appointDetail.product_list.forEach((item,index) => {
-                   custom_name.push(item.name)
-                   custom_payment_price.push(item.price)
-                   custom_price.push(item.price)
-                   custom_content.push(item.content)
-                   use_time.push(item.use_time)
-                   custom_id.push(item.id)
-           })
-            this.setState({
-                custom_name,
-                custom_payment_price,
-                custom_price,
-                custom_content,
-                use_time,
-                custom_id
-            })
+              this.setState({
+                workerList: start_workder,
+              })
+            }
+          })
+        })
+        form.setFieldsValue({
+          appoint_name: appointDetail.appoint_list.appoint_name,
+          appoint_content: appointDetail.appoint_list.appoint_content,
+          old_price: appointDetail.appoint_list.old_price,
+          payment_status: appointDetail.appoint_list.payment_status === '1',
+          appoint_date_type: appointDetail.appoint_list.appoint_date_type === '1',
+          appoint_date_num: appointDetail.appoint_list.appoint_date_num,
+          expend_time: appointDetail.appoint_list.expend_time,
+          sort: appointDetail.appoint_list.sort,
+          start_time: appointDetail.appoint_list.start_time
+            ? new Date(appointDetail.appoint_list.start_time * 1000)
+            : '',
+          end_time: appointDetail.appoint_list.end_time
+            ? new Date(appointDetail.appoint_list.end_time * 1000)
+            : '',
+          is_store: appointDetail.appoint_list.is_store === '1',
+          office_start_time: Utils.conversionTimeStringToDate(appointDetail.office_time.open),
+          office_stop_time: Utils.conversionTimeStringToDate(appointDetail.office_time.close),
+          appoint_status: appointDetail.appoint_list.appoint_status === '0',
+          appoint_type: appointDetail.appoint_list.appoint_type,
+          is_appoint_price: appointDetail.appoint_list.is_appoint_price || 0,
+          pic: appointDetail.appoint_list.pic_arr,
+        })
+        this.setState({
+          editor: appointDetail.appoint_list.appoint_pic_content,
+        })
+
+        setTimeout(() => {
+          form.setFieldsValue({
+            payment_money: appointDetail.appoint_list.payment_money,
+            appoint_price: appointDetail.appoint_list.appoint_price,
+          })
+        }, 100)
+        if (appointDetail.product_list) {
+          const custom_name = []
+          const custom_payment_price = []
+          const custom_price = []
+          const custom_content = []
+          const use_time = []
+          const custom_id = []
+          appointDetail.product_list.forEach((item, index) => {
+            custom_name.push(item.name)
+            custom_payment_price.push(item.price)
+            custom_price.push(item.price)
+            custom_content.push(item.content)
+            use_time.push(item.use_time)
+            custom_id.push(item.id)
+          })
+          this.setState({
+            custom_name,
+            custom_payment_price,
+            custom_price,
+            custom_content,
+            use_time,
+            custom_id,
+          })
         }
         this.setState({
-            appoint_type: appointDetail.appoint_list.appoint_type
+          appoint_type: appointDetail.appoint_list.appoint_type,
         })
       })
     }
     // editor.txt.html(history.location.state.value)
-
   }
 
   sotreChange = val => {
     console.log(val)
   }
+
   delSpe = async id => {
     console.log(id)
   }
+
   changeCategory = async arr => {
     // const { basicInformation } = this.props
     // await basicInformation.modifyCategory(arr)
     this.setState({ menu: false, category: arr })
   }
+
   addSpe = async () => {
-    const  { custom_name, custom_payment_price,custom_price,custom_content,use_time,custom_id} = this.state
-      if(custom_name.length < 9){
-          custom_name.push('')
-          custom_payment_price.push('')
-          custom_price.push('')
-          custom_content.push('')
-          use_time.push('')
-          custom_id.push('')
-        this.setState({
-          custom_name,
-          custom_payment_price,
-          custom_price,
-          custom_content,
-          use_time,
-          custom_id
-        })
-      }else{
-          Toast.info('不能超过9个规格')
-      }
+    const {
+      custom_name,
+      custom_payment_price,
+      custom_price,
+      custom_content,
+      use_time,
+      custom_id,
+    } = this.state
+    if (custom_name.length < 9) {
+      custom_name.push('')
+      custom_payment_price.push('')
+      custom_price.push('')
+      custom_content.push('')
+      use_time.push('')
+      custom_id.push('')
+      this.setState({
+        custom_name,
+        custom_payment_price,
+        custom_price,
+        custom_content,
+        use_time,
+        custom_id,
+      })
+    } else {
+      Toast.info('不能超过9个规格')
+    }
   }
+
   submit = async () => {
-    const { form, match, commodity , history } = this.props
+    const {
+      form, match, commodity, history,
+    } = this.props
     const { category } = this.state
     // const content = this.editor.current.state.editor.txt.html()
     form.validateFields((error, value) => {
@@ -239,20 +261,20 @@ class ReservePanel extends React.Component {
         store: this.state.store,
         worker_memus: this.state.workerList,
         custom_name: this.state.custom_name,
-        custom_payment_price:this.state.custom_payment_price,
+        custom_payment_price: this.state.custom_payment_price,
         custom_price: this.state.custom_price,
         custom_content: this.state.custom_content,
-        custom_use_time:this.state.use_time,
-        custom_id:this.state.custom_id
+        custom_use_time: this.state.use_time,
+        custom_id: this.state.custom_id,
       }
 
       if (match.params.id) {
         commodity.modifyReserve({ ...obj, appoint_id: match.params.id }).then(res => {
-            if(res) Toast.success('修改成功', 1, () => history.goBack())
+          if (res) Toast.success('修改成功', 1, () => history.goBack())
         })
       } else {
         commodity.insertReserve(obj).then(res => {
-            if(res) Toast.success('新增成功', 1, () => history.goBack())
+          if (res) Toast.success('新增成功', 1, () => history.goBack())
         })
       }
     })
@@ -260,14 +282,23 @@ class ReservePanel extends React.Component {
 
   render() {
     const { match, form, commodity } = this.props
-    const { menu, category , store , custom_name, custom_payment_price,custom_price,custom_content,use_time} = this.state
+    const {
+      menu,
+      category,
+      store,
+      custom_name,
+      custom_payment_price,
+      custom_price,
+      custom_content,
+      use_time,
+    } = this.state
     const { getFieldProps } = form
     const { shopList } = this.state
     const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const { reserveCategoryOption } = commodity
     const paymentValue = form.getFieldValue('payment_status')
     const storeChecked = form.getFieldValue('is_store')
-    const is_appoint_price = form .getFieldValue('is_appoint_price') || '0'
+    const is_appoint_price = form.getFieldValue('is_appoint_price') || '0'
     const menuEl = (
       <Menu
         className="menu-position"
@@ -338,16 +369,16 @@ class ReservePanel extends React.Component {
           >
             <List.Item arrow="horizontal">全价</List.Item>
           </Picker>
-            {is_appoint_price[0] === '1' &&(
-                <InputItem
-                    {...getFieldProps('appoint_price', {
-                        rules: [{ required: true }],
-                    })}
-                    placeholder="请填写自定义价格，最多两位小数"
-                >
-                  自定义价格
-                </InputItem>
-            )}
+          {is_appoint_price[0] === '1' && (
+            <InputItem
+              {...getFieldProps('appoint_price', {
+                rules: [{ required: true }],
+              })}
+              placeholder="请填写自定义价格，最多两位小数"
+            >
+              自定义价格
+            </InputItem>
+          )}
           <List.Item
             extra={
               <Switch
@@ -463,11 +494,11 @@ class ReservePanel extends React.Component {
             cols={1}
             extra="请选择"
             onOk={e => {
-              commodity.fetchShopList(e[0]).then(() => {
-                  const { shopList } = commodity
-                  this.setState({
-                      shopList:shopList
-                  })
+              commodity.fetchShopList(e[0], 1).then(() => {
+                const { shopList } = commodity
+                this.setState({
+                  shopList,
+                })
               })
             }}
           >
@@ -496,8 +527,7 @@ class ReservePanel extends React.Component {
           </Item>
           <Item>
             服务详情
-            <Editor ref={this.editor}/>
-
+            <Editor ref={this.editor} />
           </Item>
           <List.Item
             extra={
@@ -508,13 +538,13 @@ class ReservePanel extends React.Component {
                   rules: [{ required: true }],
                 })}
                 onClick={e => {
-                   if(!e){
-                       this.setState({
-                           store:[],
-                           workerList:[],
-                           workerSele:[]
-                       })
-                   }
+                  if (!e) {
+                    this.setState({
+                      store: [],
+                      workerList: [],
+                      workerSele: [],
+                    })
+                  }
                 }}
               />
             }
@@ -526,7 +556,6 @@ class ReservePanel extends React.Component {
               overlay="关闭后，订单将由商家指定门店及技师进行服务"
               onClick={e => {
                 e.stopPropagation()
-
               }}
             >
               <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
@@ -537,58 +566,71 @@ class ReservePanel extends React.Component {
           {storeChecked
             && shopList.map(i => (
               <div key={i.value}>
-                <CheckboxItem key={i.value}
-                              checked = {store.indexOf(i.value) !== -1?true:false}
-                              onChange={e => {
-                                        const store_now = toJS(this.state.store)
-                                        const workerList = toJS(this.state.workerList)
-                                        const workerSele = toJS(this.state.workerSele)
-                                        if (store_now.indexOf(i.value) === -1){
-                                            store_now.push(i.value)
-                                        }else{
-                                            store_now.splice(store_now.indexOf(i.value),1)
-                                            if(i.worker_list){
-                                              i.worker_list.forEach(item => {
-                                                   if (workerList.indexOf(item.merchant_store_id+','+item.merchant_worker_id) !== -1) {
-                                                       workerList.splice(workerList.indexOf(item.merchant_store_id+','+item.merchant_worker_id),1)
-                                                       workerSele.splice(workerSele.indexOf(item.merchant_worker_id),1)
-                                                   }
-                                               })
-                                            }
-                                            console.log(workerList)
-                                        }
-                                        this.setState({
-                                            store:store_now,
-                                            workerList,
-                                            workerSele
-                                        })
-                                    }
-                              }>
-                    {i.label}
+                <CheckboxItem
+                  key={i.value}
+                  checked={store.indexOf(i.value) !== -1}
+                  onChange={e => {
+                    const store_now = toJS(this.state.store)
+                    const workerList = toJS(this.state.workerList)
+                    const workerSele = toJS(this.state.workerSele)
+                    if (store_now.indexOf(i.value) === -1) {
+                      store_now.push(i.value)
+                    } else {
+                      store_now.splice(store_now.indexOf(i.value), 1)
+                      if (i.worker_list) {
+                        i.worker_list.forEach(item => {
+                          if (
+                            workerList.indexOf(
+                              `${item.merchant_store_id},${item.merchant_worker_id}`,
+                            ) !== -1
+                          ) {
+                            workerList.splice(
+                              workerList.indexOf(
+                                `${item.merchant_store_id},${item.merchant_worker_id}`,
+                              ),
+                              1,
+                            )
+                            workerSele.splice(workerSele.indexOf(item.merchant_worker_id), 1)
+                          }
+                        })
+                      }
+                      console.log(workerList)
+                    }
+                    this.setState({
+                      store: store_now,
+                      workerList,
+                      workerSele,
+                    })
+                  }}
+                >
+                  {i.label}
                 </CheckboxItem>
-                  {this.state.store.indexOf(i.value) !== -1 && i.worker_list && i.worker_list.map(j => (
+                {this.state.store.indexOf(i.value) !== -1
+                  && i.worker_list
+                  && i.worker_list.map(j => (
                     <List.Item key={j.value}>
                       <CheckboxItem
-                       checked={this.state.workerSele.indexOf(j.value) !== -1?true:false}
-                       onChange={e => {
-                           const workerList = toJS(this.state.workerList)
-                           const workerSele = toJS(this.state.workerSele)
-                        if (workerList.indexOf(i.value+','+j.value) === -1) {
-                            workerList.push(i.value+','+j.value)
+                        checked={this.state.workerSele.indexOf(j.value) !== -1}
+                        onChange={e => {
+                          const workerList = toJS(this.state.workerList)
+                          const workerSele = toJS(this.state.workerSele)
+                          if (workerList.indexOf(`${i.value},${j.value}`) === -1) {
+                            workerList.push(`${i.value},${j.value}`)
                             workerSele.push(j.value)
-                          }else{
-                            workerList.splice(workerList.indexOf(i.value+','+j.value),1)
-                            workerSele.splice(workerSele.indexOf(j.value),1)
-                        }
+                          } else {
+                            workerList.splice(workerList.indexOf(`${i.value},${j.value}`), 1)
+                            workerSele.splice(workerSele.indexOf(j.value), 1)
+                          }
                           this.setState({
-                              workerList,
-                              workerSele
+                            workerList,
+                            workerSele,
                           })
-                      }}>{j.label}</CheckboxItem>
+                        }}
+                      >
+                        {j.label}
+                      </CheckboxItem>
                     </List.Item>
-                      ))
-                  }
-
+                  ))}
               </div>
             ))}
           <DatePicker
@@ -620,7 +662,7 @@ class ReservePanel extends React.Component {
             })}
             mode="time"
             extra="选择时间"
-            onOk={e=>{
+            onOk={e => {
               console.log(e)
             }}
           >
@@ -641,69 +683,70 @@ class ReservePanel extends React.Component {
             </List.Item>
           </DatePicker>
 
-            {custom_name && custom_name.map((item , index) => (
-                <List key={index} style={{marginBottom:"2%"}}>
-                  <InputItem
-                      placeholder=""
-                      value={custom_name[index]?custom_name[index]:''}
-                      onChange={e=>{
-                          custom_name[index]=e
-                        this.setState({
-                            custom_name
-                        })
-                      }}
-                  >
-                    规格名称
-                  </InputItem>
-                  <InputItem
-                      placeholder=""
-                      value={custom_payment_price[index]?custom_payment_price[index]:''}
-                      onChange={e=>{
-                          custom_payment_price[index]=e
-                          this.setState({
-                              custom_payment_price
-                          })
-                      }}
-                  >
-                    规格定金
-                  </InputItem>
-                  <InputItem
-                      placeholder=""
-                      value={custom_price[index]?custom_price[index]:''}
-                      onChange={e=>{
-                          custom_price[index]=e
-                          this.setState({
-                              custom_price
-                          })
-                      }}
-                  >
-                    规格全价
-                  </InputItem>
-                  <InputItem
-                      placeholder=""
-                      value={custom_content[index]?custom_content[index]:''}
-                      onChange={e=>{
-                          custom_content[index]=e
-                          this.setState({
-                              custom_content
-                          })
-                      }}
-                  >
-                    规格描述
-                  </InputItem>
-                  <InputItem
-                      placeholder="(分钟)"
-                      value={use_time[index]?use_time[index]:''}
-                      onChange={e=>{
-                          use_time[index]=e
-                          this.setState({
-                              use_time
-                          })
-                      }}
-                  >
-                    平均用时
-                  </InputItem>
-          {/*        <Button type="primary"
+          {custom_name
+            && custom_name.map((item, index) => (
+              <List key={index} style={{ marginBottom: '2%' }}>
+                <InputItem
+                  placeholder=""
+                  value={custom_name[index] ? custom_name[index] : ''}
+                  onChange={e => {
+                    custom_name[index] = e
+                    this.setState({
+                      custom_name,
+                    })
+                  }}
+                >
+                  规格名称
+                </InputItem>
+                <InputItem
+                  placeholder=""
+                  value={custom_payment_price[index] ? custom_payment_price[index] : ''}
+                  onChange={e => {
+                    custom_payment_price[index] = e
+                    this.setState({
+                      custom_payment_price,
+                    })
+                  }}
+                >
+                  规格定金
+                </InputItem>
+                <InputItem
+                  placeholder=""
+                  value={custom_price[index] ? custom_price[index] : ''}
+                  onChange={e => {
+                    custom_price[index] = e
+                    this.setState({
+                      custom_price,
+                    })
+                  }}
+                >
+                  规格全价
+                </InputItem>
+                <InputItem
+                  placeholder=""
+                  value={custom_content[index] ? custom_content[index] : ''}
+                  onChange={e => {
+                    custom_content[index] = e
+                    this.setState({
+                      custom_content,
+                    })
+                  }}
+                >
+                  规格描述
+                </InputItem>
+                <InputItem
+                  placeholder="(分钟)"
+                  value={use_time[index] ? use_time[index] : ''}
+                  onChange={e => {
+                    use_time[index] = e
+                    this.setState({
+                      use_time,
+                    })
+                  }}
+                >
+                  平均用时
+                </InputItem>
+                {/*        <Button type="primary"
                           style={{width:"20%",height:"25px",lineHeight:"25px",fontSize:"14px",margin:"0 auto"}}
                           onClick={ e => {
                                     console.log(this.state.custom_name)
@@ -721,41 +764,50 @@ class ReservePanel extends React.Component {
                           },() => {console.log(this.state.custom_name)})
                   }}>
                    删除
-                  </Button>*/}
-                </List>
-            ))
+                  </Button> */}
+              </List>
+            ))}
 
-            }
-
-            <Button type="primary" style={{width:"30%",height:"30px",lineHeight:"30px",fontSize:"14px",margin:"0 auto"}} onClick={this.addSpe}>
-              增加规格
-            </Button>
-
-          <List.Item
-            extra={
-              <Switch
-                {...getFieldProps('appoint_status', {
-                  initialValue: false,
-                  valuePropName: 'checked',
-                  rules: [{ required: true }],
-                })}
-              />
-            }
+          <Button
+            type="primary"
+            style={{
+              width: '30%',
+              height: '30px',
+              lineHeight: '30px',
+              fontSize: '14px',
+              margin: '0 auto',
+            }}
+            onClick={this.addSpe}
           >
-            预约状态
-            <Tooltip
-              trigger="click"
-              placement="topLeft"
-              overlay="为了方便用户能查到以前的订单，预约无法删除！"
-              onClick={e => {
-                e.stopPropagation()
-              }}
+            增加规格
+          </Button>
+          {match.params.id && (
+            <List.Item
+              extra={
+                <Switch
+                  {...getFieldProps('appoint_status', {
+                    initialValue: false,
+                    valuePropName: 'checked',
+                    rules: [{ required: true }],
+                  })}
+                />
+              }
             >
-              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
-                &#xe628;
-              </i>
-            </Tooltip>
-          </List.Item>
+              预约状态
+              <Tooltip
+                trigger="click"
+                placement="topLeft"
+                overlay="为了方便用户能查到以前的订单，预约无法删除！"
+                onClick={e => {
+                  e.stopPropagation()
+                }}
+              >
+                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  &#xe628;
+                </i>
+              </Tooltip>
+            </List.Item>
+          )}
         </List>
 
         <WingBlank>
