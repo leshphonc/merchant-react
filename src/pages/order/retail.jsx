@@ -69,6 +69,8 @@ class Retail extends React.Component {
     if (!shopOrderList.length) order.fetchShopOrderList(orderStatusValue, payTypeValue, searchtype, keyword)
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
+    console.log(this.refresh)
+    console.log(this)
     this.setState({
       height: hei,
     })
