@@ -14,6 +14,7 @@ class LoginSotre {
       sessionStorage.setItem('currentTab', 'home')
       const response2 = await services.getWxConfig()
       if (response2.data.errorCode === ErrorCode.SUCCESS) {
+        this.fetchAliasList()
         runInAction(() => {
           this.wxConfig = response2.data.result
           window.wx.config({
@@ -63,6 +64,14 @@ class LoginSotre {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       localStorage.removeItem('ticket', response.data.result.ticket)
       localStorage.removeItem('merchant_user', JSON.stringify(response.data.result.user))
+    }
+  }
+
+  @action
+  fetchAliasList = async () => {
+    const response = await services.fetchAliasList()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      localStorage.setItem('alias',JSON.stringify(response.data.result))
     }
   }
 }
