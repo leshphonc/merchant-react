@@ -62,7 +62,7 @@ class Reserve extends React.Component {
                 ''
               )}
 
-              {item.appoint_type === 1 ? (
+              {item.appoint_type === '1' ? (
                 <div
                   className="top-features"
                   style={{

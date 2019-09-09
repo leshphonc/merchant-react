@@ -238,6 +238,7 @@ class ReservePanel extends React.Component {
       if (error) {
         Toast.info('请输入完整信息')
       }
+      value.appoint_type = value.appoint_type ? value.appoint_type[0] : '0'
       const obj = {
         ...value,
         cat_fid: category[0],
@@ -493,6 +494,7 @@ class ReservePanel extends React.Component {
             data={types}
             cols={1}
             extra="请选择"
+            disabled={match.params.id ? true : false}
             onOk={e => {
               commodity.fetchShopList(e[0], 1).then(() => {
                 const { shopList } = commodity
