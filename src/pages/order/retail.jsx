@@ -142,7 +142,7 @@ class Retail extends React.Component {
       return '可接单'
     }
     if (item.status === '1') {
-      return ''
+      return '可操作'
     }
     if (item.is_pick_in_store === '3' && item.status === '2' && item.user_confirm === '0') {
       return '已发货'
