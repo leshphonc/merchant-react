@@ -86,10 +86,19 @@ class Retail extends React.Component {
           />
           <Card.Body style={{ color: '#666', fontSize: 12 }}>
             <Flex>
-              <div style={{ minWidth: 75 }}>取单编号:</div>
-              <div>{item.fetch_number}</div>
+              <div style={{ minWidth: 75 }}>订单编号:</div>
+              <div>{item.order_id}</div>
             </Flex>
             <WhiteSpace />
+            {item.fetch_number === '0' ? null : (
+              <React.Fragment>
+                <Flex>
+                  <div style={{ minWidth: 75 }}>取单编号:</div>
+                  <div>{item.fetch_number}</div>
+                </Flex>
+                <WhiteSpace />
+              </React.Fragment>
+            )}
             <Flex>
               <div style={{ minWidth: 75 }}>下单人:</div>
               <div>{item.username}</div>
