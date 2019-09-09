@@ -47,7 +47,7 @@ class OressGoods extends React.Component {
                 {item.gift_name}
               </span>
             }
-            thumb={item.wap_pic}
+            thumb={item.wap_pic_list[0].image}
           />
           <Card.Body style={{ minHeight: '22px' }}>
             <Flex>

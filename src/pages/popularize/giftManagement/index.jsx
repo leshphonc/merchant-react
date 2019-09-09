@@ -28,6 +28,8 @@ class GiftManagement extends React.Component {
   componentDidMount() {
     const { giftManagement } = this.props
     const { height, keyword } = this.state
+    // const alias = JSON.parse(localStorage.getItem('alias'))
+    // console.log(alias)
     giftManagement.fetchGetGift(keyword)
     if (this.refresh.current) {
       /* eslint react/no-find-dom-node: 0 */
