@@ -5,7 +5,7 @@ import { observer, inject } from 'mobx-react'
 import {
   List, InputItem, WingBlank, Button, Toast, Picker,
 } from 'antd-mobile'
-import Tooltip from 'rc-tooltip'
+// import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 
@@ -69,7 +69,6 @@ class EditSpread extends React.Component {
           level_spread: appointDetail.appoint_list.level_spread,
           spread: appointDetail.appoint_list.spread,
         })
-        console.log(levelList)
         levelList.forEach((item, index) => {
           if (appointDetail.appoint_list.spread[index]) {
             userLevels.push({

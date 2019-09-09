@@ -6,7 +6,7 @@ import {
   SearchBar, List, WhiteSpace, WingBlank, PullToRefresh, Flex, Button,
 } from 'antd-mobile'
 import { ListItem, ItemTop, TopContent } from '@/styled'
-import { DeliverType } from '@/config/constant'
+// import { DeliverType } from '@/config/constant'
 
 const { Item } = List
 @inject('commodity')

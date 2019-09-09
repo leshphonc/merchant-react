@@ -193,7 +193,7 @@ class GroupOrderDetail extends React.Component {
           <Card.Header style={{ fontSize: 15, color: '#999' }} title="商品信息"></Card.Header>
           <Card.Body style={{ color: '#666', fontSize: 15 }}>
             <Flex>
-              <img src={detail.pic} style={{ width: '20%', height: '20vw' }} />
+              <img src={detail.pic} style={{ width: '20%', height: '20vw' }} alt="产品图片" />
               <div style={{ width: '75%', marginLeft: '5%' }}>
                 <div>
                   <p style={{ fontSize: 14 }}>{detail.s_name}</p>
