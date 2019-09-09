@@ -19,7 +19,6 @@ import Tooltip from 'rc-tooltip'
 import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import moment from 'moment'
-import { toJS } from 'mobx'
 import Editor from '@/common/Editor'
 import {
   CustomizeList, ListTitle, ListContent, MenuMask, PrimaryTag,
@@ -140,10 +139,10 @@ class StorePanel extends React.Component {
             qrcode: storeDetail.qrcode_backgroup,
             long: storeDetail.long,
             lat: storeDetail.lat,
+            goods: [storeDetail.cat_fid, storeDetail.cat_id],
           })
         })
       // 整理默认数据放入表单
-      console.log(toJS(storeDetail.pic))
       form.setFieldsValue({
         name: storeDetail.name,
         ismain: storeDetail.ismain === '1',
@@ -174,7 +173,7 @@ class StorePanel extends React.Component {
             form.setFieldsValue({
               discount_percent: storeDetail.discount_percent,
             })
-          } else {
+          } else if ((storeDetail.discount_type[0] === '2')) {
             form.setFieldsValue({
               condition_price: storeDetail.condition_price,
               minus_price: storeDetail.minus_price,
@@ -266,8 +265,6 @@ class StorePanel extends React.Component {
     const { allCategory } = storeFront
     const { goods } = this.state
     const cateGoryLabel = []
-    console.log(goods)
-    console.log(toJS(allCategory))
     if (allCategory.length) {
       allCategory.forEach(item => {
         if (item.value === goods[0]) {
@@ -351,8 +348,6 @@ class StorePanel extends React.Component {
         shop_logo: shopLogo,
         qrcode_backgroup: qrcode,
       }
-      console.log(value)
-      console.log(obj)
       if (match.params.id) {
         storeFront.modifyStoreFront({ ...obj, store_id: match.params.id }).then(res => {
           if (res) Toast.success('编辑成功', 1, () => history.goBack())
@@ -505,7 +500,6 @@ class StorePanel extends React.Component {
                       have_mall: val,
                     })
                   }
-                  console.log(bool)
                 }}
               />
             }
@@ -532,7 +526,6 @@ class StorePanel extends React.Component {
                       have_peisong: val,
                     })
                   }
-                  console.log(bool)
                 }}
               />
             }

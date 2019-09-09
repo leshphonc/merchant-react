@@ -28,10 +28,8 @@ class GiftPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      pic: [],
       store: [],
       asyncCascadeValue: [],
-      gift_content: '',
     }
     this.editor = React.createRef()
   }
@@ -89,7 +87,7 @@ class GiftPanel extends React.Component {
         url: item.url,
       }))
       this.setState({
-        pic: picArr,
+        // pic: picArr,
         store: getGiftDetail.store_arr,
       })
       form.setFieldsValue({
@@ -204,38 +202,13 @@ class GiftPanel extends React.Component {
   }
 
   fetchMarket = val => {
-    console.log(val[0])
+    // console.log(val[0])
     const { giftManagement } = this.props
     if (val[0]) {
       giftManagement.fetchMarket(val[0])
     } else {
       giftManagement.resetMarket()
     }
-  }
-
-  imgChange = (arr, type) => {
-    const { form } = this.props
-    if (type === 'remove') {
-      form.setFieldsValue({
-        pic: arr,
-      })
-      this.setState({ pic: arr })
-      return
-    }
-    arr.forEach((item, index) => {
-      if (item.file) {
-        Utils.compressionAndUploadImg(item.file)
-          .then(res => {
-            const picArr = arr
-            picArr.splice(index, 1, { url: res })
-            form.setFieldsValue({
-              pic: picArr,
-            })
-            this.setState({ pic: picArr })
-          })
-          .catch(e => Toast.fail(e))
-      }
-    })
   }
 
   onChange = val => {
@@ -248,9 +221,9 @@ class GiftPanel extends React.Component {
     const {
       giftCategory, giftCategorylist, shopList,
     } = giftManagement
-    const { pic, asyncCascadeValue, store } = this.state
+    const { asyncCascadeValue, store } = this.state
     const { cascadeOption, circleOption, marketOption } = giftManagement
-    // console.log(marketOption)
+    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const pickinstore = form.getFieldValue('pick_in_store')
     return (
       <React.Fragment>
@@ -305,6 +278,10 @@ class GiftPanel extends React.Component {
             <Picker
               {...getFieldProps('cascade', {
                 rules: [{ required: false }],
+                getValueFromEvent: item => {
+                  giftManagement.resetMarket()
+                  return item
+                },
               })}
               title="选择地区"
               extra="全部省"
@@ -313,7 +290,6 @@ class GiftPanel extends React.Component {
               value={asyncCascadeValue}
               onPickerChange={this.onPickerChange}
               onOk={this.fetchCircle}
-              onChange={this.fetchMarket}
             >
               <List.Item arrow="horizontal">兑换地区</List.Item>
             </Picker>
@@ -413,7 +389,7 @@ class GiftPanel extends React.Component {
                 getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
                 rules: [{ required: true }],
               })}
-              selectable={pic.length < 4}
+              selectable={pic.length < 5}
             />
           </List.Item>
           <List.Item>
