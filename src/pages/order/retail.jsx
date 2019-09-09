@@ -125,12 +125,65 @@ class Retail extends React.Component {
             </Flex>
           </Card.Body>
           <WhiteSpace />
-          <Card.Footer content={`订单来源：${item.order_from_name}`}></Card.Footer>
+          <Card.Footer
+            content={`订单来源：${item.order_from_name}`}
+            extra={this.curStatus(item)}
+          >
+          </Card.Footer>
           <WhiteSpace />
         </Card>
         <WhiteSpace />
       </React.Fragment>
     ))
+  }
+
+  curStatus = item => {
+    if (item.status === '0') {
+      return '可接单'
+    }
+    if (item.status === '1') {
+      return ''
+    }
+    if (item.is_pick_in_store === '3' && item.status === '2' && item.user_confirm === '0') {
+      return '已发货'
+    }
+    if (item.is_pick_in_store === '3' && item.status === '2' && item.user_confirm > '0') {
+      return '已确认收货'
+    }
+    if (item.status === '2') {
+      return '已消费'
+    }
+    if (item.status === '3') {
+      return '已评价'
+    }
+    if (item.status === '4') {
+      if (item.cancel_type === '7') {
+        return '超时退款'
+      }
+      return '已退款'
+    }
+    if (item.status === '5') {
+      if (item.cancel_type === '7') {
+        return '超时取消'
+      }
+      return '已取消'
+    }
+    if (item.status === '7' && item.paid === '1') {
+      return '发货到自提'
+    }
+    if (item.status === '8') {
+      return '已发货到自提'
+    }
+    if (item.status === '9') {
+      return '自提点接货'
+    }
+    if (item.status === '10') {
+      return '配送中'
+    }
+    if (item.order_from === '6') {
+      return '已取消'
+    }
+    return '未支付'
   }
 
   findSearchTypeLabelAndFetch = value => {

@@ -134,6 +134,7 @@ class Reservation extends React.Component {
               <div>{this.serviceStatus(item)}</div>
             </Flex>
           </Card.Body>
+          {/* <Card.Footer extra={this.curStatus(item)}></Card.Footer> */}
         </Card>
         <WhiteSpace />
       </React.Fragment>

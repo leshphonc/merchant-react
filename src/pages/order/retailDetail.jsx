@@ -194,8 +194,10 @@ class RetailDetail extends React.Component {
       <React.Fragment>
         <NavBar title="零售订单详情" goBack />
         <List renderHeader="订单信息">
-          <List.Item extra={orderDetails.fetch_number}>取单编号</List.Item>
-          <List.Item extra={orderDetails.real_orderid}>订单编号</List.Item>
+          {orderDetails.fetch_number === '0' ? null : (
+            <List.Item extra={orderDetails.fetch_number}>取单编号</List.Item>
+          )}
+          <List.Item extra={orderDetails.order_id}>订单编号</List.Item>
           <List.Item extra={orderDetails.create_time}>下单时间</List.Item>
           <List.Item extra={orderDetails.expect_use_time}>期望送达时间</List.Item>
           <List.Item extra={orderDetails.order_from_txt}>订单来源</List.Item>
