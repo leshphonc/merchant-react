@@ -28,10 +28,8 @@ class GiftPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      pic: [],
       store: [],
       asyncCascadeValue: [],
-      gift_content: '',
     }
     this.editor = React.createRef()
   }
@@ -89,7 +87,7 @@ class GiftPanel extends React.Component {
         url: item.url,
       }))
       this.setState({
-        pic: picArr,
+        // pic: picArr,
         store: getGiftDetail.store_arr,
       })
       form.setFieldsValue({
