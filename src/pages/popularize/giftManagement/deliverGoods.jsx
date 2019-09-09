@@ -22,8 +22,8 @@ class OressGoods extends React.Component {
     giftManagement.fetchExpress(match.params.orderId).then(() => {
       const { express } = giftManagement
       form.setFieldsValue({
-        express_id: [express.express_id],
-        express_number: express.express_number,
+        express_id: express.express_id,
+        express_number: [express.express_number],
       })
     })
   }
@@ -39,7 +39,8 @@ class OressGoods extends React.Component {
       }
       const obj = {
         ...value,
-        express_id: value.express_id[0],
+        express_id: value.express_id,
+        express_number: value.express_number[0],
       }
       giftManagement.modifyExpress({ ...obj, order_id: match.params.orderId }).then(res => {
         if (res) {
@@ -61,7 +62,7 @@ class OressGoods extends React.Component {
         <NavBar title="发货详情" goBack />
         <List renderHeader="快递信息">
           <Picker
-            {...getFieldProps('express_id', {
+            {...getFieldProps('express_number', {
               rules: [{ required: true }],
             })}
             data={expressList}
@@ -71,7 +72,7 @@ class OressGoods extends React.Component {
             <List.Item arrow="horizontal">选择快递</List.Item>
           </Picker>
           <InputItem
-            {...getFieldProps('express_number', {
+            {...getFieldProps('express_id', {
               rules: [{ required: true }],
             })}
             placeholder="请填写快递单号"

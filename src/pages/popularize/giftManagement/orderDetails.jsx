@@ -73,14 +73,14 @@ class OressGoods extends React.Component {
             结算价
           </Item>
           <Item
-            extra={moment(giftOrderDetail.order_time * 1000).format('YYYY-MM-DD hh:mm')}
+            extra={moment(giftOrderDetail.order_time * 1000).format('YYYY-MM-DD HH:mm')}
             arrow="empty"
           >
             下单时间
           </Item>
-          <Item extra={giftOrderDetail.memo} arrow="empty">
+          {/* <Item extra={giftOrderDetail.memo} arrow="empty">
             买家留言
-          </Item>
+          </Item> */}
         </List>
         <List renderHeader="用户信息">
           <Item extra={giftOrderDetail.uid} arrow="empty">
@@ -114,7 +114,7 @@ class OressGoods extends React.Component {
           <Item extra={giftOrderDetail.zipcode} arrow="empty">
             邮编
           </Item>
-          <Item extra={giftOrderDetail.address} arrow="empty">
+          <Item extra={giftOrderDetail.adress} arrow="empty">
             收货地址
           </Item>
         </List>

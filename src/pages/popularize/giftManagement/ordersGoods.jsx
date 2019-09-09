@@ -51,12 +51,12 @@ class OressGoods extends React.Component {
           />
           <Card.Body style={{ minHeight: '22px' }}>
             <Flex>
-              <Flex.Item>订单编号 {item.order_id}</Flex.Item>
-              <Flex.Item>订单数量 {item.num}</Flex.Item>
+              <Flex.Item style={{ flex: 'none', width: '56%' }}>订单编号: {item.order_id}</Flex.Item>
+              <Flex.Item>订单数量: {item.num}</Flex.Item>
             </Flex>
             <Flex style={{ marginTop: '10px', marginBottom: '5px' }}>
-              <Flex.Item>订单时间 {moment(item.order_time * 1000).format('YYYY-MM-DD HH:mm')}</Flex.Item>
-              <Flex.Item>状态 {item.paid === '1' ? '已支付' : '未支付'} {item.status === '1' ? '已发货' : '未发货'}</Flex.Item>
+              <Flex.Item style={{ flex: 'none', width: '58%' }}>订单时间: {moment(item.order_time * 1000).format('YYYY-MM-DD HH:mm')}</Flex.Item>
+              <Flex.Item style={{ marginLeft: '2px' }}>状态: {item.paid === '1' ? '已支付' : '未支付'} {item.status === '1' ? '已发货' : '未发货'}</Flex.Item>
             </Flex>
           </Card.Body>
           <Card.Footer
