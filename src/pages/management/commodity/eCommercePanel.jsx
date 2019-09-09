@@ -225,6 +225,7 @@ class ECommerceAdd extends React.Component {
             if (res) {
               Toast.success('编辑成功', 1, () => {
                 sessionStorage.removeItem('spec')
+                commodity.resetAndFetchECommerceList()
                 history.goBack()
               })
             }
@@ -234,6 +235,7 @@ class ECommerceAdd extends React.Component {
           if (res) {
             Toast.success('新增成功', 1, () => {
               sessionStorage.removeItem('spec')
+              commodity.resetAndFetchECommerceList()
               history.goBack()
             })
           }
