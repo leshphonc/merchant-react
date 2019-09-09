@@ -34,7 +34,7 @@ const PayType = [
     value: 'weixin',
   },
   {
-    label: '微信支付',
+    label: '余额支付',
     value: 'balance',
   },
 ]
@@ -55,7 +55,7 @@ class Retail extends React.Component {
       keyword: '',
       height: document.documentElement.clientHeight,
     }
- 
+    this.refresh = React.createRef()
   }
 
   componentDidMount() {

@@ -9,7 +9,6 @@ import ReservationDetail from './reservationDetail'
 
 export default () => (
   <React.Fragment>
-    <Route path="/order/retail" extra component={Retail} />
     <Route path="/order/groupList/:groupId" component={GroupList} />
     <Route path="/order/groupOrderDetail/:orderId" component={GroupOrderDetail} />
     <Route path="/order/retail" exact component={Retail} />
