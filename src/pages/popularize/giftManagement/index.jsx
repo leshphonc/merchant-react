@@ -63,9 +63,9 @@ class GiftManagement extends React.Component {
           />
           <Card.Body style={{ minHeight: '22px' }}>
             <Flex style={{ textAlign: 'center' }}>
-              <Flex.Item>编号 {item.gift_id}</Flex.Item>
-              <Flex.Item>销量 {item.sale_count}份</Flex.Item>
-              <Flex.Item>库存 {item.sku}</Flex.Item>
+              <Flex.Item>编号: {item.gift_id}</Flex.Item>
+              <Flex.Item>销量: {item.sale_count}份</Flex.Item>
+              <Flex.Item>库存: {item.sku}</Flex.Item>
             </Flex>
           </Card.Body>
           <Card.Footer
