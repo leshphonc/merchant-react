@@ -45,7 +45,6 @@ class AppointDiscounts extends React.Component {
           ? [{ url: envo_info_list[index].envo_serving_pic }]
           : []
       })
-
       this.setState({
         envoList: envo_info_list,
       })
@@ -195,10 +194,15 @@ class AppointDiscounts extends React.Component {
             style={{ color: '#fff', width: '25%', margin: '1% auto' }}
             onClick={() => {
               const envoList = toJS(this.state.envoList)
-              envoList.splice(index, 1)
-              this.setState({
-                envoList,
-              })
+              if (envoList.length > 1){ 
+                envoList.splice(index, 1)
+                this.setState({
+                  envoList,
+                })
+              } else {
+                Toast.info('至少保留一个环境')
+              }
+
             }}
           >
             删除
@@ -222,13 +226,15 @@ class AppointDiscounts extends React.Component {
       const envo_name = []
       const envo_screen_num = []
       const envo_serving_pic = []
-      this.state.envoList.forEach(item => {
-        envo_after_select_pic.push(item.envo_after_select_pic[0].url)
-        envo_before_select_pic.push(item.envo_before_select_pic[0].url)
-        envo_name.push(item.envo_name)
-        envo_screen_num.push(item.envo_screen_num)
-        envo_serving_pic.push(item.envo_serving_pic[0].url)
-      })
+      if (this.state.envoList[0].envo_after_select_pic.length > 0){ 
+        this.state.envoList.forEach(item => {
+          envo_after_select_pic.push(item.envo_after_select_pic[0].url)
+          envo_before_select_pic.push(item.envo_before_select_pic[0].url)
+          envo_name.push(item.envo_name)
+          envo_screen_num.push(item.envo_screen_num)
+          envo_serving_pic.push(item.envo_serving_pic[0].url)
+        })
+      }
       const obj = {
         dhb_get_num: value.dhb_get_num,
         envo_area_name: value.envo_area_name,

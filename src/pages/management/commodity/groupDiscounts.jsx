@@ -206,11 +206,12 @@ class GroupDiscounts extends React.Component {
     const { commodity, form } = this.props
     const { getFieldProps } = form
     const { cardGroupAll, groupPackage } = commodity
-    const { give } = this.state
+    const { give, userLevels, } = this.state
     return (
       <React.Fragment>
         <NavBar title="团购优惠设置" goBack />
         <List>
+        <Item><div style={{color: '#333', fontWeight: 'bold', textAlign: 'center' }}>套餐设置</div></Item>
           <InputItem
             {...getFieldProps('tagname', {
               rules: [{ required: false }],
@@ -251,7 +252,7 @@ class GroupDiscounts extends React.Component {
               每消费1元赠送
             </InputItem>
           </Item>
-          {this.levelDis()}
+          <Item><div style={{color: '#333', fontWeight: 'bold', textAlign: 'center' }}>赠送商家优惠券</div></Item>
           <List.Item
             extra={
               <Flex justify="between">
@@ -281,6 +282,7 @@ class GroupDiscounts extends React.Component {
             赠送商家优惠券
           </List.Item>
           {this.mapGive()}
+          <Item><div style={{color: '#333', fontWeight: 'bold', textAlign: 'center' }}>商家会员福利</div></Item>
           <Picker
             {...getFieldProps('in_group', {
               rules: [{ required: false }],
@@ -291,6 +293,8 @@ class GroupDiscounts extends React.Component {
           >
             <List.Item arrow="horizontal">选择会员分组</List.Item>
           </Picker>
+          {userLevels && (<Item><div style={{color: '#333', fontWeight: 'bold', textAlign: 'center' }}>会员优惠设置</div></Item>)}
+          {this.levelDis()}
           <WingBlank style={{ padding: '10px 0' }}>
             <Button
               type="primary"
