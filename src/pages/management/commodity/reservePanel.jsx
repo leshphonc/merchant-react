@@ -364,9 +364,11 @@ class ReservePanel extends React.Component {
             {...getFieldProps('is_appoint_price', {
               rules: [{ required: true }],
             })}
+            disabled={!!match.params.id}
             data={price}
             cols={1}
             extra="请选择"
+
           >
             <List.Item arrow="horizontal">全价</List.Item>
           </Picker>
@@ -494,7 +496,7 @@ class ReservePanel extends React.Component {
             data={types}
             cols={1}
             extra="请选择"
-            disabled={match.params.id ? true : false}
+            disabled={!!match.params.id}
             onOk={e => {
               commodity.fetchShopList(e[0], 1).then(() => {
                 const { shopList } = commodity
