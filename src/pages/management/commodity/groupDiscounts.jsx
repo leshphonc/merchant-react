@@ -27,11 +27,27 @@ class GroupDiscounts extends React.Component {
       give: [],
       userLevels: [],
       levelType: [],
+      score_name: '',
+      dhb_name: '',
     }
   }
 
   componentDidMount() {
     const { commodity, match, form } = this.props
+    const alias = JSON.parse(localStorage.getItem('alias'))
+    alias.forEach( item => {
+      if (item.name === 'score_name') { 
+        console.log(item.value)
+        this.setState({
+          score_name: item.value
+        })
+      }
+      if (item.name === 'dhb_name') { 
+        this.setState({
+          dhb_name: item.value
+        })
+      }
+    })
     commodity.fetchCardGroupAll()
     if (!match.params.id) return
     commodity.fetchGiftVoucher()
@@ -206,7 +222,7 @@ class GroupDiscounts extends React.Component {
     const { commodity, form } = this.props
     const { getFieldProps } = form
     const { cardGroupAll, groupPackage } = commodity
-    const { give, userLevels, } = this.state
+    const { give, userLevels, score_name, dhb_name, } = this.state
     return (
       <React.Fragment>
         <NavBar title="团购优惠设置" goBack />
@@ -229,6 +245,7 @@ class GroupDiscounts extends React.Component {
           >
             <List.Item arrow="horizontal">选择加入套餐</List.Item>
           </Picker>
+          <Item><div style={{color: '#333', fontWeight: 'bold', textAlign: 'center' }}>{score_name},{dhb_name}设置</div></Item>
           <Item>
             用户消费赠送比例
             <InputItem
@@ -236,8 +253,8 @@ class GroupDiscounts extends React.Component {
                 rules: [{ required: false }],
               })}
               labelNumber={7}
-              extra="元宝"
-              placeholder="请填写元宝数量"
+              extra={dhb_name}
+              placeholder={`请填写${dhb_name}数量`}
             >
               每消费1元赠送
             </InputItem>
@@ -245,9 +262,9 @@ class GroupDiscounts extends React.Component {
               {...getFieldProps('score_get_num', {
                 rules: [{ required: false }],
               })}
-              extra="金币"
+              extra={score_name}
               labelNumber={7}
-              placeholder="请填写金币数量"
+              placeholder={`请填写${score_name}数量`}
             >
               每消费1元赠送
             </InputItem>

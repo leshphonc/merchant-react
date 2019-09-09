@@ -22,12 +22,27 @@ class AppointDiscounts extends React.Component {
       // userLevels: [],
       give: [],
       envoList: [],
+      score_name: '',
+      dhb_name: '',
     }
   }
 
   componentDidMount() {
     const { commodity, match, form } = this.props
     commodity.fetchCardGroupAll()
+    const alias = JSON.parse(localStorage.getItem('alias'))
+    alias.forEach( item => {
+      if (item.name === 'score_name') { 
+        this.setState({
+          score_name: item.value
+        })
+      }
+      if (item.name === 'dhb_name') { 
+        this.setState({
+          dhb_name: item.value
+        })
+      }
+    })
     if (!match.params.id) return
     commodity.fetchGiftVoucher()
     commodity.fetchReserveDetail(match.params.id).then(() => {
@@ -258,6 +273,7 @@ class AppointDiscounts extends React.Component {
   render() {
     const { form } = this.props
     const { getFieldProps } = form
+    const { score_name, dhb_name, } = this.state
     return (
       <React.Fragment>
         <NavBar title="预约优惠设置" goBack />
@@ -296,8 +312,8 @@ class AppointDiscounts extends React.Component {
                 rules: [{ required: false }],
               })}
               labelNumber={7}
-              extra="元宝"
-              placeholder="请填写元宝数量"
+              extra={dhb_name}
+              placeholder={`请填写${dhb_name}数量`}
             >
               每消费1元赠送
             </InputItem>
@@ -305,9 +321,9 @@ class AppointDiscounts extends React.Component {
               {...getFieldProps('score_get_num', {
                 rules: [{ required: false }],
               })}
-              extra="金币"
+              extra={score_name}
               labelNumber={7}
-              placeholder="请填写金币数量"
+              placeholder={`请填写${score_name}数量`}
             >
               每消费1元赠送
             </InputItem>
