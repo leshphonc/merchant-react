@@ -13,6 +13,7 @@ import {
   TextareaItem,
   Checkbox,
 } from 'antd-mobile'
+import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 import Utils from '@/utils'
@@ -218,9 +219,7 @@ class GiftPanel extends React.Component {
   render() {
     const { giftManagement, match, form } = this.props
     const { getFieldProps } = form
-    const {
-      giftCategory, giftCategorylist, shopList,
-    } = giftManagement
+    const { giftCategory, giftCategorylist, shopList } = giftManagement
     const { asyncCascadeValue, store } = this.state
     const { cascadeOption, circleOption, marketOption } = giftManagement
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
@@ -398,6 +397,18 @@ class GiftPanel extends React.Component {
           </List.Item>
           <List.Item>
             规格
+            <Tooltip
+              trigger="click"
+              placement="topLeft"
+              overlay="以回车换行进行分割"
+              onClick={e => {
+                e.stopPropagation()
+              }}
+            >
+              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                &#xe628;
+              </i>
+            </Tooltip>
             <TextareaItem {...getFieldProps('specification')} rows={3} placeholder="请填写规格" />
           </List.Item>
           <List.Item>
