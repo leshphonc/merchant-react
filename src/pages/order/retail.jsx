@@ -34,7 +34,7 @@ const PayType = [
     value: 'weixin',
   },
   {
-    label: '微信支付',
+    label: '余额支付',
     value: 'balance',
   },
 ]
@@ -55,7 +55,7 @@ class Retail extends React.Component {
       keyword: '',
       height: document.documentElement.clientHeight,
     }
- 
+    this.refresh = React.createRef()
   }
 
   componentDidMount() {
@@ -69,8 +69,6 @@ class Retail extends React.Component {
     if (!shopOrderList.length) order.fetchShopOrderList(orderStatusValue, payTypeValue, searchtype, keyword)
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
-    console.log(this.refresh)
-    console.log(this)
     this.setState({
       height: hei,
     })
