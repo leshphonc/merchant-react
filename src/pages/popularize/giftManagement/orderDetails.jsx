@@ -104,19 +104,29 @@ class OressGoods extends React.Component {
             联系电话
           </Item>
           <Item
-            extra={
-              giftOrderDetail.delivery_type ? delivery[giftOrderDetail.delivery_type].label : ''
-            }
+            // extra={
+            //   giftOrderDetail.delivery_type ? delivery[giftOrderDetail.delivery_type].label : ''
+            // }
             arrow="empty"
           >
-            配送要求
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div>
+                配送要求
+              </div>
+              <div>{giftOrderDetail.delivery_type ? delivery[giftOrderDetail.delivery_type].label : ''}</div>
+            </div>
           </Item>
           <Item extra={giftOrderDetail.zipcode} arrow="empty">
             邮编
           </Item>
           <Item arrow="empty">
-            <div style={{ whiteSpace: 'initial' }}>
-              收货地址 &nbsp;&nbsp;&nbsp;&nbsp; {giftOrderDetail.adress}
+            <div style={{ display: 'flex' }}>
+              <div>
+                收货地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </div>
+              <div style={{ whiteSpace: 'initial' }}>
+                {giftOrderDetail.adress}
+              </div>
             </div>
           </Item>
         </List>
