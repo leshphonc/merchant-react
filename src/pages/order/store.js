@@ -21,7 +21,6 @@ class OrderStore {
 
   @observable pickAddress = []
 
-
   // 团购订单列表
   @observable groupOrderList = []
 
@@ -35,7 +34,6 @@ class OrderStore {
 
   @observable groupOrderPass = []
 
-  
   // 预约订单列表
   @observable reservationOrderList = []
 
@@ -46,7 +44,6 @@ class OrderStore {
   @observable reservationOrderListTotal = null
 
   @observable reservationOrderDetail = {}
-
 
   // 获取订单种类列表
   @action
@@ -61,7 +58,7 @@ class OrderStore {
 
   // 获取零售订单列表
   @action
-  fetchShopOrderList = async (status, paytype, searchtype, keyword) => {
+  fetchShopOrderList = async (status, paytype, searchtype, stime, etime, keyword) => {
     let hasMore = true
     if (this.shopOrderListTotal !== null) {
       hasMore = this.shopOrderListPage * this.shopOrderListSize < this.shopOrderListTotal
@@ -75,6 +72,8 @@ class OrderStore {
       status,
       paytype,
       searchtype,
+      stime,
+      etime,
       keyword,
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -113,12 +112,12 @@ class OrderStore {
 
   // 重置页数请求零售订单列表
   @action
-  resetAndFetchShopOrderList = async (status, paytype, searchtype, keyword) => {
+  resetAndFetchShopOrderList = async (status, paytype, searchtype, stime, etime, keyword) => {
     runInAction(() => {
       this.shopOrderList = []
       this.shopOrderListPage = 1
       this.shopOrderListTotal = null
-      this.fetchShopOrderList(status, paytype, searchtype, keyword)
+      this.fetchShopOrderList(status, paytype, searchtype, stime, etime, keyword)
     })
   }
 

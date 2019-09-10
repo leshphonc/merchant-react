@@ -8,13 +8,24 @@ export const fetchOrderList = () => axios.get('/appapi.php?c=Merchantapp&a=order
 })
 
 // 获取零售订单列表
-export const fetchShopOrderList = (page, size, status, paytype, searchtype, keyword) => axios.get('/appapi.php?c=Merchantapp&a=shop_order', {
+export const fetchShopOrderList = (
+  page,
+  size,
+  status,
+  paytype,
+  searchtype,
+  stime,
+  etime,
+  keyword,
+) => axios.get('/appapi.php?c=Merchantapp&a=shop_order', {
   params: {
     page,
     size,
     status,
     pay_type: paytype,
     searchtype,
+    stime,
+    etime,
     keyword,
     ticket: localStorage.getItem('ticket'),
   },

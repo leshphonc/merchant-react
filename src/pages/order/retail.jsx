@@ -2,7 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import NavBar from '@/common/NavBar'
 import {
-  SearchBar, Picker, WingBlank, WhiteSpace, Card, Flex, PullToRefresh,
+  SearchBar,
+  Picker,
+  WingBlank,
+  WhiteSpace,
+  Card,
+  Flex,
+  PullToRefresh,
+  DatePicker,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import { FilterBox } from '@/styled'
@@ -45,6 +52,10 @@ class Retail extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      startTime: '',
+      startTimeLabel: '开始时间',
+      endTime: '',
+      endTimeLabel: '结束时间',
       orderStatus: '全部',
       orderStatusValue: '-1',
       payType: '全部方式',
@@ -186,47 +197,119 @@ class Retail extends React.Component {
     return '未支付'
   }
 
+  changeStartTime = val => {
+    const { order } = this.props
+    const {
+      orderStatusValue, payTypeValue, searchtype, endTime, keyword,
+    } = this.state
+    this.setState({
+      startTime: moment(val).format('YYYY-MM-DD'),
+      startTimeLabel: moment(val).format('YYYY-MM-DD'),
+    })
+    order.resetAndFetchShopOrderList(
+      orderStatusValue,
+      payTypeValue,
+      searchtype,
+      moment(val).format('YYYY-MM-DD'),
+      endTime,
+      keyword,
+    )
+  }
+
+  changeEndTime = val => {
+    const { order } = this.props
+    const {
+      orderStatusValue, payTypeValue, searchtype, startTime, keyword,
+    } = this.state
+    this.setState({
+      endTime: moment(val).format('YYYY-MM-DD'),
+      endTimeLabel: moment(val).format('YYYY-MM-DD'),
+    })
+    order.resetAndFetchShopOrderList(
+      orderStatusValue,
+      payTypeValue,
+      searchtype,
+      startTime,
+      moment(val).format('YYYY-MM-DD'),
+      keyword,
+    )
+  }
+
   findSearchTypeLabelAndFetch = value => {
     const { order } = this.props
-    const { orderStatusValue, payTypeValue, keyword } = this.state
+    const {
+      orderStatusValue, payTypeValue, startTime, endTime, keyword,
+    } = this.state
     const result = SearchType.find(item => item.value === value[0])
     this.setState({
       searchtypeLabel: result.label,
       searchtype: result.value,
     })
-    order.resetAndFetchShopOrderList(orderStatusValue, payTypeValue, result.value, keyword)
+    order.resetAndFetchShopOrderList(
+      orderStatusValue,
+      payTypeValue,
+      result.value,
+      startTime,
+      endTime,
+      keyword,
+    )
   }
 
   findStatusLabelAndFetch = value => {
     const { order } = this.props
-    const { payTypeValue, searchtype, keyword } = this.state
+    const {
+      payTypeValue, searchtype, startTime, endTime, keyword,
+    } = this.state
     const { shopOrderStatus } = order
     const result = shopOrderStatus.find(item => item.value === value[0])
     this.setState({
       orderStatus: result.label,
       orderStatusValue: result.value,
     })
-    order.resetAndFetchShopOrderList(result.value, payTypeValue, searchtype, keyword)
+    order.resetAndFetchShopOrderList(
+      result.value,
+      payTypeValue,
+      searchtype,
+      startTime,
+      endTime,
+      keyword,
+    )
   }
 
   findPayLabelAndFetch = value => {
     const { order } = this.props
-    const { orderStatusValue, searchtype, keyword } = this.state
+    const {
+      orderStatusValue, searchtype, startTime, endTime, keyword,
+    } = this.state
     const result = PayType.find(item => item.value === value[0])
     this.setState({
       payType: result.label,
       payTypeValue: result.value,
     })
-    order.resetAndFetchShopOrderList(orderStatusValue, result.value, searchtype, keyword)
+    order.resetAndFetchShopOrderList(
+      orderStatusValue,
+      result.value,
+      searchtype,
+      startTime,
+      endTime,
+      keyword,
+    )
   }
 
   loadMore = async () => {
     const { order } = this.props
     const {
-      orderStatusValue, payTypeValue, searchtype, keyword,
+      orderStatusValue, payTypeValue, searchtype, startTime, endTime, keyword,
     } = this.state
     this.setState({ refreshing: true })
-    await order.fetchShopOrderList(orderStatusValue, payTypeValue, searchtype, keyword)
+    await order.fetchShopOrderList(
+      orderStatusValue,
+      payTypeValue,
+      searchtype,
+      startTime,
+      endTime,
+      keyword,
+    )
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
@@ -235,6 +318,10 @@ class Retail extends React.Component {
   render() {
     const { order } = this.props
     const {
+      startTime,
+      startTimeLabel,
+      endTime,
+      endTimeLabel,
       orderStatus,
       payType,
       refreshing,
@@ -252,7 +339,14 @@ class Retail extends React.Component {
           placeholder={searchtypeLabel}
           value={keyword}
           onChange={val => this.setState({ keyword: val })}
-          onSubmit={val => order.resetAndFetchShopOrderList(orderStatusValue, payTypeValue, searchtype, val)
+          onSubmit={val => order.resetAndFetchShopOrderList(
+            orderStatusValue,
+            payTypeValue,
+            searchtype,
+            startTime,
+            endTime,
+            val,
+          )
           }
         />
         <WhiteSpace />
@@ -301,6 +395,29 @@ class Retail extends React.Component {
                 </i>
               </div>
             </Picker>
+          </FilterBox>
+        </WingBlank>
+        <WhiteSpace />
+        <WingBlank size="sm">
+          <FilterBox style={{ marginRight: 5 }}>
+            <DatePicker mode="date" onChange={this.changeStartTime}>
+              <div>
+                <span>{startTimeLabel}</span>
+                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                  &#xe6f0;
+                </i>
+              </div>
+            </DatePicker>
+          </FilterBox>
+          <FilterBox style={{ marginRight: 5 }}>
+            <DatePicker mode="date" onChange={this.changeEndTime}>
+              <div>
+                <span>{endTimeLabel}</span>
+                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                  &#xe6f0;
+                </i>
+              </div>
+            </DatePicker>
           </FilterBox>
         </WingBlank>
         <WhiteSpace />

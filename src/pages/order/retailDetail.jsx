@@ -198,6 +198,7 @@ class RetailDetail extends React.Component {
             <List.Item extra={orderDetails.fetch_number}>取单编号</List.Item>
           )}
           <List.Item extra={orderDetails.order_id}>订单编号</List.Item>
+          <List.Item extra={orderDetails.real_orderid}>流水号</List.Item>
           <List.Item extra={orderDetails.create_time}>下单时间</List.Item>
           <List.Item extra={orderDetails.expect_use_time}>期望送达时间</List.Item>
           <List.Item extra={orderDetails.order_from_txt}>订单来源</List.Item>
