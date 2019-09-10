@@ -8,15 +8,12 @@ import {
 // import Utils from '@/utils'
 import moment from 'moment'
 
-// const { prompt } = Modal
 @inject('giftManagement')
 @observer
 class OressGoods extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      // giftPass: '',
-      // giftPassArr: [],
       refreshing: false,
       height: document.documentElement.clientHeight,
     }
@@ -26,17 +23,6 @@ class OressGoods extends React.Component {
   componentDidMount() {
     const { giftManagement, match } = this.props
     const { height } = this.state
-    // const { giftOrderDetail } = giftManagement
-    // if (giftOrderDetail.pass_array === '1') {
-    //   giftManagement.fecthGiftPassArray(match.params.orderId).then(() => {
-    //     const { giftOrderPass } = giftManagement
-    //     console.log(giftOrderPass)
-    //     this.setState({
-    //       giftPassArr: giftOrderPass.pass_array,
-    //     })
-    //   })
-    // }
-    // giftManagement.checkCouponCode(262)
     giftManagement.fetchGiftOrder(match.params.giftId).then(() => {
       giftManagement.resetAndFetchGiftOrderList()
       giftManagement.fetchGiftOrder(match.params.giftId)
@@ -53,7 +39,6 @@ class OressGoods extends React.Component {
   mapList = () => {
     const { giftManagement, history } = this.props
     const { giftOrder } = giftManagement
-    // const { giftPass, giftPassArr } = this.state
     return giftOrder.map(item => (
       <React.Fragment key={item.order_id}>
         <Card>
@@ -111,31 +96,8 @@ class OressGoods extends React.Component {
                     <Button
                       type="primary"
                       size="small"
-                      // onClick={() => this.giftPassList(giftPassArr)}
                       onClick={() => history.push(`/popularize/giftManagement/scanCode/${item.order_id}`)
                       }
-                      // onClick={() => {
-                      //   window.wx.scanQRCode({
-                      //     needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-                      //     scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
-                      //     success(res) {
-                      //       const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
-                      //       // window.alert(result)
-                      //       const code = Utils.getUrlParam('code', result)
-                      //       if (code) {
-                      //         giftManagement.checkCouponCode(item.order_id, code).then(res2 => {
-                      //           if (res2) Toast.success('核销成功')
-                      //         })
-                      //       } else {
-                      //         Toast.info('未识别到code，无法核销')
-                      //       }
-                      //     },
-                      //     // fail(res) {
-                      //     //   alert(JSON.stringify(res))
-                      //     //   giftManagement.checkCouponCode(item.order_id)
-                      //     // },
-                      //   })
-                      // }}
                     >
                       扫码核销
                     </Button>
