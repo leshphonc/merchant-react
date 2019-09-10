@@ -147,3 +147,8 @@ export const modifyExpress = payload => {
     ticket: localStorage.getItem('ticket'),
   })
 }
+
+export const checkCouponCode = (id, code, splice) => axios.post('/appapi.php?c=Merchantapp&a=use_couponcode', {
+  code: splice ? `${id}d${code}` : code,
+  ticket: localStorage.getItem('ticket'),
+})

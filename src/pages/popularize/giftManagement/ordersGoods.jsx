@@ -3,10 +3,12 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 import ReactDOM from 'react-dom'
 import {
-  Button, Flex, WingBlank, Card, WhiteSpace, PullToRefresh,
+  Button, Flex, WingBlank, Card, WhiteSpace, PullToRefresh, Toast,
 } from 'antd-mobile'
+import Utils from '@/utils'
 import moment from 'moment'
 
+// const { prompt } = Modal
 @inject('giftManagement')
 @observer
 class OressGoods extends React.Component {
@@ -22,6 +24,7 @@ class OressGoods extends React.Component {
   componentDidMount() {
     const { giftManagement, match } = this.props
     const { height } = this.state
+    // giftManagement.checkCouponCode()
     giftManagement.fetchGiftOrder(match.params.giftId).then(() => {
       giftManagement.resetAndFetchGiftOrderList()
       giftManagement.fetchGiftOrder(match.params.giftId)
@@ -51,12 +54,19 @@ class OressGoods extends React.Component {
           />
           <Card.Body style={{ minHeight: '22px' }}>
             <Flex>
-              <Flex.Item style={{ flex: 'none', width: '56%' }}>订单编号: {item.order_id}</Flex.Item>
+              <Flex.Item style={{ flex: 'none', width: '56%' }}>
+                订单编号: {item.order_id}
+              </Flex.Item>
               <Flex.Item>订单数量: {item.num}</Flex.Item>
             </Flex>
             <Flex style={{ marginTop: '10px', marginBottom: '5px' }}>
-              <Flex.Item style={{ flex: 'none', width: '58%' }}>订单时间: {moment(item.order_time * 1000).format('YYYY-MM-DD HH:mm')}</Flex.Item>
-              <Flex.Item style={{ marginLeft: '2px' }}>状态: {item.paid === '1' ? '已支付' : '未支付'} {item.status === '1' ? '已发货' : '未发货'}</Flex.Item>
+              <Flex.Item style={{ flex: 'none', width: '58%' }}>
+                订单时间: {moment(item.order_time * 1000).format('YYYY-MM-DD HH:mm')}
+              </Flex.Item>
+              <Flex.Item style={{ marginLeft: '2px' }}>
+                状态: {item.paid === '1' ? '已支付' : '未支付'}{' '}
+                {item.status === '1' ? '已发货' : '未发货'}
+              </Flex.Item>
             </Flex>
           </Card.Body>
           <Card.Footer
@@ -66,26 +76,51 @@ class OressGoods extends React.Component {
                   <Button
                     type="primary"
                     size="small"
-                    onClick={() => history.push(
-                      `/popularize/giftManagement/orderDetails/${item.order_id}`,
-                    )
+                    onClick={() => history.push(`/popularize/giftManagement/orderDetails/${item.order_id}`)
                     }
                   >
                     详情
                   </Button>
                 </Flex.Item>
-                <Flex.Item>
-                  <Button
-                    type="primary"
-                    size="small"
-                    onClick={() => history.push(
-                      `/popularize/giftManagement/deliverGoods/${item.order_id}`,
-                    )
-                    }
-                  >
-                    发货
-                  </Button>
-                </Flex.Item>
+                {item.is_pick_in_store === '0' ? (
+                  <Flex.Item>
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={() => history.push(`/popularize/giftManagement/deliverGoods/${item.order_id}`)
+                      }
+                    >
+                      发货
+                    </Button>
+                  </Flex.Item>
+                ) : (
+                  <Flex.Item>
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={() => {
+                        window.wx.scanQRCode({
+                          needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                          scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+                          success(res) {
+                            const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
+                            // window.alert(result)
+                            const code = Utils.getUrlParam('code', result)
+                            if (code) {
+                              giftManagement.checkCouponCode(null, code, false).then(res2 => {
+                                if (res2) Toast.success('核销成功')
+                              })
+                            } else {
+                              Toast.info('未识别到code，无法核销')
+                            }
+                          },
+                        })
+                      }}
+                    >
+                      扫码核销
+                    </Button>
+                  </Flex.Item>
+                )}
               </Flex>
             }
           />
@@ -111,10 +146,7 @@ class OressGoods extends React.Component {
     const { refreshing, height } = this.state
     return (
       <React.Fragment>
-        <NavBar
-          title="商品订单"
-          goBack
-        />
+        <NavBar title="商品订单" goBack />
         {giftOrderTotal < 10 ? (
           <React.Fragment>
             <WhiteSpace />
