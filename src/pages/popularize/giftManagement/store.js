@@ -45,6 +45,8 @@ class MastSotre {
 
   @observable express = {}
 
+  @observable giftOrderPass = []
+
   // 获取商品订单列表
   @action
   fetchGiftOrder = async giftId => {
@@ -437,26 +439,20 @@ class MastSotre {
   }
 
   @action
-  checkCouponCode = async (id, code, splice) => {
-    const response = await services.checkCouponCode(id, code, splice)
+  checkCouponCode = async (orderId, groupPass) => {
+    const response = await services.checkCouponCode(orderId, groupPass)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      this.giftOrder.forEach((item, index) => {
-        if (splice) {
-          if (item.order_id === id) {
-            runInAction(() => {
-              this.giftOrder[index].is_pick_in_store = '1'
-            })
-          }
-        } else {
-          const realId = code.split('d')[0]
-          if (item.order_id === realId) {
-            runInAction(() => {
-              this.giftOrder[index].is_pick_in_store = '1'
-            })
-          }
-        }
-      })
       return Promise.resolve(true)
+    }
+  }
+
+  @action
+  fecthGiftPassArray = async orderId => {
+    const response = await services.fecthGiftPassArray(orderId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.giftOrderPass = response.data.result
+      })
     }
   }
 }
