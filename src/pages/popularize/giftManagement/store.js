@@ -435,5 +435,29 @@ class MastSotre {
       this.giftOrderTotal = null
     })
   }
+
+  @action
+  checkCouponCode = async (id, code, splice) => {
+    const response = await services.checkCouponCode(id, code, splice)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      this.giftOrder.forEach((item, index) => {
+        if (splice) {
+          if (item.order_id === id) {
+            runInAction(() => {
+              this.giftOrder[index].is_pick_in_store = '1'
+            })
+          }
+        } else {
+          const realId = code.split('d')[0]
+          if (item.order_id === realId) {
+            runInAction(() => {
+              this.giftOrder[index].is_pick_in_store = '1'
+            })
+          }
+        }
+      })
+      return Promise.resolve(true)
+    }
+  }
 }
 export default new MastSotre()
