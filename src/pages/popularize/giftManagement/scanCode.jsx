@@ -57,21 +57,25 @@ class ScanCode extends React.Component {
 
   giftPassList = passArr => passArr.map((item, index) => (
     <Flex key={index}>
-      <div>核销码:{item.gift_pass}</div>
-      <div>
-        {item.status === '1' ? (
-          '已验证'
-        ) : (
-          <Button
-            type="primary"
-            size="small"
-            style={{ width: '60%', margin: '10px auto 0' }}
-            onClick={() => this.verificBtn(this.state.detail.order_id)}
-          >
-              验证
-          </Button>
-        )}
-      </div>
+      <Flex.Item style={{ flex: 'none', width: '60%' }}>
+        <div>核销码:{item.gift_pass}</div>
+      </Flex.Item>
+      <Flex.Item style={{ flex: 'none' }}>
+        <div>
+          {item.status === '1' ? (
+            '已验证'
+          ) : (
+            <Button
+              type="primary"
+              size="small"
+              style={{ width: '60%', margin: '0px 40px 0' }}
+              onClick={() => this.verificBtn(this.state.detail.order_id)}
+            >
+                验证
+            </Button>
+          )}
+        </div>
+      </Flex.Item>
     </Flex>
   ))
 
@@ -84,38 +88,40 @@ class ScanCode extends React.Component {
         <Card style={{ marginTop: '10px' }}>
           <Card.Header style={{ fontSize: 15, color: '#999' }} title="核销信息"></Card.Header>
           <Card.Body style={{ color: '#666', fontSize: 15 }}>
-            <Flex>
-              <Flex.Item style={{ flex: 'none', width: '60%' }}>
-                <div style={{ marginTop: '6px' }}>核销码:{giftPass}</div>
-              </Flex.Item>
-              <Flex.Item style={{ flex: 'none' }}>
-                <div>
-                  <Button
-                    type="primary"
-                    size="small"
-                    style={{ width: '60%', margin: '0px 40px 0' }}
-                    onClick={() => {
-                      window.wx.scanQRCode({
-                        needResult: 1,
-                        scanType: ['qrCode', 'barCode'],
-                        success(res) {
-                          giftManagement
-                            .checkCouponCode(detail.order_id, res.resultStr)
-                            .then(res => {
-                              if (res) Toast.success('验证成功', 1, () => window.location.reload())
-                            })
-                        },
-                      })
-                    }}
-                  >
-                    验证
-                  </Button>
-                </div>
-              </Flex.Item>
-            </Flex>
-            {detail.store_id !== '0'
-              && giftPassArr.length > 1
-              && this.giftPassList(giftPassArr)}
+            {detail.store_id !== '0' && giftPassArr.length < 1 && giftPass && (
+              <Flex>
+                <Flex.Item style={{ flex: 'none', width: '60%' }}>
+                  <div style={{ marginTop: '6px' }}>核销码:{giftPass}</div>
+                </Flex.Item>
+                <Flex.Item style={{ flex: 'none' }}>
+                  <div>
+                    <Button
+                      type="primary"
+                      size="small"
+                      style={{ width: '60%', margin: '0px 40px 0' }}
+                      onClick={() => {
+                        window.wx.scanQRCode({
+                          needResult: 1,
+                          scanType: ['qrCode', 'barCode'],
+                          success(res) {
+                            giftManagement
+                              .checkCouponCode(detail.order_id, res.resultStr)
+                              .then(res => {
+                                if (res) Toast.success('验证成功', 1, () => window.location.reload())
+                              })
+                            // giftManagement.resetAndFetchGiftOrderList()
+                            // history.goBack()
+                          },
+                        })
+                      }}
+                    >
+                      验证
+                    </Button>
+                  </div>
+                </Flex.Item>
+              </Flex>
+            )}
+            {detail.store_id !== '0' && giftPassArr.length > 1 && this.giftPassList(giftPassArr)}
           </Card.Body>
         </Card>
       </React.Fragment>
