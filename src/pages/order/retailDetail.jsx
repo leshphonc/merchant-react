@@ -1,9 +1,10 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import {
-  List, Button, Flex, WingBlank, WhiteSpace, Modal, Radio,
+  List, Button, Flex, WingBlank, WhiteSpace, Modal, Radio, Toast,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
+import ClipboardJS from 'clipboard'
 
 const { RadioItem } = Radio
 
@@ -18,6 +19,15 @@ class RetailDetail extends React.Component {
   componentDidMount() {
     const { order, match } = this.props
     order.fetchShopOrderDetail(match.params.id)
+    const copyBtn = new ClipboardJS('#copyDOM')
+    copyBtn.on('success', e => {
+      // 复制成功
+      e.clearSelection()
+    })
+    copyBtn.on('error', e => {
+      // 复制失败；
+      console.log(e.action)
+    })
   }
 
   mapList = () => {
@@ -198,7 +208,24 @@ class RetailDetail extends React.Component {
             <List.Item extra={orderDetails.fetch_number}>取单编号</List.Item>
           )}
           <List.Item extra={orderDetails.order_id}>订单编号</List.Item>
-          <List.Item extra={orderDetails.real_orderid}>流水号</List.Item>
+          <List.Item
+            extra={orderDetails.real_orderid}
+            data-clipboard-text={orderDetails.real_orderid}
+            id="copyDOM"
+            onClick={() => {
+              Modal.alert('流水号', orderDetails.real_orderid, [
+                {
+                  text: '复制',
+                  onPress: () => {
+                    // Toast.success('流水号已复制到剪贴板', 1)
+                    Toast.success('流水号已复制到剪贴板')
+                  },
+                },
+              ])
+            }}
+          >
+            流水号
+          </List.Item>
           <List.Item extra={orderDetails.create_time}>下单时间</List.Item>
           <List.Item extra={orderDetails.expect_use_time}>期望送达时间</List.Item>
           <List.Item extra={orderDetails.order_from_txt}>订单来源</List.Item>
@@ -206,7 +233,7 @@ class RetailDetail extends React.Component {
           <List.Item extra={orderDetails.userphone}>收货人电话</List.Item>
           <List.Item extra={orderDetails.register_phone}>注册电话</List.Item>
           <List.Item extra={orderDetails.note}>用户备注</List.Item>
-          <List.Item extra={!orderDetails.goods_type ? '实体商品订单' : '虚拟商品订单'}>
+          <List.Item extra={orderDetails.goods_type === '0' ? '实体商品订单' : '虚拟商品订单'}>
             订单类型
           </List.Item>
         </List>
@@ -228,9 +255,15 @@ class RetailDetail extends React.Component {
         <List renderHeader="支付信息">
           <List.Item extra={orderDetails.pay_time}>支付时间</List.Item>
           <List.Item extra={orderDetails.pay_type_str}>支付方式</List.Item>
-          <List.Item extra={`¥${orderDetails.price}`}>应收总额</List.Item>
-          <List.Item extra={orderDetails.minus_card_discount}>商家会员卡折扣</List.Item>
-          <List.Item extra={`¥${orderDetails.balance_pay}`}>系统余额支付</List.Item>
+          <List.Item
+            extra={
+              orderDetails.change_price > 0 ? orderDetails.price : `¥${orderDetails.go_pay_price}`
+            }
+          >
+            应收总额
+          </List.Item>
+          <List.Item extra={`-¥${orderDetails.minus_card_discount}`}>商家会员卡折扣</List.Item>
+          <List.Item extra={`-¥${orderDetails.balance_pay}`}>系统余额支付</List.Item>
         </List>
         <WhiteSpace />
         <WingBlank size="md">
