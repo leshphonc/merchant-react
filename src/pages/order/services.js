@@ -112,8 +112,10 @@ export const pickerAddress = (id, pickId) => axios.post('/appapi.php?c=Merchanta
 
 // 获取自提地址
 export const fetchPickAddress = id => axios.get('/appapi.php?c=Merchantapp&a=getPickAddress', {
-  order_id: id,
-  ticket: localStorage.getItem('ticket'),
+  params: {
+    order_id: id,
+    ticket: localStorage.getItem('ticket'),
+  },
 })
 
 // 发货到自提点
@@ -134,6 +136,22 @@ export const confirmConsumption = id => axios.post('/appapi.php?c=Merchantapp&a=
 export const cancelOrder = id => axios.post('/appapi.php?c=Merchantapp&a=shopOrderEdit', {
   order_id: id,
   status: '5',
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取物流配送信息
+export const fetchExpressList = () => axios.get('/appapi.php?c=Merchantapp&a=express_list', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 发货
+export const sendOrder = (orderId, no, expressId) => axios.post('/appapi.php?c=Merchantapp&a=shopOrderEdit', {
+  status: 2,
+  order_id: orderId,
+  express_number: no,
+  express_id: expressId,
   ticket: localStorage.getItem('ticket'),
 })
 

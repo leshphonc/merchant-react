@@ -71,13 +71,24 @@ class Retail extends React.Component {
 
   componentDidMount() {
     const { order } = this.props
-    const { shopOrderList } = order
     const {
-      height, orderStatusValue, payTypeValue, searchtype, keyword,
+      height,
+      orderStatusValue,
+      payTypeValue,
+      searchtype,
+      startTime,
+      endTime,
+      keyword,
     } = this.state
-
     order.fetchShopOrderStatus()
-    if (!shopOrderList.length) order.fetchShopOrderList(orderStatusValue, payTypeValue, searchtype, keyword)
+    order.resetAndFetchShopOrderList(
+      orderStatusValue,
+      payTypeValue,
+      searchtype,
+      startTime,
+      endTime,
+      keyword,
+    )
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({

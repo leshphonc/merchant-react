@@ -1,9 +1,19 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import {
-  List, Button, Flex, WingBlank, WhiteSpace, Modal, Radio, Toast,
+  List,
+  Button,
+  Flex,
+  WingBlank,
+  WhiteSpace,
+  Modal,
+  Radio,
+  Toast,
+  Picker,
+  InputItem,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
+import { FilterBox } from '@/styled'
 import ClipboardJS from 'clipboard'
 
 const { RadioItem } = Radio
@@ -13,12 +23,25 @@ const { RadioItem } = Radio
 class RetailDetail extends React.Component {
   state = {
     modal: false,
+    copyModal: false,
+    sendModal: false,
     addressValue: '',
+    expressListLabel: '',
+    expressListValue: '',
   }
 
   componentDidMount() {
     const { order, match } = this.props
     order.fetchShopOrderDetail(match.params.id)
+    order.fetchExpressList(match.params.id).then(() => {
+      const { order } = this.props
+      const { label } = order.expressList[0] ? order.expressList[0] : { label: '' }
+      const { value } = order.expressList[0] ? order.expressList[0] : { value: '' }
+      this.setState({
+        expressListLabel: label,
+        expressListValue: value,
+      })
+    })
     const copyBtn = new ClipboardJS('#copyDOM')
     copyBtn.on('success', e => {
       // 复制成功
@@ -45,7 +68,7 @@ class RetailDetail extends React.Component {
               <React.Fragment>
                 <span>x{item2.num}</span>
                 <span style={{ textDecoration: 'line-through', margin: '0 15px' }}>
-                  ¥{item2.discount_price}
+                  ¥{item2.total}
                 </span>
                 <span>¥{item2.discount_price}</span>
               </React.Fragment>
@@ -142,7 +165,15 @@ class RetailDetail extends React.Component {
     ) {
       return (
         <Flex.Item>
-          <Button type="primary">发货</Button>
+          <Button
+            type="primary"
+            onClick={() => this.setState({
+              sendModal: true,
+            })
+            }
+          >
+            发货
+          </Button>
         </Flex.Item>
       )
     }
@@ -189,16 +220,39 @@ class RetailDetail extends React.Component {
     ])
   }
 
+  findExpressLabelAndFetch = value => {
+    const { order } = this.props
+    const { expressList } = order
+    const result = expressList.find(item => item.value === value[0])
+    this.setState({
+      expressListLabel: result.label,
+      expressListValue: result.value,
+    })
+  }
+
   // 发货到自提
   shipToSelfLifting = id => {
     const { order } = this.props
     order.shipToSelfLifting(id)
   }
 
+  send = () => {
+    const { order, match } = this.props
+    const { no, expressListValue } = this.state
+    order.sendOrder(match.params.id, no, expressListValue).then(res => {
+      if (res) {
+        Toast.success('发货成功', 1)
+        this.setState({ sendModal: false })
+      }
+    })
+  }
+
   render() {
     const { order } = this.props
-    const { shopOrderDetail } = order
-    const { modal } = this.state
+    const { shopOrderDetail, expressList } = order
+    const {
+      modal, copyModal, sendModal, expressListLabel, expressListValue,
+    } = this.state
     const orderDetails = shopOrderDetail.order_details || {}
     return (
       <React.Fragment>
@@ -212,17 +266,7 @@ class RetailDetail extends React.Component {
             extra={orderDetails.real_orderid}
             data-clipboard-text={orderDetails.real_orderid}
             id="copyDOM"
-            onClick={() => {
-              Modal.alert('流水号', orderDetails.real_orderid, [
-                {
-                  text: '复制',
-                  onPress: () => {
-                    // Toast.success('流水号已复制到剪贴板', 1)
-                    Toast.success('流水号已复制到剪贴板')
-                  },
-                },
-              ])
-            }}
+            onClick={() => this.setState({ copyModal: true })}
           >
             流水号
           </List.Item>
@@ -240,7 +284,7 @@ class RetailDetail extends React.Component {
         <List renderHeader="配送信息">
           <List.Item extra={orderDetails.deliver_str}>配送方式</List.Item>
           <List.Item wrap extra={orderDetails.address}>
-            收获地址
+            收货地址
           </List.Item>
         </List>
         <List renderHeader="商品信息">
@@ -262,8 +306,18 @@ class RetailDetail extends React.Component {
           >
             应收总额
           </List.Item>
-          <List.Item extra={`-¥${orderDetails.minus_card_discount}`}>商家会员卡折扣</List.Item>
-          <List.Item extra={`-¥${orderDetails.balance_pay}`}>系统余额支付</List.Item>
+          <List.Item
+            extra={`${orderDetails.minus_card_discount > 0 ? '-' : ''}¥${
+              orderDetails.minus_card_discount
+            }`}
+          >
+            商家会员卡折扣
+          </List.Item>
+          <List.Item
+            extra={`${orderDetails.balance_pay > 0 ? '-' : ''}¥${orderDetails.balance_pay}`}
+          >
+            系统余额支付
+          </List.Item>
         </List>
         <WhiteSpace />
         <WingBlank size="md">
@@ -308,6 +362,55 @@ class RetailDetail extends React.Component {
           ]}
         >
           <List>{this.mapAddress()}</List>
+        </Modal>
+        <Modal
+          visible={copyModal}
+          transparent
+          onClose={() => this.setState({ copyModal: false })}
+          title="流水号"
+          footer={[
+            {
+              text: '复制',
+              onPress: () => {
+                Toast.success('流水号已复制到剪贴板', 1)
+                this.setState({ copyModal: false })
+              },
+            },
+          ]}
+        >
+          {orderDetails.real_orderid}
+        </Modal>
+        <Modal
+          visible={sendModal}
+          transparent
+          onClose={() => this.setState({ sendModal: false })}
+          title="快递信息"
+          footer={[
+            {
+              text: '发货',
+              onPress: () => this.send(),
+            },
+          ]}
+        >
+          <div style={{ fontSize: 13 }}>{orderDetails.address}</div>
+          <div style={{ fontSize: 13 }}>配送距离：{orderDetails.distance}km</div>
+          <WhiteSpace />
+          <FilterBox style={{ marginRight: 5 }}>
+            <Picker
+              data={expressList}
+              cols={1}
+              value={[expressListValue]}
+              onChange={val => this.findExpressLabelAndFetch(val)}
+            >
+              <div>
+                <span>{expressListLabel}</span>
+                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                  &#xe6f0;
+                </i>
+              </div>
+            </Picker>
+          </FilterBox>
+          <InputItem placeholder="请输入快递单号" onChange={val => this.setState({ no: val })} />
         </Modal>
       </React.Fragment>
     )
