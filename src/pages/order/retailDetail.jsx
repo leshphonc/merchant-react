@@ -220,6 +220,108 @@ class RetailDetail extends React.Component {
     ])
   }
 
+  mapDiscount = () => {
+    const { order } = this.props
+    const { shopOrderDetail } = order
+    const dom = []
+    if (shopOrderDetail.discount_detail) {
+      const keys = Object.keys(shopOrderDetail.discount_detail)
+      keys.forEach(key => {
+        if (shopOrderDetail.discount_detail[key].discount_type === 1) {
+          dom.push(
+            <List.Item
+              key={key}
+              wrap
+              extra={
+                <span style={{ color: '#ff372d' }}>
+                  {`- ¥${shopOrderDetail.discount_detail[key].minus}`}
+                </span>
+              }
+            >
+              <span style={{ color: '#fff', background: '#0ec0a8', padding: '0 2px' }}>首</span>{' '}
+              系统首单满
+              {shopOrderDetail.discount_detail[key].money}元减
+              {shopOrderDetail.discount_detail[key].minus}元
+            </List.Item>,
+          )
+        }
+        if (shopOrderDetail.discount_detail[key].discount_type === 2) {
+          dom.push(
+            <List.Item
+              key={key}
+              wrap
+              extra={
+                <span style={{ color: '#ff372d' }}>
+                  {`- ¥${shopOrderDetail.discount_detail[key].minus}`}
+                </span>
+              }
+            >
+              <span style={{ color: '#fff', background: '#5d26ea', padding: '0 2px' }}>减</span>{' '}
+              系统优惠满
+              {shopOrderDetail.discount_detail[key].money}元减
+              {shopOrderDetail.discount_detail[key].minus}元
+            </List.Item>,
+          )
+        }
+        if (shopOrderDetail.discount_detail[key].discount_type === 3) {
+          dom.push(
+            <List.Item
+              key={key}
+              wrap
+              extra={
+                <span style={{ color: '#ff372d' }}>
+                  {`- ¥${shopOrderDetail.discount_detail[key].minus}`}
+                </span>
+              }
+            >
+              <span style={{ color: '#fff', background: '#ffb000', padding: '0 2px' }}>首</span>{' '}
+              店铺首单满
+              {shopOrderDetail.discount_detail[key].money}元减
+              {shopOrderDetail.discount_detail[key].minus}元
+            </List.Item>,
+          )
+        }
+        if (shopOrderDetail.discount_detail[key].discount_type === 4) {
+          dom.push(
+            <List.Item
+              key={key}
+              wrap
+              extra={
+                <span style={{ color: '#ff372d' }}>
+                  {`- ¥${shopOrderDetail.discount_detail[key].minus}`}
+                </span>
+              }
+            >
+              <span style={{ color: '#fff', background: '#ff6655', padding: '0 2px' }}>减</span>{' '}
+              店铺优惠满
+              {shopOrderDetail.discount_detail[key].money}元减
+              {shopOrderDetail.discount_detail[key].minus}元
+            </List.Item>,
+          )
+        }
+        if (shopOrderDetail.discount_detail[key].discount_type === 5) {
+          dom.push(
+            <List.Item
+              key={key}
+              wrap
+              extra={
+                <span style={{ color: '#ff372d' }}>
+                  {`- ¥${shopOrderDetail.discount_detail[key].minus}`}
+                </span>
+              }
+            >
+              <span style={{ color: '#fff', background: '#ff0000', padding: '0 2px' }}>惠</span>{' '}
+              商品满
+              {shopOrderDetail.discount_detail[key].money}元配送费减
+              {shopOrderDetail.discount_detail[key].minus}元
+            </List.Item>,
+          )
+        }
+      })
+      return dom
+    }
+  }
+
   findExpressLabelAndFetch = value => {
     const { order } = this.props
     const { expressList } = order
@@ -295,6 +397,14 @@ class RetailDetail extends React.Component {
           <List.Item extra={`¥${orderDetails.freight_charge}`}>
             {shopOrderDetail.freight_alias}
           </List.Item>
+          {this.mapDiscount()}
+          <List.Item
+            extra={
+              <span style={{ color: '#ff372d' }}>{`优惠  - ¥${orderDetails.minus_price}`}</span>
+            }
+          >
+            {`订单 ¥${orderDetails.discount_price}`}
+          </List.Item>
         </List>
         <List renderHeader="支付信息">
           <List.Item extra={orderDetails.pay_time}>支付时间</List.Item>
@@ -307,14 +417,14 @@ class RetailDetail extends React.Component {
             应收总额
           </List.Item>
           <List.Item
-            extra={`${orderDetails.minus_card_discount > 0 ? '-' : ''}¥${
+            extra={`${orderDetails.minus_card_discount > 0 ? '- ' : ''}¥${
               orderDetails.minus_card_discount
             }`}
           >
             商家会员卡折扣
           </List.Item>
           <List.Item
-            extra={`${orderDetails.balance_pay > 0 ? '-' : ''}¥${orderDetails.balance_pay}`}
+            extra={`${orderDetails.balance_pay > 0 ? '- ' : ''}¥${orderDetails.balance_pay}`}
           >
             系统余额支付
           </List.Item>
