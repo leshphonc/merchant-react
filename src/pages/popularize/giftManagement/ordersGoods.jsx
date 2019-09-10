@@ -107,7 +107,7 @@ class OressGoods extends React.Component {
                             // window.alert(result)
                             const code = Utils.getUrlParam('code', result)
                             if (code) {
-                              giftManagement.checkCouponCode(code).then(res2 => {
+                              giftManagement.checkCouponCode(null, code, false).then(res2 => {
                                 if (res2) Toast.success('核销成功')
                               })
                             } else {
