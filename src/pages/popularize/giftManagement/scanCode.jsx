@@ -5,7 +5,7 @@ import {
   Button, Toast, Flex, Card,
 } from 'antd-mobile'
 import { createForm } from 'rc-form'
-import Utils from '@/utils'
+// import Utils from '@/utils'
 
 @createForm()
 @inject('giftManagement')
@@ -99,28 +99,12 @@ class ScanCode extends React.Component {
                         needResult: 1,
                         scanType: ['qrCode', 'barCode'],
                         success(res) {
-                          const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
-                          // window.alert(result)
-                          const code = Utils.getUrlParam('code', result)
-                          if (code) {
-                            giftManagement.checkCouponCode(detail.order_id, code).then(res2 => {
-                              if (res2) Toast.success('核销成功')
+                          giftManagement
+                            .checkCouponCode(detail.order_id, res.resultStr)
+                            .then(res => {
+                              if (res) Toast.success('验证成功', 1, () => window.location.reload())
                             })
-                          } else {
-                            Toast.info('未识别到code，无法核销')
-                          }
                         },
-                        // fail(res) {
-                        //   alert(JSON.stringify(res))
-                        //   giftManagement.checkCouponCode(detail.order_id)
-                        // },
-                        // success(res) {
-                        //   giftManagement
-                        //     .checkCouponCode(detail.order_id, res.resultStr)
-                        //     .then(res => {
-                        //       if (res) Toast.success('验证成功', 1, () => window.location.reload())
-                        //     })
-                        // },
                       })
                     }}
                   >
