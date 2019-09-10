@@ -3,9 +3,9 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 import ReactDOM from 'react-dom'
 import {
-  Button, Flex, WingBlank, Card, WhiteSpace, PullToRefresh, Toast,
+  Button, Flex, WingBlank, Card, WhiteSpace, PullToRefresh,
 } from 'antd-mobile'
-import Utils from '@/utils'
+// import Utils from '@/utils'
 import moment from 'moment'
 
 // const { prompt } = Modal

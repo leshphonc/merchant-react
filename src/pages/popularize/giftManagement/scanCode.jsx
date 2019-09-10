@@ -77,7 +77,6 @@ class ScanCode extends React.Component {
 
   render() {
     const { giftManagement } = this.props
-    const { giftOrderDetail } = giftManagement
     const { giftPass, giftPassArr, detail } = this.state
     return (
       <React.Fragment>
