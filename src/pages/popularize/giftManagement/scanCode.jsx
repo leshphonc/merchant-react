@@ -43,13 +43,13 @@ class ScanCode extends React.Component {
   }
 
   verificBtn = orderId => {
-    const { giftManagement } = this.props
+    const { giftManagement, history } = this.props
     window.wx.scanQRCode({
       needResult: 1,
       scanType: ['qrCode', 'barCode'],
       success(res) {
         giftManagement.checkCouponCode(orderId, res.resultStr).then(res => {
-          if (res) Toast.success('验证成功', 1, () => window.location.reload())
+          if (res) Toast.success('验证成功', 1, () => history.goBack())
         })
       },
     })
@@ -80,7 +80,7 @@ class ScanCode extends React.Component {
   ))
 
   render() {
-    const { giftManagement } = this.props
+    const { giftManagement, history } = this.props
     const { giftPass, giftPassArr, detail } = this.state
     return (
       <React.Fragment>
@@ -107,10 +107,8 @@ class ScanCode extends React.Component {
                             giftManagement
                               .checkCouponCode(detail.order_id, res.resultStr)
                               .then(res => {
-                                if (res) Toast.success('验证成功', 1, () => window.location.reload())
+                                if (res) Toast.success('验证成功', 1, () => history.goBack())
                               })
-                            // giftManagement.resetAndFetchGiftOrderList()
-                            // history.goBack()
                           },
                         })
                       }}
