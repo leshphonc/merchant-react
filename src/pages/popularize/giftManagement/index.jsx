@@ -10,6 +10,7 @@ import GiftPanel from './giftPanel'
 import OrdersGoods from './ordersGoods'
 import OrderDetails from './orderDetails'
 import DeliverGoods from './deliverGoods'
+import ScanCode from './scanCode'
 
 const seasons = [{ label: '关闭', value: '0' }, { label: '启用', value: '1' }]
 @inject('giftManagement')
@@ -166,6 +167,7 @@ export default () => (
       component={GiftPanel}
     />
     <Route path="/popularize/giftManagement/ordersGoods/:giftId?" component={OrdersGoods} />
+    <Route path="/popularize/giftManagement/scanCode/:orderId?" component={ScanCode} />
     <Route path="/popularize/giftManagement/deliverGoods/:orderId?" component={DeliverGoods} />
     <Route path="/popularize/giftManagement/orderDetails/:orderId?" component={OrderDetails} />
   </React.Fragment>
