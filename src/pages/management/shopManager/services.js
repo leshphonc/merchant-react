@@ -64,7 +64,7 @@ export const fetchBusinessList = storeId => axios.get('/appapi.php?c=Merchantapp
 })
 
 // 商品店铺
-export const fetchECommerceValues = () => axios.get('/appapi.php?c=Merchantapp&a=select_shop_store', {
+export const fetchECommerceValues = () => axios.get('/appapi.php?c=Merchantapp&a=get_store', {
   params: {
     ticket: localStorage.getItem('ticket'),
   },
