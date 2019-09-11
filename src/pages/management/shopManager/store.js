@@ -88,7 +88,7 @@ class MastSotre {
     const response = await services.fetchECommerceValues()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.eCommerceValues = response.data.result
+        this.eCommerceValues = response.data.result.store_list
       })
     }
   }
