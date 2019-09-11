@@ -23,7 +23,8 @@ class ScanCode extends React.Component {
   componentDidMount() {
     const { giftManagement, match } = this.props
     console.log(this.props)
-    // giftManagement.fetchExpressList(match.params.orderId)
+    // giftManagement.checkCouponCode(293, 53780900190911)
+    // giftManagement.fecthGiftArrayVerify(299, 10115209251903)
     giftManagement.fetchGiftOrderDetail(match.params.orderId).then(() => {
       const { giftOrderDetail } = giftManagement
       if (giftOrderDetail.pass_array === '1') {
@@ -48,7 +49,7 @@ class ScanCode extends React.Component {
       needResult: 1,
       scanType: ['qrCode', 'barCode'],
       success(res) {
-        giftManagement.checkCouponCode(orderId, res.resultStr).then(res => {
+        giftManagement.fecthGiftArrayVerify(orderId, res.resultStr).then(res => {
           if (res) Toast.success('验证成功', 1, () => history.goBack())
         })
       },
@@ -57,13 +58,15 @@ class ScanCode extends React.Component {
 
   giftPassList = passArr => passArr.map((item, index) => (
     <Flex key={index}>
-      <Flex.Item style={{ flex: 'none', width: '60%' }}>
+      <Flex.Item style={{ flex: 'none', width: '60%', marginTop: '15px' }}>
         <div>核销码:{item.gift_pass}</div>
       </Flex.Item>
-      <Flex.Item style={{ flex: 'none' }}>
+      <Flex.Item style={{ flex: 'none', marginTop: '15px' }}>
         <div>
           {item.status === '1' ? (
-            '已验证'
+            <Button type="primary" size="small" style={{ width: '60%', margin: '0px 40px 0' }}>
+                已验证
+            </Button>
           ) : (
             <Button
               type="primary"

@@ -439,8 +439,16 @@ class MastSotre {
   }
 
   @action
-  checkCouponCode = async (orderId, groupPass) => {
-    const response = await services.checkCouponCode(orderId, groupPass)
+  checkCouponCode = async (orderId, giftPass) => {
+    const response = await services.checkCouponCode(orderId, giftPass)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  fecthGiftArrayVerify = async (orderId, giftPass) => {
+    const response = await services.fecthGiftArrayVerify(orderId, giftPass)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }

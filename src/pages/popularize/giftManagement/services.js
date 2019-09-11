@@ -159,3 +159,9 @@ export const fecthGiftPassArray = orderId => axios.post('/appapi.php?c=Merchanta
   order_id: orderId,
   ticket: localStorage.getItem('ticket'),
 })
+
+export const fecthGiftArrayVerify = (orderId, giftPass) => axios.post('/appapi.php?c=Merchantapp&a=gift_array_verify', {
+  order_id: orderId,
+  gift_pass: giftPass,
+  ticket: localStorage.getItem('ticket'),
+})
