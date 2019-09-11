@@ -63,15 +63,15 @@ class ScanCode extends React.Component {
       <Flex.Item style={{ flex: 'none', marginTop: '15px' }}>
         <div>
           {item.status === '1' ? (
-            <Button type="primary" size="small" style={{ width: '60%', margin: '0px 40px 0' }}>
+            <Button type="primary" size="small" style={{ width: '60%', margin: '0px 34px 0px' }}>
                 已验证
             </Button>
           ) : (
             <Button
               type="primary"
               size="small"
-              style={{ width: '60%', margin: '0px 40px 0' }}
-              onClick={() => this.verificBtn(this.state.detail.order_id, item.gift_pass)}
+              style={{ width: '60%', margin: '0px 34px 0px' }}
+              onClick={() => this.verificBtn(this.state.detail.order_id)}
             >
                 验证
             </Button>
@@ -106,6 +106,7 @@ class ScanCode extends React.Component {
                           needResult: 1,
                           scanType: ['qrCode', 'barCode'],
                           success(res) {
+                            alert(res)
                             giftManagement
                               .checkCouponCode(detail.order_id, res.resultStr)
                               .then(res => {
