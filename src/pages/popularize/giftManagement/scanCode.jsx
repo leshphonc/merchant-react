@@ -95,31 +95,45 @@ class ScanCode extends React.Component {
                 <Flex.Item style={{ flex: 'none', width: '60%' }}>
                   <div style={{ marginTop: '6px' }}>核销码:{giftPass}</div>
                 </Flex.Item>
-                <Flex.Item style={{ flex: 'none' }}>
-                  <div>
-                    <Button
-                      type="primary"
-                      size="small"
-                      style={{ width: '60%', margin: '0px 40px 0' }}
-                      onClick={() => {
-                        window.wx.scanQRCode({
-                          needResult: 1,
-                          scanType: ['qrCode', 'barCode'],
-                          success(res) {
-                            alert(res)
-                            giftManagement
-                              .checkCouponCode(detail.order_id, res.resultStr)
-                              .then(res => {
-                                if (res) Toast.success('验证成功', 1, () => history.goBack())
-                              })
-                          },
-                        })
-                      }}
-                    >
-                      验证
-                    </Button>
-                  </div>
-                </Flex.Item>
+                {detail.status === '0' ? (
+                  <Flex.Item style={{ flex: 'none' }}>
+                    <div>
+                      <Button
+                        type="primary"
+                        size="small"
+                        style={{ width: '60%', margin: '0px 34px 0' }}
+                        onClick={() => {
+                          window.wx.scanQRCode({
+                            needResult: 1,
+                            scanType: ['qrCode', 'barCode'],
+                            success(res) {
+                              alert(res)
+                              giftManagement
+                                .checkCouponCode(detail.order_id, res.resultStr)
+                                .then(res => {
+                                  if (res) Toast.success('验证成功', 1, () => history.goBack())
+                                })
+                            },
+                          })
+                        }}
+                      >
+                        验证
+                      </Button>
+                    </div>
+                  </Flex.Item>
+                ) : (
+                  <Flex.Item style={{ flex: 'none' }}>
+                    <div>
+                      <Button
+                        type="primary"
+                        size="small"
+                        style={{ width: '60%', margin: '0px 34px 0' }}
+                      >
+                        已验证
+                      </Button>
+                    </div>
+                  </Flex.Item>
+                )}
               </Flex>
             )}
             {giftPassArr.length > 1 && this.giftPassList(giftPassArr)}
