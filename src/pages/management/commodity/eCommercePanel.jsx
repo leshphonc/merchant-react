@@ -19,7 +19,7 @@ import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import Editor from '@/common/Editor'
 import { MenuMask, PrimaryTag } from '@/styled'
-import { toJS } from 'mobx'
+import MultipleImg from '@/common/UploadImg/Multiple'
 
 const statusData = [{ label: '正常', value: '1' }, { label: '停售', value: '0' }]
 const freightType = [{ label: '按最大值算', value: '0' }, { label: '单独计算', value: '1' }]
@@ -40,6 +40,7 @@ class ECommerceAdd extends React.Component {
       specification: [],
       open: false,
       goods: [],
+      mul: false,
     }
     this.editor = React.createRef()
   }
@@ -150,8 +151,6 @@ class ECommerceAdd extends React.Component {
     const { goodsCategory } = commodity
     const { goods } = this.state
     const cateGoryLabel = []
-    console.log(goods)
-    console.log(toJS(goodsCategory))
     if (goodsCategory.length) {
       goodsCategory.forEach(item => {
         if (item.value === goods[0]) {
@@ -324,13 +323,26 @@ class ECommerceAdd extends React.Component {
     history.push('/management/commodity/eCommerceDeliveryTemplate')
   }
 
+  saveImg = url => {
+    const { form } = this.props
+    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
+    form.setFieldsValue({
+      pic: [...pic, { url }],
+    })
+    this.setState({
+      mul: false,
+    })
+  }
+
   render() {
     const { match, commodity, form } = this.props
     const {
       storeValues, categoryValues, goodsCategory, expressLists,
     } = commodity
     const { getFieldProps } = form
-    const { pic, open, goods } = this.state
+    const {
+      pic, open, goods, mul,
+    } = this.state
     const menuEl = (
       <Menu
         className="menu-position"
@@ -535,10 +547,15 @@ class ECommerceAdd extends React.Component {
             <ImagePicker
               {...getFieldProps('pic', {
                 valuePropName: 'files',
-                getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
                 rules: [{ required: true }],
               })}
-              selectable={pic.length < 4}
+              selectable={pic.length < 5}
+              onAddImageClick={e => {
+                this.setState({
+                  mul: true,
+                })
+                e.preventDefault()
+              }}
             />
           </List.Item>
           <List.Item>
@@ -560,6 +577,15 @@ class ECommerceAdd extends React.Component {
         </Button>
         {open ? menuEl : null}
         {open ? <MenuMask onClick={() => this.setState({ open: false })} /> : null}
+        <MultipleImg
+          visible={mul}
+          close={() => this.setState({
+            mul: false,
+          })
+          }
+          ratio={1}
+          callback={this.saveImg}
+        />
       </React.Fragment>
     )
   }

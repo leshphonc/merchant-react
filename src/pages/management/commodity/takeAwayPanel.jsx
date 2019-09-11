@@ -9,6 +9,7 @@ import 'rc-tooltip/assets/bootstrap.css'
 import Utils from '@/utils'
 import { createForm } from 'rc-form'
 import Editor from '@/common/Editor'
+import MultipleImg from '@/common/UploadImg/Multiple'
 
 const statusData = [{ label: '正常', value: '1' }, { label: '停售', value: '0' }]
 const category = [
@@ -25,6 +26,7 @@ class TakeAwayPanel extends React.Component {
     super(props)
     this.state = {
       pic: [],
+      mul: false,
     }
     this.editor = React.createRef()
   }
@@ -183,11 +185,22 @@ class TakeAwayPanel extends React.Component {
     }
   }
 
+  saveImg = url => {
+    const { form } = this.props
+    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
+    form.setFieldsValue({
+      pic: [...pic, { url }],
+    })
+    this.setState({
+      mul: false,
+    })
+  }
+
   render() {
     const { commodity, match, form } = this.props
     const { getFieldProps } = form
     const { storeValues, categoryValues } = commodity
-    const { pic } = this.state
+    const { pic, mul } = this.state
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}外卖商品`} goBack />
@@ -351,10 +364,15 @@ class TakeAwayPanel extends React.Component {
             <ImagePicker
               {...getFieldProps('pic', {
                 valuePropName: 'files',
-                getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
                 rules: [{ required: true }],
               })}
-              selectable={pic.length < 4}
+              selectable={pic.length < 5}
+              onAddImageClick={e => {
+                this.setState({
+                  mul: true,
+                })
+                e.preventDefault()
+              }}
             />
           </List.Item>
           <List.Item>
@@ -374,6 +392,15 @@ class TakeAwayPanel extends React.Component {
         >
           确定
         </Button>
+        <MultipleImg
+          visible={mul}
+          close={() => this.setState({
+            mul: false,
+          })
+          }
+          ratio={1}
+          callback={this.saveImg}
+        />
       </React.Fragment>
     )
   }

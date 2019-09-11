@@ -24,6 +24,7 @@ import moment from 'moment'
 import { MenuMask } from '@/styled'
 import Utils from '@/utils'
 import { toJS } from 'mobx'
+import MultipleImg from '@/common/UploadImg/Multiple'
 
 const { Item } = List
 const { CheckboxItem } = Checkbox
@@ -70,6 +71,7 @@ class ReservePanel extends React.Component {
       custom_content: [],
       use_time: [],
       custom_id: [],
+      mul: false,
     }
     this.editor = React.createRef()
   }
@@ -281,6 +283,17 @@ class ReservePanel extends React.Component {
     })
   }
 
+  saveImg = url => {
+    const { form } = this.props
+    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
+    form.setFieldsValue({
+      pic: [...pic, { url }],
+    })
+    this.setState({
+      mul: false,
+    })
+  }
+
   render() {
     const { match, form, commodity } = this.props
     const {
@@ -294,7 +307,7 @@ class ReservePanel extends React.Component {
       use_time,
     } = this.state
     const { getFieldProps } = form
-    const { shopList } = this.state
+    const { shopList, mul } = this.state
     const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const { reserveCategoryOption } = commodity
     const paymentValue = form.getFieldValue('payment_status')
@@ -368,7 +381,6 @@ class ReservePanel extends React.Component {
             data={price}
             cols={1}
             extra="请选择"
-
           >
             <List.Item arrow="horizontal">全价</List.Item>
           </Picker>
@@ -523,10 +535,15 @@ class ReservePanel extends React.Component {
             <ImagePicker
               {...getFieldProps('pic', {
                 valuePropName: 'files',
-                getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
                 rules: [{ required: true }],
               })}
               selectable={pic_arr.length < 5}
+              onAddImageClick={e => {
+                this.setState({
+                  mul: true,
+                })
+                e.preventDefault()
+              }}
             />
           </Item>
           <Item>
@@ -823,6 +840,15 @@ class ReservePanel extends React.Component {
         </WingBlank>
         {menu ? menuEl : null}
         {menu ? <MenuMask onClick={() => this.setState({ menu: false })} /> : null}
+        <MultipleImg
+          visible={mul}
+          close={() => this.setState({
+            mul: false,
+          })
+          }
+          ratio={1}
+          callback={this.saveImg}
+        />
       </React.Fragment>
     )
   }
