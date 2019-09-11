@@ -9,6 +9,7 @@ import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 import { toJS } from 'mobx'
 import Utils from '@/utils'
+import MultipleImg from '@/common/UploadImg/Multiple'
 
 const { Item } = List
 const seckill = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
@@ -24,6 +25,9 @@ class AppointDiscounts extends React.Component {
       envoList: [],
       score_name: '',
       dhb_name: '',
+      mul: false,
+      typePic: '',
+      indexPic: '',
     }
   }
 
@@ -31,15 +35,15 @@ class AppointDiscounts extends React.Component {
     const { commodity, match, form } = this.props
     commodity.fetchCardGroupAll()
     const alias = JSON.parse(localStorage.getItem('alias'))
-    alias.forEach( item => {
-      if (item.name === 'score_name') { 
+    alias.forEach(item => {
+      if (item.name === 'score_name') {
         this.setState({
-          score_name: item.value
+          score_name: item.value,
         })
       }
-      if (item.name === 'dhb_name') { 
+      if (item.name === 'dhb_name') {
         this.setState({
-          dhb_name: item.value
+          dhb_name: item.value,
         })
       }
     })
@@ -92,6 +96,17 @@ class AppointDiscounts extends React.Component {
     })
   }
 
+  saveImg = url => {
+    const { envoList } = this.state
+    // eslint-disable-next-line camelcase
+    const now_envo = toJS(envoList)
+    // eslint-disable-next-line react/destructuring-assignment
+    now_envo[this.state.indexPic][this.state.typePic] = [{ url : url }]
+    this.setState({
+      mul: false,
+    })
+  }
+
   showEnvo = () => {
     const { envoList } = this.state
     if (envoList) {
@@ -126,27 +141,28 @@ class AppointDiscounts extends React.Component {
             选中前图标
             <ImagePicker
               files={item.envo_before_select_pic}
-              onChange={e => {
-                console.log(e)
-                if (e.length <= 0) {
-                  const now_envoList = toJS(envoList)
-                  console.log(now_envoList[index])
-                  now_envoList[index].envo_before_select_pic.splice(0, 1)
-                  this.setState({
-                    envoList: now_envoList,
-                  })
-                } else {
-                  Utils.compressionAndUploadImg(e[0].file)
-                    .then(res => {
-                      const now_envo = toJS(envoList)
-                      now_envo[index].envo_before_select_pic = [{ url: res }]
-                      this.setState({
-                        envoList: now_envo,
-                      })
-                    })
-                    .catch(e => Toast.fail(e))
-                }
+              onAddImageClick={e => {
+                this.setState({
+                  mul: true,
+                  // eslint-disable-next-line react/no-unused-state
+                  typePic: 'envo_before_select_pic',
+                  // eslint-disable-next-line react/no-unused-state
+                  indexPic: index,
+                })
+                e.preventDefault()
               }}
+              onChange={
+                e => {
+                  if (e.length <= 0) {
+                    // eslint-disable-next-line camelcase
+                    const now_envoList = toJS(envoList)
+                    now_envoList[index].envo_before_select_pic.splice(0, 1)
+                    this.setState({
+                      envoList: now_envoList,
+                    })
+                  }
+                }
+              }
               selectable={item.envo_before_select_pic.length < 1}
             />
           </Item>
@@ -154,23 +170,24 @@ class AppointDiscounts extends React.Component {
             选后前图标
             <ImagePicker
               files={item.envo_after_select_pic}
+              onAddImageClick={e => {
+                this.setState({
+                  mul: true,
+                  // eslint-disable-next-line react/no-unused-state
+                  typePic: 'envo_after_select_pic',
+                  // eslint-disable-next-line react/no-unused-state
+                  indexPic: index,
+                })
+                e.preventDefault()
+              }}
               onChange={e => {
                 if (e.length <= 0) {
+                  // eslint-disable-next-line camelcase
                   const now_envoList = toJS(envoList)
                   now_envoList[index].envo_after_select_pic.splice(0, 1)
                   this.setState({
                     envoList: now_envoList,
                   })
-                } else {
-                  Utils.compressionAndUploadImg(e[0].file)
-                    .then(res => {
-                      const now_envo = toJS(envoList)
-                      now_envo[index].envo_after_select_pic = [{ url: res }]
-                      this.setState({
-                        envoList: now_envo,
-                      })
-                    })
-                    .catch(e => Toast.fail(e))
                 }
               }}
               selectable={item.envo_after_select_pic.length < 1}
@@ -180,6 +197,16 @@ class AppointDiscounts extends React.Component {
             服务中图标
             <ImagePicker
               files={item.envo_serving_pic}
+              onAddImageClick={e => {
+                this.setState({
+                  mul: true,
+                  // eslint-disable-next-line react/no-unused-state
+                  typePic: 'envo_serving_pic',
+                  // eslint-disable-next-line react/no-unused-state
+                  indexPic: index,
+                })
+                e.preventDefault()
+              }}
               onChange={e => {
                 if (e.length <= 0) {
                   const now_envoList = toJS(envoList)
@@ -187,16 +214,6 @@ class AppointDiscounts extends React.Component {
                   this.setState({
                     envoList: now_envoList,
                   })
-                } else {
-                  Utils.compressionAndUploadImg(e[0].file)
-                    .then(res => {
-                      const now_envo = toJS(envoList)
-                      now_envo[index].envo_serving_pic = [{ url: res }]
-                      this.setState({
-                        envoList: now_envo,
-                      })
-                    })
-                    .catch(e => Toast.fail(e))
                 }
               }}
               selectable={item.envo_serving_pic.length < 1}
@@ -208,7 +225,7 @@ class AppointDiscounts extends React.Component {
             style={{ color: '#fff', width: '25%', margin: '1% auto' }}
             onClick={() => {
               const envoList = toJS(this.state.envoList)
-              if (envoList.length > 1) { 
+              if (envoList.length > 1) {
                 envoList.splice(index, 1)
                 this.setState({
                   envoList,
@@ -216,7 +233,6 @@ class AppointDiscounts extends React.Component {
               } else {
                 Toast.info('至少保留一个环境')
               }
-
             }}
           >
             删除
@@ -240,7 +256,7 @@ class AppointDiscounts extends React.Component {
       const envo_name = []
       const envo_screen_num = []
       const envo_serving_pic = []
-      if (this.state.envoList[0].envo_after_select_pic.length > 0) { 
+      if (this.state.envoList[0].envo_after_select_pic.length > 0) {
         // eslint-disable-next-line react/destructuring-assignment
         this.state.envoList.forEach(item => {
           envo_after_select_pic.push(item.envo_after_select_pic[0].url)
@@ -273,7 +289,7 @@ class AppointDiscounts extends React.Component {
   render() {
     const { form } = this.props
     const { getFieldProps } = form
-    const { score_name, dhb_name, } = this.state
+    const { score_name, dhb_name, mul } = this.state
     return (
       <React.Fragment>
         <NavBar title="预约优惠设置" goBack />
@@ -324,7 +340,7 @@ class AppointDiscounts extends React.Component {
               extra={score_name}
               labelNumber={7}
               placeholder={`请填写${score_name}数量`}
-                                      >
+            >
               每消费1元赠送
             </InputItem>
           </Item>
@@ -355,6 +371,15 @@ class AppointDiscounts extends React.Component {
             </Button>
           </WingBlank>
         </List>
+        <MultipleImg
+          visible={mul}
+          close={() => this.setState({
+            mul: false,
+          })
+          }
+          ratio={1}
+          callback={this.saveImg}
+        />
       </React.Fragment>
     )
   }

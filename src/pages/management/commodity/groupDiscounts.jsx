@@ -37,7 +37,6 @@ class GroupDiscounts extends React.Component {
     const alias = JSON.parse(localStorage.getItem('alias'))
     alias.forEach( item => {
       if (item.name === 'score_name') { 
-        console.log(item.value)
         this.setState({
           score_name: item.value
         })

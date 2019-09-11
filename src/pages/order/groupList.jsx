@@ -6,7 +6,7 @@ import {
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import { FilterBox } from '@/styled'
-// import { toJS } from 'mobx'
+import { toJS } from 'mobx'
 
 const searchStatys = [
   {
@@ -101,9 +101,7 @@ class GroupList extends React.Component {
     const {
       height, statusValus, typeValue, keyword,
     } = this.state
-    console.log(match.params.groupId)
-    order.fetchGroupOrderList(match.params.groupId, statusValus, typeValue, keyword, true)
-    
+    order.resetAndFetchGroupOrderList(match.params.groupId, statusValus, typeValue, keyword)
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
       height: hei,
