@@ -21,7 +21,6 @@ class OrderStore {
 
   @observable pickAddress = []
 
-
   // 团购订单列表
   @observable groupOrderList = []
 
@@ -35,7 +34,6 @@ class OrderStore {
 
   @observable groupOrderPass = []
 
-  
   // 预约订单列表
   @observable reservationOrderList = []
 
@@ -46,7 +44,6 @@ class OrderStore {
   @observable reservationOrderListTotal = null
 
   @observable reservationOrderDetail = {}
-
 
   // 获取订单种类列表
   @action
@@ -124,9 +121,16 @@ class OrderStore {
 
   // 获取团购订单列表
   @action
-  fetchGroupOrderList = async (groupId, statu, findType, keyword) => {
+  // eslint-disable-next-line camelcase
+  fetchGroupOrderList = async (groupId, statu, findType, keyword, is_new) => {
     let hasMore = true
-    if (this.groupOrderTotal !== null) {
+    // eslint-disable-next-line camelcase
+    if (is_new) {
+      this.shopOrderList = []
+      this.shopOrderListPage = 1
+      this.shopOrderListTotal = null
+      hasMore = true
+    } else if (this.groupOrderTotal !== null) {
       hasMore = this.groupPage * this.groupOrderListSize < this.groupOrderTotal
       if (hasMore) this.groupPage += 1
     }
@@ -295,7 +299,8 @@ class OrderStore {
   fetchReservationOrderList = async (paytype, searchtype, startTime, endTime, keyword) => {
     let hasMore = true
     if (this.reservationOrderListTotal !== null) {
-      hasMore = this.reservationOrderListPage * this.reservationOrderListSize < this.reservationOrderListTotal
+      hasMore = this.reservationOrderListPage * this.reservationOrderListSize
+        < this.reservationOrderListTotal
       if (hasMore) {
         this.reservationOrderListPage += 1
       }

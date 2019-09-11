@@ -102,7 +102,9 @@ class GroupList extends React.Component {
     const {
       height, statusValus, typeValue, keyword,
     } = this.state
-    if (!groupOrderList.length) order.fetchGroupOrderList(match.params.groupId, statusValus, typeValue, keyword)
+    console.log(match.params.groupId)
+    order.fetchGroupOrderList(match.params.groupId, statusValus, typeValue, keyword, true)
+    
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
       height: hei,

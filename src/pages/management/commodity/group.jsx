@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import ReactDOM from 'react-dom'
@@ -114,23 +115,6 @@ class Group extends React.Component {
                     团购状态：{item.status === '1' ? '开启' : '关闭'}
                   </span>
                 </div>
-                <div
-                  className="top-features"
-                  style={{
-                    position: 'initial',
-                    display: 'block',
-                    fontSize: '14px',
-                    marginBottom: '10px',
-                    width: '100%',
-                  }}
-                >
-                  <div style={styleSpan.spaner}>
-                    <i className="iconfont" style={{ color: '#ffb000' }}>
-                      &#xe6fd;
-                    </i>
-                    订单列表
-                  </div>
-                </div>
               </TopContent>
             </ItemTop>
             <Flex style={{ marginTop: '8px' }}>
@@ -162,6 +146,16 @@ class Group extends React.Component {
                   }
                 >
                   佣金
+                </Button>
+              </Flex.Item>
+              <Flex.Item>
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() => history.push(`/order/groupList/${item.group_id}/`)
+                  }
+                >
+                  订单列表
                 </Button>
               </Flex.Item>
             </Flex>

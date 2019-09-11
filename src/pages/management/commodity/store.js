@@ -301,6 +301,7 @@ class MastSotre {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         const shopList = response.data.result.store_list
+        shopList.splice(0, 1)
         shopList.forEach(item => {
           if (item.worker_list) {
             item.worker_list.forEach(i => {
