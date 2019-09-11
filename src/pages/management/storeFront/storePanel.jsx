@@ -20,6 +20,7 @@ import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import moment from 'moment'
 import Editor from '@/common/Editor'
+import MultipleImg from '@/common/UploadImg/Multiple'
 import {
   CustomizeList, ListTitle, ListContent, MenuMask, PrimaryTag,
 } from '@/styled'
@@ -44,6 +45,7 @@ class StorePanel extends React.Component {
       qrcode: '',
       open: false,
       goods: [],
+      mul: false,
     }
     this.editor = React.createRef()
   }
@@ -173,7 +175,7 @@ class StorePanel extends React.Component {
             form.setFieldsValue({
               discount_percent: storeDetail.discount_percent,
             })
-          } else if ((storeDetail.discount_type[0] === '2')) {
+          } else if (storeDetail.discount_type[0] === '2') {
             form.setFieldsValue({
               condition_price: storeDetail.condition_price,
               minus_price: storeDetail.minus_price,
@@ -369,6 +371,17 @@ class StorePanel extends React.Component {
     }
   }
 
+  saveImg = url => {
+    const { form } = this.props
+    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
+    form.setFieldsValue({
+      pic: [...pic, { url }],
+    })
+    this.setState({
+      mul: false,
+    })
+  }
+
   render() {
     const { match, form, storeFront } = this.props
     const { getFieldProps } = form
@@ -379,7 +392,7 @@ class StorePanel extends React.Component {
       ? form.getFieldValue('discount_type')[0]
       : ''
     const {
-      long, lat, asyncCascadeValue, shopLogo, qrcode, open, goods,
+      long, lat, asyncCascadeValue, shopLogo, qrcode, open, goods, mul,
     } = this.state
     const menuEl = (
       <Menu
@@ -616,10 +629,15 @@ class StorePanel extends React.Component {
             <ImagePicker
               {...getFieldProps('pic', {
                 valuePropName: 'files',
-                getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
                 rules: [{ required: true }],
               })}
-              selectable={pic.length < 4}
+              selectable={pic.length < 5}
+              onAddImageClick={e => {
+                this.setState({
+                  mul: true,
+                })
+                e.preventDefault()
+              }}
             />
           </List.Item>
           <List.Item arrow="horizontal" onClick={this.goQrPicker}>
@@ -689,6 +707,15 @@ class StorePanel extends React.Component {
         </Button>
         {open ? menuEl : null}
         {open ? <MenuMask onClick={() => this.setState({ open: false })} /> : null}
+        <MultipleImg
+          visible={mul}
+          close={() => this.setState({
+            mul: false,
+          })
+          }
+          ratio={1}
+          callback={this.saveImg}
+        />
       </React.Fragment>
     )
   }

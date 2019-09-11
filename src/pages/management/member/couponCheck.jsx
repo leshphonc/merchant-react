@@ -10,7 +10,7 @@ import moment from 'moment'
 
 const { prompt } = Modal
 
-@inject('member')
+@inject('member', 'login')
 @observer
 class CouponCheck extends React.Component {
   constructor(props) {
@@ -23,7 +23,8 @@ class CouponCheck extends React.Component {
   }
 
   componentDidMount() {
-    const { member, match } = this.props
+    const { member, match, login } = this.props
+    login.wxConfigFun()
     // const { couponCheckList } = member
     const { height } = this.state
     member.fetchCouponCheckList(match.params.id)
@@ -107,8 +108,34 @@ class CouponCheck extends React.Component {
     }, 100)
   }
 
+  scanQRCode = () => {
+    const { member, login } = this.props
+    window.wx.scanQRCode({
+      needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+      scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+      success(res) {
+        const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
+        // window.alert(result)
+        const code = Utils.getUrlParam('code', result)
+        if (code) {
+          member.checkCouponCode(null, code, false).then(res2 => {
+            if (res2) Toast.success('核销成功')
+          })
+        } else {
+          Toast.info('未识别到code，无法核销')
+        }
+      },
+      fail() {
+        login.wxConfigFun().then(res => {
+          if (res) {
+            this.scanQRCode()
+          }
+        })
+      },
+    })
+  }
+
   render() {
-    const { member } = this.props
     const { height, refreshing } = this.state
     return (
       <React.Fragment>
@@ -121,22 +148,7 @@ class CouponCheck extends React.Component {
               style={{ color: '#fff', border: '1px solid #fff' }}
               size="small"
               onClick={() => {
-                window.wx.scanQRCode({
-                  needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-                  scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
-                  success(res) {
-                    const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
-                    // window.alert(result)
-                    const code = Utils.getUrlParam('code', result)
-                    if (code) {
-                      member.checkCouponCode(null, code, false).then(res2 => {
-                        if (res2) Toast.success('核销成功')
-                      })
-                    } else {
-                      Toast.info('未识别到code，无法核销')
-                    }
-                  },
-                })
+                this.scanQRCode()
               }}
             >
               扫码核销

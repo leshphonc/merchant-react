@@ -1,13 +1,24 @@
 import React from 'react'
-import NavBar from '@/common/NavBar'
+import { Modal } from 'antd-mobile'
+import CropperImg from './CropperImg'
 
 class Multiple extends React.Component {
+  saveImg = url => {
+    const { callback } = this.props
+    callback(url)
+  }
+
   render() {
-    const { match } = this.props
+    const { close, visible, ratio } = this.props
     return (
-      <React.Fragment>
-        <NavBar title={match.params.title} goBack />
-      </React.Fragment>
+      <Modal
+        visible={visible}
+        transparent={false}
+        onClose={close}
+        title={<div style={{ height: 33 }}>裁剪</div>}
+      >
+        <CropperImg aspectratio={ratio} callback={this.saveImg} />
+      </Modal>
     )
   }
 }

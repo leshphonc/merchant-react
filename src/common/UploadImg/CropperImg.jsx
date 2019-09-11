@@ -51,7 +51,9 @@ class CropperImg extends React.Component {
   }
 
   save = () => {
-    this.props.callback(this.state.resultImgUrl)
+    const { callback } = this.props
+    const { resultImgUrl } = this.state
+    callback(resultImgUrl)
     // // 创造提交表单数据对象
     // const formData = new FormData()
     // // 添加要上传的文件
