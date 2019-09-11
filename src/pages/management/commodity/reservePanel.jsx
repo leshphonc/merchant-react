@@ -79,7 +79,7 @@ class ReservePanel extends React.Component {
   componentDidMount() {
     const { commodity, match, form } = this.props
     const { appoint_type } = this.state
-    commodity.fetchShopList(appoint_type).then(() => {
+    commodity.fetchShopList(appoint_type, 1).then(() => {
       const { shopList } = commodity
       this.setState({
         shopList,
@@ -103,7 +103,7 @@ class ReservePanel extends React.Component {
           store: appointDetail.store_arr,
           workerSele,
         })
-        commodity.fetchShopList(appoint_type).then(() => {
+        commodity.fetchShopList(1,1).then(() => {
           const { shopList } = commodity
           this.setState({
             shopList,
@@ -185,14 +185,6 @@ class ReservePanel extends React.Component {
       })
     }
     // editor.txt.html(history.location.state.value)
-  }
-
-  sotreChange = val => {
-    console.log(val)
-  }
-
-  delSpe = async id => {
-    console.log(id)
   }
 
   changeCategory = async arr => {
@@ -510,7 +502,7 @@ class ReservePanel extends React.Component {
             extra="请选择"
             disabled={!!match.params.id}
             onOk={e => {
-              commodity.fetchShopList(e[0], 1).then(() => {
+              commodity.fetchShopList(0, 1).then(() => {
                 const { shopList } = commodity
                 this.setState({
                   shopList,
