@@ -17,7 +17,6 @@ import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import MultipleImg from '@/common/UploadImg/Multiple'
 import { createForm } from 'rc-form'
-import Utils from '@/utils'
 import { toJS } from 'mobx'
 import Editor from '@/common/Editor'
 
