@@ -5,6 +5,7 @@ import {
   Button, Toast, Flex, Card,
 } from 'antd-mobile'
 import { createForm } from 'rc-form'
+import { toJS } from 'mobx'
 // import Utils from '@/utils'
 
 @createForm()
@@ -23,14 +24,12 @@ class ScanCode extends React.Component {
   componentDidMount() {
     const { giftManagement, match } = this.props
     console.log(this.props)
-    // giftManagement.checkCouponCode(293, 53780900190911)
-    // giftManagement.fecthGiftArrayVerify(299, 10115209251903)
     giftManagement.fetchGiftOrderDetail(match.params.orderId).then(() => {
       const { giftOrderDetail } = giftManagement
       if (giftOrderDetail.pass_array === '1') {
         giftManagement.fecthGiftPassArray(match.params.orderId).then(() => {
           const { giftOrderPass } = giftManagement
-          console.log(giftOrderPass)
+          console.log(toJS(giftOrderPass))
           this.setState({
             giftPassArr: giftOrderPass.pass_array,
           })
@@ -122,7 +121,7 @@ class ScanCode extends React.Component {
                 </Flex.Item>
               </Flex>
             )}
-            {detail.store_id !== '0' && giftPassArr.length > 1 && this.giftPassList(giftPassArr)}
+            {giftPassArr.length > 1 && this.giftPassList(giftPassArr)}
           </Card.Body>
         </Card>
       </React.Fragment>
