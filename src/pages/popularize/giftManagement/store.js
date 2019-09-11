@@ -388,13 +388,14 @@ class MastSotre {
 
   // 从新获取礼品列表（搜索）
   @action
-  resetAndFetchGiftList = keyword => {
+  resetAndFetchGiftList = async keyword => {
     runInAction(() => {
       this.getGift = []
       this.getGiftPage = 1
       this.getGiftTotal = null
-      this.fetchGetGift(keyword)
+      
     })
+    await this.fetchGetGift(keyword)
   }
 
   // 发货选择快递

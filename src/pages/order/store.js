@@ -119,8 +119,8 @@ class OrderStore {
       this.shopOrderList = []
       this.shopOrderListPage = 1
       this.shopOrderListTotal = null
-      this.fetchShopOrderList(status, paytype, searchtype, stime, etime, keyword)
     })
+    await this.fetchShopOrderList(status, paytype, searchtype, stime, etime, keyword)
   }
 
   // 获取团购订单列表
@@ -178,8 +178,8 @@ class OrderStore {
       this.groupOrderList = []
       this.groupPage = 1
       this.groupOrderTotal = null
-      this.fetchGroupOrderList(groupId, statu, findType, keyword)
     })
+    await this.fetchGroupOrderList(groupId, statu, findType, keyword)
   }
 
   // 获取团购详情
@@ -378,8 +378,8 @@ class OrderStore {
       this.reservationOrderList = []
       this.reservationOrderListPage = 1
       this.reservationOrderListTotal = null
-      this.fetchReservationOrderList(paytype, searchtype, startTime, endTime, keyword)
     })
+    await this.fetchReservationOrderList(paytype, searchtype, startTime, endTime, keyword)
   }
 
   // 获取预定订单详情

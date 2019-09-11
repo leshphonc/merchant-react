@@ -31,6 +31,8 @@ class StoreFrontStore {
 
   @observable circleOption = []
 
+  @observable marketOption = []
+
   @observable eCommerceDetail = {}
 
   @observable takeawayDetail = {}
@@ -361,6 +363,17 @@ class StoreFrontStore {
   @action
   resetCircle = () => {
     this.circleOption = []
+  }
+
+  // 商盟
+  @action
+  fetchMarket = async id => {
+    const response = await services.fetchMarket(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.marketOption = response.data.result
+      })
+    }
   }
 
   // 电商详情配置获取

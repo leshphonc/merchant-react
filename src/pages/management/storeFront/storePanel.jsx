@@ -74,6 +74,13 @@ class StorePanel extends React.Component {
         lat: cacheData.lat,
         goods: cacheData.goods,
       })
+      if (cacheData.circle_id) {
+        storeFront.fetchMarket(cacheData.circle_id).then(() => {
+          form.setFieldsValue({
+            market_id: cacheData.market_id,
+          })
+        })
+      }
       // 整理默认数据放入表单
       form.setFieldsValue({
         name: cacheData.name,
@@ -144,6 +151,13 @@ class StorePanel extends React.Component {
             goods: [storeDetail.cat_fid, storeDetail.cat_id],
           })
         })
+      if (storeDetail.circle_id) {
+        storeFront.fetchMarket(storeDetail.circle_id).then(() => {
+          form.setFieldsValue({
+            market_id: storeDetail.market_id,
+          })
+        })
+      }
       // 整理默认数据放入表单
       form.setFieldsValue({
         name: storeDetail.name,
@@ -371,6 +385,12 @@ class StorePanel extends React.Component {
     }
   }
 
+  fetchMarket = val => {
+    const { storeFront } = this.props
+    console.log(val)
+    storeFront.fetchMarket(val[0])
+  }
+
   saveImg = url => {
     const { form } = this.props
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
@@ -385,7 +405,9 @@ class StorePanel extends React.Component {
   render() {
     const { match, form, storeFront } = this.props
     const { getFieldProps } = form
-    const { cascadeOption, circleOption, allCategory } = storeFront
+    const {
+      cascadeOption, circleOption, marketOption, allCategory,
+    } = storeFront
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     /* eslint camelcase: 0 */
     const discount_type = form.getFieldValue('discount_type')
@@ -462,9 +484,23 @@ class StorePanel extends React.Component {
             title="选择商圈"
             extra="请选择"
             cols={1}
+            onOk={this.fetchMarket}
           >
             <List.Item arrow="horizontal">所在商圈</List.Item>
           </Picker>
+
+          <Picker
+            {...getFieldProps('market_id', {
+              rules: [{ required: false }],
+            })}
+            data={marketOption}
+            title="选择商盟"
+            extra="请选择"
+            cols={1}
+          >
+            <List.Item arrow="horizontal">所在商盟</List.Item>
+          </Picker>
+
           <TextareaItem
             {...getFieldProps('adress', {
               rules: [{ required: true }],
@@ -713,7 +749,7 @@ class StorePanel extends React.Component {
             mul: false,
           })
           }
-          ratio={2}
+          ratio={1}
           callback={this.saveImg}
         />
       </React.Fragment>

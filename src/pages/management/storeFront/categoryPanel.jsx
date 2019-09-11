@@ -25,7 +25,7 @@ class CateGoryPanel extends React.Component {
   state = {
     sortName: '',
     sort: '',
-    weekShow: '1',
+    weekShow: '0',
     week: [],
     sortDiscount: '',
   }
@@ -155,70 +155,72 @@ class CateGoryPanel extends React.Component {
           >
             <Item arrow="horizontal">是否开启星期几显示</Item>
           </Picker>
-          <List.Item>
-            <CustomizeList>
-              <ListTitle>星期几显示</ListTitle>
-              <ListContent style={{ fontSize: 13 }}>
-                <Flex justify="around">
-                  <Checkbox
-                    onChange={this.checkChange}
-                    value="1"
-                    checked={week.indexOf('1') !== -1}
-                  >
-                    星期一
-                  </Checkbox>
-                  <Checkbox
-                    onChange={this.checkChange}
-                    value="2"
-                    checked={week.indexOf('2') !== -1}
-                  >
-                    星期二
-                  </Checkbox>
-                  <Checkbox
-                    onChange={this.checkChange}
-                    value="3"
-                    checked={week.indexOf('3') !== -1}
-                  >
-                    星期三
-                  </Checkbox>
-                </Flex>
-                <WhiteSpace />
-                <Flex justify="around">
-                  <Checkbox
-                    onChange={this.checkChange}
-                    value="4"
-                    checked={week.indexOf('4') !== -1}
-                  >
-                    星期四
-                  </Checkbox>
-                  <Checkbox
-                    onChange={this.checkChange}
-                    value="5"
-                    checked={week.indexOf('5') !== -1}
-                  >
-                    星期五
-                  </Checkbox>
-                  <Checkbox
-                    onChange={this.checkChange}
-                    value="6"
-                    checked={week.indexOf('6') !== -1}
-                  >
-                    星期六
-                  </Checkbox>
-                </Flex>
-                <WhiteSpace />
-                <Flex justify="around">
-                  <Checkbox
-                    onChange={this.checkChange}
-                    value="0"
-                    checked={week.indexOf('0') !== -1}
-                  >
-                    星期日
-                  </Checkbox>
-                </Flex>
-              </ListContent>
-            </CustomizeList>
-          </List.Item>
+          {weekShow === '1' ? (
+            <List.Item>
+              <CustomizeList>
+                <ListTitle>星期几显示</ListTitle>
+                <ListContent style={{ fontSize: 13 }}>
+                  <Flex justify="around">
+                    <Checkbox
+                      onChange={this.checkChange}
+                      value="1"
+                      checked={week.indexOf('1') !== -1}
+                    >
+                      星期一
+                    </Checkbox>
+                    <Checkbox
+                      onChange={this.checkChange}
+                      value="2"
+                      checked={week.indexOf('2') !== -1}
+                    >
+                      星期二
+                    </Checkbox>
+                    <Checkbox
+                      onChange={this.checkChange}
+                      value="3"
+                      checked={week.indexOf('3') !== -1}
+                    >
+                      星期三
+                    </Checkbox>
+                  </Flex>
+                  <WhiteSpace />
+                  <Flex justify="around">
+                    <Checkbox
+                      onChange={this.checkChange}
+                      value="4"
+                      checked={week.indexOf('4') !== -1}
+                    >
+                      星期四
+                    </Checkbox>
+                    <Checkbox
+                      onChange={this.checkChange}
+                      value="5"
+                      checked={week.indexOf('5') !== -1}
+                    >
+                      星期五
+                    </Checkbox>
+                    <Checkbox
+                      onChange={this.checkChange}
+                      value="6"
+                      checked={week.indexOf('6') !== -1}
+                    >
+                      星期六
+                    </Checkbox>
+                  </Flex>
+                  <WhiteSpace />
+                  <Flex justify="around">
+                    <Checkbox
+                      onChange={this.checkChange}
+                      value="0"
+                      checked={week.indexOf('0') !== -1}
+                    >
+                      星期日
+                    </Checkbox>
+                  </Flex>
+                </ListContent>
+              </CustomizeList>
+            </List.Item>
+          ) : null}
           <InputItem
             placeholder="请输入产品折扣率"
             value={sortDiscount}

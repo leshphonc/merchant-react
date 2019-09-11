@@ -130,7 +130,7 @@ class TakeawayPanel extends React.Component {
         deliver_type: value.deliver_type[0],
         stock_type: value.stock_type[0],
         reduce_stock_type: value.reduce_stock_type[0],
-        discount_type: value.discount_type[0],
+        discount_type: value.discount_type ? value.discount_type[0] : '',
         delivertime_start: moment(value.delivertime_start).format('HH:mm'),
         delivertime_stop: moment(value.delivertime_stop).format('HH:mm'),
         reach_delivery_fee_type: value.reach_delivery_fee_type[0],

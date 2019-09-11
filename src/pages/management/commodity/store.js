@@ -119,23 +119,23 @@ class MastSotre {
   }
 
   @action
-  resetAndFetchGroupList = keyword => {
+  resetAndFetchGroupList = async keyword => {
     runInAction(() => {
       this.groupList = []
       this.groupListPage = 1
       this.groupListTotal = null
-      this.fetchGroupList(keyword)
     })
+    await this.fetchGroupList(keyword)
   }
 
   @action
-  resetAndFetchReserveList = keyword => {
+  resetAndFetchReserveList = async keyword => {
     runInAction(() => {
       this.reserveList = []
       this.reserveListPage = 1
       this.reserveListTotal = null
-      this.fetchReserveList(keyword)
     })
+    await this.fetchReserveList(keyword)
   }
 
   @action
@@ -260,8 +260,8 @@ class MastSotre {
       this.takeAwayList = []
       this.takeAwayListPage = 1
       this.takeAwayListTotal = null
-      this.fetchTakeAwayList(id, str)
     })
+    await this.fetchTakeAwayList(id, str)
   }
 
   @action
@@ -399,8 +399,8 @@ class MastSotre {
       this.eCommerceList = []
       this.eCommerceListPage = 1
       this.eCommerceListTotal = null
-      this.fetchECommerceList(id, str)
     })
+    await this.fetchECommerceList(id, str)
   }
 
   @action

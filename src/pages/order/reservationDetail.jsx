@@ -270,9 +270,11 @@ class ReservationDetail extends React.Component {
       Toast.info('请选择服务者', 1)
       return false
     }
-    order.orderHandle(match.params.id, workerId).then(() => {
-      this.setState({ workerModal: false })
-      Toast.success('服务者指定成功', 2)
+    order.orderHandle(match.params.id, workerId).then(res => {
+      if (res) {
+        this.setState({ workerModal: false })
+        Toast.success('服务者指定成功', 2)
+      }
     })
   }
 
@@ -287,9 +289,11 @@ class ReservationDetail extends React.Component {
       Toast.info('输入服务密码', 1)
       return false
     }
-    order.verifyHandle(match.params.id, workerId, payType, psw).then(() => {
-      this.setState({ verifyModal: false })
-      Toast.success('验证成功', 2)
+    order.verifyHandle(match.params.id, workerId, payType, psw).then(res => {
+      if (res) {
+        this.setState({ verifyModal: false })
+        Toast.success('验证成功', 2)
+      }
     })
   }
 
