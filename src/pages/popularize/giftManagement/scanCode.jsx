@@ -72,7 +72,7 @@ class ScanCode extends React.Component {
               type="primary"
               size="small"
               style={{ width: '60%', margin: '0px 40px 0' }}
-              onClick={() => this.verificBtn(this.state.detail.order_id)}
+              onClick={() => this.verificBtn(this.state.detail.order_id, item.gift_pass)}
             >
                 验证
             </Button>
