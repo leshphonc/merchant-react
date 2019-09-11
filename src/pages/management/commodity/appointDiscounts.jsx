@@ -8,7 +8,6 @@ import {
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 import { toJS } from 'mobx'
-import Utils from '@/utils'
 import MultipleImg from '@/common/UploadImg/Multiple'
 
 const { Item } = List

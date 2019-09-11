@@ -9,7 +9,7 @@ import { toJS } from 'mobx'
 // import Utils from '@/utils'
 
 @createForm()
-@inject('giftManagement')
+@inject('giftManagement', 'login')
 @observer
 class ScanCode extends React.Component {
   constructor(props) {
@@ -123,18 +123,16 @@ class ScanCode extends React.Component {
                 </Flex.Item>
                 {detail.status === '0' ? (
                   <Flex.Item style={{ flex: 'none' }}>
-                    <div>
-                      <Button
-                        type="primary"
-                        size="small"
-                        style={{ width: '60%', margin: '0px 34px 0' }}
-                        onClick={() => {
-                          this.ver(detail.order_id)
-                        }}
-                      >
-                        验证
-                      </Button>
-                    </div>
+                    <Button
+                      type="primary"
+                      size="small"
+                      style={{ width: '60%', margin: '0px 34px 0' }}
+                      onClick={() => {
+                        this.ver(detail.order_id)
+                      }}
+                    >
+                      验证
+                    </Button>
                   </Flex.Item>
                 ) : (
                   <Flex.Item style={{ flex: 'none' }}>

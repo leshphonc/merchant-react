@@ -18,7 +18,7 @@ import ClipboardJS from 'clipboard'
 
 const { RadioItem } = Radio
 
-@inject('order')
+@inject('order', 'login')
 @observer
 class RetailDetail extends React.Component {
   state = {

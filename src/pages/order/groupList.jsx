@@ -6,7 +6,6 @@ import {
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import { FilterBox } from '@/styled'
-import { toJS } from 'mobx'
 
 const searchStatys = [
   {

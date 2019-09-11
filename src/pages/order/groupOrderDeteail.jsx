@@ -46,7 +46,7 @@ const styleSpan = {
   },
 }
 
-@inject('order')
+@inject('order', 'login')
 @observer
 class GroupOrderDetail extends React.Component {
   constructor(props) {
