@@ -128,12 +128,12 @@ class Reserve extends React.Component {
                   审核状态：{item.check_status ? '通过' : '待审核'}
                 </span>
               </div>
-              <div style={{ display: 'inline-block', color: '#333', marginRight: '30px' }}>
+              {/* <div style={{ display: 'inline-block', color: '#333', marginRight: '30px' }}>
                 <i className="iconfont" style={{ color: '#ffb000' }}>
                   &#xe6fd;
                 </i>
                 订单列表
-              </div>
+              </div> */}
             </TopContent>
           </ItemTop>
           <Flex style={{ marginTop: '8px' }}>
