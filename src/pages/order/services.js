@@ -132,6 +132,13 @@ export const confirmConsumption = id => axios.post('/appapi.php?c=Merchantapp&a=
   ticket: localStorage.getItem('ticket'),
 })
 
+// 扫码确认消费
+export const scanCode = id => axios.post('/appapi.php?c=Merchantapp&a=shopOrderEdit', {
+  order_id: id,
+  status: '2',
+  ticket: localStorage.getItem('ticket'),
+})
+
 // 取消订单
 export const cancelOrder = id => axios.post('/appapi.php?c=Merchantapp&a=shopOrderEdit', {
   order_id: id,

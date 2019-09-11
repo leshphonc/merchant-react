@@ -282,6 +282,15 @@ class OrderStore {
     }
   }
 
+  // 扫码确认消费
+  @action
+  scanCode = async id => {
+    const response = await services.scanCode(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      await this.fetchShopOrderDetail(id)
+    }
+  }
+
   // 取消订单
   @action
   cancelOrder = async id => {
