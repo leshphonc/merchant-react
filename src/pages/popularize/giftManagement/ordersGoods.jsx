@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom'
 import {
   Button, Flex, WingBlank, Card, WhiteSpace, PullToRefresh,
 } from 'antd-mobile'
+// import Utils from '@/utils'
 import moment from 'moment'
 
 @inject('giftManagement')
@@ -47,16 +48,29 @@ class OressGoods extends React.Component {
                 {item.gift_name}
               </span>
             }
-            thumb={item.wap_pic}
+            thumb={item.wap_pic_list[0].image}
           />
           <Card.Body style={{ minHeight: '22px' }}>
             <Flex>
-              <Flex.Item style={{ flex: 'none', width: '56%' }}>订单编号: {item.order_id}</Flex.Item>
+              <Flex.Item style={{ flex: 'none', width: '56%' }}>
+                订单编号: {item.order_id}
+              </Flex.Item>
               <Flex.Item>订单数量: {item.num}</Flex.Item>
             </Flex>
             <Flex style={{ marginTop: '10px', marginBottom: '5px' }}>
-              <Flex.Item style={{ flex: 'none', width: '58%' }}>订单时间: {moment(item.order_time * 1000).format('YYYY-MM-DD HH:mm')}</Flex.Item>
-              <Flex.Item style={{ marginLeft: '2px' }}>状态: {item.paid === '1' ? '已支付' : '未支付'} {item.status === '1' ? '已发货' : '未发货'}</Flex.Item>
+              <Flex.Item style={{ flex: 'none', width: '58%' }}>
+                订单时间: {moment(item.order_time * 1000).format('YYYY-MM-DD HH:mm')}
+              </Flex.Item>
+              {item.is_pick_in_store === '1' ? (
+                <Flex.Item style={{ marginLeft: '2px' }}>
+                  状态: {item.status === '1' ? '已完成' : '未完成'}
+                </Flex.Item>
+              ) : (
+                <Flex.Item style={{ marginLeft: '2px' }}>
+                  状态: {item.paid === '1' ? '已支付' : '未支付'}
+                  {item.status === '1' ? '已发货' : '未发货'}
+                </Flex.Item>
+              )}
             </Flex>
           </Card.Body>
           <Card.Footer
@@ -66,26 +80,35 @@ class OressGoods extends React.Component {
                   <Button
                     type="primary"
                     size="small"
-                    onClick={() => history.push(
-                      `/popularize/giftManagement/orderDetails/${item.order_id}`,
-                    )
+                    onClick={() => history.push(`/popularize/giftManagement/orderDetails/${item.order_id}`)
                     }
                   >
                     详情
                   </Button>
                 </Flex.Item>
-                <Flex.Item>
-                  <Button
-                    type="primary"
-                    size="small"
-                    onClick={() => history.push(
-                      `/popularize/giftManagement/deliverGoods/${item.order_id}`,
-                    )
-                    }
-                  >
-                    发货
-                  </Button>
-                </Flex.Item>
+                {item.is_pick_in_store === '0' ? (
+                  <Flex.Item>
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={() => history.push(`/popularize/giftManagement/deliverGoods/${item.order_id}`)
+                      }
+                    >
+                      发货
+                    </Button>
+                  </Flex.Item>
+                ) : (
+                  <Flex.Item>
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={() => history.push(`/popularize/giftManagement/scanCode/${item.order_id}`)
+                      }
+                    >
+                      扫码核销
+                    </Button>
+                  </Flex.Item>
+                )}
               </Flex>
             }
           />
@@ -111,10 +134,7 @@ class OressGoods extends React.Component {
     const { refreshing, height } = this.state
     return (
       <React.Fragment>
-        <NavBar
-          title="商品订单"
-          goBack
-        />
+        <NavBar title="商品订单" goBack />
         {giftOrderTotal < 10 ? (
           <React.Fragment>
             <WhiteSpace />

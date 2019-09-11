@@ -21,6 +21,8 @@ class OrderStore {
 
   @observable pickAddress = []
 
+  @observable expressList = []
+
   // 团购订单列表
   @observable groupOrderList = []
 
@@ -58,7 +60,7 @@ class OrderStore {
 
   // 获取零售订单列表
   @action
-  fetchShopOrderList = async (status, paytype, searchtype, keyword) => {
+  fetchShopOrderList = async (status, paytype, searchtype, stime, etime, keyword) => {
     let hasMore = true
     if (this.shopOrderListTotal !== null) {
       hasMore = this.shopOrderListPage * this.shopOrderListSize < this.shopOrderListTotal
@@ -72,6 +74,8 @@ class OrderStore {
       status,
       paytype,
       searchtype,
+      stime,
+      etime,
       keyword,
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -110,12 +114,12 @@ class OrderStore {
 
   // 重置页数请求零售订单列表
   @action
-  resetAndFetchShopOrderList = async (status, paytype, searchtype, keyword) => {
+  resetAndFetchShopOrderList = async (status, paytype, searchtype, stime, etime, keyword) => {
     runInAction(() => {
       this.shopOrderList = []
       this.shopOrderListPage = 1
       this.shopOrderListTotal = null
-      this.fetchShopOrderList(status, paytype, searchtype, keyword)
+      this.fetchShopOrderList(status, paytype, searchtype, stime, etime, keyword)
     })
   }
 
@@ -263,7 +267,7 @@ class OrderStore {
   pickerAddress = async (id, pickId) => {
     const response = await services.pickerAddress(id, pickId)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      await services.fetchShopOrderDetail(id)
+      this.fetchShopOrderDetail(id)
     }
   }
 
@@ -272,7 +276,7 @@ class OrderStore {
   shipToSelfLifting = async id => {
     const response = await services.shipToSelfLifting(id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      await services.fetchShopOrderDetail(id)
+      this.fetchShopOrderDetail(id)
     }
   }
 
@@ -281,7 +285,17 @@ class OrderStore {
   confirmConsumption = async id => {
     const response = await services.confirmConsumption(id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      await services.fetchShopOrderDetail(id)
+      this.fetchShopOrderDetail(id)
+    }
+  }
+
+  // 扫码确认消费
+  @action
+  scanCode = async id => {
+    const response = await services.scanCode(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      await this.fetchShopOrderDetail(id)
+      return Promise.resolve(true)
     }
   }
 
@@ -290,7 +304,28 @@ class OrderStore {
   cancelOrder = async id => {
     const response = await services.cancelOrder(id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      await services.fetchShopOrderDetail(id)
+      this.fetchShopOrderDetail(id)
+    }
+  }
+
+  // 获取物流配送信息
+  @action
+  fetchExpressList = async id => {
+    const response = await services.fetchExpressList(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.expressList = response.data.result
+      })
+    }
+  }
+
+  // 发货
+  @action
+  sendOrder = async (orderId, no, expressId) => {
+    const response = await services.sendOrder(orderId, no, expressId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      await this.fetchShopOrderDetail(orderId)
+      return Promise.resolve(true)
     }
   }
 
@@ -299,8 +334,7 @@ class OrderStore {
   fetchReservationOrderList = async (paytype, searchtype, startTime, endTime, keyword) => {
     let hasMore = true
     if (this.reservationOrderListTotal !== null) {
-      hasMore = this.reservationOrderListPage * this.reservationOrderListSize
-        < this.reservationOrderListTotal
+      hasMore = this.reservationOrderListPage * this.reservationOrderListSize < this.reservationOrderListTotal
       if (hasMore) {
         this.reservationOrderListPage += 1
       }

@@ -241,7 +241,8 @@ class AppointDiscounts extends React.Component {
       const envo_name = []
       const envo_screen_num = []
       const envo_serving_pic = []
-      if (this.state.envoList[0].envo_after_select_pic.length > 0){ 
+      if (this.state.envoList[0].envo_after_select_pic.length > 0) { 
+        // eslint-disable-next-line react/destructuring-assignment
         this.state.envoList.forEach(item => {
           envo_after_select_pic.push(item.envo_after_select_pic[0].url)
           envo_before_select_pic.push(item.envo_before_select_pic[0].url)
@@ -265,6 +266,7 @@ class AppointDiscounts extends React.Component {
       }
 
       commodity.editAppointDis({ ...obj, appoint_id: match.params.id }).then(res => {
+        return 
         if (res) Toast.success('编辑成功', 1, () => history.goBack())
       })
     })
@@ -324,7 +326,7 @@ class AppointDiscounts extends React.Component {
               extra={score_name}
               labelNumber={7}
               placeholder={`请填写${score_name}数量`}
-            >
+                                      >
               每消费1元赠送
             </InputItem>
           </Item>

@@ -120,8 +120,8 @@ class GroupOrderDetail extends React.Component {
       needResult: 1,
       scanType: ['qrCode', 'barCode'],
       success(res) {
-        order.verificGroup(orderId, res.resultStr).then(res => {
-          if (res) Toast.success('验证成功', 1, () => window.location.reload())
+        order.verificGroup(orderId, res.resultStr).then(resVer => {
+          if (resVer) Toast.success('验证成功', 1, () => window.location.reload())
         })
       },
     })
@@ -364,9 +364,8 @@ class GroupOrderDetail extends React.Component {
             {detail.store_id !== '0'
               && detail.type === 1
               && detail.tuan_type !== 2
-              && groupPassArr.length < 1 
-              && groupPass
-              && (
+              && groupPassArr.length < 1
+              && groupPass && (
                 <Flex style={styleSpan.topDis}>
                   <div style={styleSpan.passLeft}>核销码:{groupPass}</div>
                   <div style={styleSpan.passRight}>
@@ -379,8 +378,8 @@ class GroupOrderDetail extends React.Component {
                           needResult: 1,
                           scanType: ['qrCode', 'barCode'],
                           success(res) {
-                            order.verificGroup(detail.order_id, res.resultStr).then(res => {
-                              if (res) Toast.success('验证成功', 1, () => window.location.reload())
+                            order.verificGroup(detail.order_id, res.resultStr).then(resVer => {
+                              if (resVer) Toast.success('验证成功', 1, () => window.location.reload())
                             })
                           },
                         })

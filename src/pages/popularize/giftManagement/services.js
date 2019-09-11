@@ -147,3 +147,21 @@ export const modifyExpress = payload => {
     ticket: localStorage.getItem('ticket'),
   })
 }
+
+export const checkCouponCode = (orderId, giftPass) => axios.post('/appapi.php?c=Merchantapp&a=gift_verify', {
+  // code: splice ? `${id}d${code}` : code,
+  gift_pass: giftPass,
+  order_id: orderId,
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const fecthGiftPassArray = orderId => axios.post('/appapi.php?c=Merchantapp&a=gift_pass_array', {
+  order_id: orderId,
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const fecthGiftArrayVerify = (orderId, giftPass) => axios.post('/appapi.php?c=Merchantapp&a=gift_array_verify', {
+  order_id: orderId,
+  gift_pass: giftPass,
+  ticket: localStorage.getItem('ticket'),
+})

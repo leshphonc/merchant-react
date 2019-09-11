@@ -45,6 +45,8 @@ class MastSotre {
 
   @observable express = {}
 
+  @observable giftOrderPass = []
+
   // 获取商品订单列表
   @action
   fetchGiftOrder = async giftId => {
@@ -434,6 +436,32 @@ class MastSotre {
       this.giftOrderPage = 1
       this.giftOrderTotal = null
     })
+  }
+
+  @action
+  checkCouponCode = async (orderId, giftPass) => {
+    const response = await services.checkCouponCode(orderId, giftPass)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  fecthGiftArrayVerify = async (orderId, giftPass) => {
+    const response = await services.fecthGiftArrayVerify(orderId, giftPass)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  fecthGiftPassArray = async orderId => {
+    const response = await services.fecthGiftPassArray(orderId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.giftOrderPass = response.data.result
+      })
+    }
   }
 }
 export default new MastSotre()
