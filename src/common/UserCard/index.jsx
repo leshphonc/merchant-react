@@ -1,16 +1,17 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { WingBlank, Flex } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import {
   Container, Avatar, Content, Wallet, Setting,
 } from './styled'
 
+@withRouter
 @inject('home')
 @observer
 class UserCard extends React.Component {
   render() {
-    const { home } = this.props
+    const { home, history } = this.props
     const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
     const userName = userInfo ? userInfo.name : '未登录'
     const { avatar } = userInfo || {}
@@ -30,7 +31,7 @@ class UserCard extends React.Component {
                   <Wallet>充值 | 提现</Wallet>
                 </Link>
               </Flex>
-              <Setting>
+              <Setting onClick={() => history.push('/login')}>
                 <i className="iconfont">&#xe606;</i>
               </Setting>
             </Content>
