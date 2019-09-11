@@ -15,7 +15,7 @@ class Multiple extends React.Component {
         visible={visible}
         transparent={false}
         onClose={close}
-        title={<div style={{ height: 33 }}>裁剪</div>}
+        title={<div style={{ height: 33, lineHeight: '48px' }}>裁剪</div>}
       >
         <CropperImg aspectratio={ratio} callback={this.saveImg} />
       </Modal>

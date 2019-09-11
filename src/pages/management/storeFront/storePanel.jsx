@@ -154,7 +154,7 @@ class StorePanel extends React.Component {
       if (storeDetail.circle_id) {
         storeFront.fetchMarket(storeDetail.circle_id).then(() => {
           form.setFieldsValue({
-            market_id: storeDetail.market_id,
+            market_id: [storeDetail.market_id],
           })
         })
       }
