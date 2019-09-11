@@ -198,7 +198,7 @@ class RetailDetail extends React.Component {
 
   // 确认消费
   confirmConsumption = id => {
-    const { order, match } = this.props
+    const { order } = this.props
     const { shopOrderDetail } = order
     const { order_details } = shopOrderDetail
     if (order_details.deliver_str === '自提') {
@@ -207,8 +207,8 @@ class RetailDetail extends React.Component {
         scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
         success(res) {
           const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
-          window.alert(result)
-          order.scanCode(match.params.id).then(res2 => {
+          // window.alert(result)
+          order.scanCode(result).then(res2 => {
             if (res2) {
               Toast.success('确认消费成功')
             } else {

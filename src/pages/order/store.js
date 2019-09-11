@@ -288,6 +288,7 @@ class OrderStore {
     const response = await services.scanCode(id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       await this.fetchShopOrderDetail(id)
+      return Promise.resolve(true)
     }
   }
 
