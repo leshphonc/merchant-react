@@ -98,7 +98,6 @@ class AppointDiscounts extends React.Component {
       return envoList.map((item, index) => (
         <React.Fragment key={index}>
           <InputItem
-            placeholder=""
             defaultValue={item.envo_name}
             onChange={e => {
               const now_envoList = toJS(envoList)
@@ -209,7 +208,7 @@ class AppointDiscounts extends React.Component {
             style={{ color: '#fff', width: '25%', margin: '1% auto' }}
             onClick={() => {
               const envoList = toJS(this.state.envoList)
-              if (envoList.length > 1){ 
+              if (envoList.length > 1) { 
                 envoList.splice(index, 1)
                 this.setState({
                   envoList,
@@ -266,7 +265,6 @@ class AppointDiscounts extends React.Component {
       }
 
       commodity.editAppointDis({ ...obj, appoint_id: match.params.id }).then(res => {
-        return 
         if (res) Toast.success('编辑成功', 1, () => history.goBack())
       })
     })

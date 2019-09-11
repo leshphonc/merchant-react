@@ -98,7 +98,6 @@ class GroupList extends React.Component {
 
   componentDidMount() {
     const { match, order } = this.props
-    const { groupOrderList } = order
     const {
       height, statusValus, typeValue, keyword,
     } = this.state

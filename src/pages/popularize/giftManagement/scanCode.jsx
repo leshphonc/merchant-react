@@ -43,13 +43,20 @@ class ScanCode extends React.Component {
   }
 
   verificBtn = orderId => {
-    const { giftManagement, history } = this.props
+    const { giftManagement, history, login } = this.props
     window.wx.scanQRCode({
       needResult: 1,
       scanType: ['qrCode', 'barCode'],
       success(res) {
-        giftManagement.fecthGiftArrayVerify(orderId, res.resultStr).then(res => {
-          if (res) Toast.success('验证成功', 1, () => history.goBack())
+        giftManagement.fecthGiftArrayVerify(orderId, res.resultStr).then(res2 => {
+          if (res2) Toast.success('验证成功', 1, () => history.goBack())
+        })
+      },
+      fail() {
+        login.wxConfigFun().then(res => {
+          if (res) {
+            this.verificBtn(orderId)
+          }
         })
       },
     })
@@ -81,8 +88,27 @@ class ScanCode extends React.Component {
     </Flex>
   ))
 
+  ver = id => {
+    const { giftManagement, history, login } = this.props
+    window.wx.scanQRCode({
+      needResult: 1,
+      scanType: ['qrCode', 'barCode'],
+      success(res) {
+        giftManagement.checkCouponCode(id, res.resultStr).then(res2 => {
+          if (res2) Toast.success('验证成功', 1, () => history.goBack())
+        })
+      },
+      fail() {
+        login.wxConfigFun().then(res => {
+          if (res) {
+            this.ver(id)
+          }
+        })
+      },
+    })
+  }
+
   render() {
-    const { giftManagement, history } = this.props
     const { giftPass, giftPassArr, detail } = this.state
     return (
       <React.Fragment>
@@ -102,18 +128,7 @@ class ScanCode extends React.Component {
                       size="small"
                       style={{ width: '60%', margin: '0px 40px 0' }}
                       onClick={() => {
-                        window.wx.scanQRCode({
-                          needResult: 1,
-                          scanType: ['qrCode', 'barCode'],
-                          success(res) {
-                            alert(res)
-                            giftManagement
-                              .checkCouponCode(detail.order_id, res.resultStr)
-                              .then(res => {
-                                if (res) Toast.success('验证成功', 1, () => history.goBack())
-                              })
-                          },
-                        })
+                        this.ver(detail.order_id)
                       }}
                     >
                       验证

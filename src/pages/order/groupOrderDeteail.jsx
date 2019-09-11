@@ -115,13 +115,20 @@ class GroupOrderDetail extends React.Component {
   }
 
   verificBtn = orderId => {
-    const { order } = this.props
+    const { order, login } = this.props
     window.wx.scanQRCode({
       needResult: 1,
       scanType: ['qrCode', 'barCode'],
       success(res) {
-        order.verificGroup(orderId, res.resultStr).then(resVer => {
-          if (resVer) Toast.success('验证成功', 1, () => window.location.reload())
+        order.verificGroup(orderId, res.resultStr).then(res2 => {
+          if (res2) Toast.success('验证成功', 1, () => window.location.reload())
+        })
+      },
+      fail() {
+        login.wxConfigFun().then(res => {
+          if (res) {
+            this.verificBtn(orderId)
+          }
         })
       },
     })
@@ -374,15 +381,7 @@ class GroupOrderDetail extends React.Component {
                       size="small"
                       style={{ width: '60%', margin: '10px auto 0' }}
                       onClick={() => {
-                        window.wx.scanQRCode({
-                          needResult: 1,
-                          scanType: ['qrCode', 'barCode'],
-                          success(res) {
-                            order.verificGroup(detail.order_id, res.resultStr).then(resVer => {
-                              if (resVer) Toast.success('验证成功', 1, () => window.location.reload())
-                            })
-                          },
-                        })
+                        this.verificBtn(detail.order_id)
                       }}
                     >
                       验证

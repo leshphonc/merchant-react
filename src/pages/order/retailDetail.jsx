@@ -196,27 +196,39 @@ class RetailDetail extends React.Component {
     }
   }
 
+  scanQRCode = () => {
+    const { order, login } = this.props
+    window.wx.scanQRCode({
+      needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+      scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+      success(res) {
+        const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
+        // window.alert(result)
+        order.scanCode(result).then(res2 => {
+          if (res2) {
+            Toast.success('确认消费成功')
+          } else {
+            Toast.fail('确认消费失败')
+          }
+        })
+      },
+      fail() {
+        login.wxConfigFun().then(res => {
+          if (res) {
+            this.scanQRCode()
+          }
+        })
+      },
+    })
+  }
+
   // 确认消费
   confirmConsumption = id => {
     const { order } = this.props
     const { shopOrderDetail } = order
     const { order_details } = shopOrderDetail
     if (order_details.deliver_str === '自提') {
-      window.wx.scanQRCode({
-        needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-        scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
-        success(res) {
-          const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
-          // window.alert(result)
-          order.scanCode(result).then(res2 => {
-            if (res2) {
-              Toast.success('确认消费成功')
-            } else {
-              Toast.fail('确认消费失败')
-            }
-          })
-        },
-      })
+      this.scanQRCode()
       return false
     }
     Modal.alert('重要提示', '确认消费后，订单将设为已消费且不能恢复，请确认用户收货后再操作！', [
