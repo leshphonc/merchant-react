@@ -96,6 +96,7 @@ class ReservationDetail extends React.Component {
   serviceStatus = item => {
     if (item.paid === '0') {
       if (item.service_status === '0') {
+        if (!item.supply_info) return '无信息'
         if (item.supply_info.status === '1') return '未服务'
         if (item.supply_info.status === '2') return '服务中'
         if (item.supply_info.status === '3') return '已服务'
@@ -106,6 +107,7 @@ class ReservationDetail extends React.Component {
       }
     } else if (item.paid === '1') {
       if (item.service_status === '0') {
+        if (!item.supply_info) return '无信息'
         if (item.supply_info.status === '1') return '未服务'
         if (item.supply_info.status === '2') return '服务中'
         if (item.supply_info.status === '3') return '已服务'
@@ -159,7 +161,7 @@ class ReservationDetail extends React.Component {
   }
 
   showSJ3 = orderDetails => {
-    let dom = ''
+    const dom = []
     if (
       orderDetails.product_id
       && orderDetails.paid === '1'
@@ -167,30 +169,39 @@ class ReservationDetail extends React.Component {
       && orderDetails.is_initiative
     ) {
       if (orderDetails.user_pay_money - 0 + (orderDetails.product_balance_pay - 0) > 0) {
-        dom += <List.Item extra={`-¥${orderDetails.balance_pay}`}>实际支付余额</List.Item>
+        dom.push(
+          <List.Item key="实际支付余额" extra={`-¥${orderDetails.balance_pay}`}>
+            实际支付余额
+          </List.Item>,
+        )
       }
-      dom += <List.Item extra={`${orderDetails.user_pay_time}`}>实际支付余额时间</List.Item>
+      dom.push(
+        <List.Item key="实际支付余额时间" extra={`${orderDetails.user_pay_time}`}>
+          实际支付余额时间
+        </List.Item>,
+      )
       if (orderDetails.product_score_deducte > 0) {
-        dom += (
+        dom.push(
           <List.Item
+            key="实际支付积分金额"
             extra={`-¥${orderDetails.product_score_deducte} (使用${orderDetails.product_score_used_count}积分)`}
           >
             实际支付积分金额
-          </List.Item>
+          </List.Item>,
         )
       }
       if (orderDetails.product_coupon_price > 0) {
-        dom += (
-          <List.Item extra={`-¥${orderDetails.product_score_deducte}`}>
+        dom.push(
+          <List.Item key="实际支付系统优惠券金额" extra={`-¥${orderDetails.product_score_deducte}`}>
             实际支付系统优惠券金额
-          </List.Item>
+          </List.Item>,
         )
       }
       if (orderDetails.product_card_price > 0) {
-        dom += (
-          <List.Item extra={`-¥${orderDetails.product_card_price}`}>
+        dom.push(
+          <List.Item key="实际支付商家优惠券金额" extra={`-¥${orderDetails.product_card_price}`}>
             实际支付商家优惠券金额
-          </List.Item>
+          </List.Item>,
         )
       }
     }
