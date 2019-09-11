@@ -15,6 +15,7 @@ import {
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
+import MultipleImg from '@/common/UploadImg/Multiple'
 import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import { toJS } from 'mobx'
@@ -29,6 +30,7 @@ class GiftPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      mul: false,
       store: [],
       asyncCascadeValue: [],
     }
@@ -216,11 +218,22 @@ class GiftPanel extends React.Component {
     console.log(val)
   }
 
+  saveImg = url => {
+    const { form } = this.props
+    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
+    form.setFieldsValue({
+      pic: [...pic, { url }],
+    })
+    this.setState({
+      mul: false,
+    })
+  }
+
   render() {
     const { giftManagement, match, form } = this.props
     const { getFieldProps } = form
     const { giftCategory, giftCategorylist, shopList } = giftManagement
-    const { asyncCascadeValue, store } = this.state
+    const { asyncCascadeValue, store, mul } = this.state
     const { cascadeOption, circleOption, marketOption } = giftManagement
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const pickinstore = form.getFieldValue('pick_in_store')
@@ -385,10 +398,15 @@ class GiftPanel extends React.Component {
             <ImagePicker
               {...getFieldProps('pic', {
                 valuePropName: 'files',
-                getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
                 rules: [{ required: true }],
               })}
               selectable={pic.length < 5}
+              onAddImageClick={e => {
+                this.setState({
+                  mul: true,
+                })
+                e.preventDefault()
+              }}
             />
           </List.Item>
           <List.Item>
@@ -433,6 +451,15 @@ class GiftPanel extends React.Component {
             </Button>
           </WingBlank>
         </List>
+        <MultipleImg
+          visible={mul}
+          close={() => this.setState({
+            mul: false,
+          })
+          }
+          ratio={1}
+          callback={this.saveImg}
+        />
       </React.Fragment>
     )
   }

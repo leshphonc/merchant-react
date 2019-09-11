@@ -121,20 +121,34 @@ class ScanCode extends React.Component {
                 <Flex.Item style={{ flex: 'none', width: '60%' }}>
                   <div style={{ marginTop: '6px' }}>核销码:{giftPass}</div>
                 </Flex.Item>
-                <Flex.Item style={{ flex: 'none' }}>
-                  <div>
-                    <Button
-                      type="primary"
-                      size="small"
-                      style={{ width: '60%', margin: '0px 40px 0' }}
-                      onClick={() => {
-                        this.ver(detail.order_id)
-                      }}
-                    >
-                      验证
-                    </Button>
-                  </div>
-                </Flex.Item>
+                {detail.status === '0' ? (
+                  <Flex.Item style={{ flex: 'none' }}>
+                    <div>
+                      <Button
+                        type="primary"
+                        size="small"
+                        style={{ width: '60%', margin: '0px 34px 0' }}
+                        onClick={() => {
+                          this.ver(detail.order_id)
+                        }}
+                      >
+                        验证
+                      </Button>
+                    </div>
+                  </Flex.Item>
+                ) : (
+                  <Flex.Item style={{ flex: 'none' }}>
+                    <div>
+                      <Button
+                        type="primary"
+                        size="small"
+                        style={{ width: '60%', margin: '0px 34px 0' }}
+                      >
+                        已验证
+                      </Button>
+                    </div>
+                  </Flex.Item>
+                )}
               </Flex>
             )}
             {giftPassArr.length > 1 && this.giftPassList(giftPassArr)}
