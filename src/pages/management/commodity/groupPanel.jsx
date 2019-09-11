@@ -23,6 +23,7 @@ import { toJS } from 'mobx'
 import Utils from '@/utils'
 import moment from 'moment'
 import Editor from '@/common/Editor'
+import MultipleImg from '@/common/UploadImg/Multiple'
 
 const { Item } = List
 const { CheckboxItem } = Checkbox
@@ -106,6 +107,7 @@ class GroupPanel extends React.Component {
       stock_reduce_method: '0',
       start_discount: '',
       is_edit: '',
+      mul: false,
     }
     this.editor = React.createRef()
   }
@@ -276,15 +278,20 @@ class GroupPanel extends React.Component {
     })
   }
 
-  onChange = files => {
-    this.setState({
-      files,
-    })
-  }
-
   changePermission = bool => {
     const { basicInformation } = this.props
     basicInformation.modifyPermission(bool ? '1' : '0')
+  }
+
+  saveImg = url => {
+    const { form } = this.props
+    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
+    form.setFieldsValue({
+      pic: [...pic, { url }],
+    })
+    this.setState({
+      mul: false,
+    })
   }
 
   render() {
@@ -293,7 +300,7 @@ class GroupPanel extends React.Component {
     const { commodity } = this.props
     const { groupCatFir, groupCatSec } = commodity
     // eslint-disable-next-line camelcase
-    const { is_edit } = this.state
+    const { is_edit, mul } = this.state
     const {
       // eslint-disable-next-line camelcase
       cat_fid,
@@ -565,10 +572,15 @@ class GroupPanel extends React.Component {
               <ImagePicker
                 {...getFieldProps('pic', {
                   valuePropName: 'files',
-                  getValueFromEvent: arr => Utils.compressionAndUploadImgArr(arr),
                   rules: [{ required: true }],
                 })}
                 selectable={pic_arr.length < 5}
+                onAddImageClick={e => {
+                  this.setState({
+                    mul: true,
+                  })
+                  e.preventDefault()
+                }}
               />
             </Item>
           </div>
@@ -745,6 +757,15 @@ class GroupPanel extends React.Component {
             </Button>
           </WingBlank>
         </List>
+        <MultipleImg
+          visible={mul}
+          close={() => this.setState({
+            mul: false,
+          })
+          }
+          ratio={1}
+          callback={this.saveImg}
+        />
       </React.Fragment>
     )
   }
