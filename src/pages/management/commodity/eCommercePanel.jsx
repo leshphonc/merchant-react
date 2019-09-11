@@ -36,7 +36,6 @@ class ECommerceAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      pic: [],
       specification: [],
       open: false,
       goods: [],
@@ -342,9 +341,8 @@ class ECommerceAdd extends React.Component {
       storeValues, categoryValues, goodsCategory, expressLists,
     } = commodity
     const { getFieldProps } = form
-    const {
-      pic, open, goods, mul,
-    } = this.state
+    const { open, goods, mul } = this.state
+    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const menuEl = (
       <Menu
         className="menu-position"
@@ -545,7 +543,7 @@ class ECommerceAdd extends React.Component {
             商城商品分类
           </List.Item>
           <List.Item arrow="empty">
-            店铺图片
+            商品图片
             <ImagePicker
               {...getFieldProps('pic', {
                 valuePropName: 'files',

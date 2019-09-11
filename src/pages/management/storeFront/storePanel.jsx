@@ -749,7 +749,7 @@ class StorePanel extends React.Component {
             mul: false,
           })
           }
-          ratio={1}
+          ratio={2}
           callback={this.saveImg}
         />
       </React.Fragment>

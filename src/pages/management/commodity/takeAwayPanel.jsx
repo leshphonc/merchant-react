@@ -25,7 +25,6 @@ class TakeAwayPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      pic: [],
       mul: false,
     }
     this.editor = React.createRef()
@@ -204,7 +203,8 @@ class TakeAwayPanel extends React.Component {
     const { commodity, match, form } = this.props
     const { getFieldProps } = form
     const { storeValues, categoryValues } = commodity
-    const { pic, mul } = this.state
+    const { mul } = this.state
+    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}外卖商品`} goBack />
@@ -364,7 +364,7 @@ class TakeAwayPanel extends React.Component {
             规格设置
           </List.Item>
           <List.Item arrow="empty">
-            店铺图片
+            商品图片
             <ImagePicker
               {...getFieldProps('pic', {
                 valuePropName: 'files',
