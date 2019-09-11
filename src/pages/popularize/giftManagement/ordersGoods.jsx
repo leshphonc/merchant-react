@@ -61,10 +61,16 @@ class OressGoods extends React.Component {
               <Flex.Item style={{ flex: 'none', width: '58%' }}>
                 订单时间: {moment(item.order_time * 1000).format('YYYY-MM-DD HH:mm')}
               </Flex.Item>
-              <Flex.Item style={{ marginLeft: '2px' }}>
-                状态: {item.paid === '1' ? '已支付' : '未支付'}{' '}
-                {item.status === '1' ? '已发货' : '未发货'}
-              </Flex.Item>
+              {item.is_pick_in_store === '1' ? (
+                <Flex.Item style={{ marginLeft: '2px' }}>
+                  状态: {item.status === '1' ? '已完成' : '未完成'}
+                </Flex.Item>
+              ) : (
+                <Flex.Item style={{ marginLeft: '2px' }}>
+                  状态: {item.paid === '1' ? '已支付' : '未支付'}
+                  {item.status === '1' ? '已发货' : '未发货'}
+                </Flex.Item>
+              )}
             </Flex>
           </Card.Body>
           <Card.Footer
