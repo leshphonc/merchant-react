@@ -74,14 +74,7 @@ class BasicInformation extends React.Component {
     return (
       <Flex justify="end">
         {cateGoryLabel.map((item, index) => (
-          <PrimaryTag
-            key={index}
-            style={{ marginLeft: 2 }}
-            onClick={() => {
-              document.body.style.position = 'fixed'
-              this.setState({ menu: true })
-            }}
-          >
+          <PrimaryTag key={index} style={{ marginLeft: 2 }}>
             {item}
           </PrimaryTag>
         ))}
@@ -217,7 +210,15 @@ class BasicInformation extends React.Component {
             >
               详细地址
             </Item>
-            <Item extra={this.getMenuList()}>商户所属分类</Item>
+            <Item
+              extra={this.getMenuList()}
+              onClick={() => {
+                document.body.style.position = 'fixed'
+                this.setState({ menu: true })
+              }}
+            >
+              商户所属分类
+            </Item>
           </List>
           <List renderHeader="商家描述">
             <Item
@@ -287,10 +288,10 @@ class BasicInformation extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/setting/basicInformation" exact component={BasicInformation} />
-    <Route path="/setting/basicInformation/modifyPhone/:value" component={ModifyPhone} />
-    <Route path="/setting/basicInformation/modifyEmail/:value" component={ModifyEmail} />
+    <Route path="/setting/basicInformation/modifyPhone/:value?" component={ModifyPhone} />
+    <Route path="/setting/basicInformation/modifyEmail/:value?" component={ModifyEmail} />
     <Route
-      path="/setting/basicInformation/modifyDescription/:value"
+      path="/setting/basicInformation/modifyDescription/:value?"
       component={ModifyDescription}
     />
     <Route

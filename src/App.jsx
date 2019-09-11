@@ -63,7 +63,7 @@ export default () => (
         <Route path="/popularize/giftManagement" component={GiftManagement} />
         {/* 上传图片页面 */}
         <Route
-          path="/uploadSingleImg/:title/:key/:ratio"
+          path="/uploadSingleImg/:title/:key/:ratio?"
           component={UploadSingleImg}
         />
         <Route

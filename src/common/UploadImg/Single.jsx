@@ -29,10 +29,11 @@ class Single extends React.Component {
 
   render() {
     const { match } = this.props
+    const ratio = match.params.ratio ? match.params.ratio - 0 : null
     return (
       <React.Fragment>
         <NavBar title={match.params.title} goBack />
-        <CropperImg aspectratio={match.params.ratio - 0} callback={this.saveImg} />
+        <CropperImg aspectratio={ratio} callback={this.saveImg} />
       </React.Fragment>
     )
   }

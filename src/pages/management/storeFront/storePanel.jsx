@@ -218,7 +218,7 @@ class StorePanel extends React.Component {
   goQrPicker = () => {
     const { history } = this.props
     this.cacheData()
-    history.push('/uploadSingleImg/上传二维码背景图/qrcode/2')
+    history.push('/uploadSingleImg/上传二维码背景图/qrcode')
   }
 
   onPickerChange = val => {
@@ -651,7 +651,7 @@ class StorePanel extends React.Component {
           <Picker
             {...getFieldProps('discount_type', {
               rules: [{ required: true }],
-              initialValue: '0',
+              initialValue: ['0'],
             })}
             data={DiscountOptions}
             cols={1}
@@ -713,7 +713,7 @@ class StorePanel extends React.Component {
             mul: false,
           })
           }
-          ratio={1}
+          ratio={2}
           callback={this.saveImg}
         />
       </React.Fragment>
