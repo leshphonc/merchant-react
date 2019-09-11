@@ -341,6 +341,7 @@ class StorePanel extends React.Component {
         city_id: value.cascade[1],
         area_id: value.cascade[2],
         circle_id: value.circle_id[0],
+        market_id: value.market_id[0],
         adress: value.adress,
         sort: value.sort,
         cat_fid: goods[0],
