@@ -181,7 +181,7 @@ class GroupPanel extends React.Component {
           groupCatFir,
         })
       })
-      commodity.fetchShopList(1,1).then(() => {
+      commodity.fetchShopList(1, 1).then(() => {
         const { shopList } = commodity
         this.setState({
           shopList,

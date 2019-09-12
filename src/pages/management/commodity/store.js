@@ -91,6 +91,8 @@ class MastSotre {
 
   @observable showThree = 0
 
+  @observable openUserSpread = 0
+
   @action
   fetchGroupList = async keyword => {
     let hasMore = true
@@ -703,6 +705,16 @@ class MastSotre {
         this.scoreOpen = response.data.result.now_merchant.score_open
         this.dhbOpen = response.data.result.now_merchant.dhb_open
         this.showThree = response.data.result.now_merchant.show_three
+      })
+    }
+  }
+
+  // 三级分佣
+  showCommission = async () => {
+    const response = await services.showCommission()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.openUserSpread = response.data.result[0].value
       })
     }
   }

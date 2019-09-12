@@ -394,3 +394,10 @@ export const fetchscoreAndDhb = () => axios.get('/appapi.php?c=Merchantapp&a=mer
     ticket: localStorage.getItem('ticket'),
   },
 })
+
+// 三级分佣
+export const showCommission = () => axios.get('/appapi.php?c=Merchantapp&a=get_config', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
