@@ -28,11 +28,17 @@ class RetailDetail extends React.Component {
     addressValue: '',
     expressListLabel: '',
     expressListValue: '',
+    no: '',
   }
 
   componentDidMount() {
     const { order, match } = this.props
-    order.fetchShopOrderDetail(match.params.id)
+    order.fetchShopOrderDetail(match.params.id).then(() => {
+      const { shopOrderDetail } = order
+      this.setState({
+        no: shopOrderDetail.order_details.express_number,
+      })
+    })
     order.fetchExpressList(match.params.id).then(() => {
       const { order } = this.props
       const { label } = order.expressList[0] ? order.expressList[0] : { label: '' }
@@ -385,7 +391,7 @@ class RetailDetail extends React.Component {
     const { order } = this.props
     const { shopOrderDetail, expressList } = order
     const {
-      modal, copyModal, sendModal, expressListLabel, expressListValue,
+      modal, copyModal, sendModal, expressListLabel, expressListValue, no,
     } = this.state
     const orderDetails = shopOrderDetail.order_details || {}
     return (
@@ -552,7 +558,11 @@ class RetailDetail extends React.Component {
               </div>
             </Picker>
           </FilterBox>
-          <InputItem placeholder="请输入快递单号" onChange={val => this.setState({ no: val })} />
+          <InputItem
+            placeholder="请输入快递单号"
+            value={no}
+            onChange={val => this.setState({ no: val })}
+          />
         </Modal>
       </React.Fragment>
     )
