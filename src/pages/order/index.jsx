@@ -37,7 +37,7 @@ class Order extends React.Component {
                 history.push('/order/reservation')
                 return false
               }
-              Toast.info('暂无权限，请联系管理员')
+              Toast.info('手机端暂未开放此功能，请登录电脑端后台进行操作')
             }}
           >
             {item.name}

@@ -20,8 +20,7 @@ class Marketing extends React.Component {
           <List.Item
             arrow="horizontal"
             onClick={() => {
-              Toast.info('正在开发，敬请期待')
-              console.log(item.url)
+              Toast.info('手机端暂未开放此功能，请登录电脑端后台进行操作')
             }}
           >
             {item.name}
