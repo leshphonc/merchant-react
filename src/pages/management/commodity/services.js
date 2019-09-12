@@ -387,3 +387,10 @@ export const editGroupDis = payload => {
     ticket: localStorage.getItem('ticket'),
   })
 }
+
+// 积分兑换币是否开启
+export const scoreAndDhb = () => axios.get('/appapi.php?c=Merchantapp&a=merchant', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})

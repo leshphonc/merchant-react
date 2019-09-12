@@ -47,6 +47,7 @@ class GroupDiscounts extends React.Component {
         })
       }
     })
+    commodity.scoreAndDhb()
     commodity.fetchCardGroupAll()
     if (!match.params.id) return
     commodity.fetchGiftVoucher()

@@ -85,6 +85,12 @@ class MastSotre {
 
   @observable groupPackage = []
 
+  @observable scoreOpen = 0
+
+  @observable dhbOpen = 0
+
+  @observable showThree = 0
+
   @action
   fetchGroupList = async keyword => {
     let hasMore = true
@@ -686,6 +692,18 @@ class MastSotre {
     const response = await services.editGroupDis(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
+    }
+  }
+
+  // 积分兑换币是否开启
+  scoreAndDhb = async () => {
+    const response = await services.scoreAndDhb()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.scoreOpen = response.data.result.now_merchant.score_open
+        this.dhbOpen = response.data.result.now_merchant.dhb_open
+        this.showThree = response.data.result.now_merchant.show_three
+      })
     }
   }
 }
