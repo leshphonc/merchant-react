@@ -228,12 +228,13 @@ class ReservationDetail extends React.Component {
   }
 
   operating = orderDetails => {
+    const dom = []
     if (
       (orderDetails.service_status === '0' || orderDetails.service_status === '3')
       && orderDetails.is_del === '0'
     ) {
       if (orderDetails.merchant_worker_id !== '0') {
-        return (
+        dom.push(
           <Flex.Item>
             <Button
               type="primary"
@@ -244,23 +245,39 @@ class ReservationDetail extends React.Component {
             >
               修改派单
             </Button>
-          </Flex.Item>
+          </Flex.Item>,
+        )
+      } else {
+        dom.push(
+          <Flex.Item>
+            <Button
+              type="primary"
+              onClick={() => this.setState({
+                workerModal: true,
+              })
+              }
+            >
+              派单
+            </Button>
+          </Flex.Item>,
         )
       }
-      return (
+      dom.push(
         <Flex.Item>
           <Button
             type="primary"
-            onClick={() => this.setState({
-              workerModal: true,
-            })
-            }
+            onClick={() => {
+              this.setState({
+                verifyModal: true,
+              })
+            }}
           >
-            派单
+            验证服务
           </Button>
-        </Flex.Item>
+        </Flex.Item>,
       )
     }
+    return dom
   }
 
   orderHandle = () => {
@@ -273,7 +290,7 @@ class ReservationDetail extends React.Component {
     order.orderHandle(match.params.id, workerId).then(res => {
       if (res) {
         this.setState({ workerModal: false })
-        Toast.success('服务者指定成功', 2)
+        Toast.success('修改成功', 1)
       }
     })
   }
@@ -483,21 +500,7 @@ class ReservationDetail extends React.Component {
         </List>
         <WhiteSpace />
         <WingBlank size="md">
-          <Flex>
-            {this.operating(orderDetails)}
-            <Flex.Item>
-              <Button
-                type="primary"
-                onClick={() => {
-                  this.setState({
-                    verifyModal: true,
-                  })
-                }}
-              >
-                验证服务
-              </Button>
-            </Flex.Item>
-          </Flex>
+          <Flex>{this.operating(orderDetails)}</Flex>
         </WingBlank>
         <WhiteSpace />
         <Modal

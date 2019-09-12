@@ -696,8 +696,8 @@ class MastSotre {
   }
 
   // 积分兑换币是否开启
-  scoreAndDhb = async () => {
-    const response = await services.scoreAndDhb()
+  fetchscoreAndDhb = async () => {
+    const response = await services.fetchscoreAndDhb()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.scoreOpen = response.data.result.now_merchant.score_open

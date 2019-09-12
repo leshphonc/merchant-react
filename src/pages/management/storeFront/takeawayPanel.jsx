@@ -94,7 +94,7 @@ class TakeawayPanel extends React.Component {
         <CommodityCategory
           data={storeFront.takeawayDetail.category_list || []}
           check={cacheData.check}
-          type="2"
+          type="1"
           ref={this.categoryCheck}
         />
       )
@@ -104,7 +104,7 @@ class TakeawayPanel extends React.Component {
         <CommodityCategory
           data={storeFront.takeawayDetail.category_list}
           check={storeFront.takeawayDetail.relation_array}
-          type="2"
+          type="1"
           ref={this.categoryCheck}
         />
       )

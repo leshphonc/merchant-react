@@ -11,17 +11,18 @@ class Order extends React.Component {
   componentDidMount() {
     const { order } = this.props
     order.fetchOrderList()
+    order.fetchReservationOrderListCount()
   }
 
   mapList = () => {
     const { order } = this.props
-    const { orderList } = order
+    const { orderList, reservationCount } = order
     return orderList.map(item => (
       <React.Fragment key={item.name}>
         <List>
           <List.Item
             arrow="horizontal"
-            extra={item.count}
+            extra={item.name === '预定订单' ? reservationCount : item.count}
             onClick={() => {
               const { history } = this.props
               if (item.name === '零售订单') {

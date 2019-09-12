@@ -47,6 +47,8 @@ class OrderStore {
 
   @observable reservationOrderDetail = {}
 
+  @observable reservationCount = 0
+
   // 获取订单种类列表
   @action
   fetchOrderList = async () => {
@@ -329,7 +331,7 @@ class OrderStore {
     }
   }
 
-  // 获取预约订单列表
+  // 获取预定订单列表
   @action
   fetchReservationOrderList = async (paytype, searchtype, startTime, endTime, keyword) => {
     let hasMore = true
@@ -410,6 +412,17 @@ class OrderStore {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       await this.fetchReservationOrderDetail(orderId)
       return Promise.resolve(true)
+    }
+  }
+
+  // 单独获取预定订单数量
+  @action
+  fetchReservationOrderListCount = async () => {
+    const response = await services.fetchReservationOrderListCount()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.reservationCount = response.data.result.total
+      })
     }
   }
 }

@@ -162,7 +162,7 @@ export const sendOrder = (orderId, no, expressId) => axios.post('/appapi.php?c=M
   ticket: localStorage.getItem('ticket'),
 })
 
-// 获取预约订单列表
+// 获取预定订单列表
 export const fetchReservationOrderList = (
   page,
   size,
@@ -184,7 +184,7 @@ export const fetchReservationOrderList = (
   },
 })
 
-// 获取预约订单详情
+// 获取预定订单详情
 export const fetchReservationOrderDetail = id => axios.get('/appapi.php?c=Merchantapp&a=appoint_order_detail', {
   params: {
     order_id: id,
@@ -206,4 +206,13 @@ export const verifyHandle = (orderId, workerId, payType, psw) => axios.post('/ap
   merchant_pay_type: payType,
   appoint_pass: psw,
   ticket: localStorage.getItem('ticket'),
+})
+
+// 单独获取预定订单数量
+export const fetchReservationOrderListCount = () => axios.get('/appapi.php?c=Merchantapp&a=appoint_order_list', {
+  params: {
+    page: 1,
+    size: 10,
+    ticket: localStorage.getItem('ticket'),
+  },
 })

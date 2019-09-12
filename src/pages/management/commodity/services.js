@@ -389,7 +389,7 @@ export const editGroupDis = payload => {
 }
 
 // 积分兑换币是否开启
-export const scoreAndDhb = () => axios.get('/appapi.php?c=Merchantapp&a=merchant', {
+export const fetchscoreAndDhb = () => axios.get('/appapi.php?c=Merchantapp&a=merchant', {
   params: {
     ticket: localStorage.getItem('ticket'),
   },
