@@ -26,6 +26,7 @@ class Index extends React.Component {
   }
 
   render() {
+    const { history } = this.props
     const { cur } = this.state
     return (
       <TabBarContainer>
@@ -86,7 +87,7 @@ class Index extends React.Component {
           </TabBar.Item>
           <TabBar.Item
             icon={
-              <AddBtnBox>
+              <AddBtnBox onClick={() => history.push('/management/commodity')}>
                 <AddBtn>
                   <div>
                     <i className="iconfont">&#xe61e;</i>

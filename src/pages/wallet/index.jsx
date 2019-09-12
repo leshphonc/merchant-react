@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
 import { WhiteSpace, List } from 'antd-mobile'
 import AddCredit from './addCredit'
@@ -10,15 +10,7 @@ const { Item } = List
 
 const Wallet = props => (
   <React.Fragment>
-    <NavBar
-      title="充值"
-      goBack="/"
-      right={
-        <Link to="/wallet/detail" style={{ color: '#fff', fontSize: 14 }}>
-          账户明细
-        </Link>
-      }
-    />
+    <NavBar title="充值" goBack="/" />
     <WhiteSpace />
     <List>
       <Item
@@ -48,6 +40,20 @@ const Wallet = props => (
         arrow="horizontal"
       >
         提现
+      </Item>
+      <Item
+        onClick={() => props.history.push({
+          pathname: '/wallet/detail',
+        })
+        }
+        thumb={
+          <i className="iconfont" style={{ fontSize: 18, marginLeft: 2 }}>
+            &#xe601;
+          </i>
+        }
+        arrow="horizontal"
+      >
+        账户明细
       </Item>
     </List>
   </React.Fragment>

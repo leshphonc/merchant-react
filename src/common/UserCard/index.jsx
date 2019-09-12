@@ -32,7 +32,7 @@ class UserCard extends React.Component {
                 </Link>
               </Flex>
               <Setting onClick={() => history.push('/login')}>
-                <i className="iconfont">&#xe606;</i>
+                <i className="iconfont">&#xe637;</i>
               </Setting>
             </Content>
           </Flex>
