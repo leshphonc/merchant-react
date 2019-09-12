@@ -199,3 +199,11 @@ export const fetchQrcode = id => axios.get('/appapi.php?c=Merchantapp&type=merch
     ticket: localStorage.getItem('ticket'),
   },
 })
+
+// 获取商铺资质
+export const fetchAuthFiles = id => axios.get('/appapi.php?c=Merchantapp&type=merchantstore&a=get_auth', {
+  params: {
+    store_id: id,
+    ticket: localStorage.getItem('ticket'),
+  },
+})

@@ -16,6 +16,7 @@ import CategoryPanel from './categoryPanel'
 import StoreDiscount from './storeDiscount'
 import StoreDiscountPanel from './storeDiscountPanel'
 import DiningInformation from './diningInformation'
+import StoreFrontQualification from './storeFrontQualification'
 import { StoreStatus } from '@/config/constant'
 import { PrimaryTag } from '@/styled'
 import Utils from '@/utils'
@@ -69,32 +70,49 @@ class StoreFront extends React.Component {
           </Card.Body>
           <Card.Footer
             content={
-              <Flex>
-                <Flex.Item>
-                  <Button
-                    type="primary"
-                    size="small"
-                    onClick={() => history.push(`/management/storefront/storePanel/编辑/${item.store_id}`)
-                    }
-                  >
-                    基础信息
-                  </Button>
-                </Flex.Item>
-                <Flex.Item>
-                  <Button
-                    type="primary"
-                    size="small"
-                    onClick={() => history.push(
-                      `/management/storefront/storeFrontBusiness/${item.store_id}/${
-                        item.have_mall
-                      }/${item.have_peisong}`,
-                    )
-                    }
-                  >
-                    业务信息
-                  </Button>
-                </Flex.Item>
-              </Flex>
+              <React.Fragment>
+                <Flex>
+                  <Flex.Item>
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={() => history.push(`/management/storefront/storePanel/编辑/${item.store_id}`)
+                      }
+                    >
+                      基础信息
+                    </Button>
+                  </Flex.Item>
+                  <Flex.Item>
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={() => history.push(
+                        `/management/storefront/storeFrontBusiness/${item.store_id}/${item.have_mall}/${item.have_peisong}`,
+                      )
+                      }
+                    >
+                      业务信息
+                    </Button>
+                  </Flex.Item>
+                </Flex>
+                {item.have_mall === '1' || item.have_peisong === '1' ? (
+                  <React.Fragment>
+                    <WhiteSpace />
+                    <Flex>
+                      <Flex.Item>
+                        <Button
+                          type="primary"
+                          size="small"
+                          onClick={() => history.push(`/management/storefront/qualification/${item.store_id}`)
+                          }
+                        >
+                          资质审核
+                        </Button>
+                      </Flex.Item>
+                    </Flex>
+                  </React.Fragment>
+                ) : null}
+              </React.Fragment>
             }
           />
           <WhiteSpace />
@@ -173,6 +191,8 @@ export default () => (
       path="/management/storefront/storeDiscountPanel/:str/:id/:cid?"
       component={StoreDiscountPanel}
     />
+    {/* 资质审核 */}
+    <Route path="/management/storefront/qualification/:id" component={StoreFrontQualification} />
     {/* 餐饮信息 */}
     <Route path="/management/storefront/diningInformation" component={DiningInformation} />
   </React.Fragment>

@@ -97,7 +97,7 @@ class StorePanel extends React.Component {
         have_auto_parts: cacheData.have_auto_parts,
         txt_info: cacheData.txt_info,
         pic: cacheData.pic,
-        file: cacheData.file,
+        auth_files: cacheData.auth_files,
         discount_type: cacheData.discount_type,
         open_1: cacheData.open_1 && new Date(cacheData.open_1),
         close_1: cacheData.open_1 && new Date(cacheData.close_1),
@@ -177,7 +177,7 @@ class StorePanel extends React.Component {
         close_1: Utils.conversionTimeStringToDate(storeDetail.close_1),
         txt_info: storeDetail.txt_info,
         pic: storeDetail.pic,
-        file: storeDetail.file,
+        auth_files: storeDetail.auth_files,
         discount_type: [storeDetail.discount_type],
       })
       setTimeout(() => {
@@ -358,7 +358,7 @@ class StorePanel extends React.Component {
         txt_info: value.txt_info,
         context: this.editor.current.state.editor.txt.html(),
         pic: value.pic.map(item => item.url),
-        file: value.file.map(item => item.url),
+        auth_files: value.auth_files.map(item => item.url),
         discount_type: value.discount_type[0],
         discount_percent: value.discount_percent,
         condition_price: value.condition_price,
@@ -413,7 +413,6 @@ class StorePanel extends React.Component {
       cascadeOption, circleOption, marketOption, allCategory,
     } = storeFront
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
-    const file = form.getFieldValue('file') ? form.getFieldValue('file') : []
     /* eslint camelcase: 0 */
     const discount_type = form.getFieldValue('discount_type')
       ? form.getFieldValue('discount_type')[0]
@@ -421,8 +420,6 @@ class StorePanel extends React.Component {
     const {
       long, lat, asyncCascadeValue, shopLogo, qrcode, open, goods, mul,
     } = this.state
-    const have_mall = form.getFieldValue('have_mall')
-    const have_peisong = form.getFieldValue('have_peisong')
     const menuEl = (
       <Menu
         className="menu-position"
@@ -627,19 +624,6 @@ class StorePanel extends React.Component {
           >
             汽配
           </List.Item>
-          {have_mall || have_peisong ? (
-            <List.Item arrow="empty">
-              资质图片
-              <ImagePicker
-                {...getFieldProps('file', {
-                  valuePropName: 'files',
-                  getValueFromEvent: item => Utils.compressionAndUploadImgArr(item),
-                  rules: [{ required: true }],
-                })}
-                selectable={file.length < 5}
-              />
-            </List.Item>
-          ) : null}
           <DatePicker
             {...getFieldProps('open_1', {
               rules: [{ required: true }],

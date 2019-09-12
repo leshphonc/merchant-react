@@ -2,7 +2,9 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
-import { List, InputItem, WingBlank, Button, Toast, Picker } from 'antd-mobile'
+import {
+  List, InputItem, WingBlank, Button, Toast, Picker,
+} from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
@@ -28,26 +30,28 @@ class ECommerceSpread extends React.Component {
         userLevels,
       })
     })
+    commodity.fetchscoreAndDhb()
+    commodity.fetchShowCommission()
     if (!match.params.goodid) return
-    commodity
-      .fetchECommerceDetail(match.params.id, match.params.goodid)
-      .then(() => {
-        const { eCommerceDetail } = commodity
-        form.setFieldsValue({
-          spread_sale: eCommerceDetail.spread_sale,
-          spread_rate: eCommerceDetail.spread_rate,
-          level_set: [eCommerceDetail.level_set],
-        })
-        if (eCommerceDetail.spread.length) {
-          this.setState({
-            userLevels: eCommerceDetail.spread,
-          })
-        }
+    commodity.fetchECommerceDetail(match.params.id, match.params.goodid).then(() => {
+      const { eCommerceDetail } = commodity
+      form.setFieldsValue({
+        spread_sale: eCommerceDetail.spread_sale,
+        spread_rate: eCommerceDetail.spread_rate,
+        level_set: [eCommerceDetail.level_set],
       })
+      if (eCommerceDetail.spread.length) {
+        this.setState({
+          userLevels: eCommerceDetail.spread,
+        })
+      }
+    })
   }
 
   submit = () => {
-    const { commodity, form, match, history } = this.props
+    const {
+      commodity, form, match, history,
+    } = this.props
     const { userLevels } = this.state
     form.validateFields((error, value) => {
       if (error) {
@@ -56,7 +60,7 @@ class ECommerceSpread extends React.Component {
       }
       const obj = {
         ...value,
-        level_set: value.level_set[0] + '',
+        level_set: `${value.level_set[0]}`,
         spread: userLevels,
       }
       commodity
@@ -82,6 +86,8 @@ class ECommerceSpread extends React.Component {
 
   mapList = () => {
     const { userLevels } = this.state
+    const { commodity } = this.props
+    const { showThree, openUserSpread } = commodity
     return userLevels.map((item, index) => (
       <React.Fragment key={index}>
         <Item>
@@ -89,9 +95,7 @@ class ECommerceSpread extends React.Component {
           <InputItem
             extra="%"
             value={item.spread_sale}
-            onChange={val =>
-              this.changeUserLevelsItem(val, index, 'spread_sale')
-            }
+            onChange={val => this.changeUserLevelsItem(val, index, 'spread_sale')}
             labelNumber={7}
             placeholder=" 销售佣金比例"
           >
@@ -100,14 +104,34 @@ class ECommerceSpread extends React.Component {
           <InputItem
             extra="%"
             value={item.spread_rate}
-            onChange={val =>
-              this.changeUserLevelsItem(val, index, 'spread_rate')
-            }
+            onChange={val => this.changeUserLevelsItem(val, index, 'spread_rate')}
             labelNumber={7}
             placeholder=" 推广佣金比例"
           >
             推广佣金比例
           </InputItem>
+          {showThree === '0' && openUserSpread === '1' ? (
+            <React.Fragment>
+              <InputItem
+                extra="%"
+                value={item.sub_spread_rate}
+                onChange={val => this.changeUserLevelsItem(val, index, 'sub_spread_rate')}
+                labelNumber={7}
+                placeholder=" 推广佣金比例2"
+              >
+                推广佣金比例2
+              </InputItem>
+              <InputItem
+                extra="%"
+                value={item.third_spread_rate}
+                onChange={val => this.changeUserLevelsItem(val, index, 'third_spread_rate')}
+                labelNumber={7}
+                placeholder=" 推广佣金比例3"
+              >
+                推广佣金比例3
+              </InputItem>
+            </React.Fragment>
+          ) : null}
         </Item>
       </React.Fragment>
     ))
@@ -117,9 +141,7 @@ class ECommerceSpread extends React.Component {
     const { match, form } = this.props
     const { getFieldProps } = form
     // const { spread } = this.state
-    const levelSetValue = form.getFieldValue('level_set')
-      ? form.getFieldValue('level_set')[0]
-      : ''
+    const levelSetValue = form.getFieldValue('level_set') ? form.getFieldValue('level_set')[0] : ''
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}推广分佣`} goBack />

@@ -132,7 +132,7 @@ class Group extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(`/management/commodity/GroupDiscounts/团购/${item.group_id}/`)
+                  onClick={() => history.push(`/management/commodity/GroupDiscounts/团购/${item.group_id}`)
                   }
                 >
                   优惠
@@ -142,7 +142,7 @@ class Group extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(`/management/commodity/editSpread/group_id/${item.group_id}/`)
+                  onClick={() => history.push(`/management/commodity/editSpread/group_id/${item.group_id}`)
                   }
                 >
                   佣金
@@ -152,7 +152,7 @@ class Group extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(`/order/groupList/${item.group_id}/`)
+                  onClick={() => history.push(`/order/groupList/${item.group_id}`)
                   }
                 >
                   订单列表

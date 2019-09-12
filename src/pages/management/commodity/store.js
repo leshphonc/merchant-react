@@ -710,8 +710,8 @@ class MastSotre {
   }
 
   // 三级分佣
-  showCommission = async () => {
-    const response = await services.showCommission()
+  fetchShowCommission = async () => {
+    const response = await services.fetchShowCommission()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.openUserSpread = response.data.result[0].value

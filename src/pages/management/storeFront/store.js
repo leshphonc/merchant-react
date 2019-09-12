@@ -41,6 +41,10 @@ class StoreFrontStore {
 
   @observable allCategory = []
 
+  @observable authFiles = []
+
+  @observable authStatus = '0'
+
   // 商铺列表
   @action
   fetchStoreList = async () => {
@@ -438,6 +442,18 @@ class StoreFrontStore {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.qrCode = response.data.result
+      })
+    }
+  }
+
+  // 获取商铺资质
+  @action
+  fetchAuthFiles = async id => {
+    const response = await services.fetchAuthFiles(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.authFiles = response.data.result.auth_files
+        this.authStatus = response.data.result.auth
       })
     }
   }

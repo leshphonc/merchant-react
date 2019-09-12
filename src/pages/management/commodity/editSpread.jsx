@@ -31,73 +31,74 @@ class EditSpread extends React.Component {
         userLevelList: levelList,
       })
     })
-    commodity.scoreAndDhb()
-    commodity.showCommission()
-    if (match.params.str === 'group_id') {
-      commodity.fetchGroupDetail(match.params.id).then(() => {
-        const { groupDetail, levelList } = commodity
-        const { userLevels } = this.state
-        form.setFieldsValue({
-          spread_sale: groupDetail.spread_sale,
-          spread_rate: groupDetail.spread_rate,
-          level_set: [groupDetail.level_set],
-          level_spread: groupDetail.level_spread,
-          spread: groupDetail.spread,
-        })
-        levelList.forEach((item, index) => {
-          if (groupDetail.spread[index]) {
-            userLevels.push({
-              spread_sale: groupDetail.spread[index].spread_sale,
-              spread_rate: groupDetail.spread[index].spread_sale,
-              name: item.name,
-            })
-          } else {
-            userLevels.push({ spread_sale: '', spread_rate: '', name: item.name })
-          }
-        })
-        this.setState({
-          userLevels,
-        })
-      })
-    } else {
-      commodity.fetchReserveDetail(match.params.id).then(() => {
-        const { appointDetail, levelList } = commodity
-        const { userLevels } = this.state
-        form.setFieldsValue({
-          spread_sale: appointDetail.appoint_list.spread_sale,
-          spread_rate: appointDetail.appoint_list.spread_rate,
-          level_set: [appointDetail.appoint_list.level_set],
-          level_spread: appointDetail.appoint_list.level_spread,
-          spread: appointDetail.appoint_list.spread,
-        })
-        levelList.forEach((item, index) => {
-          if (appointDetail.appoint_list.spread[index]) {
-            userLevels.push({
-              spread_sale: appointDetail.appoint_list.spread[index].spread_sale,
-              spread_rate: appointDetail.appoint_list.spread[index].spread_sale,
-              name: item.name,
-            })
-          } else {
-            userLevels.push({ spread_sale: '', spread_rate: '', name: item.name })
-          }
-        })
-        this.setState({
-          userLevels,
-        })
-      })
-    }
-    /*
-        if (!match.params.goodid) return
-        commodity.fetchECommerceDetail(match.params.id, match.params.goodid).then(() => {
-            const { eCommerceDetail } = commodity
+    commodity.fetchscoreAndDhb().then(() => {
+      commodity.fetchShowCommission().then(() => {
+        const { showThree, openUserSpread } = commodity
+        if (match.params.str === 'group_id') {
+          commodity.fetchGroupDetail(match.params.id).then(() => {
+            const { groupDetail, levelList } = commodity
+            const { userLevels } = this.state
             form.setFieldsValue({
-                ...eCommerceDetail,
-                level_set: [eCommerceDetail.level_set],
+              spread_sale: groupDetail.spread_sale,
+              spread_rate: groupDetail.spread_rate,
+              level_set: [groupDetail.level_set],
+              level_spread: groupDetail.level_spread,
+              spread: groupDetail.spread,
+            })
+            levelList.forEach((item, index) => {
+              if (groupDetail.spread[index]) {
+                if (showThree === '0' && openUserSpread === '1') {
+                  userLevels.push({
+                    spread_sale: groupDetail.spread[index].spread_sale,
+                    spread_rate: groupDetail.spread[index].spread_rate,
+                    sub_spread_rate: groupDetail.spread[index].sub_spread_rate,
+                    third_spread_rate: groupDetail.spread[index].third_spread_rate,
+                    name: item.name,
+                  })
+                } else {
+                  userLevels.push({
+                    spread_sale: groupDetail.spread[index].spread_sale,
+                    spread_rate: groupDetail.spread[index].spread_rate,
+                    name: item.name,
+                  })
+                }
+              } else {
+                userLevels.push({ spread_sale: '', spread_rate: '', name: item.name })
+              }
             })
             this.setState({
-                userLevels: eCommerceDetail.spread,
+              userLevels,
             })
-        }) */
+          })
+        } else {
+          commodity.fetchReserveDetail(match.params.id).then(() => {
+            const { appointDetail, levelList } = commodity
+            const { userLevels } = this.state
+            form.setFieldsValue({
+              spread_sale: appointDetail.appoint_list.spread_sale,
+              spread_rate: appointDetail.appoint_list.spread_rate,
+              level_set: [appointDetail.appoint_list.level_set],
+              level_spread: appointDetail.appoint_list.level_spread,
+              spread: appointDetail.appoint_list.spread,
+            })
+            levelList.forEach((item, index) => {
+              if (appointDetail.appoint_list.spread[index]) {
+                userLevels.push({
+                  spread_sale: appointDetail.appoint_list.spread[index].spread_sale,
+                  spread_rate: appointDetail.appoint_list.spread[index].spread_sale,
+                  name: item.name,
+                })
+              } else {
+                userLevels.push({ spread_sale: '', spread_rate: '', name: item.name })
+              }
+            })
+            this.setState({
+              userLevels,
+            })
+          })
+        }
+      })
+    })
   }
 
   submit = () => {
@@ -160,10 +161,32 @@ class EditSpread extends React.Component {
             value={item.spread_rate}
             onChange={val => this.changeUserLevelsItem(val, index, 'spread_rate')}
             labelNumber={7}
-            placeholder=" 推广佣金比例"
+            placeholder=" 推广佣金比例1"
           >
-            推广佣金比例
+            推广佣金比例1
           </InputItem>
+          {showThree === '0' && openUserSpread === '1' ? (
+            <React.Fragment>
+              <InputItem
+                extra="%"
+                value={item.sub_spread_rate}
+                onChange={val => this.changeUserLevelsItem(val, index, 'sub_spread_rate')}
+                labelNumber={7}
+                placeholder=" 推广佣金比例2"
+              >
+                推广佣金比例2
+              </InputItem>
+              <InputItem
+                extra="%"
+                value={item.third_spread_rate}
+                onChange={val => this.changeUserLevelsItem(val, index, 'third_spread_rate')}
+                labelNumber={7}
+                placeholder=" 推广佣金比例3"
+              >
+                推广佣金比例3
+              </InputItem>
+            </React.Fragment>
+          ) : null}
         </Item>
       </React.Fragment>
     ))
