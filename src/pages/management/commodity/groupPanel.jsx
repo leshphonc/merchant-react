@@ -268,11 +268,23 @@ class GroupPanel extends React.Component {
       }
       if (match.params.id) {
         commodity.fetchEditGroup(obj, match.params.id).then(res => {
-          if (res) Toast.success('修改成功', 1, () => history.goBack())
+          if (res) {
+            Toast.success('修改成功', 1, () => {
+              commodity.resetAndFetchGroupList().then(() => {
+                history.goBack()
+              })
+            })
+          }
         })
       } else {
         commodity.fetchAddGroup(obj).then(res => {
-          if (res) Toast.success('新增成功', 1, () => history.goBack())
+          if (res) {
+            Toast.success('新增成功', 1, () => {
+              commodity.resetAndFetchGroupList().then(() => {
+                history.goBack()
+              })
+            })
+          }
         })
       }
     })

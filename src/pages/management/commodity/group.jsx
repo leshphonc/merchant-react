@@ -25,13 +25,14 @@ class Group extends React.Component {
 
   componentDidMount() {
     const { commodity } = this.props
-    const { height, keyword } = this.state
-    commodity.fetchGroupList(keyword)
+    const { groupList } = commodity
+    const { height } = this.state
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
     this.setState({
       height: hei,
     })
+    if (!groupList.length) commodity.fetchGroupList()
   }
 
   mapList = () => {
@@ -152,8 +153,7 @@ class Group extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(`/order/groupList/${item.group_id}`)
-                  }
+                  onClick={() => history.push(`/order/groupList/${item.group_id}`)}
                 >
                   订单列表
                 </Button>

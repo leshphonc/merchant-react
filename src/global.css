@@ -123,6 +123,8 @@ body {
 
 .w-e-text img {
   max-width: 100%;
+  width: auto;
+  height: auto;
 }
 
 /* 清除默认button样式 */

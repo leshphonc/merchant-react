@@ -53,17 +53,24 @@ class EditSpread extends React.Component {
                     spread_rate: groupDetail.spread[index].spread_rate,
                     sub_spread_rate: groupDetail.spread[index].sub_spread_rate,
                     third_spread_rate: groupDetail.spread[index].third_spread_rate,
+                    level: item.id,
                     name: item.name,
                   })
                 } else {
                   userLevels.push({
                     spread_sale: groupDetail.spread[index].spread_sale,
                     spread_rate: groupDetail.spread[index].spread_rate,
+                    level: item.id,
                     name: item.name,
                   })
                 }
               } else {
-                userLevels.push({ spread_sale: '', spread_rate: '', name: item.name })
+                userLevels.push({
+                  spread_sale: '',
+                  spread_rate: '',
+                  name: item.name,
+                  level: item.id,
+                })
               }
             })
             this.setState({
@@ -86,10 +93,16 @@ class EditSpread extends React.Component {
                 userLevels.push({
                   spread_sale: appointDetail.appoint_list.spread[index].spread_sale,
                   spread_rate: appointDetail.appoint_list.spread[index].spread_sale,
+                  level: item.id,
                   name: item.name,
                 })
               } else {
-                userLevels.push({ spread_sale: '', spread_rate: '', name: item.name })
+                userLevels.push({
+                  spread_sale: '',
+                  spread_rate: '',
+                  name: item.name,
+                  level: item.id,
+                })
               }
             })
             this.setState({

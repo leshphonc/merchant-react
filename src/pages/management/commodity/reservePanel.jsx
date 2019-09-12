@@ -103,7 +103,7 @@ class ReservePanel extends React.Component {
           store: appointDetail.store_arr,
           workerSele,
         })
-        commodity.fetchShopList(1,1).then(() => {
+        commodity.fetchShopList(1, 1).then(() => {
           const { shopList } = commodity
           this.setState({
             shopList,
@@ -144,6 +144,7 @@ class ReservePanel extends React.Component {
           appoint_type: appointDetail.appoint_list.appoint_type,
           is_appoint_price: appointDetail.appoint_list.is_appoint_price || 0,
           pic: appointDetail.appoint_list.pic_arr,
+          time_gap: appointDetail.appoint_list.time_gap,
         })
         this.setState({
           editor: appointDetail.appoint_list.appoint_pic_content,
@@ -265,11 +266,23 @@ class ReservePanel extends React.Component {
 
       if (match.params.id) {
         commodity.modifyReserve({ ...obj, appoint_id: match.params.id }).then(res => {
-          if (res) Toast.success('修改成功', 1, () => history.goBack())
+          if (res) {
+            Toast.success('修改成功', 1, () => {
+              commodity.resetAndFetchReserveList().then(() => {
+                history.goBack()
+              })
+            })
+          }
         })
       } else {
         commodity.insertReserve(obj).then(res => {
-          if (res) Toast.success('新增成功', 1, () => history.goBack())
+          if (res) {
+            Toast.success('新增成功', 1, () => {
+              commodity.resetAndFetchReserveList().then(() => {
+                history.goBack()
+              })
+            })
+          }
         })
       }
     })
@@ -338,7 +351,7 @@ class ReservePanel extends React.Component {
             {...getFieldProps('old_price', {
               rules: [{ required: true }],
             })}
-            placeholder="请填写原件，最多两位小数"
+            placeholder="请填写原价，最多两位小数"
           >
             原价
           </InputItem>
@@ -438,6 +451,26 @@ class ReservePanel extends React.Component {
             placeholder="请填写时间，单位：分钟"
           >
             耗时
+          </InputItem>
+          <InputItem
+            {...getFieldProps('time_gap', {
+              rules: [{ required: true }],
+            })}
+            placeholder=""
+          >
+            时间间隔
+            <Tooltip
+              trigger="click"
+              placement="topLeft"
+              overlay="预约时间间隔，单位分钟，必须是5的倍数，填写-1则显示为天数预约。"
+              onClick={e => {
+                e.stopPropagation()
+              }}
+            >
+              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                &#xe628;
+              </i>
+            </Tooltip>
           </InputItem>
           <InputItem
             {...getFieldProps('sort', {

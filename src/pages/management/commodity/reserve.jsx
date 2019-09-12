@@ -26,13 +26,14 @@ class Reserve extends React.Component {
 
   componentDidMount() {
     const { commodity } = this.props
-    const { height, keyword } = this.state
-    commodity.fetchReserveList(keyword)
+    const { reserveList } = commodity
+    const { height } = this.state
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
     this.setState({
       height: hei,
     })
+    if (!reserveList.length) commodity.fetchReserveList()
   }
 
   mapList = () => {

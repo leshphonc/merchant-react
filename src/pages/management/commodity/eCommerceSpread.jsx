@@ -26,25 +26,28 @@ class ECommerceSpread extends React.Component {
     const { commodity, match, form } = this.props
     commodity.fetchUserLevel(match.params.id, match.params.goodid).then(() => {
       const { userLevels } = commodity
+      userLevels.forEach(item => {
+        item.level = item.id
+      })
       this.setState({
         userLevels,
       })
-    })
-    commodity.fetchscoreAndDhb()
-    commodity.fetchShowCommission()
-    if (!match.params.goodid) return
-    commodity.fetchECommerceDetail(match.params.id, match.params.goodid).then(() => {
-      const { eCommerceDetail } = commodity
-      form.setFieldsValue({
-        spread_sale: eCommerceDetail.spread_sale,
-        spread_rate: eCommerceDetail.spread_rate,
-        level_set: [eCommerceDetail.level_set],
-      })
-      if (eCommerceDetail.spread.length) {
-        this.setState({
-          userLevels: eCommerceDetail.spread,
+      commodity.fetchscoreAndDhb()
+      commodity.fetchShowCommission()
+      if (!match.params.goodid) return
+      commodity.fetchECommerceDetail(match.params.id, match.params.goodid).then(() => {
+        const { eCommerceDetail } = commodity
+        form.setFieldsValue({
+          spread_sale: eCommerceDetail.spread_sale,
+          spread_rate: eCommerceDetail.spread_rate,
+          level_set: [eCommerceDetail.level_set],
         })
-      }
+        if (eCommerceDetail.spread.length) {
+          this.setState({
+            userLevels: eCommerceDetail.spread,
+          })
+        }
+      })
     })
   }
 
@@ -86,6 +89,7 @@ class ECommerceSpread extends React.Component {
 
   mapList = () => {
     const { userLevels } = this.state
+    console.log(userLevels)
     const { commodity } = this.props
     const { showThree, openUserSpread } = commodity
     return userLevels.map((item, index) => (

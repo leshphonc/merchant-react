@@ -33,6 +33,7 @@ class TakeAway extends React.Component {
 
   componentDidMount() {
     const { commodity } = this.props
+    const { takeAwayList } = commodity
     const { height } = this.state
     commodity.fetchStoreValues('2', '1')
     sessionStorage.removeItem('spec')
@@ -43,7 +44,7 @@ class TakeAway extends React.Component {
         height: hei,
       })
     }
-    commodity.fetchTakeAwayList()
+    if (!takeAwayList.length) commodity.fetchTakeAwayList()
   }
 
   detele = (id, storeId) => {
