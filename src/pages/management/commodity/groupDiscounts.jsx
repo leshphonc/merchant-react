@@ -223,6 +223,7 @@ class GroupDiscounts extends React.Component {
       cardGroupAll, groupPackage, dhbOpen, scoreOpen,
     } = commodity
     const {
+      // eslint-disable-next-line camelcase
       give, userLevels, score_name, dhb_name,
     } = this.state
     return (
@@ -249,7 +250,6 @@ class GroupDiscounts extends React.Component {
           >
             <List.Item arrow="horizontal">选择加入套餐</List.Item>
           </Picker>
-         
           {(dhbOpen === '1' || scoreOpen === '1') && (
             <div>
               <Item>

@@ -31,7 +31,8 @@ class EditSpread extends React.Component {
         userLevelList: levelList,
       })
     })
-
+    commodity.scoreAndDhb()
+    commodity.showCommission()
     if (match.params.str === 'group_id') {
       commodity.fetchGroupDetail(match.params.id).then(() => {
         const { groupDetail, levelList } = commodity
@@ -137,6 +138,8 @@ class EditSpread extends React.Component {
 
   mapList = () => {
     const { userLevels } = this.state
+    const { commodity } = this.props
+    const { showThree, openUserSpread } = commodity
     return userLevels.map((item, index) => (
       <React.Fragment key={index}>
         <Item>
