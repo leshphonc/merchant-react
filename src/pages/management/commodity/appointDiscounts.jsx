@@ -33,6 +33,7 @@ class AppointDiscounts extends React.Component {
   componentDidMount() {
     const { commodity, match, form } = this.props
     commodity.fetchCardGroupAll()
+    commodity.scoreAndDhb()
     const alias = JSON.parse(localStorage.getItem('alias'))
     alias.forEach(item => {
       if (item.name === 'score_name') {
@@ -100,7 +101,7 @@ class AppointDiscounts extends React.Component {
     // eslint-disable-next-line camelcase
     const now_envo = toJS(envoList)
     // eslint-disable-next-line react/destructuring-assignment
-    now_envo[this.state.indexPic][this.state.typePic] = [{ url : url }]
+    now_envo[this.state.indexPic][this.state.typePic] = [{ url }]
     this.setState({
       mul: false,
     })
@@ -150,18 +151,16 @@ class AppointDiscounts extends React.Component {
                 })
                 e.preventDefault()
               }}
-              onChange={
-                e => {
-                  if (e.length <= 0) {
-                    // eslint-disable-next-line camelcase
-                    const now_envoList = toJS(envoList)
-                    now_envoList[index].envo_before_select_pic.splice(0, 1)
-                    this.setState({
-                      envoList: now_envoList,
-                    })
-                  }
+              onChange={e => {
+                if (e.length <= 0) {
+                  // eslint-disable-next-line camelcase
+                  const now_envoList = toJS(envoList)
+                  now_envoList[index].envo_before_select_pic.splice(0, 1)
+                  this.setState({
+                    envoList: now_envoList,
+                  })
                 }
-              }
+              }}
               selectable={item.envo_before_select_pic.length < 1}
             />
           </Item>
@@ -286,9 +285,11 @@ class AppointDiscounts extends React.Component {
   }
 
   render() {
-    const { form } = this.props
+    const { commodity, form } = this.props
     const { getFieldProps } = form
+    // eslint-disable-next-line camelcase
     const { score_name, dhb_name, mul } = this.state
+    const { dhbOpen, scoreOpen } = commodity
     return (
       <React.Fragment>
         <NavBar title="预约优惠设置" goBack />
@@ -320,29 +321,38 @@ class AppointDiscounts extends React.Component {
           >
             <List.Item arrow="horizontal">是否输入车牌</List.Item>
           </Picker>
-          <Item>
-            用户消费赠送比例
-            <InputItem
-              {...getFieldProps('dhb_get_num', {
-                rules: [{ required: false }],
-              })}
-              labelNumber={7}
-              extra={dhb_name}
-              placeholder={`请填写${dhb_name}数量`}
-            >
-              每消费1元赠送
-            </InputItem>
-            <InputItem
-              {...getFieldProps('score_get_num', {
-                rules: [{ required: false }],
-              })}
-              extra={score_name}
-              labelNumber={7}
-              placeholder={`请填写${score_name}数量`}
-            >
-              每消费1元赠送
-            </InputItem>
-          </Item>
+          {(dhbOpen === '1' || scoreOpen === '1') && (
+            <div>
+              <Item>
+                用户消费赠送比例
+                {dhbOpen === '1' && (
+                  <InputItem
+                    {...getFieldProps('dhb_get_num', {
+                      rules: [{ required: false }],
+                    })}
+                    labelNumber={7}
+                    extra={dhb_name}
+                    placeholder={`请填写${dhb_name}数量`}
+                  >
+                    每消费1元赠送
+                  </InputItem>
+                )}
+                {scoreOpen === '1' && (
+                  <InputItem
+                    {...getFieldProps('score_get_num', {
+                      rules: [{ required: false }],
+                    })}
+                    extra={score_name}
+                    labelNumber={7}
+                    placeholder={`请填写${score_name}数量`}
+                  >
+                    每消费1元赠送
+                  </InputItem>
+                )}
+              </Item>
+            </div>
+          )}
+
           <InputItem
             {...getFieldProps('envo_area_name', {
               rules: [{ required: false }],

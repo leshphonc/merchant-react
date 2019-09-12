@@ -35,15 +35,15 @@ class GroupDiscounts extends React.Component {
   componentDidMount() {
     const { commodity, match, form } = this.props
     const alias = JSON.parse(localStorage.getItem('alias'))
-    alias.forEach( item => {
-      if (item.name === 'score_name') { 
+    alias.forEach(item => {
+      if (item.name === 'score_name') {
         this.setState({
-          score_name: item.value
+          score_name: item.value,
         })
       }
-      if (item.name === 'dhb_name') { 
+      if (item.name === 'dhb_name') {
         this.setState({
-          dhb_name: item.value
+          dhb_name: item.value,
         })
       }
     })
@@ -76,9 +76,7 @@ class GroupDiscounts extends React.Component {
           toJS(groupDetail.leveloff).forEach((item, index) => {
             userLevels[index][`leveloff[${item.level}][lid]`] = item.lid
             userLevels[index][`leveloff[${item.level}][lname]`] = item.lname
-            userLevels[index][`leveloff[${item.level}][type]`] = item.type
-              ? `${item.type}`
-              : '0'
+            userLevels[index][`leveloff[${item.level}][type]`] = item.type ? `${item.type}` : '0'
             userLevels[index][`leveloff[${item.level}][vv]`] = item.vv
             levelType.push(item.type ? item.type : '0')
           })
@@ -221,13 +219,19 @@ class GroupDiscounts extends React.Component {
   render() {
     const { commodity, form } = this.props
     const { getFieldProps } = form
-    const { cardGroupAll, groupPackage } = commodity
-    const { give, userLevels, score_name, dhb_name, } = this.state
+    const {
+      cardGroupAll, groupPackage, dhbOpen, scoreOpen,
+    } = commodity
+    const {
+      give, userLevels, score_name, dhb_name,
+    } = this.state
     return (
       <React.Fragment>
         <NavBar title="团购优惠设置" goBack />
         <List>
-        <Item><div style={{color: '#333', fontWeight: 'bold', textAlign: 'center' }}>套餐设置</div></Item>
+          <Item>
+            <div style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>套餐设置</div>
+          </Item>
           <InputItem
             {...getFieldProps('tagname', {
               rules: [{ required: false }],
@@ -245,31 +249,49 @@ class GroupDiscounts extends React.Component {
           >
             <List.Item arrow="horizontal">选择加入套餐</List.Item>
           </Picker>
-          <Item><div style={{color: '#333', fontWeight: 'bold', textAlign: 'center' }}>{score_name},{dhb_name}设置</div></Item>
+         
+          {(dhbOpen === '1' || scoreOpen === '1') && (
+            <div>
+              <Item>
+                <div style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
+                {dhb_name}{score_name}设置
+                </div>
+              </Item>
+              <Item>
+              用户消费赠送比例
+                {dhbOpen === '1' && (
+                <InputItem
+                  {...getFieldProps('dhb_get_num', {
+                    rules: [{ required: false }],
+                  })}
+                  labelNumber={7}
+                  extra={dhb_name}
+                  placeholder={`请填写${dhb_name}数量`}
+                >
+                  每消费1元赠送
+                </InputItem>
+                )}
+                {scoreOpen === '1' && (
+                <InputItem
+                  {...getFieldProps('score_get_num', {
+                    rules: [{ required: false }],
+                  })}
+                  extra={score_name}
+                  labelNumber={7}
+                  placeholder={`请填写${score_name}数量`}
+                >
+                  每消费1元赠送
+                </InputItem>
+                )}
+              </Item>
+            </div>
+          )}
+
           <Item>
-            用户消费赠送比例
-            <InputItem
-              {...getFieldProps('dhb_get_num', {
-                rules: [{ required: false }],
-              })}
-              labelNumber={7}
-              extra={dhb_name}
-              placeholder={`请填写${dhb_name}数量`}
-            >
-              每消费1元赠送
-            </InputItem>
-            <InputItem
-              {...getFieldProps('score_get_num', {
-                rules: [{ required: false }],
-              })}
-              extra={score_name}
-              labelNumber={7}
-              placeholder={`请填写${score_name}数量`}
-            >
-              每消费1元赠送
-            </InputItem>
+            <div style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
+              赠送商家优惠券
+            </div>
           </Item>
-          <Item><div style={{color: '#333', fontWeight: 'bold', textAlign: 'center' }}>赠送商家优惠券</div></Item>
           <List.Item
             extra={
               <Flex justify="between">
@@ -299,7 +321,11 @@ class GroupDiscounts extends React.Component {
             赠送商家优惠券
           </List.Item>
           {this.mapGive()}
-          <Item><div style={{color: '#333', fontWeight: 'bold', textAlign: 'center' }}>商家会员福利</div></Item>
+          <Item>
+            <div style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
+              商家会员福利
+            </div>
+          </Item>
           <Picker
             {...getFieldProps('in_group', {
               rules: [{ required: false }],
@@ -310,7 +336,13 @@ class GroupDiscounts extends React.Component {
           >
             <List.Item arrow="horizontal">选择会员分组</List.Item>
           </Picker>
-          {userLevels && (<Item><div style={{color: '#333', fontWeight: 'bold', textAlign: 'center' }}>会员优惠设置</div></Item>)}
+          {userLevels && (
+            <Item>
+              <div style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
+                会员优惠设置
+              </div>
+            </Item>
+          )}
           {this.levelDis()}
           <WingBlank style={{ padding: '10px 0' }}>
             <Button
