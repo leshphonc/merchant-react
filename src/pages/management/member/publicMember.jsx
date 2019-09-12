@@ -40,22 +40,30 @@ class PublicMember extends React.Component {
           <ItemTop>
             <img className="avatar" src={item.avatar} alt="" />
             <div className="top-content">
-              <div className="content-left">
-                <div>编号：{item.id}</div>
-                <div>电话号码：{item.mobile || '暂无'}</div>
-                <div>性别：{item.gender === '1' ? '男' : '女'}</div>
+              <div className="content-left" style={{ alignItems: 'start' }}>
+                <div>编号：{item.uid}</div>
+                <div>电话号码：{item.phone || '暂无'}</div>
+                <div>性别：{item.sex === '1' ? '男' : '女'}</div>
               </div>
-              <div className="content-right">
+              <div className="content-right" style={{ alignItems: 'start' }}>
                 <div>昵称：{item.nickname}</div>
                 <div className="hide">hide</div>
-                <div>注册时间：{moment(item.register_time * 1000).format('YYYY-MM-DD')}</div>
+                <div>
+                  注册时间：
+                  {item.add_time
+                    ? moment(item.add_time * 1000).format('YYYY-MM-DD')
+                    : '暂无数据'}
+                </div>
               </div>
             </div>
           </ItemTop>
           <ItemBottom>
             <div>关注时间：{moment(item.dateline * 1000).format('YYYY-MM-DD')}</div>
             <WhiteSpace />
-            <div>最后登录：{item.lasted}</div>
+            <div>
+              最后登录：
+              {item.last_time ? moment(item.last_time * 1000).format('YYYY-MM-DD') : '暂无数据'}
+            </div>
             <WhiteSpace />
             <div>获取渠道：{item.type}</div>
           </ItemBottom>

@@ -33,7 +33,7 @@ class AppointDiscounts extends React.Component {
   componentDidMount() {
     const { commodity, match, form } = this.props
     commodity.fetchCardGroupAll()
-    commodity.scoreAndDhb()
+    commodity.fetchscoreAndDhb()
     const alias = JSON.parse(localStorage.getItem('alias'))
     alias.forEach(item => {
       if (item.name === 'score_name') {

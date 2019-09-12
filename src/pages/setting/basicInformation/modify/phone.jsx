@@ -35,8 +35,9 @@ class ModifyPhone extends React.Component {
         <List renderFooter="一个手机号只能作为一个账号的登录名，一个手机号最多可以被6个账号绑定">
           <InputItem
             placeholder="请输入您的手机号"
-            type="phone"
+            type="number"
             value={phone}
+            maxLength="11"
             onChange={val => this.setState({ phone: val })}
           >
             手机号

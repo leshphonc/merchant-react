@@ -207,3 +207,9 @@ export const fetchAuthFiles = id => axios.get('/appapi.php?c=Merchantapp&type=me
     ticket: localStorage.getItem('ticket'),
   },
 })
+
+export const modifyAuth = (id, files) => axios.post('/appapi.php?c=Merchantapp&type=merchantstore&a=auth_edit', {
+  store_id: id,
+  auth_files: files,
+  ticket: localStorage.getItem('ticket'),
+})

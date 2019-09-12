@@ -457,6 +457,15 @@ class StoreFrontStore {
       })
     }
   }
+
+  // 商铺资质修改
+  @action
+  modifyAuth = async (id, files) => {
+    const response = await services.modifyAuth(id, files)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
 }
 
 export default new StoreFrontStore()
