@@ -31,6 +31,15 @@ const DiscountOptions = [
   { label: '满减', value: '2' },
 ]
 
+const BusinessOption = [
+  { label: '电商', value: 'have_mall' },
+  { label: '外卖', value: 'have_peisong' },
+  { label: '餐饮', value: 'have_meal' },
+  { label: '酒店', value: 'have_hotel' },
+  { label: '汽配', value: 'have_auto_parts' },
+  // { label: '', value: 'have_auto_parts' },
+]
+
 @createForm()
 @inject('storeFront', 'common')
 @observer
@@ -46,6 +55,13 @@ class StorePanel extends React.Component {
       open: false,
       goods: [],
       mul: false,
+      business: {
+        have_mall: '0',
+        have_peisong: '0',
+        have_meal: '0',
+        have_hotel: '0',
+        have_auto_parts: '0',
+      },
     }
     this.editor = React.createRef()
   }
@@ -90,11 +106,12 @@ class StorePanel extends React.Component {
         circle_id: cacheData.circle_id,
         adress: cacheData.adress,
         sort: cacheData.sort,
-        have_mall: cacheData.have_mall,
-        have_peisong: cacheData.have_peisong,
-        have_meal: cacheData.have_meal,
-        have_hotel: cacheData.have_hotel,
-        have_auto_parts: cacheData.have_auto_parts,
+        business: cacheData.business,
+        // have_mall: cacheData.have_mall,
+        // have_peisong: cacheData.have_peisong,
+        // have_meal: cacheData.have_meal,
+        // have_hotel: cacheData.have_hotel,
+        // have_auto_parts: cacheData.have_auto_parts,
         txt_info: cacheData.txt_info,
         pic: cacheData.pic,
         discount_type: cacheData.discount_type,
@@ -158,6 +175,28 @@ class StorePanel extends React.Component {
           })
         })
       }
+      const picArr = []
+      if (storeDetail.pic && storeDetail.pic.length !== 0) {
+        storeDetail.pic.forEach(item => {
+          picArr.push({ url: item })
+        })
+      }
+      let business = ''
+      if (storeDetail.have_mall === '1') {
+        business = ['have_mall']
+      }
+      if (storeDetail.have_peisong === '1') {
+        business = ['have_peisong']
+      }
+      if (storeDetail.have_meal === '1') {
+        business = ['have_meal']
+      }
+      if (storeDetail.have_hotel === '1') {
+        business = ['have_hotel']
+      }
+      if (storeDetail.have_auto_parts === '1') {
+        business = ['have_auto_parts']
+      }
       // 整理默认数据放入表单
       form.setFieldsValue({
         name: storeDetail.name,
@@ -167,15 +206,16 @@ class StorePanel extends React.Component {
         circle_id: [storeDetail.circle_id],
         adress: storeDetail.adress,
         sort: storeDetail.sort,
-        have_mall: storeDetail.have_mall === '1',
-        have_peisong: storeDetail.have_mall === '1' ? false : storeDetail.have_peisong === '1',
-        have_meal: storeDetail.have_meal === '1',
-        have_hotel: storeDetail.have_hotel === '1',
-        have_auto_parts: storeDetail.have_auto_parts === '1',
+        business,
+        // have_mall: storeDetail.have_mall === '1',
+        // have_peisong: storeDetail.have_mall === '1' ? false : storeDetail.have_peisong === '1',
+        // have_meal: storeDetail.have_meal === '1',
+        // have_hotel: storeDetail.have_hotel === '1',
+        // have_auto_parts: storeDetail.have_auto_parts === '1',
         open_1: Utils.conversionTimeStringToDate(storeDetail.open_1),
         close_1: Utils.conversionTimeStringToDate(storeDetail.close_1),
         txt_info: storeDetail.txt_info,
-        pic: storeDetail.pic,
+        pic: picArr,
         discount_type: [storeDetail.discount_type],
       })
       setTimeout(() => {
@@ -318,7 +358,7 @@ class StorePanel extends React.Component {
       storeFront, form, match, history,
     } = this.props
     const {
-      long, lat, shopLogo, qrcode, goods,
+      long, lat, shopLogo, qrcode, goods, business,
     } = this.state
 
     if (!long || !lat || !shopLogo) {
@@ -334,7 +374,10 @@ class StorePanel extends React.Component {
         Toast.info('请输入完整信息')
         return
       }
+      const businessCache = JSON.parse(JSON.stringify(business))
+      businessCache[value.business] = '1'
       const obj = {
+        ...businessCache,
         name: value.name,
         ismain: value.ismain ? '1' : '0',
         phone: value.phone,
@@ -347,11 +390,11 @@ class StorePanel extends React.Component {
         sort: value.sort,
         cat_fid: goods[0],
         cat_id: goods[1],
-        have_mall: value.have_mall ? '1' : '0',
-        have_peisong: value.have_peisong ? '1' : '0',
-        have_meal: value.have_meal ? '1' : '0',
-        have_hotel: value.have_hotel ? '1' : '0',
-        have_auto_parts: value.have_auto_parts ? '1' : '0',
+        // have_mall: value.have_mall ? '1' : '0',
+        // have_peisong: value.have_peisong ? '1' : '0',
+        // have_meal: value.have_meal ? '1' : '0',
+        // have_hotel: value.have_hotel ? '1' : '0',
+        // have_auto_parts: value.have_auto_parts ? '1' : '0',
         open_1: moment(value.open_1).format('HH:mm:ss'),
         close_1: moment(value.close_1).format('HH:mm:ss'),
         txt_info: value.txt_info,
@@ -531,7 +574,7 @@ class StorePanel extends React.Component {
               </i>
             </Tooltip>
           </InputItem>
-          <List.Item
+          {/* <List.Item
             extra={
               <Switch
                 {...getFieldProps('have_mall', {
@@ -621,7 +664,17 @@ class StorePanel extends React.Component {
             }
           >
             汽配
-          </List.Item>
+          </List.Item> */}
+          <Picker
+            {...getFieldProps('business', {
+              rules: [{ required: true }],
+            })}
+            disabled={match.params.id}
+            data={BusinessOption}
+            cols={1}
+          >
+            <List.Item arrow="horizontal">店铺业务</List.Item>
+          </Picker>
           <DatePicker
             {...getFieldProps('open_1', {
               rules: [{ required: true }],
