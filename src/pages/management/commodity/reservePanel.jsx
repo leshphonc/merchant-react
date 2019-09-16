@@ -223,7 +223,7 @@ class ReservePanel extends React.Component {
     }
   }
 
-  submit = async () => {
+  submit = () => {
     const {
       form, match, commodity, history,
     } = this.props

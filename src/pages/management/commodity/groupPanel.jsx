@@ -221,7 +221,7 @@ class GroupPanel extends React.Component {
     }
   }
 
-  submit = async () => {
+  submit = () => {
     // const { editorContent } = this.state
     const {
       form, match, commodity, history,
