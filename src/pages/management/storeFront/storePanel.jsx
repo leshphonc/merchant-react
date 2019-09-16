@@ -97,7 +97,6 @@ class StorePanel extends React.Component {
         have_auto_parts: cacheData.have_auto_parts,
         txt_info: cacheData.txt_info,
         pic: cacheData.pic,
-        auth_files: cacheData.auth_files,
         discount_type: cacheData.discount_type,
         open_1: cacheData.open_1 && new Date(cacheData.open_1),
         close_1: cacheData.open_1 && new Date(cacheData.close_1),
@@ -177,7 +176,6 @@ class StorePanel extends React.Component {
         close_1: Utils.conversionTimeStringToDate(storeDetail.close_1),
         txt_info: storeDetail.txt_info,
         pic: storeDetail.pic,
-        auth_files: storeDetail.auth_files,
         discount_type: [storeDetail.discount_type],
       })
       setTimeout(() => {
@@ -322,6 +320,7 @@ class StorePanel extends React.Component {
     const {
       long, lat, shopLogo, qrcode, goods,
     } = this.state
+
     if (!long || !lat || !shopLogo) {
       Toast.info('请输入完整信息')
       return
@@ -343,7 +342,7 @@ class StorePanel extends React.Component {
         city_id: value.cascade[1],
         area_id: value.cascade[2],
         circle_id: value.circle_id[0],
-        market_id: value.market_id[0],
+        market_id: value.market_id ? value.market_id[0] : '',
         adress: value.adress,
         sort: value.sort,
         cat_fid: goods[0],
@@ -358,7 +357,6 @@ class StorePanel extends React.Component {
         txt_info: value.txt_info,
         context: this.editor.current.state.editor.txt.html(),
         pic: value.pic.map(item => item.url),
-        auth_files: value.auth_files.map(item => item.url),
         discount_type: value.discount_type[0],
         discount_percent: value.discount_percent,
         condition_price: value.condition_price,

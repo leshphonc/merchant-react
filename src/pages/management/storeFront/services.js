@@ -213,3 +213,10 @@ export const modifyAuth = (id, files) => axios.post('/appapi.php?c=Merchantapp&t
   auth_files: files,
   ticket: localStorage.getItem('ticket'),
 })
+
+// 获取会员等级
+export const fetchLevel = () => axios.get('/appapi.php?c=Merchantapp&type=merchantstore&a=user_level', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})

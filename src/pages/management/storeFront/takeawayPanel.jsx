@@ -269,9 +269,9 @@ class TakeawayPanel extends React.Component {
             {...getFieldProps('send_time', {
               required: true,
             })}
-            placeholder="配单时长"
+            placeholder="请输入配单时长"
           >
-            配送费别名
+            配单时长
           </InputItem>
           <Picker
             {...getFieldProps('deliver_type', {

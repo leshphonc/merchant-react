@@ -45,6 +45,8 @@ class StoreFrontStore {
 
   @observable authStatus = '0'
 
+  @observable levelOption = []
+
   // 商铺列表
   @action
   fetchStoreList = async () => {
@@ -464,6 +466,17 @@ class StoreFrontStore {
     const response = await services.modifyAuth(id, files)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
+    }
+  }
+
+  // 获取会员等级
+  @action
+  fetchLevel = async () => {
+    const response = await services.fetchLevel()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.levelOption = response.data.result
+      })
     }
   }
 }

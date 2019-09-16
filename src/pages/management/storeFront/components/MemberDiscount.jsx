@@ -1,64 +1,31 @@
 import React from 'react'
 import { List, Picker, InputItem } from 'antd-mobile'
+import { observer, inject } from 'mobx-react'
 
+@inject('storeFront')
+@observer
 class MemberDiscount extends React.Component {
   state = {
-    leveloff: [
-      {
-        name: '青铜会员',
-        type: '0',
-        vv: '',
-        id: '9',
-      },
-      {
-        name: '白银会员',
-        type: '0',
-        vv: '',
-        id: '10',
-      },
-      {
-        name: '黄金会员',
-        type: '0',
-        vv: '',
-        id: '11',
-      },
-      {
-        name: '城市合伙人',
-        type: '0',
-        vv: '',
-        id: '12',
-      },
-      {
-        name: '区域合伙人',
-        type: '0',
-        vv: '',
-        id: '13',
-      },
-      {
-        name: '总部合伙人',
-        type: '0',
-        vv: '',
-        id: '14',
-      },
-    ],
+    leveloff: [],
   }
 
   componentDidMount() {
-    const { data } = this.props
-    const { leveloff } = this.state
-    const obj = JSON.parse(JSON.stringify(leveloff))
-    console.log(obj)
-    obj.map((item, index) => {
-      if (data.leveloff) {
-        if (data.leveloff[index]) {
-          item.type = `${data.leveloff[index].type}`
-          item.vv = `${data.leveloff[index].vv}`
+    const { data, storeFront } = this.props
+    storeFront.fetchLevel().then(() => {
+      const { levelOption } = storeFront
+      const obj = JSON.parse(JSON.stringify(levelOption))
+      obj.map((item, index) => {
+        if (data.leveloff) {
+          if (data.leveloff[index]) {
+            item.type = `${data.leveloff[index].type}`
+            item.vv = `${data.leveloff[index].vv}`
+          }
         }
-      }
-      return null
-    })
-    this.setState({
-      leveloff: obj,
+        return null
+      })
+      this.setState({
+        leveloff: obj,
+      })
     })
   }
 

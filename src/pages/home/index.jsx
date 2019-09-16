@@ -188,6 +188,10 @@ class Home extends React.Component {
     if (!indexData.wap_MerchantAd) {
       return false
     }
+    if (!indexData.wap_MerchantAd.length) {
+      return false
+    }
+
     const ratio = indexData.wap_MerchantAd[0].cat_width_height_ratio
     const widthRatio = ratio.split(':')[0] - 0
     const heightRatio = ratio.split(':')[1] - 0
@@ -343,12 +347,12 @@ class Home extends React.Component {
           </Paper>
         </WingBlank>
         <WhiteSpace />
-        <WingBlank size="md">
+        {/* <WingBlank size="md">
           <Paper>
             <GridCard data={AllianceGrid} col={4} />
           </Paper>
         </WingBlank>
-        <WhiteSpace />
+        <WhiteSpace /> */}
       </React.Fragment>
     )
   }
