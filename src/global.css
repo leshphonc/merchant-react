@@ -156,3 +156,8 @@ button {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* 提示栏 */
+.rc-tooltip {
+  z-index: 99999;
+}
