@@ -22,7 +22,11 @@ import moment from 'moment'
 import Editor from '@/common/Editor'
 import MultipleImg from '@/common/UploadImg/Multiple'
 import {
-  CustomizeList, ListTitle, ListContent, MenuMask, PrimaryTag,
+  CustomizeList,
+  ListTitle,
+  ListContent,
+  MenuMask,
+  PrimaryTag,
 } from '@/styled'
 
 const DiscountOptions = [
@@ -155,7 +159,11 @@ class StorePanel extends React.Component {
       const { storeDetail } = storeFront
       // 获取级联数据
       storeFront
-        .fetchCascadeOption(storeDetail.province_id, storeDetail.city_id, storeDetail.area_id)
+        .fetchCascadeOption(
+          storeDetail.province_id,
+          storeDetail.city_id,
+          storeDetail.area_id,
+        )
         .then(() => {
           const { asyncCascadeValue } = storeFront
           // 整理默认数据存入state
@@ -202,7 +210,11 @@ class StorePanel extends React.Component {
         name: storeDetail.name,
         ismain: storeDetail.ismain === '1',
         phone: storeDetail.phone,
-        cascade: [storeDetail.province_id, storeDetail.city_id, storeDetail.area_id],
+        cascade: [
+          storeDetail.province_id,
+          storeDetail.city_id,
+          storeDetail.area_id,
+        ],
         circle_id: [storeDetail.circle_id],
         adress: storeDetail.adress,
         sort: storeDetail.sort,
@@ -242,9 +254,7 @@ class StorePanel extends React.Component {
 
   cacheData = () => {
     const { form } = this.props
-    const {
-      long, lat, shopLogo, qrcode, asyncCascadeValue, goods,
-    } = this.state
+    const { long, lat, shopLogo, qrcode, asyncCascadeValue, goods } = this.state
     const formData = form.getFieldsValue()
     form.asyncCascadeValue = asyncCascadeValue
     formData.long = long
@@ -354,12 +364,8 @@ class StorePanel extends React.Component {
   }
 
   submit = () => {
-    const {
-      storeFront, form, match, history,
-    } = this.props
-    const {
-      long, lat, shopLogo, qrcode, goods, business,
-    } = this.state
+    const { storeFront, form, match, history } = this.props
+    const { long, lat, shopLogo, qrcode, goods, business } = this.state
 
     if (!long || !lat || !shopLogo) {
       Toast.info('请输入完整信息')
@@ -410,9 +416,11 @@ class StorePanel extends React.Component {
         qrcode_backgroup: qrcode,
       }
       if (match.params.id) {
-        storeFront.modifyStoreFront({ ...obj, store_id: match.params.id }).then(res => {
-          if (res) Toast.success('编辑成功', 1, () => history.goBack())
-        })
+        storeFront
+          .modifyStoreFront({ ...obj, store_id: match.params.id })
+          .then(res => {
+            if (res) Toast.success('编辑成功', 1, () => history.goBack())
+          })
       } else {
         storeFront.insertStoreFront(obj).then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
@@ -432,7 +440,6 @@ class StorePanel extends React.Component {
 
   fetchMarket = val => {
     const { storeFront } = this.props
-    console.log(val)
     storeFront.fetchMarket(val[0])
   }
 
@@ -451,7 +458,10 @@ class StorePanel extends React.Component {
     const { match, form, storeFront } = this.props
     const { getFieldProps } = form
     const {
-      cascadeOption, circleOption, marketOption, allCategory,
+      cascadeOption,
+      circleOption,
+      marketOption,
+      allCategory,
     } = storeFront
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     /* eslint camelcase: 0 */
@@ -459,17 +469,21 @@ class StorePanel extends React.Component {
       ? form.getFieldValue('discount_type')[0]
       : ''
     const {
-      long, lat, asyncCascadeValue, shopLogo, qrcode, open, goods, mul,
+      long,
+      lat,
+      asyncCascadeValue,
+      shopLogo,
+      qrcode,
+      open,
+      goods,
+      mul,
     } = this.state
     const menuEl = (
       <Menu
         className="menu-position"
         data={allCategory}
         value={goods}
-        onChange={arr => this.setState({
-          goods: arr,
-        })
-        }
+        onChange={arr => this.setState({ goods: arr })}
         height={document.documentElement.clientHeight * 0.6}
       />
     )
@@ -554,7 +568,11 @@ class StorePanel extends React.Component {
             title="详细地址"
             rows={2}
           />
-          <List.Item extra={`${long}, ${lat}`} arrow="horizontal" onClick={this.goMapPicker}>
+          <List.Item
+            extra={`${long}, ${lat}`}
+            arrow="horizontal"
+            onClick={this.goMapPicker}
+          >
             地图位置
           </List.Item>
           <InputItem
@@ -797,13 +815,12 @@ class StorePanel extends React.Component {
           确定
         </Button>
         {open ? menuEl : null}
-        {open ? <MenuMask onClick={() => this.setState({ open: false })} /> : null}
+        {open ? (
+          <MenuMask onClick={() => this.setState({ open: false })} />
+        ) : null}
         <MultipleImg
           visible={mul}
-          close={() => this.setState({
-            mul: false,
-          })
-          }
+          close={() => this.setState({ mul: false })}
           ratio={2}
           callback={this.saveImg}
         />

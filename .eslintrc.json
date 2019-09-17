@@ -16,7 +16,7 @@
     // 限制单行的表达式数量
     "react/jsx-one-expression-per-line": 0,
     // 多行jsx需要写在（）中
-    "react/jsx-wrap-multilines": [2, "as-needed"],
+    "react/jsx-wrap-multilines": [2],
     // 引用时候根据根目录基础
     "import/no-unresolved": 0,
     // 限制可使用jsx的文件扩展名
@@ -31,6 +31,8 @@
     // 关闭prop-types
     "react/prop-types": 0,
     // return语句总是或永远不指定值
-    "consistent-return": 0
+    "consistent-return": 0,
+    // 此规则在对象文字或解构赋值的大括号内强制执行一致的换行符。
+    "object-curly-newline": 0
   }
 }

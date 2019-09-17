@@ -77,7 +77,7 @@ export default () => (
         />
         {/* 规格属性 */}
         <Route path="/specification" component={Specification} />
-        <Route component={NotFound}></Route>
+        <Route component={NotFound} />
       </Switch>
     </HashRouter>
   </Provider>
