@@ -183,12 +183,12 @@ class StorePanel extends React.Component {
           })
         })
       }
-      const picArr = []
-      if (storeDetail.pic && storeDetail.pic.length !== 0) {
-        storeDetail.pic.forEach(item => {
-          picArr.push({ url: item })
-        })
-      }
+      // const picArr = []
+      // if (storeDetail.pic && storeDetail.pic.length !== 0) {
+      //   storeDetail.pic.forEach(item => {
+      //     picArr.push({ url: item })
+      //   })
+      // }
       let business = ''
       if (storeDetail.have_mall === '1') {
         business = ['have_mall']
@@ -227,7 +227,7 @@ class StorePanel extends React.Component {
         open_1: Utils.conversionTimeStringToDate(storeDetail.open_1),
         close_1: Utils.conversionTimeStringToDate(storeDetail.close_1),
         txt_info: storeDetail.txt_info,
-        pic: picArr,
+        pic: storeDetail.pic,
         discount_type: [storeDetail.discount_type],
       })
       setTimeout(() => {
@@ -382,8 +382,16 @@ class StorePanel extends React.Component {
       }
       const businessCache = JSON.parse(JSON.stringify(business))
       businessCache[value.business] = '1'
+      let have_shop = '0'
+      if (
+        businessCache.have_mall === '1' ||
+        businessCache.have_peisong === '1'
+      ) {
+        have_shop = '1'
+      }
       const obj = {
         ...businessCache,
+        have_shop,
         name: value.name,
         ismain: value.ismain ? '1' : '0',
         phone: value.phone,
