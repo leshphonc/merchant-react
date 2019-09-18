@@ -93,6 +93,8 @@ class EditSpread extends React.Component {
                 userLevels.push({
                   spread_sale: appointDetail.appoint_list.spread[index].spread_sale,
                   spread_rate: appointDetail.appoint_list.spread[index].spread_sale,
+                  sub_spread_rate: appointDetail.appoint_list.spread[index].sub_spread_rate,
+                  third_spread_rate: appointDetail.appoint_list.spread[index].third_spread_rate,
                   level: item.id,
                   name: item.name,
                 })
