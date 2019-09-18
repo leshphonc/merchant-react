@@ -185,6 +185,10 @@ class ReservePanel extends React.Component {
           appoint_type: appointDetail.appoint_list.appoint_type,
         })
       })
+    } else {
+      form.setFieldsValue({
+        sort: 0,
+      })
     }
     // editor.txt.html(history.location.state.value)
   }
@@ -295,6 +299,11 @@ class ReservePanel extends React.Component {
             }
           })
         }
+        setTimeout(() => {
+          this.setState({
+            isClick: true,
+          })
+        }, 1500)
       })
     }
   }
@@ -492,7 +501,7 @@ class ReservePanel extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps('sort', {
-              rules: [{ required: false }],
+              rules: [{ required: true }],
             })}
             placeholder="请填写数值，值越大，越靠前"
           >
