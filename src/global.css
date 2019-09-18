@@ -165,3 +165,8 @@ button {
   right: 0;
   z-index: 90;
 }
+
+/* 显示PrimaryTag超出部分 */
+.primaryTag-show .am-list-extra {
+  overflow: auto !important;
+}

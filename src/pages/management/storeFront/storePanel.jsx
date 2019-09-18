@@ -730,6 +730,7 @@ class StorePanel extends React.Component {
             arrow="horizontal"
             extra={this.getMenuList()}
             onClick={() => this.setState({ open: true })}
+            className="primaryTag-show"
           >
             店铺分类
           </List.Item>

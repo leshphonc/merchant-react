@@ -559,6 +559,7 @@ class ECommerceAdd extends React.Component {
             arrow="horizontal"
             extra={this.getMenuList()}
             onClick={() => this.setState({ open: true })}
+            className="primaryTag-show"
           >
             商城商品分类
           </List.Item>
