@@ -1,8 +1,6 @@
 /* eslint-disable camelcase */
 import React from 'react'
-import {
-  List, InputItem, Button, Toast,
-} from 'antd-mobile'
+import { List, InputItem, Button, Toast } from 'antd-mobile'
 import { withRouter } from 'react-router-dom'
 import { createForm } from 'rc-form'
 
@@ -48,10 +46,7 @@ class GenerateProduct extends React.Component {
   num5 = []
 
   mapList = () => {
-    const {
-      specification, attribute, form, json,
-    } = this.props
-    console.log(specification, attribute, json)
+    const { specification, attribute, form, json } = this.props
     const { getFieldProps } = form
     const result = []
     const specs = []
@@ -88,6 +83,10 @@ class GenerateProduct extends React.Component {
     this.propertiesVal = propertiesVal
     this.propertiesNum = propertiesNum
     const renderList = this.forEachItem(specification)
+    if (renderList.length > 20) {
+      renderList.splice(20)
+      Toast.info('组合数量超出20种，目前最多支持20种。已删除超出部分')
+    }
     // const len = result.length
     // const i = 0
     // if (len > 1) {
@@ -104,7 +103,9 @@ class GenerateProduct extends React.Component {
       const arr = Object.keys(item)
       arr.forEach(item2 => {
         const str = item2.substr(0, item2.length - 2)
-        this[str].push(item[item2])
+        if (!this[str].length) {
+          this[str].push(item[item2])
+        }
       })
     })
     let resultList = []
@@ -113,7 +114,6 @@ class GenerateProduct extends React.Component {
     } else {
       resultList = renderList
     }
-    console.log(resultList)
     return resultList.map((item, index) => (
       <React.Fragment key={item.spec_name}>
         <List renderHeader={item.spec_name}>
@@ -178,17 +178,23 @@ class GenerateProduct extends React.Component {
     ))
   }
 
-  forEachItem = arrs => arrs.reduce((a, b) => {
+  forEachItem = arrs => {
     const arr = []
-    a.spec_val.forEach(i => {
-      b.spec_val.forEach(j => {
-        arr.push({
-          spec_name: `${i}_${j}`,
+    arrs.forEach((item, index) => {
+      const reduceArr = arrs.slice(index)
+      reduceArr.reduce((a, b) => {
+        a.spec_val.forEach(i => {
+          b.spec_val.forEach(j => {
+            arr.push({
+              spec_name: `${i}_${j}`,
+            })
+          })
         })
+        return reduceArr[0]
       })
     })
     return arr
-  })
+  }
 
   submit = () => {
     const { attribute, form, history } = this.props
