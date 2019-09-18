@@ -165,7 +165,7 @@ class ReservePanel extends React.Component {
           const custom_id = []
           appointDetail.product_list.forEach((item, index) => {
             custom_name.push(item.name)
-            custom_payment_price.push(item.price)
+            custom_payment_price.push(item.payment_price)
             custom_price.push(item.price)
             custom_content.push(item.content)
             use_time.push(item.use_time)
