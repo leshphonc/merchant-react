@@ -168,5 +168,5 @@ button {
 
 /* 显示PrimaryTag超出部分 */
 .primaryTag-show .am-list-extra {
-  overflow: auto !important;
+  flex-basis: auto !important;
 }
