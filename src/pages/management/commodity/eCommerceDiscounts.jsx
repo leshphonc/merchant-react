@@ -11,7 +11,7 @@ import moment from 'moment'
 import { createForm } from 'rc-form'
 
 const { Item } = List
-const seckill = [{ label: '固定时间段', value: '1' }, { label: '每天的时间段', value: '0' }]
+const seckill = [{ label: '固定时间段', value: '0' }, { label: '每天的时间段', value: '1' }]
 @createForm()
 @inject('commodity')
 @observer
