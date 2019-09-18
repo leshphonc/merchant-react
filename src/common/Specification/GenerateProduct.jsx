@@ -87,6 +87,7 @@ class GenerateProduct extends React.Component {
       renderList.splice(20)
       Toast.info('组合数量超出20种，目前最多支持20种。已删除超出部分')
     }
+    console.log(renderList)
     // const len = result.length
     // const i = 0
     // if (len > 1) {
@@ -182,16 +183,24 @@ class GenerateProduct extends React.Component {
     const arr = []
     arrs.forEach((item, index) => {
       const reduceArr = arrs.slice(index)
-      reduceArr.reduce((a, b) => {
-        a.spec_val.forEach(i => {
-          b.spec_val.forEach(j => {
-            arr.push({
-              spec_name: `${i}_${j}`,
-            })
+      if (reduceArr.length === 1) {
+        reduceArr[0].spec_val.forEach(i => {
+          arr.push({
+            spec_name: `${i}`,
           })
         })
-        return reduceArr[0]
-      })
+      } else {
+        reduceArr.reduce((a, b) => {
+          a.spec_val.forEach(i => {
+            b.spec_val.forEach(j => {
+              arr.push({
+                spec_name: `${i}_${j}`,
+              })
+            })
+          })
+          return reduceArr[0]
+        })
+      }
     })
     return arr
   }
