@@ -17,6 +17,7 @@ import Coupon from '@/pages/management/member/coupon'
 import Commodity from '@/pages/management/commodity'
 import ShopManager from '@/pages/management/shopManager'
 import BasicInformation from '@/pages/setting/basicInformation'
+import SelfManagement from '@/pages/setting/selfManagement'
 import UploadSingleImg from '@/common/UploadImg/Single'
 import UploadMultipleImg from '@/common/UploadImg/Multiple'
 import CoordinatePicker from '@/common/CoordinatePicker'
@@ -57,6 +58,7 @@ export default () => (
         <Route path="/management/shopManager" component={ShopManager} />
         {/* 基本信息 -> setting */}
         <Route path="/setting/basicInformation" component={BasicInformation} />
+        <Route path="/setting/selfManagement" component={SelfManagement} />
         {/* 商家推广 ->  popularize */}
         <Route path="/popularize/shopAssistant" component={ShopAssistant} />
         <Route path="/popularize/redEnvelope" component={RedEnvelope} />

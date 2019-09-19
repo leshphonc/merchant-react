@@ -9,6 +9,7 @@ import wallet from '@/pages/wallet/store'
 import storeFront from '@/pages/management/storeFront/store'
 import marketing from '@/pages/marketing/store'
 import basicInformation from '@/pages/setting/basicInformation/store'
+import selfManagement from '@/pages/setting/selfManagement/store'
 import shopAssistant from '@/pages/popularize/shopAssistant/store'
 import member from '@/pages/management/member/store'
 import commodity from '@/pages/management/commodity/store'
@@ -51,6 +52,7 @@ const stores = {
   storeFront,
   marketing,
   basicInformation,
+  selfManagement,
   shopAssistant,
   member,
   redEnvelop,

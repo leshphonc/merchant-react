@@ -140,7 +140,7 @@ const SettingGrid = {
     },
     {
       name: '自提点管理',
-      path: '5',
+      path: '/setting/selfManagement',
       enable: require('../assets/image/ztdgl.png'),
       disable: require('../assets/image/ztdgl_gray.png'),
     },

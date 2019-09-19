@@ -3,9 +3,7 @@ import NavBar from '@/common/NavBar'
 import { Link } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import { WingBlank, WhiteSpace, Button } from 'antd-mobile'
-import {
-  ListItem, ItemTop, TopContent,
-} from '@/styled'
+import { ListItem, ItemTop, TopContent } from '@/styled'
 import { Btn } from './styled'
 
 @inject('shopManager')
@@ -31,7 +29,7 @@ class Classify extends React.Component {
   mapList = () => {
     const { shopManager, history } = this.props
     const { classify } = shopManager
-    return classify.map(item => (
+    return classify.map((item, index) => (
       <React.Fragment key={item.id}>
         <ListItem>
           <ItemTop>
@@ -42,25 +40,31 @@ class Classify extends React.Component {
               <WhiteSpace />
               <div>分类名称: {item.name}</div>
               <WhiteSpace />
-              <Btn>
-                <Button
-                  type="button"
-                  onClick={() => history.push(
-                    `/management/shopManager/classifyPanel/编辑/${item.id}`,
-                  )
-                  }
-                >
-                  编辑
-                </Button>
-              </Btn>
-              <Btn>
-                <Button
-                  style={{ display: 'inline-block', marginLeft: '30px' }}
-                  onClick={() => this.detele(item.id)}
-                >
-                  删除
-                </Button>
-              </Btn>
+              {item.id - 0 > 5 ? (
+                <Btn>
+                  <Button
+                    type="button"
+                    onClick={() => history.push(`/management/shopManager/classifyPanel/编辑/${item.id}`)
+                    }
+                  >
+                    编辑
+                  </Button>
+                </Btn>
+              ) : (
+                ''
+              )}
+              {item.id - 0 > 5 ? (
+                <Btn>
+                  <Button
+                    style={{ display: 'inline-block', marginLeft: '30px' }}
+                    onClick={() => this.detele(item.id)}
+                  >
+                    删除
+                  </Button>
+                </Btn>
+              ) : (
+                ''
+              )}
             </TopContent>
           </ItemTop>
         </ListItem>
