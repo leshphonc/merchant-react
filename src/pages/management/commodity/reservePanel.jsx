@@ -72,6 +72,7 @@ class ReservePanel extends React.Component {
       use_time: [],
       custom_id: [],
       mul: false,
+      isClick: true,
     }
     this.editor = React.createRef()
   }
@@ -96,7 +97,9 @@ class ReservePanel extends React.Component {
             workerSele.push(item.merchant_worker_id)
           })
         }
-        this.editor.current.state.editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
+        setTimeout(() => {
+          this.editor.current.state.editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
+        }, 500)
         this.setState({
           files: appointDetail.appoint_list.pic_arr,
           category: [appointDetail.appoint_list.cat_fid, appointDetail.appoint_list.cat_id],
@@ -165,7 +168,7 @@ class ReservePanel extends React.Component {
           const custom_id = []
           appointDetail.product_list.forEach((item, index) => {
             custom_name.push(item.name)
-            custom_payment_price.push(item.price)
+            custom_payment_price.push(item.payment_price)
             custom_price.push(item.price)
             custom_content.push(item.content)
             use_time.push(item.use_time)
@@ -183,6 +186,10 @@ class ReservePanel extends React.Component {
         this.setState({
           appoint_type: appointDetail.appoint_list.appoint_type,
         })
+      })
+    } else {
+      form.setFieldsValue({
+        sort: 0,
       })
     }
     // editor.txt.html(history.location.state.value)
@@ -227,65 +234,80 @@ class ReservePanel extends React.Component {
     const {
       form, match, commodity, history,
     } = this.props
-    const { category } = this.state
+    const { category, isClick } = this.state
     // const content = this.editor.current.state.editor.txt.html()
-    form.validateFields((error, value) => {
-      if (error) {
-        Toast.info('请输入完整信息')
-      }
-      value.appoint_type = value.appoint_type ? value.appoint_type[0] : '0'
-      const obj = {
-        ...value,
-        cat_fid: category[0],
-        cat_id: category[1],
-        appoint_pic_content: this.editor.current.state.editor.txt.html(),
-        start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD') : '',
-        end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD') : '',
-        office_start_time: value.office_start_time
-          ? moment(value.office_start_time).format('HH:mm')
-          : '',
-        office_stop_time: value.office_stop_time
-          ? moment(value.office_stop_time).format('HH:mm')
-          : '',
-        is_appoint_price: value.is_appoint_price[0],
-        appoint_type: value.appoint_type[0],
-        payment_status: value.payment_status ? '1' : '0',
-        appoint_date_type: value.appoint_date_type ? '1' : '0',
-        is_store: value.is_store ? '1' : '0',
-        appoint_status: !value.appoint_status ? '1' : '0',
-        pic: value.pic.map(item => item.url),
-        store: this.state.store,
-        worker_memus: this.state.workerList,
-        custom_name: this.state.custom_name,
-        custom_payment_price: this.state.custom_payment_price,
-        custom_price: this.state.custom_price,
-        custom_content: this.state.custom_content,
-        custom_use_time: this.state.use_time,
-        custom_id: this.state.custom_id,
-      }
+    if (isClick) {
+      form.validateFields((error, value) => {
+        this.setState({
+          isClick: false,
+        })
+        if (error) {
+          Toast.info('请输入完整信息')
+          this.setState({
+            isClick: true,
+          })
+          return
+        }
+        // eslint-disable-next-line no-param-reassign
+        value.appoint_type = value.appoint_type ? value.appoint_type[0] : '0'
+        const obj = {
+          ...value,
+          cat_fid: category[0],
+          cat_id: category[1],
+          appoint_pic_content: this.editor.current.state.editor.txt.html(),
+          start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD') : '',
+          end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD') : '',
+          office_start_time: value.office_start_time
+            ? moment(value.office_start_time).format('HH:mm')
+            : '',
+          office_stop_time: value.office_stop_time
+            ? moment(value.office_stop_time).format('HH:mm')
+            : '',
+          is_appoint_price: value.is_appoint_price[0],
+          appoint_type: value.appoint_type[0],
+          payment_status: value.payment_status ? '1' : '0',
+          appoint_date_type: value.appoint_date_type ? '1' : '0',
+          is_store: value.is_store ? '1' : '0',
+          appoint_status: !value.appoint_status ? '1' : '0',
+          pic: value.pic.map(item => item.url),
+          store: this.state.store,
+          worker_memus: this.state.workerList,
+          custom_name: this.state.custom_name,
+          custom_payment_price: this.state.custom_payment_price,
+          custom_price: this.state.custom_price,
+          custom_content: this.state.custom_content,
+          custom_use_time: this.state.use_time,
+          custom_id: this.state.custom_id,
+        }
 
-      if (match.params.id) {
-        commodity.modifyReserve({ ...obj, appoint_id: match.params.id }).then(res => {
-          if (res) {
-            Toast.success('修改成功', 1, () => {
-              commodity.resetAndFetchReserveList().then(() => {
-                history.goBack()
+        if (match.params.id) {
+          commodity.modifyReserve({ ...obj, appoint_id: match.params.id }).then(res => {
+            if (res) {
+              Toast.success('修改成功', 1, () => {
+                commodity.resetAndFetchReserveList().then(() => {
+                  history.goBack()
+                })
               })
-            })
-          }
-        })
-      } else {
-        commodity.insertReserve(obj).then(res => {
-          if (res) {
-            Toast.success('新增成功', 1, () => {
-              commodity.resetAndFetchReserveList().then(() => {
-                history.goBack()
+            }
+          })
+        } else {
+          commodity.insertReserve(obj).then(res => {
+            if (res) {
+              Toast.success('新增成功', 1, () => {
+                commodity.resetAndFetchReserveList().then(() => {
+                  history.goBack()
+                })
               })
-            })
-          }
-        })
-      }
-    })
+            }
+          })
+        }
+        setTimeout(() => {
+          this.setState({
+            isClick: true,
+          })
+        }, 1500)
+      })
+    }
   }
 
   saveImg = url => {
@@ -305,18 +327,25 @@ class ReservePanel extends React.Component {
       menu,
       category,
       store,
+      // eslint-disable-next-line camelcase
       custom_name,
+      // eslint-disable-next-line camelcase
       custom_payment_price,
+      // eslint-disable-next-line camelcase
       custom_price,
+      // eslint-disable-next-line camelcase
       custom_content,
+      // eslint-disable-next-line camelcase
       use_time,
     } = this.state
     const { getFieldProps } = form
     const { shopList, mul } = this.state
+    // eslint-disable-next-line camelcase
     const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const { reserveCategoryOption } = commodity
     const paymentValue = form.getFieldValue('payment_status')
     const storeChecked = form.getFieldValue('is_store')
+    // eslint-disable-next-line camelcase
     const is_appoint_price = form.getFieldValue('is_appoint_price') || '0'
     const menuEl = (
       <Menu

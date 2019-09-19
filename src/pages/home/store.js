@@ -11,6 +11,9 @@ class HomeStore {
 
   @action
   fetchEchartData = async (type, date, search, id) => {
+    if (date === '二级筛选') {
+      date = ''
+    }
     const response = await services.fetchEchartData(type, date, search, id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {

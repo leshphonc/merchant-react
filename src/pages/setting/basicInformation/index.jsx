@@ -216,6 +216,7 @@ class BasicInformation extends React.Component {
                 document.body.style.position = 'fixed'
                 this.setState({ menu: true })
               }}
+              className="primaryTag-show"
             >
               商户所属分类
             </Item>

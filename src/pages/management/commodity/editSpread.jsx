@@ -47,7 +47,7 @@ class EditSpread extends React.Component {
             })
             levelList.forEach((item, index) => {
               if (groupDetail.spread[index]) {
-                if (showThree === '0' && openUserSpread === '1') {
+                if (showThree === '1' && openUserSpread === '1') {
                   userLevels.push({
                     spread_sale: groupDetail.spread[index].spread_sale,
                     spread_rate: groupDetail.spread[index].spread_rate,
@@ -93,6 +93,8 @@ class EditSpread extends React.Component {
                 userLevels.push({
                   spread_sale: appointDetail.appoint_list.spread[index].spread_sale,
                   spread_rate: appointDetail.appoint_list.spread[index].spread_sale,
+                  sub_spread_rate: appointDetail.appoint_list.spread[index].sub_spread_rate,
+                  third_spread_rate: appointDetail.appoint_list.spread[index].third_spread_rate,
                   level: item.id,
                   name: item.name,
                 })
@@ -178,7 +180,7 @@ class EditSpread extends React.Component {
           >
             推广佣金比例1
           </InputItem>
-          {showThree === '0' && openUserSpread === '1' ? (
+          {showThree === '1' && openUserSpread === '1' ? (
             <React.Fragment>
               <InputItem
                 extra="%"

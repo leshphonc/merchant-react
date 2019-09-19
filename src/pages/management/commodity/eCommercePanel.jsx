@@ -19,10 +19,15 @@ import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import Editor from '@/common/Editor'
 import { MenuMask, PrimaryTag } from '@/styled'
-import MultipleImg from '@/common/UploadImg/Multiple'
 
-const statusData = [{ label: '正常', value: '1' }, { label: '停售', value: '0' }]
-const freightType = [{ label: '按最大值算', value: '0' }, { label: '单独计算', value: '1' }]
+const statusData = [
+  { label: '正常', value: '1' },
+  { label: '停售', value: '0' },
+]
+const freightType = [
+  { label: '按最大值算', value: '0' },
+  { label: '单独计算', value: '1' },
+]
 const category = [
   { label: '实体商品', value: '0' },
   { label: '虚拟商品', value: '1' },
@@ -39,7 +44,6 @@ class ECommerceAdd extends React.Component {
       specification: [],
       open: false,
       goods: [],
-      mul: false,
     }
     this.editor = React.createRef()
   }
@@ -60,16 +64,14 @@ class ECommerceAdd extends React.Component {
       })
       if (cacheData.store_id) {
         commodity.fetchCategoryValues(cacheData.store_id[0]).then(() => {
-          setTimeout(() => {
-            form.setFieldsValue({
-              sort_id: cacheData.sort_id,
-            })
-            if (this.editor.current) {
-              this.editor.current.state.editor.txt.html(cacheData.des)
-            }
-          }, 500)
+          form.setFieldsValue({
+            sort_id: cacheData.sort_id,
+          })
         })
       }
+      setTimeout(() => {
+        this.editor.current.state.editor.txt.html(cacheData.des)
+      }, 500)
 
       Utils.clearCacheData()
       if (match.params.goodid) {
@@ -79,50 +81,50 @@ class ECommerceAdd extends React.Component {
     }
 
     if (!match.params.goodid) return
-    commodity.fetchECommerceDetail(match.params.id, match.params.goodid).then(() => {
-      const { eCommerceDetail } = commodity
-      const picArr = eCommerceDetail.pic.map(item => ({
-        url: item.url,
-      }))
-      commodity.fetchCategoryValues(eCommerceDetail.store_id).then(() => {
-        setTimeout(() => {
+    commodity
+      .fetchECommerceDetail(match.params.id, match.params.goodid)
+      .then(() => {
+        const { eCommerceDetail } = commodity
+        const picArr = eCommerceDetail.pic.map(item => ({
+          url: item.url,
+        }))
+        commodity.fetchCategoryValues(eCommerceDetail.store_id).then(() => {
           form.setFieldsValue({
             sort_id: [eCommerceDetail.sort_id],
           })
-          if (this.editor.current) {
-            this.editor.current.state.editor.txt.html(eCommerceDetail.des)
-          }
+        })
+        setTimeout(() => {
+          this.editor.current.state.editor.txt.html(eCommerceDetail.des)
         }, 500)
-      })
-      this.setState(
-        {
+
+        this.setState(
+          {
+            goods: [eCommerceDetail.cat_fid, eCommerceDetail.cat_id],
+          },
+          () => {
+            this.getMenuList()
+          },
+        )
+        form.setFieldsValue({
+          name: eCommerceDetail.name,
+          unit: eCommerceDetail.unit,
+          old_price: eCommerceDetail.old_price,
+          price: eCommerceDetail.price,
+          stock_num: eCommerceDetail.stock_num,
+          sort: eCommerceDetail.sort,
+          status: [eCommerceDetail.status],
+          store_id: [eCommerceDetail.store_id],
+          sort_id: [eCommerceDetail.sort_id],
+          goods_type: [eCommerceDetail.goods_type],
+          freight_type: [eCommerceDetail.freight_type],
+          freight_value: eCommerceDetail.freight_value,
+          freight_template: [eCommerceDetail.freight_template],
           pic: picArr,
-          goods: [eCommerceDetail.cat_fid, eCommerceDetail.cat_id],
-        },
-        () => {
-          this.getMenuList()
-        },
-      )
-      form.setFieldsValue({
-        name: eCommerceDetail.name,
-        unit: eCommerceDetail.unit,
-        old_price: eCommerceDetail.old_price,
-        price: eCommerceDetail.price,
-        stock_num: eCommerceDetail.stock_num,
-        sort: eCommerceDetail.sort,
-        status: [eCommerceDetail.status],
-        store_id: [eCommerceDetail.store_id],
-        sort_id: [eCommerceDetail.sort_id],
-        goods_type: [eCommerceDetail.goods_type],
-        freight_type: [eCommerceDetail.freight_type],
-        freight_value: eCommerceDetail.freight_value,
-        freight_template: [eCommerceDetail.freight_template],
-        pic: picArr,
+        })
+        // this.setState({
+        //   specification: eCommerceDetail.spec_list,
+        // })
       })
-      // this.setState({
-      //   specification: eCommerceDetail.spec_list,
-      // })
-    })
   }
 
   changeGiveValue = (val, index) => {
@@ -183,9 +185,7 @@ class ECommerceAdd extends React.Component {
   }
 
   submit = () => {
-    const {
-      commodity, form, match, history,
-    } = this.props
+    const { commodity, form, match, history } = this.props
     const { specification, goods } = this.state
     form.validateFields((error, value) => {
       if (error) {
@@ -230,16 +230,18 @@ class ECommerceAdd extends React.Component {
             }
           })
       } else {
-        commodity.addECommerce({ ...obj, spec, store_id: value.store_id[0] }).then(res => {
-          if (res) {
-            Toast.success('新增成功', 1, () => {
-              sessionStorage.removeItem('spec')
-              commodity.resetAndFetchECommerceList().then(() => {
-                history.goBack()
+        commodity
+          .addECommerce({ ...obj, ...spec, store_id: value.store_id[0] })
+          .then(res => {
+            if (res) {
+              Toast.success('新增成功', 1, () => {
+                sessionStorage.removeItem('spec')
+                commodity.resetAndFetchECommerceList().then(() => {
+                  history.goBack()
+                })
               })
-            })
-          }
-        })
+            }
+          })
       }
     })
   }
@@ -278,15 +280,17 @@ class ECommerceAdd extends React.Component {
   }
 
   goSpec = () => {
-    const { form, history, commodity } = this.props
+    const { form, history, commodity, match } = this.props
     const { goods } = this.state
     const formData = form.getFieldsValue()
     formData.des = this.editor.current.state.editor.txt.html()
     formData.goods = goods
     const obj = {
-      spec: commodity.eCommerceDetail.spec_list || [],
-      attr: commodity.eCommerceDetail.properties_status_list || [],
-      json: commodity.eCommerceDetail.json || [],
+      spec: match.params.id ? commodity.eCommerceDetail.spec_list || [] : [],
+      attr: match.params.id
+        ? commodity.eCommerceDetail.properties_status_list || []
+        : [],
+      json: match.params.id ? commodity.eCommerceDetail.json || [] : [],
     }
     if (sessionStorage.getItem('spec')) {
       const spec = JSON.parse(sessionStorage.getItem('spec'))
@@ -324,24 +328,16 @@ class ECommerceAdd extends React.Component {
     history.push('/management/commodity/eCommerceDeliveryTemplate')
   }
 
-  saveImg = url => {
-    const { form } = this.props
-    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
-    form.setFieldsValue({
-      pic: [...pic, { url }],
-    })
-    this.setState({
-      mul: false,
-    })
-  }
-
   render() {
-    const { match, commodity, form } = this.props
+    const { match, commodity, form, history } = this.props
     const {
-      storeValues, categoryValues, goodsCategory, expressLists,
+      storeValues,
+      categoryValues,
+      goodsCategory,
+      expressLists,
     } = commodity
     const { getFieldProps } = form
-    const { open, goods, mul } = this.state
+    const { open, goods } = this.state
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const menuEl = (
       <Menu
@@ -365,7 +361,10 @@ class ECommerceAdd extends React.Component {
           >
             商品名称
           </InputItem>
-          <InputItem {...getFieldProps('number')} placeholder="请填写商品条形码">
+          <InputItem
+            {...getFieldProps('number')}
+            placeholder="请填写商品条形码"
+          >
             商品条形码
           </InputItem>
           <InputItem
@@ -513,7 +512,11 @@ class ECommerceAdd extends React.Component {
           >
             <List.Item arrow="horizontal">运费模板</List.Item>
           </Picker>
-          <List.Item arrow="horizontal" extra="编辑" onClick={() => this.goTemplate()}>
+          <List.Item
+            arrow="horizontal"
+            extra="编辑"
+            onClick={() => this.goTemplate()}
+          >
             运费模板
           </List.Item>
           <InputItem
@@ -539,6 +542,7 @@ class ECommerceAdd extends React.Component {
             arrow="horizontal"
             extra={this.getMenuList()}
             onClick={() => this.setState({ open: true })}
+            className="primaryTag-show"
           >
             商城商品分类
           </List.Item>
@@ -551,9 +555,11 @@ class ECommerceAdd extends React.Component {
               })}
               selectable={pic.length < 5}
               onAddImageClick={e => {
-                this.setState({
-                  mul: true,
-                })
+                const formData = form.getFieldsValue()
+                formData.des = this.editor.current.state.editor.txt.html()
+                formData.goods = goods
+                Utils.cacheData(formData)
+                history.push('/uploadMultipleImg/裁剪/pic/2')
                 e.preventDefault()
               }}
             />
@@ -576,16 +582,9 @@ class ECommerceAdd extends React.Component {
           确定
         </Button>
         {open ? menuEl : null}
-        {open ? <MenuMask onClick={() => this.setState({ open: false })} /> : null}
-        <MultipleImg
-          visible={mul}
-          close={() => this.setState({
-            mul: false,
-          })
-          }
-          ratio={1}
-          callback={this.saveImg}
-        />
+        {open ? (
+          <MenuMask onClick={() => this.setState({ open: false })} />
+        ) : null}
       </React.Fragment>
     )
   }

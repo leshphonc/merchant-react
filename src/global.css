@@ -35,6 +35,7 @@ body {
   font-size: 12px;
 }
 
+/* antd-mobil Textarea样式覆盖 */
 .am-textarea-label {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.77);
@@ -49,13 +50,13 @@ body {
   color: #ffb000;
 }
 
-/* card样式覆盖 */
+/* antd-mobil Card样式覆盖 */
 .am-card-header-content img {
   width: 52px;
   height: 52px;
 }
 
-/* switch自定义样式 */
+/* antd-mobil Switch样式覆盖 */
 .am-switch .checkbox {
   width: 40px;
   height: 14px;
@@ -77,7 +78,7 @@ body {
   transform: translateX(19px);
 }
 
-/* 导航栏阴影 */
+/* antd-mobil 导航栏阴影 */
 .am-tab-bar-bar {
   box-shadow: 0 0 10px 1px #ccc;
 }
@@ -86,16 +87,7 @@ body {
   z-index: -1;
 }
 
-/* 定义menu位置在navbar下面 */
-.menu-position {
-  position: fixed;
-  top: 54px;
-  left: 0;
-  right: 0;
-  z-index: 90;
-}
-
-/* menu左侧滚动 */
+/* antd-mobil Menu左侧滚动 */
 .am-flexbox-item {
   align-self: stretch;
 }
@@ -112,11 +104,13 @@ body {
   height: 60vh !important;
   z-index: 70 !important;
 }
+
 .w-e-text-container .w-e-panel-container {
   width: 100% !important;
   margin-left: 0 !important;
   left: 0 !important;
 }
+
 .w-e-toolbar .w-e-menu {
   z-index: 70 !important;
 }
@@ -140,6 +134,7 @@ button {
 .slider-list {
   height: 100% !important;
 }
+
 .slider-list a {
   display: block;
   width: 100% !important;
@@ -160,4 +155,18 @@ button {
 /* 提示栏 */
 .rc-tooltip {
   z-index: 99999;
+}
+
+/* 自定义menu位置在navbar下面 */
+.menu-position {
+  position: fixed;
+  top: 54px;
+  left: 0;
+  right: 0;
+  z-index: 90;
+}
+
+/* 显示PrimaryTag超出部分 */
+.primaryTag-show .am-list-extra {
+  flex-basis: auto !important;
 }

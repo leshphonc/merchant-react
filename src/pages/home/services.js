@@ -18,6 +18,7 @@ export const fetchIndexData = () => axios.get('/appapi.php?c=Merchantapp&a=index
 export const fetchStoreList = id => axios.get('/appapi.php?c=Merchantapp&a=get_store', {
   params: {
     store_id: id,
+    show_all: 1,
     ticket: localStorage.getItem('ticket'),
   },
 })

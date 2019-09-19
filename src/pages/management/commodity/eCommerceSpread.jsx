@@ -114,7 +114,7 @@ class ECommerceSpread extends React.Component {
           >
             推广佣金比例
           </InputItem>
-          {showThree === '0' && openUserSpread === '1' ? (
+          {showThree === '1' && openUserSpread === '1' ? (
             <React.Fragment>
               <InputItem
                 extra="%"
