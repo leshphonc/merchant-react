@@ -20,7 +20,6 @@ import { createForm } from 'rc-form'
 import Utils from '@/utils'
 import moment from 'moment'
 import Editor from '@/common/Editor'
-import MultipleImg from '@/common/UploadImg/Multiple'
 import {
   CustomizeList,
   ListTitle,
@@ -58,7 +57,6 @@ class StorePanel extends React.Component {
       qrcode: '',
       open: false,
       goods: [],
-      mul: false,
       business: {
         have_mall: '0',
         have_peisong: '0',
@@ -451,19 +449,8 @@ class StorePanel extends React.Component {
     storeFront.fetchMarket(val[0])
   }
 
-  saveImg = url => {
-    const { form } = this.props
-    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
-    form.setFieldsValue({
-      pic: [...pic, { url }],
-    })
-    this.setState({
-      mul: false,
-    })
-  }
-
   render() {
-    const { match, form, storeFront } = this.props
+    const { match, form, storeFront, history } = this.props
     const { getFieldProps } = form
     const {
       cascadeOption,
@@ -484,7 +471,6 @@ class StorePanel extends React.Component {
       qrcode,
       open,
       goods,
-      mul,
     } = this.state
     const menuEl = (
       <Menu
@@ -751,9 +737,8 @@ class StorePanel extends React.Component {
               })}
               selectable={pic.length < 5}
               onAddImageClick={e => {
-                this.setState({
-                  mul: true,
-                })
+                this.cacheData()
+                history.push('/uploadMultipleImg/裁剪/pic/2')
                 e.preventDefault()
               }}
             />
@@ -827,12 +812,6 @@ class StorePanel extends React.Component {
         {open ? (
           <MenuMask onClick={() => this.setState({ open: false })} />
         ) : null}
-        <MultipleImg
-          visible={mul}
-          close={() => this.setState({ mul: false })}
-          ratio={2}
-          callback={this.saveImg}
-        />
       </React.Fragment>
     )
   }

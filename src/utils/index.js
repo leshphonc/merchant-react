@@ -150,7 +150,8 @@ export default {
       account: '/^[A-Za-z0-9]{1,30}$/',
       password: '/^(\\w){6,16}$/',
       tel: '/^[1][3-9][0-9]{9}$/',
-      email: '/^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})$/',
+      email:
+        '/^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})$/',
     }
     return new RegExp(REGS[rule]).test(value)
   },
@@ -167,7 +168,7 @@ export default {
   },
   // 缓存单个值到cacheData
   cacheItemToData(key, value) {
-    const data = JSON.parse(sessionStorage.getItem('cacheData'))
+    const data = JSON.parse(sessionStorage.getItem('cacheData')) || {}
     data[key] = value
     sessionStorage.setItem('cacheData', JSON.stringify(data))
   },
