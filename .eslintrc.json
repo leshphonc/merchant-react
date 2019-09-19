@@ -36,10 +36,14 @@
     "react/no-array-index-key": 1,
     // return语句总是或永远不指定值
     "consistent-return": 0,
+    // 允许windows开发环境
+    "linebreak-style": [
+      0,
+      "error",
+      "windows"
+    ]
     //   // 箭头函数直接返回的时候不需要 大括号 {}
     //   "arrow-body-style": [2, "as-needed"],
-    // 允许windows开发环境
-    "linebreak-style": [0, "error", "windows"],
     //   // 限制可使用jsx的文件扩展名
     //   "react/jsx-filename-extension": [
     //     2,
