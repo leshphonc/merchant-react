@@ -24,7 +24,7 @@ import moment from 'moment'
 import { MenuMask } from '@/styled'
 import Utils from '@/utils'
 import { toJS } from 'mobx'
-import MultipleImg from '@/common/UploadImg/Multiple'
+// import MultipleImg from '@/common/UploadImg/Multiple'
 
 const { Item } = List
 const { CheckboxItem } = Checkbox
@@ -149,6 +149,13 @@ class ReservePanel extends React.Component {
           pic: appointDetail.appoint_list.pic_arr,
           time_gap: appointDetail.appoint_list.time_gap,
         })
+        if ( sessionStorage.getItem('cacheData') ) { 
+          const arr_pic = JSON.parse(sessionStorage.getItem('cacheData')).pic
+          form.setFieldsValue({
+            pic: arr_pic,
+          })
+          Utils.clearCacheData()
+        }
         this.setState({
           editor: appointDetail.appoint_list.appoint_pic_content,
         })
@@ -191,6 +198,13 @@ class ReservePanel extends React.Component {
       form.setFieldsValue({
         sort: 0,
       })
+      if ( sessionStorage.getItem('cacheData') ) { 
+        const arr_pic = JSON.parse(sessionStorage.getItem('cacheData')).pic
+        form.setFieldsValue({
+          pic: arr_pic,
+        })
+        Utils.clearCacheData()
+      }
     }
     // editor.txt.html(history.location.state.value)
   }
@@ -322,7 +336,7 @@ class ReservePanel extends React.Component {
   }
 
   render() {
-    const { match, form, commodity } = this.props
+    const { match, form, commodity, history } = this.props
     const {
       menu,
       category,
@@ -339,7 +353,7 @@ class ReservePanel extends React.Component {
       use_time,
     } = this.state
     const { getFieldProps } = form
-    const { shopList, mul } = this.state
+    const { shopList } = this.state
     // eslint-disable-next-line camelcase
     const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const { reserveCategoryOption } = commodity
@@ -593,10 +607,12 @@ class ReservePanel extends React.Component {
               })}
               selectable={pic_arr.length < 5}
               onAddImageClick={e => {
-                this.setState({
-                  mul: true,
-                })
-                e.preventDefault()
+                const formData = form.getFieldsValue()
+                  formData.des = this.editor.current.state.editor.txt.html()
+                  console.log(formData)
+                  Utils.cacheData(formData)
+                  history.push('/uploadMultipleImg/裁剪/pic/1')
+                  e.preventDefault()
               }}
             />
           </Item>
@@ -892,9 +908,9 @@ class ReservePanel extends React.Component {
           </Button>
           <WhiteSpace />
         </WingBlank>
-        {menu ? menuEl : null}
-        {menu ? <MenuMask onClick={() => this.setState({ menu: false })} /> : null}
-        <MultipleImg
+        {/* {menu ? menuEl : null}
+        {menu ? <MenuMask onClick={() => this.setState({ menu: false })} /> : null} */}
+        {/* <MultipleImg
           visible={mul}
           close={() => this.setState({
             mul: false,
@@ -902,7 +918,7 @@ class ReservePanel extends React.Component {
           }
           ratio={1}
           callback={this.saveImg}
-        />
+        /> */}
       </React.Fragment>
     )
   }

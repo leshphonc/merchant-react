@@ -12,6 +12,7 @@ import {
   ImagePicker,
   DatePicker,
   Toast,
+  Modal,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -20,10 +21,10 @@ import { observer, inject } from 'mobx-react'
 import { createForm } from 'rc-form'
 import { Team } from './styled'
 import { toJS } from 'mobx'
-// import Utils from '@/utils'
+import Utils from '@/utils'
 import moment from 'moment'
 import Editor from '@/common/Editor'
-import MultipleImg from '@/common/UploadImg/Multiple'
+// import MultipleImg from '@/common/UploadImg/Multiple'
 
 const { Item } = List
 const { CheckboxItem } = Checkbox
@@ -156,6 +157,12 @@ class GroupPanel extends React.Component {
           no_refund: groupDetail.no_refund === '0',
           status: groupDetail.status !== '0',
         })
+        if ( sessionStorage.getItem('cacheData') ) { 
+          const arr_pic = JSON.parse(sessionStorage.getItem('cacheData')).pic
+          form.setFieldsValue({
+            pic: arr_pic,
+          })
+        }
         this.editor.current.state.editor.txt.html(groupDetail.content)
         setTimeout(() => {
           form.setFieldsValue({
@@ -218,6 +225,12 @@ class GroupPanel extends React.Component {
         no_refund: false,
         status: false,
       })
+      if ( sessionStorage.getItem('cacheData') ) { 
+        const arr_pic = JSON.parse(sessionStorage.getItem('cacheData')).pic
+        form.setFieldsValue({
+          pic: arr_pic,
+        })
+      }
     }
   }
 
@@ -289,13 +302,13 @@ class GroupPanel extends React.Component {
       }
     })
   }
-
   changePermission = bool => {
     const { basicInformation } = this.props
     basicInformation.modifyPermission(bool ? '1' : '0')
   }
 
   saveImg = url => {
+    console.log(121)
     const { form } = this.props
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     form.setFieldsValue({
@@ -307,7 +320,7 @@ class GroupPanel extends React.Component {
   }
 
   render() {
-    const { match, form } = this.props
+    const { match, form, history } = this.props
     const { getFieldProps } = form
     const { commodity } = this.props
     const { groupCatFir, groupCatSec } = commodity
@@ -328,8 +341,8 @@ class GroupPanel extends React.Component {
       shopList,
     } = this.state
     // eslint-disable-next-line camelcase
-    const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
-    console.log(match)
+    const pic_arr =  form.getFieldValue('pic') ? form.getFieldValue('pic') : []
+ 
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}团购商品`} goBack />
@@ -588,9 +601,11 @@ class GroupPanel extends React.Component {
                 })}
                 selectable={pic_arr.length < 5}
                 onAddImageClick={e => {
-                  this.setState({
-                    mul: true,
-                  })
+                  const formData = form.getFieldsValue()
+                  formData.des = this.editor.current.state.editor.txt.html()
+                  console.log(formData)
+                  Utils.cacheData(formData)
+                  history.push('/uploadMultipleImg/裁剪/pic/1')
                   e.preventDefault()
                 }}
               />
@@ -769,7 +784,7 @@ class GroupPanel extends React.Component {
             </Button>
           </WingBlank>
         </List>
-        <MultipleImg
+        {/* <MultipleImg
           visible={mul}
           close={() => this.setState({
             mul: false,
@@ -777,7 +792,7 @@ class GroupPanel extends React.Component {
           }
           ratio={1}
           callback={this.saveImg}
-        />
+        /> */}
       </React.Fragment>
     )
   }

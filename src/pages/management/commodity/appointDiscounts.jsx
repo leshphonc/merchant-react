@@ -8,7 +8,8 @@ import {
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 import { toJS } from 'mobx'
-import MultipleImg from '@/common/UploadImg/Multiple'
+import Utils from '@/utils'
+// import MultipleImg from '@/common/UploadImg/Multiple'
 
 const { Item } = List
 const seckill = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
@@ -28,7 +29,9 @@ class AppointDiscounts extends React.Component {
       typePic: '',
       indexPic: '',
     }
+    this.editor = React.createRef()
   }
+ 
 
   componentDidMount() {
     const { commodity, match, form } = this.props
@@ -67,6 +70,16 @@ class AppointDiscounts extends React.Component {
       this.setState({
         envoList: envo_info_list,
       })
+      if (sessionStorage.getItem('cacheData')){ 
+        const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
+        const envoList = JSON.parse(sessionStorage.getItem('envoList'))
+        console.log(envoList)
+       envoList[sessionStorage.getItem('index')][sessionStorage.getItem('type')].push({url:cacheData.pic[0].url})
+        this.setState({
+          envoList
+        })
+      }
+      console.log(this.state.envoList)
       form.setFieldsValue({
         is_select_car_model: [appointDetail.appoint_list.is_select_car_model],
         is_select_car_license: [appointDetail.appoint_list.is_select_car_license],
@@ -109,6 +122,7 @@ class AppointDiscounts extends React.Component {
 
   showEnvo = () => {
     const { envoList } = this.state
+    const { form, history } = this.props
     if (envoList) {
       return envoList.map((item, index) => (
         <React.Fragment key={index}>
@@ -142,18 +156,16 @@ class AppointDiscounts extends React.Component {
             <ImagePicker
               files={item.envo_before_select_pic}
               onAddImageClick={e => {
-                this.setState({
-                  mul: true,
-                  // eslint-disable-next-line react/no-unused-state
-                  typePic: 'envo_before_select_pic',
-                  // eslint-disable-next-line react/no-unused-state
-                  indexPic: index,
-                })
+                sessionStorage.setItem('envoList',JSON.stringify(envoList))
+                const formData = form.getFieldsValue()
+                sessionStorage.setItem('index',index)
+                 sessionStorage.setItem('type','envo_before_select_pic')
+                Utils.cacheData(formData)
+                history.push('/uploadMultipleImg/裁剪/pic/1')
                 e.preventDefault()
               }}
               onChange={e => {
                 if (e.length <= 0) {
-                  // eslint-disable-next-line camelcase
                   const now_envoList = toJS(envoList)
                   now_envoList[index].envo_before_select_pic.splice(0, 1)
                   this.setState({
@@ -169,13 +181,12 @@ class AppointDiscounts extends React.Component {
             <ImagePicker
               files={item.envo_after_select_pic}
               onAddImageClick={e => {
-                this.setState({
-                  mul: true,
-                  // eslint-disable-next-line react/no-unused-state
-                  typePic: 'envo_after_select_pic',
-                  // eslint-disable-next-line react/no-unused-state
-                  indexPic: index,
-                })
+                sessionStorage.setItem('envoList',JSON.stringify(envoList))
+                const formData = form.getFieldsValue()
+                sessionStorage.setItem('index',index)
+                 sessionStorage.setItem('type','envo_after_select_pic')
+                Utils.cacheData(formData)
+                history.push('/uploadMultipleImg/裁剪/pic/1')
                 e.preventDefault()
               }}
               onChange={e => {
@@ -196,13 +207,12 @@ class AppointDiscounts extends React.Component {
             <ImagePicker
               files={item.envo_serving_pic}
               onAddImageClick={e => {
-                this.setState({
-                  mul: true,
-                  // eslint-disable-next-line react/no-unused-state
-                  typePic: 'envo_serving_pic',
-                  // eslint-disable-next-line react/no-unused-state
-                  indexPic: index,
-                })
+                sessionStorage.setItem('envoList',JSON.stringify(envoList))
+                const formData = form.getFieldsValue()
+                sessionStorage.setItem('index',index)
+                sessionStorage.setItem('type','envo_serving_pic')
+                Utils.cacheData(formData)
+                history.push('/uploadMultipleImg/裁剪/pic/1')
                 e.preventDefault()
               }}
               onChange={e => {
@@ -380,7 +390,7 @@ class AppointDiscounts extends React.Component {
             </Button>
           </WingBlank>
         </List>
-        <MultipleImg
+        {/* <MultipleImg
           visible={mul}
           close={() => this.setState({
             mul: false,
@@ -388,7 +398,7 @@ class AppointDiscounts extends React.Component {
           }
           ratio={1}
           callback={this.saveImg}
-        />
+        /> */}
       </React.Fragment>
     )
   }
