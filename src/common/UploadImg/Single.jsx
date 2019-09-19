@@ -1,6 +1,8 @@
 /**
  * @author cc
+ * @param title navbar名称
  * @param aspectratio 截图比,不传则不控制
+ * @param key 要存入的参数名
  * @callback callback
  * @description
  * 使用方法：

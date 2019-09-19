@@ -97,7 +97,9 @@ class ReservePanel extends React.Component {
             workerSele.push(item.merchant_worker_id)
           })
         }
-        this.editor.current.state.editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
+        setTimeout(() => {
+          this.editor.current.state.editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
+        }, 500)
         this.setState({
           files: appointDetail.appoint_list.pic_arr,
           category: [appointDetail.appoint_list.cat_fid, appointDetail.appoint_list.cat_id],

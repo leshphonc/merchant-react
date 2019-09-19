@@ -107,7 +107,9 @@ class GiftPanel extends React.Component {
         circle_idss: [getGiftDetail.circle_idss],
         market_idss: [getGiftDetail.market_idss],
       })
-      this.editor.current.state.editor.txt.html(getGiftDetail.gift_content)
+      setTimeout(() => {
+        this.editor.current.state.editor.txt.html(getGiftDetail.gift_content)
+      }, 500)
       giftManagement.fetchMarket(getGiftDetail.circle_idss)
     })
     giftManagement.fetchShopList().then(() => {

@@ -2,16 +2,25 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 import {
-  Picker, List, InputItem, Button, ImagePicker, Toast, WhiteSpace, Modal,
+  Picker,
+  List,
+  InputItem,
+  Button,
+  ImagePicker,
+  Toast,
+  WhiteSpace,
+  Modal,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import Utils from '@/utils'
 import { createForm } from 'rc-form'
 import Editor from '@/common/Editor'
-import MultipleImg from '@/common/UploadImg/Multiple'
 
-const statusData = [{ label: '正常', value: '1' }, { label: '停售', value: '0' }]
+const statusData = [
+  { label: '正常', value: '1' },
+  { label: '停售', value: '0' },
+]
 const category = [
   { label: '实体商品', value: '0' },
   { label: '虚拟商品', value: '1' },
@@ -24,9 +33,6 @@ const category = [
 class TakeAwayPanel extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      mul: false,
-    }
     this.editor = React.createRef()
   }
 
@@ -40,14 +46,14 @@ class TakeAwayPanel extends React.Component {
       })
       if (cacheData.store_id) {
         commodity.fetchCategoryValues(cacheData.store_id[0]).then(() => {
-          setTimeout(() => {
-            form.setFieldsValue({
-              sort_id: cacheData.sort_id,
-            })
-            this.editor.current.state.editor.txt.html(cacheData.des)
-          }, 500)
+          form.setFieldsValue({
+            sort_id: cacheData.sort_id,
+          })
         })
       }
+      setTimeout(() => {
+        this.editor.current.state.editor.txt.html(cacheData.des)
+      }, 500)
       Utils.clearCacheData()
       if (match.params.goodid) {
         commodity.fetchTakeAwayDetail(match.params.id, match.params.goodid)
@@ -55,41 +61,41 @@ class TakeAwayPanel extends React.Component {
       return false
     }
     if (!match.params.goodid) return
-    commodity.fetchTakeAwayDetail(match.params.id, match.params.goodid).then(() => {
-      const { takeAwayDetail } = commodity
-      const picArr = takeAwayDetail.pic.map(item => ({
-        url: item.url,
-      }))
-      form.setFieldsValue({
-        name: takeAwayDetail.name,
-        number: takeAwayDetail.number,
-        unit: takeAwayDetail.unit,
-        old_price: takeAwayDetail.old_price,
-        price: takeAwayDetail.price,
-        packing_charge: takeAwayDetail.packing_charge,
-        stock_num: takeAwayDetail.stock_num,
-        sort: takeAwayDetail.sort,
-        status: [takeAwayDetail.status],
-        goods_type: [takeAwayDetail.goods_type],
-        store_id: [takeAwayDetail.store_id],
-        sort_id: [takeAwayDetail.sort_id],
-        pic: picArr,
-      })
-      commodity.fetchCategoryValues(takeAwayDetail.store_id).then(() => {
-        setTimeout(() => {
+    commodity
+      .fetchTakeAwayDetail(match.params.id, match.params.goodid)
+      .then(() => {
+        const { takeAwayDetail } = commodity
+        const picArr = takeAwayDetail.pic.map(item => ({
+          url: item.url,
+        }))
+        form.setFieldsValue({
+          name: takeAwayDetail.name,
+          number: takeAwayDetail.number,
+          unit: takeAwayDetail.unit,
+          old_price: takeAwayDetail.old_price,
+          price: takeAwayDetail.price,
+          packing_charge: takeAwayDetail.packing_charge,
+          stock_num: takeAwayDetail.stock_num,
+          sort: takeAwayDetail.sort,
+          status: [takeAwayDetail.status],
+          goods_type: [takeAwayDetail.goods_type],
+          store_id: [takeAwayDetail.store_id],
+          sort_id: [takeAwayDetail.sort_id],
+          pic: picArr,
+        })
+        commodity.fetchCategoryValues(takeAwayDetail.store_id).then(() => {
           form.setFieldsValue({
             sort_id: [takeAwayDetail.sort_id],
           })
+        })
+        setTimeout(() => {
           this.editor.current.state.editor.txt.html(takeAwayDetail.des)
         }, 500)
       })
-    })
   }
 
   submit = () => {
-    const {
-      commodity, match, history, form,
-    } = this.props
+    const { commodity, match, history, form } = this.props
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请填写完整信息')
@@ -188,22 +194,10 @@ class TakeAwayPanel extends React.Component {
     }
   }
 
-  saveImg = url => {
-    const { form } = this.props
-    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
-    form.setFieldsValue({
-      pic: [...pic, { url }],
-    })
-    this.setState({
-      mul: false,
-    })
-  }
-
   render() {
-    const { commodity, match, form } = this.props
+    const { commodity, match, form, history } = this.props
     const { getFieldProps } = form
     const { storeValues, categoryValues } = commodity
-    const { mul } = this.state
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     return (
       <React.Fragment>
@@ -218,7 +212,10 @@ class TakeAwayPanel extends React.Component {
           >
             商品名称
           </InputItem>
-          <InputItem {...getFieldProps('number')} placeholder="请填写商品条形码">
+          <InputItem
+            {...getFieldProps('number')}
+            placeholder="请填写商品条形码"
+          >
             商品条形码
           </InputItem>
           <InputItem
@@ -372,9 +369,10 @@ class TakeAwayPanel extends React.Component {
               })}
               selectable={pic.length < 5}
               onAddImageClick={e => {
-                this.setState({
-                  mul: true,
-                })
+                const formData = form.getFieldsValue()
+                formData.des = this.editor.current.state.editor.txt.html()
+                Utils.cacheData(formData)
+                history.push('/uploadMultipleImg/裁剪/pic/2')
                 e.preventDefault()
               }}
             />
@@ -396,15 +394,6 @@ class TakeAwayPanel extends React.Component {
         >
           确定
         </Button>
-        <MultipleImg
-          visible={mul}
-          close={() => this.setState({
-            mul: false,
-          })
-          }
-          ratio={1}
-          callback={this.saveImg}
-        />
       </React.Fragment>
     )
   }

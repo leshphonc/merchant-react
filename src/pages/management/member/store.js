@@ -77,7 +77,9 @@ class MemberStore {
   fetchMiniProgramList = async () => {
     let hasMore = true
     if (this.miniProgramListTotal !== null) {
-      hasMore = this.miniProgramListPage * this.miniProgramListSize < this.miniProgramListTotal
+      hasMore =
+        this.miniProgramListPage * this.miniProgramListSize <
+        this.miniProgramListTotal
       if (hasMore) {
         this.miniProgramListPage += 1
       }
@@ -98,7 +100,10 @@ class MemberStore {
         const remainder = this.miniProgramListTotal % this.miniProgramListSize
         if (remainder) {
           runInAction(() => {
-            this.miniProgramList.splice(this.miniProgramListTotal - remainder, remainder)
+            this.miniProgramList.splice(
+              this.miniProgramListTotal - remainder,
+              remainder,
+            )
             const arr = this.miniProgramList
             arr.push(...response.data.result.lists)
             this.miniProgramList = arr
@@ -118,7 +123,10 @@ class MemberStore {
         this.publicListPage += 1
       }
     }
-    const response = await services.fetchPublicList(this.publicListPage, this.publicListSize)
+    const response = await services.fetchPublicList(
+      this.publicListPage,
+      this.publicListSize,
+    )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
@@ -146,7 +154,9 @@ class MemberStore {
   fetchCardGroupList = async () => {
     let hasMore = true
     if (this.cardGroupListTotal !== null) {
-      hasMore = this.cardGroupListPage * this.cardGroupListSize < this.cardGroupListTotal
+      hasMore =
+        this.cardGroupListPage * this.cardGroupListSize <
+        this.cardGroupListTotal
       if (hasMore) {
         this.cardGroupListPage += 1
       }
@@ -167,7 +177,10 @@ class MemberStore {
         const remainder = this.cardGroupListTotal % this.cardGroupListSize
         if (remainder) {
           runInAction(() => {
-            this.cardGroupList.splice(this.cardGroupListTotal - remainder, remainder)
+            this.cardGroupList.splice(
+              this.cardGroupListTotal - remainder,
+              remainder,
+            )
             const arr = this.cardGroupList
             arr.push(...response.data.result.lists)
             this.cardGroupList = arr
@@ -188,7 +201,14 @@ class MemberStore {
   }
 
   @action
-  operatingCardGroup = async (groupname, comment, discount, effdays, give, id) => {
+  operatingCardGroup = async (
+    groupname,
+    comment,
+    discount,
+    effdays,
+    give,
+    id,
+  ) => {
     if (id) {
       const response = await services.modifyCardGroup(
         groupname,
@@ -211,7 +231,13 @@ class MemberStore {
         return Promise.resolve(true)
       }
     } else {
-      const response = await services.insertCardGroup(groupname, comment, discount, effdays, give)
+      const response = await services.insertCardGroup(
+        groupname,
+        comment,
+        discount,
+        effdays,
+        give,
+      )
       if (response.data.errorCode === ErrorCode.SUCCESS) {
         return Promise.resolve(true)
       }
@@ -242,7 +268,9 @@ class MemberStore {
   fetchCardGroupUsers = async id => {
     let hasMore = true
     if (this.cardGroupUsersListTotal !== null) {
-      hasMore = this.cardGroupUsersListPage * this.cardGroupUsersListSize < this.cardGroupUsersListTotal
+      hasMore =
+        this.cardGroupUsersListPage * this.cardGroupUsersListSize <
+        this.cardGroupUsersListTotal
       if (hasMore) {
         this.cardGroupUsersListPage += 1
       }
@@ -261,10 +289,14 @@ class MemberStore {
           this.cardGroupUsersListTotal = response.data.result.total - 0
         })
       } else {
-        const remainder = this.cardGroupUsersListTotal % this.cardGroupUsersListSize
+        const remainder =
+          this.cardGroupUsersListTotal % this.cardGroupUsersListSize
         if (remainder) {
           runInAction(() => {
-            this.cardGroupUsersList.splice(this.cardGroupUsersListTotal - remainder, remainder)
+            this.cardGroupUsersList.splice(
+              this.cardGroupUsersListTotal - remainder,
+              remainder,
+            )
             const arr = this.cardGroupUsersList
             arr.push(...response.data.result.lists)
             this.cardGroupUsersList = arr
@@ -304,7 +336,9 @@ class MemberStore {
   fetchExpensesRecordList = async id => {
     let hasMore = true
     if (this.expensesRecordListTotal !== null) {
-      hasMore = this.expensesRecordListPage * this.expensesRecordListSize < this.expensesRecordListTotal
+      hasMore =
+        this.expensesRecordListPage * this.expensesRecordListSize <
+        this.expensesRecordListTotal
       if (hasMore) {
         this.expensesRecordListPage += 1
       }
@@ -323,10 +357,14 @@ class MemberStore {
           this.expensesRecordListTotal = response.data.result.total - 0
         })
       } else {
-        const remainder = this.expensesRecordListTotal % this.expensesRecordListSize
+        const remainder =
+          this.expensesRecordListTotal % this.expensesRecordListSize
         if (remainder) {
           runInAction(() => {
-            this.expensesRecordList.splice(this.expensesRecordListTotal - remainder, remainder)
+            this.expensesRecordList.splice(
+              this.expensesRecordListTotal - remainder,
+              remainder,
+            )
             const arr = this.expensesRecordList
             arr.push(...response.data.result.lists)
             this.expensesRecordList = arr
@@ -346,7 +384,10 @@ class MemberStore {
         this.couponListPage += 1
       }
     }
-    const response = await services.fetchCouponList(this.couponListPage, this.couponListSize)
+    const response = await services.fetchCouponList(
+      this.couponListPage,
+      this.couponListSize,
+    )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
@@ -378,7 +419,9 @@ class MemberStore {
   fetchCouponCheckList = async id => {
     let hasMore = true
     if (this.couponCheckListTotal !== null) {
-      hasMore = this.couponCheckListPage * this.couponCheckListSize < this.couponCheckListTotal
+      hasMore =
+        this.couponCheckListPage * this.couponCheckListSize <
+        this.couponCheckListTotal
       if (hasMore) {
         this.couponCheckListPage += 1
       }
@@ -400,7 +443,10 @@ class MemberStore {
         const remainder = this.couponCheckListTotal % this.couponCheckListSize
         if (remainder) {
           runInAction(() => {
-            this.couponCheckList.splice(this.couponCheckListTotal - remainder, remainder)
+            this.couponCheckList.splice(
+              this.couponCheckListTotal - remainder,
+              remainder,
+            )
             const arr = this.couponCheckList
             arr.push(...response.data.result.lists)
             this.couponCheckList = arr
@@ -409,6 +455,15 @@ class MemberStore {
         }
       }
     }
+  }
+
+  @action
+  ResetCouponCheckList = async () => {
+    runInAction(() => {
+      this.couponCheckList = []
+      this.couponCheckListPage = 1
+      this.couponCheckListTotal = null
+    })
   }
 
   @action

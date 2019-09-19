@@ -2,9 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
-import {
-  WhiteSpace, Button, PullToRefresh, ActionSheet,
-} from 'antd-mobile'
+import { WhiteSpace, Button, PullToRefresh, ActionSheet } from 'antd-mobile'
 import NavBar from '@/common/NavBar'
 import moment from 'moment'
 import CouponCheck from './couponCheck'
@@ -26,6 +24,7 @@ class Coupon extends React.Component {
     const { member } = this.props
     const { couponList } = member
     const { height } = this.state
+    member.ResetCouponCheckList()
     if (!couponList.length) member.fetchCouponList()
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
@@ -80,7 +79,9 @@ class Coupon extends React.Component {
                 type="primary"
                 size="small"
                 onClick={() => {
-                  history.push(`/management/member/coupon/couponCheck/${item.coupon_id}`)
+                  history.push(
+                    `/management/member/coupon/couponCheck/${item.coupon_id}`,
+                  )
                 }}
               >
                 已领取{item.had_pull}张
@@ -127,7 +128,9 @@ class Coupon extends React.Component {
                   领完了
                 </Button>
               ) : null}
-              {item.status !== '1' && item.status !== '2' && item.status !== '3' ? (
+              {item.status !== '1' &&
+              item.status !== '2' &&
+              item.status !== '3' ? (
                 <Button
                   type="primary"
                   size="small"
@@ -203,6 +206,9 @@ class Coupon extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/management/member/coupon" exact component={Coupon} />
-    <Route path="/management/member/coupon/couponCheck/:id" component={CouponCheck} />
+    <Route
+      path="/management/member/coupon/couponCheck/:id"
+      component={CouponCheck}
+    />
   </React.Fragment>
 )
