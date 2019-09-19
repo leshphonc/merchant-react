@@ -73,13 +73,15 @@ class AppointDiscounts extends React.Component {
       if (sessionStorage.getItem('cacheData')){ 
         const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
         const envoList = JSON.parse(sessionStorage.getItem('envoList'))
-        console.log(envoList)
-       envoList[sessionStorage.getItem('index')][sessionStorage.getItem('type')].push({url:cacheData.pic[0].url})
-        this.setState({
-          envoList
+        envoList[sessionStorage.getItem('index')][sessionStorage.getItem('type')].push({url:cacheData.pic[0].url})
+          this.setState({
+            envoList
         })
+        sessionStorage.removeItem('cacheData')
+        sessionStorage.removeItem('envoList')
+        sessionStorage.removeItem('type')
+        sessionStorage.removeItem('index')
       }
-      console.log(this.state.envoList)
       form.setFieldsValue({
         is_select_car_model: [appointDetail.appoint_list.is_select_car_model],
         is_select_car_license: [appointDetail.appoint_list.is_select_car_license],
