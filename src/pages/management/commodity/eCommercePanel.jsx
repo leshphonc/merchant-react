@@ -559,7 +559,7 @@ class ECommerceAdd extends React.Component {
                 formData.des = this.editor.current.state.editor.txt.html()
                 formData.goods = goods
                 Utils.cacheData(formData)
-                history.push('/uploadMultipleImg/裁剪/pic/2')
+                history.push('/uploadMultipleImg/裁剪/pic/1')
                 e.preventDefault()
               }}
             />

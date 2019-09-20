@@ -434,7 +434,7 @@ class GiftPanel extends React.Component {
                 const formData = form.getFieldsValue()
                 formData.des = this.editor.current.state.editor.txt.html()
                 Utils.cacheData(formData)
-                history.push('/uploadMultipleImg/裁剪/pic/2')
+                history.push('/uploadMultipleImg/裁剪/pic/1')
                 e.preventDefault()
               }}
             />
