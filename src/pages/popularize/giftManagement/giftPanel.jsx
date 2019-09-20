@@ -39,7 +39,7 @@ class GiftPanel extends React.Component {
     const { giftManagement, match, form } = this.props
     // console.log(this.props)
     giftManagement.fetchGiftCategory()
-
+    giftManagement.fetchGiftCategorylist(match.params.catFid)
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
       if (cacheData.cascade) {
