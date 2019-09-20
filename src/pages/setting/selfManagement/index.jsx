@@ -10,6 +10,7 @@ import SelfMentionPanel from './selfMentionPanel'
 // import ModifyCoordinate from './modify/coordinate'
 import CoordinatePicker from './modify/coordinate'
 import SecretKey from './secretKey'
+import Utils from '@/utils'
 // import { ShopManager } from '@/config/list'
 import { Btn, Btns } from './styled'
 
@@ -24,11 +25,12 @@ class SelfManagement extends React.Component {
   componentDidMount() {
     const { selfManagement } = this.props
     selfManagement.fetchPickLists()
+    Utils.clearCacheData()
   }
 
-  detele = Id => {
+  detele = id => {
     const { selfManagement } = this.props
-    selfManagement.fetchPickAddressDel(Id).then(() => {
+    selfManagement.fetchPickAddressDel(id).then(() => {
       selfManagement.fetchPickLists()
     })
   }

@@ -52,16 +52,16 @@ export const fetchPickLists = (page, size, id) => axios.get('/appapi.php?c=Merch
   },
 })
 
-export const fetchSeePickPwd = id => axios.get('/appapi.php?c=Merchantapp&a=see_pick_pwd', {
+export const fetchSeePickPwd = id => axios.get('/appapi.php?c=Merchantapp&a=get_pick_addr_merid', {
   params: {
-    pick_addr_id: id,
+    id,
     ticket: localStorage.getItem('ticket'),
   },
 })
 
 export const fetchPickAddressDel = id => axios.get('/appapi.php?c=Merchantapp&a=pick_address_del', {
   params: {
-    pick_addr_id: id,
+    id,
     ticket: localStorage.getItem('ticket'),
   },
 })

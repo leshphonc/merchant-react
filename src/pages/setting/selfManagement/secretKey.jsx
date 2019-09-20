@@ -12,16 +12,14 @@ import { createForm } from 'rc-form'
 @observer
 class secretKey extends React.Component {
   componentDidMount() {
-    const { selfManagement, match } = this.props
-    selfManagement.fetchSeePickPwd(match.params.id)
-    // const { shopManager, match, form } = this.props
-    // if (!match.params.id) return
-    // shopManager.fetchClassifyDetail(match.params.id).then(() => {
-    //   const { classifyDetail } = shopManager
-    //   form.setFieldsValue({
-    //     name: classifyDetail.name,
-    //   })
-    // })
+    const { selfManagement, match, form } = this.props
+    selfManagement.fetchPickAddressDetail(match.params.id).then(() => {
+      const { pickAddressDetail } = selfManagement
+      form.setFieldsValue({
+        pwd: pickAddressDetail.pwd,
+      })
+    })
+    // selfManagement.fetchSeePickPwd(match.params.id)
   }
 
   // submit = () => {
@@ -43,10 +41,6 @@ class secretKey extends React.Component {
   //       shopManager.addClassify({ ...obj, id: match.params.id }).then(res => {
   //         if (res) Toast.success('编辑成功', 1, () => history.goBack())
   //       })
-  //     } else {
-  //       shopManager.modifyClassify({ ...obj }).then(res => {
-  //         if (res) Toast.success('新增成功', 1, () => history.goBack())
-  //       })
   //     }
   //   })
   // }
@@ -59,7 +53,7 @@ class secretKey extends React.Component {
         <NavBar title={`${match.params.str}登陆密钥`} goBack />
         <List>
           <InputItem
-            {...getFieldProps('name', {
+            {...getFieldProps('pwd', {
               rules: [{ required: true }],
             })}
           >
