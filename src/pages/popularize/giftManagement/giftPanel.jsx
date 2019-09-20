@@ -63,22 +63,21 @@ class GiftPanel extends React.Component {
       }
       form.setFieldsValue({
         gift_name: cacheData.gift_name,
-        cascade: cacheData.cascade,
-        circle_idss: cacheData.circle_idss,
         pic: cacheData.pic,
-        cat_id: cacheData.cat_id,
-        cat_fid: cacheData.cat_fid,
         intro: cacheData.intro,
         invoice_content: cacheData.invoice_content,
         sku: cacheData.sku,
         specification: cacheData.specification,
         worth: cacheData.worth,
-        des: cacheData.des,
       })
       if (cacheData.cat_fid) {
         giftManagement.fetchGiftCategorylist(cacheData.cat_fid[0]).then(() => {
           form.setFieldsValue({
-            ...cacheData,
+            cat_fid: cacheData.cat_fid,
+            cat_id: cacheData.cat_id,
+            circle_idss: cacheData.circle_idss,
+            market_idss: cacheData.market_idss,
+            cascade: cacheData.cascade,
           })
           setTimeout(() => {
             this.editor.current.state.editor.txt.html(cacheData.des)
@@ -86,7 +85,8 @@ class GiftPanel extends React.Component {
         })
       } else {
         form.setFieldsValue({
-          ...cacheData,
+          des: cacheData.des,
+          cascade: cacheData.cascade,
         })
         setTimeout(() => {
           this.editor.current.state.editor.txt.html(cacheData.des)
