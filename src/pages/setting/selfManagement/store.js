@@ -17,56 +17,65 @@ class BasicInformationSotre {
 
   @observable pickLists = []
 
-  // @observable pickListsPage = 1
+  @observable pickListsPage = 1
 
-  // @observable pickListsSize = 10
+  @observable pickListsSize = 10
 
-  // @observable pickListsTotal = null
+  @observable pickListsTotal = null
 
   @observable pickAddressDetail = {}
 
-  // @action
-  // fetchPickLists = async id => {
-  //   let hasMore = true
-  //   if (this.pickListsTotal !== null) {
-  //     hasMore = this.pickListsPage * this.pickListsSize < this.pickListsTotal
-  //     if (hasMore) {
-  //       this.pickListsPage += 1
-  //     }
-  //   }
-  //   const response = await services.fetchPickLists(this.pickListsPage, this.pickListsSize, id)
-  //   if (response.data.errorCode === ErrorCode.SUCCESS) {
-  //     if (hasMore) {
-  //       runInAction(() => {
-  //         const arr = this.pickLists
-  //         arr.push(...response.data.result)
-  //         this.pickLists = arr
-  //         this.pickListsTotal = response.data.result.total - 0
-  //       })
-  //     } else {
-  //       const remainder = this.pickListsTotal % this.pickListsSize
-  //       if (remainder) {
-  //         runInAction(() => {
-  //           this.pickLists.splice(this.pickListsTotal - remainder, remainder)
-  //           const arr = this.pickLists
-  //           arr.push(...response.data.result)
-  //           this.pickLists = arr
-  //           this.pickListsTotal = response.data.result.total - 0
-  //         })
-  //       }
-  //     }
-  //   }
-  // }
-
   @action
   fetchPickLists = async id => {
-    const response = await services.fetchPickLists(id)
+    let hasMore = true
+    if (this.pickListsTotal !== null) {
+      hasMore = this.pickListsPage * this.pickListsSize < this.pickListsTotal
+      if (hasMore) {
+        this.pickListsPage += 1
+      }
+    }
+    const response = await services.fetchPickLists(this.pickListsPage, this.pickListsSize, id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        this.pickLists = response.data.result
-      })
+      if (hasMore) {
+        runInAction(() => {
+          const arr = this.pickLists
+          arr.push(...response.data.result)
+          this.pickLists = arr
+          this.pickListsTotal = response.data.result.total - 0
+        })
+      } else {
+        const remainder = this.pickListsTotal % this.pickListsSize
+        if (remainder) {
+          runInAction(() => {
+            this.pickLists.splice(this.pickListsTotal - remainder, remainder)
+            const arr = this.pickLists
+            arr.push(...response.data.result)
+            this.pickLists = arr
+            this.pickListsTotal = response.data.result.total - 0
+          })
+        }
+      }
     }
   }
+
+  @action
+  resetAndfetchPickLists = async () => {
+    runInAction(() => {
+      this.pickLists = []
+      this.pickListsPage = 1
+      this.pickListsTotal = null
+    })
+  }
+
+  // @action
+  // fetchPickLists = async id => {
+  //   const response = await services.fetchPickLists(id)
+  //   if (response.data.errorCode === ErrorCode.SUCCESS) {
+  //     runInAction(() => {
+  //       this.pickLists = response.data.result
+  //     })
+  //   }
+  // }
 
   @action
   fetchSeePickPwd = async id => {

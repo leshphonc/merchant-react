@@ -1,8 +1,9 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
+import ReactDOM from 'react-dom'
 import { Link, Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
-import { WingBlank, WhiteSpace, Button } from 'antd-mobile'
+import { WingBlank, WhiteSpace, Button, PullToRefresh } from 'antd-mobile'
 import {
   ListItem, ItemTop, TopContent, List,
 } from '@/styled'
@@ -10,6 +11,7 @@ import SelfMentionPanel from './selfMentionPanel'
 // import ModifyCoordinate from './modify/coordinate'
 import CoordinatePicker from './modify/coordinate'
 import SecretKey from './secretKey'
+import Utils from '@/utils'
 // import { ShopManager } from '@/config/list'
 import { Btn, Btns } from './styled'
 
@@ -18,17 +20,31 @@ import { Btn, Btns } from './styled'
 class SelfManagement extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      refreshing: false,
+      height: document.documentElement.clientHeight,
+    }
+    this.refresh = React.createRef()
   }
 
   componentDidMount() {
     const { selfManagement } = this.props
+    const { height } = this.state
     selfManagement.fetchPickLists()
+    Utils.clearCacheData()
+    if (this.refresh.current) {
+      /* eslint react/no-find-dom-node: 0 */
+      const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
+      this.setState({
+        height: hei,
+      })
+    }
   }
 
-  detele = Id => {
+  detele = id => {
     const { selfManagement } = this.props
-    selfManagement.fetchPickAddressDel(Id).then(() => {
+    selfManagement.fetchPickAddressDel(id).then(() => {
+      selfManagement.resetAndfetchPickLists()
       selfManagement.fetchPickLists()
     })
   }
@@ -37,13 +53,13 @@ class SelfManagement extends React.Component {
     const { history, selfManagement } = this.props
     const { pickLists } = selfManagement
     console.log(pickLists)
-    return pickLists.map(item => (
+    return pickLists.map((item, index) => (
       <React.Fragment key={item.array_key}>
         <ListItem>
           <ItemTop style={{ width: '70%', display: 'inline-block' }}>
             <TopContent>
               <div className="top-title" style={{ fontSize: '15px' }}>
-                编号：{item.array_key}
+                编号：{index + 1}
               </div>
               <WhiteSpace />
               <div>区域1: {item.area_info.province}</div>
@@ -61,7 +77,6 @@ class SelfManagement extends React.Component {
               <Btns>
                 登陆密钥:
                 <Button
-                  // style={{ marginTop: '20px' }}
                   type="button"
                   onClick={() => history.push(`/setting/selfManagement/secretKey/查看/${item.pick_addr_id}`)
                   }
@@ -97,12 +112,36 @@ class SelfManagement extends React.Component {
     ))
   }
 
+  loadMore = async () => {
+    const { selfManagement } = this.props
+    this.setState({ refreshing: true })
+    await selfManagement.fetchPickLists()
+    setTimeout(() => {
+      this.setState({ refreshing: false })
+    }, 100)
+  }
+
   render() {
+    const { height, refreshing } = this.state
     return (
       <React.Fragment>
         <NavBar title="自提点管理" goBack />
         <WhiteSpace />
-        <WingBlank size="sm">{this.mapList()}</WingBlank>
+        <PullToRefresh
+          ref={this.refresh}
+          refreshing={refreshing}
+          style={{
+            height,
+            overflow: 'auto',
+          }}
+          indicator={{ deactivate: '上拉可以刷新' }}
+          direction="up"
+          onRefresh={this.loadMore}
+        >
+          <WhiteSpace />
+          <WingBlank size="sm">{this.mapList()}</WingBlank>
+        </PullToRefresh>
+        {/* <WingBlank size="sm">{this.mapList()}</WingBlank> */}
         <WhiteSpace />
         <WhiteSpace />
         <WhiteSpace />

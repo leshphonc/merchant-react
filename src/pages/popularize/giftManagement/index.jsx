@@ -11,6 +11,7 @@ import OrdersGoods from './ordersGoods'
 import OrderDetails from './orderDetails'
 import DeliverGoods from './deliverGoods'
 import ScanCode from './scanCode'
+import Utils from '@/utils'
 
 const seasons = [{ label: '关闭', value: '0' }, { label: '启用', value: '1' }]
 @inject('giftManagement')
@@ -32,6 +33,7 @@ class GiftManagement extends React.Component {
     // const alias = JSON.parse(localStorage.getItem('alias'))
     // console.log(alias)
     giftManagement.fetchGetGift(keyword)
+    Utils.clearCacheData()
     if (this.refresh.current) {
       /* eslint react/no-find-dom-node: 0 */
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44

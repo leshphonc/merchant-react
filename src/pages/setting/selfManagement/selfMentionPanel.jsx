@@ -1,9 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  List, InputItem, WingBlank, Button, Toast, Picker,
-} from 'antd-mobile'
+import { List, InputItem, WingBlank, Button, Toast, Picker } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 import Utils from '@/utils'
@@ -17,7 +15,6 @@ class selfMention extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      // menu: false,
       long: '',
       lat: '',
       asyncCascadeValue: [],
@@ -27,8 +24,7 @@ class selfMention extends React.Component {
   componentDidMount() {
     const { selfManagement, form, match } = this.props
     console.log(this.props)
-    // selfManagement.fetchBasicInfo()
-    // selfManagement.fetchPickAddressDetail(match.params.id)
+    selfManagement.fetchPickAddressDetail(match.params.id)
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
       if (cacheData.cascade) {
@@ -46,6 +42,12 @@ class selfMention extends React.Component {
         long: cacheData.long,
         lat: cacheData.lat,
       })
+      form.setFieldsValue({
+        phone: cacheData.phone,
+        pick_addr: cacheData.pick_addr,
+        cascade: cacheData.cascade,
+      })
+      return
     }
     if (!match.params.id) {
       selfManagement.fetchCascadeOption().then(() => {
@@ -88,9 +90,7 @@ class selfMention extends React.Component {
 
   cacheData = () => {
     const { form } = this.props
-    const {
-      long, lat, asyncCascadeValue,
-    } = this.state
+    const { long, lat, asyncCascadeValue } = this.state
     const formData = form.getFieldsValue()
     form.asyncCascadeValue = asyncCascadeValue
     formData.long = long
@@ -147,9 +147,7 @@ class selfMention extends React.Component {
   }
 
   submit = () => {
-    const {
-      selfManagement, form, match, history,
-    } = this.props
+    const { selfManagement, form, match, history } = this.props
     const { long, lat } = this.state
     form.validateFields((error, value) => {
       if (error) {
@@ -162,49 +160,49 @@ class selfMention extends React.Component {
         province_id: value.cascade ? value.cascade[0] : value.province_id,
         city_id: value.cascade ? value.cascade[1] : value.city_id,
         area_id: value.cascade ? value.cascade[2] : value.area_id,
-        long_lat: { long, lat },
+        long_lat: [long, lat],
         long,
         lat,
       }
       if (match.params.id) {
-        selfManagement
-          .addECommerce({ ...obj, id: match.params.id })
-          .then(res => {
-            if (res) Toast.success('编辑成功', 1, () => history.goBack())
-          })
+        selfManagement.addECommerce({ ...obj, id: match.params.id }).then(res => {
+          if (res) {
+            Toast.success('编辑成功', 1, () => {
+              selfManagement.resetAndfetchPickLists()
+              history.goBack()
+            })
+          }
+          // if (res) Toast.success('编辑成功', 1, () => history.goBack())
+        })
       } else {
         selfManagement.modifyECommerce(obj).then(res => {
-          if (res) Toast.success('新增成功', 1, () => history.goBack())
+          if (res) {
+            Toast.success('新增成功', 1, () => {
+              selfManagement.resetAndfetchPickLists()
+              history.goBack()
+            })
+          }
         })
       }
     })
   }
 
   render() {
-    const {
-      match, form, selfManagement,
-    } = this.props
+    const { match, form, selfManagement } = this.props
     const { getFieldProps } = form
     const { cascadeOption } = selfManagement
     const { asyncCascadeValue, long, lat } = this.state
-    // console.log(long)
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}自提点`} goBack />
         <List>
-          <List.Item extra={`${long}, ${lat}`} arrow="horizontal" onClick={this.goMapPicker}>
-          自提点经纬度
-          </List.Item>
-          {/* <Item
+          <List.Item
+            extra={`${long || 0}, ${lat || 0}`}
             arrow="horizontal"
-            extra={`${basicInfo.long || 0}, ${basicInfo.lat || 0}`}
-            onClick={() => history.push(
-              `/setting/selfManagement/modify/coordinate/${basicInfo.long}/${basicInfo.lat}`,
-            )
-            }
+            onClick={this.goMapPicker}
           >
             自提点经纬度
-          </Item> */}
+          </List.Item>
           <Picker
             {...getFieldProps('cascade', {
               rules: [{ required: true }],
