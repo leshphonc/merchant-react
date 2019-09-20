@@ -13,7 +13,6 @@ import {
   ImagePicker,
   WhiteSpace,
   Toast,
-  Menu,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -21,7 +20,6 @@ import { createForm } from 'rc-form'
 import { observer, inject } from 'mobx-react'
 import Editor from '@/common/Editor'
 import moment from 'moment'
-import { MenuMask } from '@/styled'
 import Utils from '@/utils'
 import { toJS } from 'mobx'
 // import MultipleImg from '@/common/UploadImg/Multiple'
@@ -330,16 +328,11 @@ class ReservePanel extends React.Component {
     form.setFieldsValue({
       pic: [...pic, { url }],
     })
-    this.setState({
-      mul: false,
-    })
   }
 
   render() {
     const { match, form, commodity, history } = this.props
     const {
-      menu,
-      category,
       store,
       // eslint-disable-next-line camelcase
       custom_name,
@@ -356,19 +349,10 @@ class ReservePanel extends React.Component {
     const { shopList } = this.state
     // eslint-disable-next-line camelcase
     const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
-    const { reserveCategoryOption } = commodity
     const paymentValue = form.getFieldValue('payment_status')
     const storeChecked = form.getFieldValue('is_store')
     // eslint-disable-next-line camelcase
     const is_appoint_price = form.getFieldValue('is_appoint_price') || '0'
-    const menuEl = (
-      <Menu
-        className="menu-position"
-        value={category}
-        data={reserveCategoryOption}
-        onChange={this.changeCategory}
-      />
-    )
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}预定商品`} goBack />

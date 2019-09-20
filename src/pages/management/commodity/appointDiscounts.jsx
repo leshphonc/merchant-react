@@ -25,7 +25,6 @@ class AppointDiscounts extends React.Component {
       envoList: [],
       score_name: '',
       dhb_name: '',
-      mul: false,
       typePic: '',
       indexPic: '',
     }
@@ -117,9 +116,6 @@ class AppointDiscounts extends React.Component {
     const now_envo = toJS(envoList)
     // eslint-disable-next-line react/destructuring-assignment
     now_envo[this.state.indexPic][this.state.typePic] = [{ url }]
-    this.setState({
-      mul: false,
-    })
   }
 
   showEnvo = () => {
@@ -300,7 +296,7 @@ class AppointDiscounts extends React.Component {
     const { commodity, form } = this.props
     const { getFieldProps } = form
     // eslint-disable-next-line camelcase
-    const { score_name, dhb_name, mul } = this.state
+    const { score_name, dhb_name } = this.state
     const { dhbOpen, scoreOpen } = commodity
     return (
       <React.Fragment>
