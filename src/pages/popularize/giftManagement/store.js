@@ -330,10 +330,21 @@ class MastSotre {
     }
   }
 
-  // 商盟列表
+  // // 商盟列表
+  // @action
+  // fetchMarket = async id => {
+  //   this.marketOption = []
+  //   const response = await services.fetchMarket(id)
+  //   if (response.data.errorCode === ErrorCode.SUCCESS) {
+  //     runInAction(() => {
+  //       this.marketOption = response.data.result
+  //     })
+  //   }
+  // }
+
+  // 商盟
   @action
   fetchMarket = async id => {
-    this.marketOption = []
     const response = await services.fetchMarket(id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
@@ -342,11 +353,11 @@ class MastSotre {
     }
   }
 
-  // 重置商盟
-  @action
-  resetMarket = () => {
-    this.marketOption = []
-  }
+  // // 重置商盟
+  // @action
+  // resetMarket = () => {
+  //   this.marketOption = []
+  // }
 
   // 重置商圈
   @action
