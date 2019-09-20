@@ -15,7 +15,7 @@ import {
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
-import MultipleImg from '@/common/UploadImg/Multiple'
+import Utils from '@/utils'
 import { createForm } from 'rc-form'
 import { toJS } from 'mobx'
 import Editor from '@/common/Editor'
@@ -29,7 +29,6 @@ class GiftPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      mul: false,
       store: [],
       asyncCascadeValue: [],
     }
@@ -40,7 +39,7 @@ class GiftPanel extends React.Component {
     const { giftManagement, match, form } = this.props
     // console.log(this.props)
     giftManagement.fetchGiftCategory()
-    giftManagement.fetchGiftCategorylist(match.params.catFid)
+    
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
       if (cacheData.cascade) {
@@ -52,11 +51,50 @@ class GiftPanel extends React.Component {
       } else {
         giftManagement.fetchCascadeOption()
       }
-      // 整理默认数据存入state
       this.setState({
         asyncCascadeValue: cacheData.cascade,
       })
+      if (cacheData.circle_idss) {
+        giftManagement.fetchMarket(cacheData.circle_idss).then(() => {
+          form.setFieldsValue({
+            market_idss: cacheData.market_idss,
+          })
+        })
+      }
+      form.setFieldsValue({
+        gift_name: cacheData.gift_name,
+        cascade: cacheData.cascade,
+        circle_idss: cacheData.circle_idss,
+        pic: cacheData.pic,
+        cat_id: cacheData.cat_id,
+        cat_fid: cacheData.cat_fid,
+        intro: cacheData.intro,
+        invoice_content: cacheData.invoice_content,
+        sku: cacheData.sku,
+        specification: cacheData.specification,
+        worth: cacheData.worth,
+        des: cacheData.des,
+      })
+      if(cacheData.cat_fid) {
+        giftManagement.fetchGiftCategorylist(cacheData.cat_fid[0]).then(()=> {
+          form.setFieldsValue({
+            ...cacheData
+          })
+          setTimeout(() => {
+            this.editor.current.state.editor.txt.html(cacheData.des)
+          }, 500) 
+        })
+      } else {
+        form.setFieldsValue({
+          ...cacheData
+        })
+        setTimeout(() => {
+          this.editor.current.state.editor.txt.html(cacheData.des)
+        }, 500) 
+      }
+      return
     }
+
     if (!match.params.giftId) {
       giftManagement.fetchCascadeOption().then(() => {
         const { asyncCascadeValue } = giftManagement
@@ -85,6 +123,13 @@ class GiftPanel extends React.Component {
             asyncCascadeValue,
           })
         })
+        if (getGiftDetail.circle_idss) {
+          giftManagement.fetchMarket(getGiftDetail.circle_idss).then(() => {
+            form.setFieldsValue({
+              market_idss: [getGiftDetail.market_idss],
+            })
+          })
+        }
       const picArr = getGiftDetail.wap_pic_list.map(item => ({
         url: item.url,
       }))
@@ -110,12 +155,21 @@ class GiftPanel extends React.Component {
       setTimeout(() => {
         this.editor.current.state.editor.txt.html(getGiftDetail.gift_content)
       }, 500)
-      giftManagement.fetchMarket(getGiftDetail.circle_idss)
+      // giftManagement.fetchMarket(getGiftDetail.circle_idss)
     })
     giftManagement.fetchShopList().then(() => {
       // const { shopList } = giftManagement
       // console.log(shopList)
     })
+   
+  }
+
+  cacheData = () => {
+    const { form } = this.props
+    const { asyncCascadeValue } = this.state
+    const formData = form.getFieldsValue()
+    form.asyncCascadeValue = asyncCascadeValue
+    Utils.cacheData(formData)
   }
 
   onPickerChange = val => {
@@ -174,11 +228,11 @@ class GiftPanel extends React.Component {
         cat_id: value.cat_id[0],
         pick_in_store: value.pick_in_store ? '1' : '0',
         wap_pic: value.pic.map(item => item.url),
-        province_idss: value.cascade ? value.cascade[0] : value.province_idss,
-        city_idss: value.cascade ? value.cascade[1] : value.city_idss,
-        area_idss: value.cascade ? value.cascade[2] : value.area_idss,
-        circle_idss: value.circle_idss ? value.circle_idss[0] : value.circle_idss,
-        market_idss: value.market_idss ? value.market_idss[0] : value.market_idss,
+        province_idss: value.cascade[0],
+        city_idss: value.cascade[1],
+        area_idss: value.cascade[2],
+        circle_idss: value.circle_idss[0],
+        market_idss: value.market_idss ? value.market_idss[0] : '',
         gift_content: this.editor.current.state.editor.txt.html(),
         store: this.state.store,
       }
@@ -206,35 +260,19 @@ class GiftPanel extends React.Component {
   }
 
   fetchMarket = val => {
-    // console.log(val[0])
     const { giftManagement } = this.props
-    if (val[0]) {
-      giftManagement.fetchMarket(val[0])
-    } else {
-      giftManagement.resetMarket()
-    }
+    giftManagement.fetchMarket(val[0])
   }
 
   onChange = val => {
     console.log(val)
   }
 
-  saveImg = url => {
-    const { form } = this.props
-    const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
-    form.setFieldsValue({
-      pic: [...pic, { url }],
-    })
-    this.setState({
-      mul: false,
-    })
-  }
-
   render() {
-    const { giftManagement, match, form } = this.props
+    const { giftManagement, match, form, history } = this.props
     const { getFieldProps } = form
     const { giftCategory, giftCategorylist, shopList } = giftManagement
-    const { asyncCascadeValue, store, mul } = this.state
+    const { asyncCascadeValue, store } = this.state
     const { cascadeOption, circleOption, marketOption } = giftManagement
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const pickinstore = form.getFieldValue('pick_in_store')
@@ -290,14 +328,10 @@ class GiftPanel extends React.Component {
           {pickinstore === false ? (
             <Picker
               {...getFieldProps('cascade', {
-                rules: [{ required: false }],
-                getValueFromEvent: item => {
-                  giftManagement.resetMarket()
-                  return item
-                },
+                rules: [{ required: true }],
               })}
               title="选择地区"
-              extra="全部省"
+              extra="请选择"
               cols={3}
               data={cascadeOption}
               value={asyncCascadeValue}
@@ -313,15 +347,12 @@ class GiftPanel extends React.Component {
             <Picker
               {...getFieldProps('circle_idss', {
                 rules: [{ required: false }],
-                getValueFromEvent: item => {
-                  giftManagement.fetchMarket(item[0])
-                  return item
-                },
               })}
               data={circleOption}
               title="选择商圈"
               extra="请选择"
               cols={1}
+              onOk={this.fetchMarket}
             >
               <List.Item arrow="horizontal">所在商圈</List.Item>
             </Picker>
@@ -403,9 +434,10 @@ class GiftPanel extends React.Component {
               })}
               selectable={pic.length < 5}
               onAddImageClick={e => {
-                this.setState({
-                  mul: true,
-                })
+                const formData = form.getFieldsValue()
+                formData.des = this.editor.current.state.editor.txt.html()
+                Utils.cacheData(formData)
+                history.push('/uploadMultipleImg/裁剪/pic/2')
                 e.preventDefault()
               }}
             />
@@ -452,15 +484,6 @@ class GiftPanel extends React.Component {
             </Button>
           </WingBlank>
         </List>
-        <MultipleImg
-          visible={mul}
-          close={() => this.setState({
-            mul: false,
-          })
-          }
-          ratio={1}
-          callback={this.saveImg}
-        />
       </React.Fragment>
     )
   }
