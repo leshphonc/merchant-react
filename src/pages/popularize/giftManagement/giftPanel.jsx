@@ -126,7 +126,7 @@ class GiftPanel extends React.Component {
       if (getGiftDetail.circle_idss) {
         giftManagement.fetchMarket(getGiftDetail.circle_idss).then(() => {
           form.setFieldsValue({
-            market_idss: [getGiftDetail.market_idss],
+            // market_idss: [getGiftDetail.market_idss],
           })
         })
       }
