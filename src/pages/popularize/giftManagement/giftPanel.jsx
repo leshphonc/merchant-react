@@ -39,7 +39,7 @@ class GiftPanel extends React.Component {
     const { giftManagement, match, form } = this.props
     // console.log(this.props)
     giftManagement.fetchGiftCategory()
-    
+
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
       if (cacheData.cascade) {
@@ -75,22 +75,22 @@ class GiftPanel extends React.Component {
         worth: cacheData.worth,
         des: cacheData.des,
       })
-      if(cacheData.cat_fid) {
-        giftManagement.fetchGiftCategorylist(cacheData.cat_fid[0]).then(()=> {
+      if (cacheData.cat_fid) {
+        giftManagement.fetchGiftCategorylist(cacheData.cat_fid[0]).then(() => {
           form.setFieldsValue({
-            ...cacheData
+            ...cacheData,
           })
           setTimeout(() => {
             this.editor.current.state.editor.txt.html(cacheData.des)
-          }, 500) 
+          }, 500)
         })
       } else {
         form.setFieldsValue({
-          ...cacheData
+          ...cacheData,
         })
         setTimeout(() => {
           this.editor.current.state.editor.txt.html(cacheData.des)
-        }, 500) 
+        }, 500)
       }
       return
     }
@@ -123,13 +123,13 @@ class GiftPanel extends React.Component {
             asyncCascadeValue,
           })
         })
-        if (getGiftDetail.circle_idss) {
-          giftManagement.fetchMarket(getGiftDetail.circle_idss).then(() => {
-            form.setFieldsValue({
-              market_idss: [getGiftDetail.market_idss],
-            })
+      if (getGiftDetail.circle_idss) {
+        giftManagement.fetchMarket(getGiftDetail.circle_idss).then(() => {
+          form.setFieldsValue({
+            market_idss: [getGiftDetail.market_idss],
           })
-        }
+        })
+      }
       const picArr = getGiftDetail.wap_pic_list.map(item => ({
         url: item.url,
       }))
@@ -161,7 +161,6 @@ class GiftPanel extends React.Component {
       // const { shopList } = giftManagement
       // console.log(shopList)
     })
-   
   }
 
   cacheData = () => {
@@ -214,9 +213,7 @@ class GiftPanel extends React.Component {
   }
 
   submit = () => {
-    const {
-      giftManagement, form, match, history,
-    } = this.props
+    const { giftManagement, form, match, history } = this.props
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请输入完整信息')
