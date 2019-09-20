@@ -88,10 +88,10 @@ class AddCredit extends React.Component {
         <Button
           type="primary"
           style={{
-            position: 'fixed',
-            bottom: 20,
             width: '90%',
-            left: '5%',
+            marginLeft: '5%',
+            marginTop: 20,
+            marginBottom: 20,
           }}
           onClick={this.createOrder}
         >
