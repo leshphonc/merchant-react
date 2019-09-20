@@ -32,11 +32,11 @@ class Multiple extends React.Component {
   }
 
   render() {
-    const { match, ratio } = this.props
+    const { match } = this.props
     return (
       <>
         <NavBar title={match.params.title} goBack />
-        <CropperImg aspectratio={ratio} callback={this.saveImg} />
+        <CropperImg aspectratio={match.params.ratio} callback={this.saveImg} />
       </>
     )
   }
