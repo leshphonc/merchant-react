@@ -8,11 +8,9 @@ import {
   ListItem, ItemTop, TopContent, List,
 } from '@/styled'
 import SelfMentionPanel from './selfMentionPanel'
-// import ModifyCoordinate from './modify/coordinate'
 import CoordinatePicker from './modify/coordinate'
 import SecretKey from './secretKey'
 import Utils from '@/utils'
-// import { ShopManager } from '@/config/list'
 import { Btn, Btns } from './styled'
 
 @inject('selfManagement')
