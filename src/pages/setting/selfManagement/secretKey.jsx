@@ -1,9 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  List, InputItem, WingBlank, Button,
-} from 'antd-mobile'
+import { List, InputItem, WingBlank, Button } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 
@@ -19,31 +17,17 @@ class secretKey extends React.Component {
         pwd: pickAddressDetail.pwd,
       })
     })
-    // selfManagement.fetchSeePickPwd(match.params.id)
   }
 
-  // submit = () => {
-  //   const {
-  //     shopManager, form, match, history,
-  //   } = this.props
-  //   form.validateFields((error, value) => {
-  //     if (error) {
-  //       Toast.info('请输入完整信息')
-  //       return
-  //     }
-  //     const obj = {
-  //       ...value,
-  //     }
-  //     // console.log(value)
-  //     // console.log(obj)
-  //     if (match.params.id) {
-  //       // console.log(match.params.id)
-  //       shopManager.addClassify({ ...obj, id: match.params.id }).then(res => {
-  //         if (res) Toast.success('编辑成功', 1, () => history.goBack())
-  //       })
-  //     }
-  //   })
-  // }
+  submit = id => {
+    const { selfManagement, form } = this.props
+    selfManagement.fetchChangePicPwd(id).then(() => {
+      const { changePicPwd } = selfManagement
+      form.setFieldsValue({
+        pwd: changePicPwd.pwd,
+      })
+    })
+  }
 
   render() {
     const { match, form } = this.props
@@ -63,7 +47,7 @@ class secretKey extends React.Component {
             <Button
               type="primary"
               style={{ color: '#333', fontWeight: 'bold' }}
-              onClick={this.submit}
+              onClick={() => this.submit(match.params.id)}
             >
               更换登陆密钥
             </Button>

@@ -59,6 +59,7 @@ export const fetchSeePickPwd = id => axios.get('/appapi.php?c=Merchantapp&a=get_
   },
 })
 
+// 删除
 export const fetchPickAddressDel = id => axios.get('/appapi.php?c=Merchantapp&a=pick_address_del', {
   params: {
     id,
@@ -66,11 +67,18 @@ export const fetchPickAddressDel = id => axios.get('/appapi.php?c=Merchantapp&a=
   },
 })
 
+// 自提点列表详情
 export const fetchPickAddressDetail = id => axios.get('/appapi.php?c=Merchantapp&a=pick_address_detail', {
   params: {
     id,
     ticket: localStorage.getItem('ticket'),
   },
+})
+
+// 自提点密钥
+export const fetchChangePicPwd = id => axios.post('/appapi.php?c=Merchantapp&a=change_pic_pwd', {
+  pick_id: id,
+  ticket: localStorage.getItem('ticket'),
 })
 
 // 添加

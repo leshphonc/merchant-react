@@ -25,6 +25,10 @@ class BasicInformationSotre {
 
   @observable pickAddressDetail = {}
 
+  @observable changePicPwd = {}
+
+
+  // 自提点列表
   @action
   fetchPickLists = async id => {
     let hasMore = true
@@ -58,6 +62,7 @@ class BasicInformationSotre {
     }
   }
 
+  // 重置列表
   @action
   resetAndfetchPickLists = async () => {
     runInAction(() => {
@@ -82,11 +87,24 @@ class BasicInformationSotre {
     await services.fetchSeePickPwd(id)
   }
 
+  // 删除
   @action
   fetchPickAddressDel = async id => {
     await services.fetchPickAddressDel(id)
   }
 
+  // 更换密钥
+  @action
+  fetchChangePicPwd = async id => {
+    const response = await services.fetchChangePicPwd(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.changePicPwd = response.data.result
+      })
+    }
+  }
+
+  // 自提点列表详情
   @action
   fetchPickAddressDetail = async id => {
     const response = await services.fetchPickAddressDetail(id)
@@ -285,6 +303,7 @@ class BasicInformationSotre {
     }
   }
 
+  // 添加
   @action
   addECommerce = async payload => {
     const response = await services.addECommerce(payload)
