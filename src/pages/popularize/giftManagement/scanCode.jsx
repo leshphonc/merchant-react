@@ -1,9 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  Button, Toast, Flex, Card,
-} from 'antd-mobile'
+import { Button, Toast, Flex, Card } from 'antd-mobile'
 import { createForm } from 'rc-form'
 import { toJS } from 'mobx'
 // import Utils from '@/utils'
@@ -74,14 +72,15 @@ class ScanCode extends React.Component {
                 已验证
             </Button>
           ) : (
-            <Button
-              type="primary"
-              size="small"
-              style={{ width: '60%', margin: '0px 34px 0px' }}
-              onClick={() => this.verificBtn(this.state.detail.order_id)}
-            >
-                验证
-            </Button>
+          // <Button
+          //             type="primary"
+          //             size="small"
+          //             style={{ width: '60%', margin: '0px 34px 0px' }}
+          //             onClick={() => this.verificBtn(this.state.detail.order_id)}
+          //           >
+          //               验证
+          //           </Button>
+            ''
           )}
         </div>
       </Flex.Item>
@@ -112,7 +111,40 @@ class ScanCode extends React.Component {
     const { giftPass, giftPassArr, detail } = this.state
     return (
       <React.Fragment>
-        <NavBar title="审核详情" goBack />
+        {giftPassArr.length > 1 ? (
+          <NavBar
+            title="审核详情"
+            goBack
+            right={
+              <Button
+                type="primary"
+                // size="small"
+                // style={{ width: '60%', margin: '0px 34px 0px' }}
+                onClick={() => this.verificBtn(detail.order_id)}
+              >
+                验证
+              </Button>
+            }
+          />
+        ) : (
+          <NavBar
+            title="审核详情"
+            goBack
+            right={
+              <Button
+                type="primary"
+                // size="small"
+                // style={{ width: '60%', margin: '0px 34px 0' }}
+                onClick={() => {
+                  this.ver(detail.order_id)
+                }}
+              >
+                验证
+              </Button>
+            }
+          />
+        )}
+
         <Card style={{ marginTop: '10px' }}>
           <Card.Header style={{ fontSize: 15, color: '#999' }} title="核销信息"></Card.Header>
           <Card.Body style={{ color: '#666', fontSize: 15 }}>
@@ -122,18 +154,19 @@ class ScanCode extends React.Component {
                   <div style={{ marginTop: '6px' }}>核销码:{giftPass}</div>
                 </Flex.Item>
                 {detail.status === '0' ? (
-                  <Flex.Item style={{ flex: 'none' }}>
-                    <Button
-                      type="primary"
-                      size="small"
-                      style={{ width: '60%', margin: '0px 34px 0' }}
-                      onClick={() => {
-                        this.ver(detail.order_id)
-                      }}
-                    >
-                      验证
-                    </Button>
-                  </Flex.Item>
+                  // <Flex.Item style={{ flex: 'none' }}>
+                  //   <Button
+                  //     type="primary"
+                  //     size="small"
+                  //     style={{ width: '60%', margin: '0px 34px 0' }}
+                  //     onClick={() => {
+                  //       this.ver(detail.order_id)
+                  //     }}
+                  //   >
+                  //     验证
+                  //   </Button>
+                  // </Flex.Item>
+                  ''
                 ) : (
                   <Flex.Item style={{ flex: 'none' }}>
                     <div>
