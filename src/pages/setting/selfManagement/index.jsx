@@ -4,15 +4,13 @@ import ReactDOM from 'react-dom'
 import { Link, Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import { WingBlank, WhiteSpace, Button, PullToRefresh } from 'antd-mobile'
-import {
-  ListItem, ItemTop, TopContent, List,
-} from '@/styled'
+import { ListItem, ItemTop, TopContent, List } from '@/styled'
 import SelfMentionPanel from './selfMentionPanel'
 import CoordinatePicker from './modify/coordinate'
 import SecretKey from './secretKey'
 import Utils from '@/utils'
-import { Btn, Btns } from './styled'
-
+import { Btn } from './styled'
+// Btns
 @inject('selfManagement')
 @observer
 class SelfManagement extends React.Component {
@@ -72,7 +70,7 @@ class SelfManagement extends React.Component {
                 自提点电话：{item.phone}
               </div>
               <WhiteSpace />
-              <Btns>
+              {/* <Btns>
                 登陆密钥:
                 <Button
                   type="button"
@@ -81,7 +79,7 @@ class SelfManagement extends React.Component {
                 >
                   查看
                 </Button>
-              </Btns>
+              </Btns> */}
             </TopContent>
           </ItemTop>
           <div style={{ width: '20%', display: 'inline-block', float: 'right' }}>
