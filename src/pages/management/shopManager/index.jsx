@@ -91,7 +91,7 @@ class ShopManager extends React.Component {
             <Link
               to="/"
               style={{ color: '#fff' }}
-              onClick={() => (window.location.href = 'http://cs.7youke.com/packapp/storestaff/index.html')
+              onClick={() => (window.location.href = 'http://www.czg365.cn/packapp/storestaff/login.html?back=index')
               }
             >
               登陆
