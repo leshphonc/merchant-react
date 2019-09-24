@@ -171,7 +171,7 @@ class ScanCode extends React.Component {
                   ''
                 ) : (
                   <Flex.Item style={{ flex: 'none' }}>
-                    <div style={{ marginTop: '-6px' }}>
+                    <div>
                       <Button
                         type="primary"
                         size="small"
