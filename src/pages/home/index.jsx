@@ -5,14 +5,7 @@ import ReactEcharts from 'echarts-for-react'
 import { Paper, FilterBox } from '@/styled'
 import { observer, inject } from 'mobx-react'
 import { ManagementGrid, PopularizeGrid } from '@/config/grid'
-import {
-  WingBlank,
-  WhiteSpace,
-  Carousel,
-  Flex,
-  Picker,
-  DatePicker,
-} from 'antd-mobile'
+import { WingBlank, WhiteSpace, Carousel, Flex, Picker, DatePicker } from 'antd-mobile'
 import moment from 'moment'
 import FlexBox from './styled'
 
@@ -41,22 +34,15 @@ class Home extends React.Component {
 
   componentDidMount() {
     const { home } = this.props
-    const {
-      filterValue1,
-      filterLabel2,
-      searchType,
-      filterStoreValue,
-    } = this.state
+    const { filterValue1, filterLabel2, searchType, filterStoreValue } = this.state
     const ticket = localStorage.getItem('ticket')
     if (!ticket) return
     home.fetchStoreList()
-    home
-      .fetchEchartData(filterValue1, filterLabel2, searchType, filterStoreValue)
-      .then(() => {
-        this.setState({
-          echartData: home.echartData,
-        })
+    home.fetchEchartData(filterValue1, filterLabel2, searchType, filterStoreValue).then(() => {
+      this.setState({
+        echartData: home.echartData,
       })
+    })
   }
 
   getOption = () => {
@@ -76,10 +62,7 @@ class Home extends React.Component {
     let format = null
     if (custom) {
       format = params => {
-        const str = params[0].axisValue.substr(
-          0,
-          params[0].axisValue.length - 1,
-        )
+        const str = params[0].axisValue.substr(0, params[0].axisValue.length - 1)
         const result = `${str - 2}点 - ${str}点<br />
         <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#ffb000;"></span>${
           params[0].seriesName
@@ -136,6 +119,7 @@ class Home extends React.Component {
       filterValue1: result.value,
       filterLabel1: result.label,
       filterLabel2: '二级筛选',
+      echartData: [],
     })
   }
 
@@ -143,12 +127,7 @@ class Home extends React.Component {
     const { home } = this.props
     const { filterValue1, searchType, filterStoreValue } = this.state
     home
-      .fetchEchartData(
-        filterValue1,
-        moment(val).format('YYYY'),
-        searchType,
-        filterStoreValue,
-      )
+      .fetchEchartData(filterValue1, moment(val).format('YYYY'), searchType, filterStoreValue)
       .then(() => {
         this.setState({
           echartData: home.echartData,
@@ -161,12 +140,7 @@ class Home extends React.Component {
     const { home } = this.props
     const { filterValue1, searchType, filterStoreValue } = this.state
     home
-      .fetchEchartData(
-        filterValue1,
-        moment(val).format('YYYY-MM'),
-        searchType,
-        filterStoreValue,
-      )
+      .fetchEchartData(filterValue1, moment(val).format('YYYY-MM'), searchType, filterStoreValue)
       .then(() => {
         this.setState({
           echartData: home.echartData,
@@ -179,12 +153,7 @@ class Home extends React.Component {
     const { home } = this.props
     const { filterValue1, searchType, filterStoreValue } = this.state
     home
-      .fetchEchartData(
-        filterValue1,
-        moment(val).format('YYYY-MM-DD'),
-        searchType,
-        filterStoreValue,
-      )
+      .fetchEchartData(filterValue1, moment(val).format('YYYY-MM-DD'), searchType, filterStoreValue)
       .then(() => {
         this.setState({
           echartData: home.echartData,
@@ -197,27 +166,23 @@ class Home extends React.Component {
     const { home } = this.props
     const { filterValue1, filterLabel2, searchType } = this.state
     const result = home.storeList.find(item => item.value === val[0])
-    home
-      .fetchEchartData(filterValue1, filterLabel2, searchType, val[0])
-      .then(() => {
-        this.setState({
-          echartData: home.echartData,
-          filterStoreLabel: result.label,
-          filterStoreValue: val[0],
-        })
+    home.fetchEchartData(filterValue1, filterLabel2, searchType, val[0]).then(() => {
+      this.setState({
+        echartData: home.echartData,
+        filterStoreLabel: result.label,
+        filterStoreValue: val[0],
       })
+    })
   }
 
   changeEchartType = (num, type) => {
     const { home } = this.props
     const { filterValue1, filterLabel2, filterStoreValue } = this.state
-    home
-      .fetchEchartData(filterValue1, filterLabel2, type, filterStoreValue)
-      .then(() => {
-        this.setState({
-          echartData: home.echartData,
-        })
+    home.fetchEchartData(filterValue1, filterLabel2, type, filterStoreValue).then(() => {
+      this.setState({
+        echartData: home.echartData,
       })
+    })
     let label = ''
     switch (num) {
       case '1':
@@ -338,10 +303,7 @@ class Home extends React.Component {
               >
                 <div>
                   <span>{filterStoreLabel}</span>
-                  <i
-                    className="iconfont"
-                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                  >
+                  <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
                     &#xe6f0;
                   </i>
                 </div>
@@ -356,10 +318,7 @@ class Home extends React.Component {
               >
                 <div>
                   <span>{filterLabel1}</span>
-                  <i
-                    className="iconfont"
-                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                  >
+                  <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
                     &#xe6f0;
                   </i>
                 </div>
@@ -371,10 +330,7 @@ class Home extends React.Component {
                 <DatePicker mode="year" onChange={this.changeYear}>
                   <div>
                     <span>{filterLabel2}</span>
-                    <i
-                      className="iconfont"
-                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                    >
+                    <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
                       &#xe6f0;
                     </i>
                   </div>
@@ -386,10 +342,7 @@ class Home extends React.Component {
                 <DatePicker mode="month" onChange={this.changeMonth}>
                   <div>
                     <span>{filterLabel2}</span>
-                    <i
-                      className="iconfont"
-                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                    >
+                    <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
                       &#xe6f0;
                     </i>
                   </div>
@@ -401,10 +354,7 @@ class Home extends React.Component {
                 <DatePicker mode="date" onChange={this.changeDay}>
                   <div>
                     <span>{filterLabel2}</span>
-                    <i
-                      className="iconfont"
-                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                    >
+                    <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
                       &#xe6f0;
                     </i>
                   </div>
