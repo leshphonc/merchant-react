@@ -72,15 +72,14 @@ class ScanCode extends React.Component {
                 已验证
             </Button>
           ) : (
-          // <Button
-          //             type="primary"
-          //             size="small"
-          //             style={{ width: '60%', margin: '0px 34px 0px' }}
-          //             onClick={() => this.verificBtn(this.state.detail.order_id)}
-          //           >
-          //               验证
-          //           </Button>
-            ''
+            <Button
+              type="primary"
+              size="small"
+              style={{ width: '60%', margin: '0px 34px 0px' }}
+              onClick={() => this.verificBtn(this.state.detail.order_id)}
+            >
+                验证
+            </Button>
           )}
         </div>
       </Flex.Item>
@@ -115,16 +114,16 @@ class ScanCode extends React.Component {
           <NavBar
             title="审核详情"
             goBack
-            right={
-              <Button
-                type="primary"
-                // size="small"
-                // style={{ width: '60%', margin: '0px 34px 0px' }}
-                onClick={() => this.verificBtn(this.state.detail.order_id)}
-              >
-                验证
-              </Button>
-            }
+            // right={
+            //   <Button
+            //     type="primary"
+            //     // size="small"
+            //     // style={{ width: '60%', margin: '0px 34px 0px' }}
+            //     onClick={() => this.verificBtn(this.state.detail.order_id)}
+            //   >
+            //     验证
+            //   </Button>
+            // }
           />
         ) : (
           ''
