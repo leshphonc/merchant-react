@@ -1,9 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  WhiteSpace, List, Picker, InputItem, TextareaItem, Button, Toast,
-} from 'antd-mobile'
+import { WhiteSpace, List, Picker, InputItem, TextareaItem, Button, Toast } from 'antd-mobile'
 import UploadInvoice from './components/UploadInvoice'
 import { CustomizeList, ListTitle, ListContent } from '@/styled'
 
@@ -51,6 +49,7 @@ class WithDraw extends React.Component {
         accountOption: option,
       })
     })
+    wallet.fetchMinPrice()
   }
 
   changeReceipt = value => {
@@ -117,6 +116,7 @@ class WithDraw extends React.Component {
   }
 
   render() {
+    const { wallet } = this.props
     const {
       name,
       amount,
@@ -162,7 +162,7 @@ class WithDraw extends React.Component {
               <InputItem
                 value={amount}
                 labelNumber={7}
-                placeholder="最低提现3元"
+                placeholder={`最低提现${wallet.minPrice}元`}
                 onChange={value => this.setState({
                   amount: value,
                 })

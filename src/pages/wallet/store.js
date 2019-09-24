@@ -36,14 +36,14 @@ class WalletStore {
 
   @observable withDrawInfo = {}
 
+  @observable minPrice = 0
+
   @action
   getWxCode = async () => {
     const response = await services.getWxConfig()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       const url = encodeURIComponent(window.location.href)
-      window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${
-        response.data.result.appId
-      }&redirect_uri=${url}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`
+      window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${response.data.result.appId}&redirect_uri=${url}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`
     }
   }
 
@@ -244,6 +244,16 @@ class WalletStore {
     const response = await services.withDraw(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
+    }
+  }
+
+  @action
+  fetchMinPrice = async () => {
+    const response = await services.fetchMinPrice()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.minPrice = response.data.result[0].value
+      })
     }
   }
 }

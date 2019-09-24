@@ -79,3 +79,9 @@ export const withDraw = payload => axios.post('/appapi.php?c=Merchantapp&a=money
   invoice: payload.invoice,
   ticket: localStorage.getItem('ticket'),
 })
+
+export const fetchMinPrice = () => axios.get('/appapi.php?c=Merchantapp&a=get_config', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
