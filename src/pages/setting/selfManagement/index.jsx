@@ -172,7 +172,7 @@ class SelfManagement extends React.Component {
             >
               添加自提点
             </Link>
-            <Link
+            {/* <Link
               style={{
                 color: '#fff',
                 background: '#ffb000',
@@ -185,7 +185,7 @@ class SelfManagement extends React.Component {
               to="1"
             >
               自提点登陆
-            </Link>
+            </Link> */}
           </div>
         </List>
       </React.Fragment>
