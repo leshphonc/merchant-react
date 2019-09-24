@@ -6,7 +6,6 @@ import {
 } from 'antd-mobile'
 // import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
-
 const styleSpan = {
   spaner: {
     display: 'inline-block',
@@ -116,13 +115,20 @@ class GroupOrderDetail extends React.Component {
 
   verificBtn = orderId => {
     const { order, login } = this.props
+    const { groupOrderDetail } = order
     window.wx.scanQRCode({
       needResult: 1,
       scanType: ['qrCode', 'barCode'],
       success(res) {
-        order.verificGroup(orderId, res.resultStr).then(res2 => {
-          if (res2) Toast.success('验证成功', 1, () => window.location.reload())
-        })
+        if (groupOrderDetail.now_order.num > 1) {
+          order.verificGroup(orderId, res.resultStr).then(res2 => {
+            if (res2) Toast.success('验证成功', 1, () => window.location.reload())
+          })
+        } else {
+          order.verificOneGroup(orderId, res.resultStr).then(res2 => {
+            if (res2) Toast.success('验证成功', 1, () => window.location.reload())
+          })
+        }
       },
       fail() {
         login.wxConfigFun().then(res => {

@@ -246,10 +246,18 @@ class OrderStore {
     }
   }
 
-  // 团购单个核销
+  // 团购多组单个核销
   @action
   verificGroup = async (orderId, groupPass) => {
     const response = await services.verificGroup(orderId, groupPass)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 团购单个核销
+  verificOneGroup = async (orderId, groupPass) => { 
+    const response = await services.verificOneGroup(orderId, groupPass)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }
