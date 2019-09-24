@@ -90,11 +90,12 @@ export const verificGroupAll = (orderId, storeId) => axios.post('/appapi.php?c=M
 })
 
 // 团购单个核销
-export const verificOneGroup = (oriderId, proupPass) => axios('/appapi.php?c=Merchantapp&a=group_verify', {
+export const verificOneGroup = (oriderId, proupPass) => axios.post('/appapi.php?c=Merchantapp&a=group_verify', {
   order_id: oriderId,
   group_pass: proupPass,
   ticket: localStorage.getItem('ticket'),
 })
+
 // 团购多组单个核销
 export const verificGroup = (orderId, groupPass) => axios.post('/appapi.php?c=Merchantapp&a=group_array_verify', {
   order_id: orderId,
