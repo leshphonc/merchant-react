@@ -6,6 +6,7 @@ import {
 } from 'antd-mobile'
 // import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
+
 const styleSpan = {
   spaner: {
     display: 'inline-block',
