@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import { Link, Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import { WingBlank, WhiteSpace, Button, PullToRefresh } from 'antd-mobile'
-import { ListItem, ItemTop, TopContent, List } from '@/styled'
+import { ListItem, ItemTop, TopContent } from '@/styled'
 import SelfMentionPanel from './selfMentionPanel'
 import CoordinatePicker from './modify/coordinate'
 import SecretKey from './secretKey'
@@ -30,7 +30,7 @@ class SelfManagement extends React.Component {
     Utils.clearCacheData()
     if (this.refresh.current) {
       /* eslint react/no-find-dom-node: 0 */
-      const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
+      const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 10
       this.setState({
         height: hei,
       })
@@ -69,7 +69,7 @@ class SelfManagement extends React.Component {
               <div className="top-title" style={{ fontSize: '15px' }}>
                 自提点电话：{item.phone}
               </div>
-              <WhiteSpace />
+              {/* <WhiteSpace /> */}
               {/* <Btns>
                 登陆密钥:
                 <Button
@@ -121,7 +121,15 @@ class SelfManagement extends React.Component {
     const { height, refreshing } = this.state
     return (
       <React.Fragment>
-        <NavBar title="自提点管理" goBack />
+        <NavBar
+          title="自提点管理"
+          goBack
+          right={
+            <Link style={{ color: '#fff' }} to="/setting/selfManagement/selfMentionPanel/添加">
+              添加
+            </Link>
+          }
+        />
         <WhiteSpace />
         <PullToRefresh
           ref={this.refresh}
@@ -138,13 +146,8 @@ class SelfManagement extends React.Component {
           <WingBlank size="sm">{this.mapList()}</WingBlank>
         </PullToRefresh>
         {/* <WingBlank size="sm">{this.mapList()}</WingBlank> */}
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <WhiteSpace />
-        <List style={{ position: 'fixed', bottom: '0', width: '100%' }}>
-          <div
+        {/* <List style={{ position: 'fixed', bottom: '0', width: '100%' }}> */}
+        {/* <div
             style={{
               fontWeight: 'bold',
               width: '100%',
@@ -155,8 +158,8 @@ class SelfManagement extends React.Component {
               height: '46px',
               alignItems: 'center',
             }}
-          >
-            <Link
+          > */}
+        {/* <Link
               style={{
                 color: '#fff',
                 background: '#ffb000',
@@ -169,8 +172,8 @@ class SelfManagement extends React.Component {
               to="/setting/selfManagement/selfMentionPanel/添加"
             >
               添加自提点
-            </Link>
-            {/* <Link
+            </Link> */}
+        {/* <Link
               style={{
                 color: '#fff',
                 background: '#ffb000',
@@ -184,8 +187,8 @@ class SelfManagement extends React.Component {
             >
               自提点登陆
             </Link> */}
-          </div>
-        </List>
+        {/* </div> */}
+        {/* </List> */}
       </React.Fragment>
     )
   }
