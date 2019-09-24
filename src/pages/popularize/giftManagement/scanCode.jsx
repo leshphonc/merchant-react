@@ -66,7 +66,7 @@ class ScanCode extends React.Component {
         <div>核销码:{item.gift_pass}</div>
       </Flex.Item>
       <Flex.Item style={{ flex: 'none', marginTop: '15px' }}>
-        <div>
+        <div style={{ marginTop: '-6px' }}>
           {item.status === '1' ? (
             <Button type="primary" size="small" style={{ width: '60%', margin: '0px 34px 0px' }}>
                 已验证
@@ -172,7 +172,7 @@ class ScanCode extends React.Component {
                   ''
                 ) : (
                   <Flex.Item style={{ flex: 'none' }}>
-                    <div>
+                    <div style={{ marginTop: '-6px' }}>
                       <Button
                         type="primary"
                         size="small"
