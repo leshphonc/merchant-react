@@ -96,11 +96,16 @@ class ReservePanel extends React.Component {
           })
         }
         setTimeout(() => {
-          this.editor.current.state.editor.txt.html(appointDetail.appoint_list.appoint_pic_content)
+          this.editor.current.state.editor.txt.html(
+            appointDetail.appoint_list.appoint_pic_content,
+          )
         }, 500)
         this.setState({
           files: appointDetail.appoint_list.pic_arr,
-          category: [appointDetail.appoint_list.cat_fid, appointDetail.appoint_list.cat_id],
+          category: [
+            appointDetail.appoint_list.cat_fid,
+            appointDetail.appoint_list.cat_id,
+          ],
           store: appointDetail.store_arr,
           workerSele,
         })
@@ -113,7 +118,9 @@ class ReservePanel extends React.Component {
           shopList.forEach(item => {
             if (item.worker_list) {
               item.worker_list.forEach(t => {
-                if (this.state.workerSele.indexOf(t.merchant_worker_id) !== -1) {
+                if (
+                  this.state.workerSele.indexOf(t.merchant_worker_id) !== -1
+                ) {
                   start_workder.push(`${item.value},${t.merchant_worker_id}`)
                 }
               })
@@ -128,7 +135,8 @@ class ReservePanel extends React.Component {
           appoint_content: appointDetail.appoint_list.appoint_content,
           old_price: appointDetail.appoint_list.old_price,
           payment_status: appointDetail.appoint_list.payment_status === '1',
-          appoint_date_type: appointDetail.appoint_list.appoint_date_type === '1',
+          appoint_date_type:
+            appointDetail.appoint_list.appoint_date_type === '1',
           appoint_date_num: appointDetail.appoint_list.appoint_date_num,
           expend_time: appointDetail.appoint_list.expend_time,
           sort: appointDetail.appoint_list.sort,
@@ -139,15 +147,19 @@ class ReservePanel extends React.Component {
             ? new Date(appointDetail.appoint_list.end_time * 1000)
             : '',
           is_store: appointDetail.appoint_list.is_store === '1',
-          office_start_time: Utils.conversionTimeStringToDate(appointDetail.office_time.open),
-          office_stop_time: Utils.conversionTimeStringToDate(appointDetail.office_time.close),
+          office_start_time: Utils.conversionTimeStringToDate(
+            appointDetail.office_time.open,
+          ),
+          office_stop_time: Utils.conversionTimeStringToDate(
+            appointDetail.office_time.close,
+          ),
           appoint_status: appointDetail.appoint_list.appoint_status === '0',
           appoint_type: appointDetail.appoint_list.appoint_type,
           is_appoint_price: appointDetail.appoint_list.is_appoint_price || 0,
           pic: appointDetail.appoint_list.pic_arr,
           time_gap: appointDetail.appoint_list.time_gap,
         })
-        if ( sessionStorage.getItem('cacheData') ) { 
+        if (sessionStorage.getItem('cacheData')) {
           const arr_pic = JSON.parse(sessionStorage.getItem('cacheData')).pic
           form.setFieldsValue({
             pic: arr_pic,
@@ -196,7 +208,7 @@ class ReservePanel extends React.Component {
       form.setFieldsValue({
         sort: 0,
       })
-      if ( sessionStorage.getItem('cacheData') ) { 
+      if (sessionStorage.getItem('cacheData')) {
         const arr_pic = JSON.parse(sessionStorage.getItem('cacheData')).pic
         form.setFieldsValue({
           pic: arr_pic,
@@ -243,9 +255,7 @@ class ReservePanel extends React.Component {
   }
 
   submit = () => {
-    const {
-      form, match, commodity, history,
-    } = this.props
+    const { form, match, commodity, history } = this.props
     const { category, isClick } = this.state
     // const content = this.editor.current.state.editor.txt.html()
     if (isClick) {
@@ -267,8 +277,12 @@ class ReservePanel extends React.Component {
           cat_fid: category[0],
           cat_id: category[1],
           appoint_pic_content: this.editor.current.state.editor.txt.html(),
-          start_time: value.start_time ? moment(value.start_time).format('YYYY-MM-DD') : '',
-          end_time: value.end_time ? moment(value.end_time).format('YYYY-MM-DD') : '',
+          start_time: value.start_time
+            ? moment(value.start_time).format('YYYY-MM-DD')
+            : '',
+          end_time: value.end_time
+            ? moment(value.end_time).format('YYYY-MM-DD')
+            : '',
           office_start_time: value.office_start_time
             ? moment(value.office_start_time).format('HH:mm')
             : '',
@@ -293,15 +307,17 @@ class ReservePanel extends React.Component {
         }
 
         if (match.params.id) {
-          commodity.modifyReserve({ ...obj, appoint_id: match.params.id }).then(res => {
-            if (res) {
-              Toast.success('修改成功', 1, () => {
-                commodity.resetAndFetchReserveList().then(() => {
-                  history.goBack()
+          commodity
+            .modifyReserve({ ...obj, appoint_id: match.params.id })
+            .then(res => {
+              if (res) {
+                Toast.success('修改成功', 1, () => {
+                  commodity.resetAndFetchReserveList().then(() => {
+                    history.goBack()
+                  })
                 })
-              })
-            }
-          })
+              }
+            })
         } else {
           commodity.insertReserve(obj).then(res => {
             if (res) {
@@ -501,7 +517,7 @@ class ReservePanel extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps('sort', {
-              rules: [{ required: true }],
+              initialValue: 0,
             })}
             placeholder="请填写数值，值越大，越靠前"
           >
@@ -524,7 +540,10 @@ class ReservePanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -547,7 +566,10 @@ class ReservePanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -574,9 +596,10 @@ class ReservePanel extends React.Component {
           </Picker>
           <Item
             arrow="horizontal"
-            onClick={() => this.setState({
-              menu: true,
-            })
+            onClick={() =>
+              this.setState({
+                menu: true,
+              })
             }
           >
             商户所属分类
@@ -592,11 +615,11 @@ class ReservePanel extends React.Component {
               selectable={pic_arr.length < 5}
               onAddImageClick={e => {
                 const formData = form.getFieldsValue()
-                  formData.des = this.editor.current.state.editor.txt.html()
-                  console.log(formData)
-                  Utils.cacheData(formData)
-                  history.push('/uploadMultipleImg/裁剪/pic/1')
-                  e.preventDefault()
+                formData.des = this.editor.current.state.editor.txt.html()
+                console.log(formData)
+                Utils.cacheData(formData)
+                history.push('/uploadMultipleImg/裁剪/pic/1')
+                e.preventDefault()
               }}
             />
           </Item>
@@ -638,8 +661,8 @@ class ReservePanel extends React.Component {
               </i>
             </Tooltip>
           </List.Item>
-          {storeChecked
-            && shopList.map(i => (
+          {storeChecked &&
+            shopList.map(i => (
               <div key={i.value}>
                 <CheckboxItem
                   key={i.value}
@@ -665,7 +688,10 @@ class ReservePanel extends React.Component {
                               ),
                               1,
                             )
-                            workerSele.splice(workerSele.indexOf(item.merchant_worker_id), 1)
+                            workerSele.splice(
+                              workerSele.indexOf(item.merchant_worker_id),
+                              1,
+                            )
                           }
                         })
                       }
@@ -680,20 +706,25 @@ class ReservePanel extends React.Component {
                 >
                   {i.label}
                 </CheckboxItem>
-                {this.state.store.indexOf(i.value) !== -1
-                  && i.worker_list
-                  && i.worker_list.map(j => (
+                {this.state.store.indexOf(i.value) !== -1 &&
+                  i.worker_list &&
+                  i.worker_list.map(j => (
                     <List.Item key={j.value}>
                       <CheckboxItem
                         checked={this.state.workerSele.indexOf(j.value) !== -1}
                         onChange={e => {
                           const workerList = toJS(this.state.workerList)
                           const workerSele = toJS(this.state.workerSele)
-                          if (workerList.indexOf(`${i.value},${j.value}`) === -1) {
+                          if (
+                            workerList.indexOf(`${i.value},${j.value}`) === -1
+                          ) {
                             workerList.push(`${i.value},${j.value}`)
                             workerSele.push(j.value)
                           } else {
-                            workerList.splice(workerList.indexOf(`${i.value},${j.value}`), 1)
+                            workerList.splice(
+                              workerList.indexOf(`${i.value},${j.value}`),
+                              1,
+                            )
                             workerSele.splice(workerSele.indexOf(j.value), 1)
                           }
                           this.setState({
@@ -725,7 +756,10 @@ class ReservePanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -751,15 +785,18 @@ class ReservePanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
             </List.Item>
           </DatePicker>
 
-          {custom_name
-            && custom_name.map((item, index) => (
+          {custom_name &&
+            custom_name.map((item, index) => (
               <List key={index} style={{ marginBottom: '2%' }}>
                 <InputItem
                   placeholder=""
@@ -775,7 +812,11 @@ class ReservePanel extends React.Component {
                 </InputItem>
                 <InputItem
                   placeholder=""
-                  value={custom_payment_price[index] ? custom_payment_price[index] : ''}
+                  value={
+                    custom_payment_price[index]
+                      ? custom_payment_price[index]
+                      : ''
+                  }
                   onChange={e => {
                     custom_payment_price[index] = e
                     this.setState({
@@ -877,7 +918,10 @@ class ReservePanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>

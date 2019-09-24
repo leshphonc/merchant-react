@@ -571,7 +571,7 @@ class StorePanel extends React.Component {
           </List.Item>
           <InputItem
             {...getFieldProps('sort', {
-              rules: [{ required: true }],
+              initialValue: 0,
             })}
             placeholder="请输入店铺排序"
           >

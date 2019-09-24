@@ -437,7 +437,7 @@ class ECommerceAdd extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps('sort', {
-              rules: [{ required: true }],
+              initialValue: 0,
             })}
             placeholder="请填写数值"
           >
