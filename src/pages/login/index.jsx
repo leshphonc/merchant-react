@@ -1,11 +1,7 @@
 import React from 'react'
-import {
-  Flex, InputItem, Button, Toast, WingBlank,
-} from 'antd-mobile'
+import { InputItem, Button, Toast } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
-import {
-  Container, Box, Avatar, InputBox,
-} from './styled'
+import { Container, Box, Avatar, InputBox } from './styled'
 
 @inject('login')
 @observer
@@ -56,12 +52,16 @@ class Login extends React.Component {
               onChange={val => this.setState({ password: val })}
             />
           </InputBox>
-          <WingBlank>
+          {/* <WingBlank>
             <Flex justify="end" style={{ marginBottom: '15vh' }}>
               <span style={{ color: '#ffb000', fontSize: 13 }}>找回密码？</span>
             </Flex>
-          </WingBlank>
-          <Button onClick={this.submit} type="primary">
+          </WingBlank> */}
+          <Button
+            onClick={this.submit}
+            type="primary"
+            style={{ marginTop: '15vh' }}
+          >
             登录
           </Button>
         </Box>
