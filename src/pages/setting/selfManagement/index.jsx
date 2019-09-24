@@ -8,11 +8,9 @@ import {
   ListItem, ItemTop, TopContent, List,
 } from '@/styled'
 import SelfMentionPanel from './selfMentionPanel'
-// import ModifyCoordinate from './modify/coordinate'
 import CoordinatePicker from './modify/coordinate'
 import SecretKey from './secretKey'
 import Utils from '@/utils'
-// import { ShopManager } from '@/config/list'
 import { Btn, Btns } from './styled'
 
 @inject('selfManagement')
@@ -174,7 +172,7 @@ class SelfManagement extends React.Component {
             >
               添加自提点
             </Link>
-            <Link
+            {/* <Link
               style={{
                 color: '#fff',
                 background: '#ffb000',
@@ -187,7 +185,7 @@ class SelfManagement extends React.Component {
               to="1"
             >
               自提点登陆
-            </Link>
+            </Link> */}
           </div>
         </List>
       </React.Fragment>
