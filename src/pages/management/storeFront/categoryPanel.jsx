@@ -26,8 +26,8 @@ const pickerOptions = [
   },
 ]
 
-@observer
 @inject('storeFront')
+@observer
 class CateGoryPanel extends React.Component {
   state = {
     sortName: '',

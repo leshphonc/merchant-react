@@ -115,12 +115,18 @@ class Home extends React.Component {
 
   changeFilter1 = val => {
     const result = FilterData1.find(item => item.value === val[0])
-    this.setState({
-      filterValue1: result.value,
-      filterLabel1: result.label,
-      filterLabel2: '二级筛选',
-      echartData: [],
-    })
+    this.setState(
+      {
+        filterValue1: result.value,
+        filterLabel1: result.label,
+        filterLabel2: '二级筛选',
+        echartData: [],
+      },
+      () => {
+        const { cur, searchType } = this.state
+        this.changeEchartType(cur, searchType)
+      },
+    )
   }
 
   changeYear = val => {
