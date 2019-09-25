@@ -1,16 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  WhiteSpace,
-  List,
-  InputItem,
-  Picker,
-  Checkbox,
-  Flex,
-  Button,
-  Toast,
-} from 'antd-mobile'
+import { WhiteSpace, List, InputItem, Picker, Checkbox, Flex, Button, Toast } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import { CustomizeList, ListTitle, ListContent } from '@/styled'
 
@@ -41,11 +32,7 @@ class CateGoryPanel extends React.Component {
     const { storeFront, match } = this.props
     if (!match.params.stid) return
     storeFront
-      .fetchCategoryDetail(
-        match.params.id,
-        match.params.type,
-        match.params.stid,
-      )
+      .fetchCategoryDetail(match.params.id, match.params.type, match.params.stid)
       .then(() => {
         const { categoryDetail } = storeFront
         this.setState({
@@ -125,10 +112,9 @@ class CateGoryPanel extends React.Component {
           <InputItem
             placeholder="请输入分类名称"
             value={sortName}
-            onChange={val =>
-              this.setState({
-                sortName: val,
-              })
+            onChange={val => this.setState({
+              sortName: val,
+            })
             }
           >
             分类名称
@@ -136,10 +122,9 @@ class CateGoryPanel extends React.Component {
           <InputItem
             placeholder="请输入店铺排序"
             value={sort}
-            onChange={val =>
-              this.setState({
-                sort: val,
-              })
+            onChange={val => this.setState({
+              sort: val,
+            })
             }
           >
             店铺排序
@@ -157,10 +142,9 @@ class CateGoryPanel extends React.Component {
             data={pickerOptions}
             cols={1}
             value={[weekShow]}
-            onChange={val =>
-              this.setState({
-                weekShow: val[0],
-              })
+            onChange={val => this.setState({
+              weekShow: val[0],
+            })
             }
           >
             <Item arrow="horizontal">是否开启星期几显示</Item>
@@ -234,10 +218,9 @@ class CateGoryPanel extends React.Component {
           <InputItem
             placeholder="请输入产品折扣率"
             value={sortDiscount}
-            onChange={val =>
-              this.setState({
-                sortDiscount: val,
-              })
+            onChange={val => this.setState({
+              sortDiscount: val,
+            })
             }
           >
             折扣率
