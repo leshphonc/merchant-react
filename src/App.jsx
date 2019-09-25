@@ -16,6 +16,7 @@ import CardGroup from '@/pages/management/member/cardGroup'
 import Coupon from '@/pages/management/member/coupon'
 import Commodity from '@/pages/management/commodity'
 import ShopManager from '@/pages/management/shopManager'
+import SmartScreen from '@/pages/popularize/smartScreen'
 import BasicInformation from '@/pages/setting/basicInformation'
 import SelfManagement from '@/pages/setting/selfManagement'
 import UploadSingleImg from '@/common/UploadImg/Single'
@@ -48,10 +49,7 @@ export default () => (
         <Route path="/management/storefront" component={StoreFront} />
         <Route path="/management/member" exact component={Member} />
         <Route path="/management/member/miniProgram" component={MiniProgram} />
-        <Route
-          path="/management/member/publicMember"
-          component={PublicMember}
-        />
+        <Route path="/management/member/publicMember" component={PublicMember} />
         <Route path="/management/member/cardGroup" component={CardGroup} />
         <Route path="/management/member/coupon" component={Coupon} />
         <Route path="/management/commodity" component={Commodity} />
@@ -63,20 +61,12 @@ export default () => (
         <Route path="/popularize/shopAssistant" component={ShopAssistant} />
         <Route path="/popularize/redEnvelope" component={RedEnvelope} />
         <Route path="/popularize/giftManagement" component={GiftManagement} />
+        <Route path="/popularize/smartScreen" component={SmartScreen} />
         {/* 上传图片页面 */}
-        <Route
-          path="/uploadSingleImg/:title/:key/:ratio?"
-          component={UploadSingleImg}
-        />
-        <Route
-          path="/uploadMultipleImg/:title/:key/:ratio"
-          component={UploadMultipleImg}
-        />
+        <Route path="/uploadSingleImg/:title/:key/:ratio?" component={UploadSingleImg} />
+        <Route path="/uploadMultipleImg/:title/:key/:ratio" component={UploadMultipleImg} />
         {/* 坐标拾取页面 */}
-        <Route
-          path="/coordinatePicker/:lng?/:lat?"
-          component={CoordinatePicker}
-        />
+        <Route path="/coordinatePicker/:lng?/:lat?" component={CoordinatePicker} />
         {/* 规格属性 */}
         <Route path="/specification" component={Specification} />
         <Route component={NotFound} />

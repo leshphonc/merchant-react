@@ -62,7 +62,7 @@ const PopularizeGrid = {
     // },
     {
       name: '智能屏推广',
-      path: '6',
+      path: '/popularize/smartScreen',
       enable: require('../assets/image/znptg.png'),
       disable: require('../assets/image/znptg_gray.png'),
     },
