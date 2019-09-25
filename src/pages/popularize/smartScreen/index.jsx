@@ -1,6 +1,8 @@
 import React from 'react'
+import { Route } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
-import { Icon, Picker } from 'antd-mobile'
+import { List, Icon, Picker } from 'antd-mobile'
+import PromotionList from './promotionList'
 
 const seasons = [
   [
@@ -32,6 +34,7 @@ class SmartScreen extends React.Component {
   }
 
   render() {
+    const { history } = this.props
     const { open, value } = this.state
     return (
       <>
@@ -44,9 +47,22 @@ class SmartScreen extends React.Component {
             </Picker>
           }
         />
+        <List>
+          <List.Item
+            arrow="horizontal"
+            onClick={() => history.push('/popularize/smartScreen/promotionList')}
+          >
+            推广列表
+          </List.Item>
+        </List>
       </>
     )
   }
 }
 
-export default SmartScreen
+export default () => (
+  <React.Fragment>
+    <Route path="/popularize/smartScreen" exact component={SmartScreen} />
+    <Route path="/popularize/smartScreen/promotionList" component={PromotionList} />
+  </React.Fragment>
+)
