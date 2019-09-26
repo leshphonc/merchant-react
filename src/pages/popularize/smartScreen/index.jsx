@@ -7,35 +7,12 @@ import { FilterBox } from '@/styled'
 import { List, Icon, Picker, WhiteSpace, WingBlank, Badge } from 'antd-mobile'
 import PromotionList from './promotionList'
 
-const seasons = [
-  [
-    {
-      label: '2013',
-      value: '2013',
-    },
-    {
-      label: '2014',
-      value: '2014',
-    },
-  ],
-  [
-    {
-      label: '春',
-      value: '春',
-    },
-    {
-      label: '夏',
-      value: '夏',
-    },
-  ],
-]
-
 @inject('smartScreen')
 @observer
 class SmartScreen extends React.Component {
   state = {
     open: false,
-    value: ['2013', '夏'],
+    value: [],
     filterLabel1: '年',
     filterValue1: '',
     filterLabel2: '2019',
@@ -132,7 +109,7 @@ class SmartScreen extends React.Component {
           title="智能屏推广"
           goBack
           right={
-            <Picker data={seasons} title="选择季节" cascade={false} value={value}>
+            <Picker title="选择季节" cascade={false} cols={2} data={[]} value={value}>
               <Icon type="ellipsis" onClick={() => this.setState({ open: !open })} />
             </Picker>
           }
