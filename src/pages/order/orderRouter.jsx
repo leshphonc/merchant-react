@@ -6,6 +6,7 @@ import GroupOrderDetail from './groupOrderDeteail'
 import RetailDetail from './retailDetail'
 import Reservation from './reservation'
 import ReservationDetail from './reservationDetail'
+import Arrival from './arrival'
 
 export default () => (
   <React.Fragment>
@@ -15,5 +16,6 @@ export default () => (
     <Route path="/order/retail/detail/:id" component={RetailDetail} />
     <Route path="/order/reservation" exact component={Reservation} />
     <Route path="/order/reservation/detail/:id" component={ReservationDetail} />
+    <Route path="/order/arrival" component={Arrival} />
   </React.Fragment>
 )

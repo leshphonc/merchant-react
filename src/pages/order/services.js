@@ -223,3 +223,22 @@ export const fetchReservationOrderListCount = () => axios.get('/appapi.php?c=Mer
     ticket: localStorage.getItem('ticket'),
   },
 })
+
+// 获取到店订单列表
+export const fetchArrivalList = (page, storeId, staffId, goodsName, stime, etime, merId, flag) => axios.post('/appapi.php?c=Merchantapp&a=getMerchantPay', {
+  page,
+  store_id: storeId,
+  staff_id: staffId,
+  goods_name: goodsName,
+  start_time: stime,
+  end_time: etime,
+  mer_id: merId,
+  flag,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取到店的商铺list
+export const fetchStoreList = id => axios.post('/appapi.php?c=Merchantapp&a=getStoreStaff', {
+  mer_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
