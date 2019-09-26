@@ -152,6 +152,7 @@ class GroupOrderDetail extends React.Component {
             type="primary"
             size="small"
             style={{ width: '60%', margin: '10px auto 0' }}
+            // eslint-disable-next-line react/destructuring-assignment
             onClick={() => this.verificBtn(this.state.detail.order_id)}
           >
               验证
