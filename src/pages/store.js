@@ -11,6 +11,7 @@ import marketing from '@/pages/marketing/store'
 import basicInformation from '@/pages/setting/basicInformation/store'
 import selfManagement from '@/pages/setting/selfManagement/store'
 import shopAssistant from '@/pages/popularize/shopAssistant/store'
+import smartScreen from '@/pages/popularize/smartScreen/store'
 import member from '@/pages/management/member/store'
 import commodity from '@/pages/management/commodity/store'
 import shopManager from '@/pages/management/shopManager/store'
@@ -59,5 +60,6 @@ const stores = {
   commodity,
   shopManager,
   giftManagement,
+  smartScreen,
 }
 export default stores
