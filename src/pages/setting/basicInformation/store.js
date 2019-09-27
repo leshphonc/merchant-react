@@ -11,12 +11,15 @@ class BasicInformationSotre {
 
   @observable imgUrl
 
+  @observable noUser = {}
+
   @action
   fetchBasicInfo = async () => {
     const response = await services.fetchBasicInfo()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.basicInfo = response.data.result.now_merchant
+        this.noUser = response.data.result.user
       })
     }
   }

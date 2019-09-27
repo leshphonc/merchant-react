@@ -38,6 +38,12 @@ class WalletStore {
 
   @observable minPrice = 0
 
+  @observable bankAps = []
+
+  @observable bankApsPage = 1
+
+  @observable bankApsTotal = null
+
   @action
   getWxCode = async () => {
     const response = await services.getWxConfig()
@@ -254,6 +260,61 @@ class WalletStore {
       runInAction(() => {
         this.minPrice = response.data.result[0].value
       })
+    }
+  }
+
+  @action
+  fetchBankAps = async (bank, province, city, key) => {
+    if (this.bankApsPage * 10 > this.bankApsTotal) {
+      return false
+    }
+    runInAction(() => {
+      this.bankApsPage = this.bankApsPage - 0 + 1
+    })
+    const response = await services.fetchBankAps(this.bankApsPage, bank, province, city, key)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        const arr = this.bankAps
+        arr.push(...response.data.result.record)
+        this.bankAps = arr
+        this.bankApsPage = this.bankApsPage + 1
+        this.bankApsTotal = response.data.result.totalcount
+      })
+    }
+  }
+
+  @action
+  resetAndFetchBankAps = async (bank, province, city, key) => {
+    const response = await services.fetchBankAps(1, bank, province, city, key)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.bankAps = response.data.result.record
+        this.bankApsPage = response.data.result.page
+        this.bankApsTotal = response.data.result.totalcount
+      })
+    }
+  }
+
+  // 绑定银行卡获取手机验证码
+  @action
+  bindBankCard = async payload => {
+    await services.bindBankCard(payload)
+  }
+
+  // 输入验证码
+  @action
+  verCode = async code => {
+    const response = await services.verCode(code)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  unBindBank = async () => {
+    const response = await services.unBindBank()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
     }
   }
 }

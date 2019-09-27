@@ -8,6 +8,7 @@ import WalletDetail from './detail'
 import Bank from './bank'
 import AddBankCard from './addBankCard'
 import VerificationCard from './verificationCard'
+import SearchBankAps from './searchBankAps'
 
 const { Item } = List
 
@@ -95,5 +96,6 @@ export default () => (
     <Route path="/wallet/detail" component={WalletDetail} />
     <Route path="/wallet/addBankCard" component={AddBankCard} />
     <Route path="/wallet/verificationCard" component={VerificationCard} />
+    <Route path="/wallet/searchBankAps" component={SearchBankAps} />
   </React.Fragment>
 )

@@ -1,44 +1,80 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
+import { observer, inject } from 'mobx-react'
 import { WhiteSpace, List, InputItem, Button, Modal } from 'antd-mobile'
+import Utils from '@/utils'
 
+@observer
+@inject('wallet')
 class VerificationCard extends React.Component {
   state = {
     cur: 1,
     time: 60,
+    cardNo: '',
+    phone: '',
+    code: '',
+  }
+
+  componentDidMount() {
+    const cacheData = Utils.getCacheData()
+    if (cacheData) {
+      this.setState({
+        cardNo: cacheData.memberacctno,
+        phone: cacheData.mobile,
+      })
+    }
   }
 
   getCode = () => {
-    this.setState({ cur: 2 })
-    const timer = setInterval(() => {
-      const { time } = this.state
-      if (time === 0) {
-        clearInterval(timer)
-        return false
-      }
-      this.setState({
-        time: time - 1,
+    const { wallet } = this.props
+    const cacheData = Utils.getCacheData()
+    if (cacheData) {
+      wallet.bindBankCard({
+        membername: cacheData.membername,
+        memberglobaltype: cacheData.memberglobaltype[0],
+        memberglobalid: cacheData.memberglobalid,
+        memberacctno: cacheData.memberacctno.replace(/\s+/g, ''),
+        banktype: cacheData.banktype[0],
+        acctopenbranchname: cacheData.acctopenbranchname,
+        mobile: cacheData.mobile.replace(/\s+/g, ''),
+        cnapsbranchid: cacheData.cnapsbranchid,
       })
-    }, 1000)
+      this.setState({ cur: 2 })
+      const timer = setInterval(() => {
+        const { time } = this.state
+        if (time === 0) {
+          clearInterval(timer)
+          return false
+        }
+        this.setState({
+          time: time - 1,
+        })
+      }, 1000)
+    }
   }
 
   submit = () => {
-    const { history } = this.props
-    Modal.alert(
-      <div>
-        绑定成功
-        <div style={{ marginTop: 25 }}>您已成功绑定银行卡！</div>
-      </div>,
-      <div style={{ marginTop: 20 }}>
-        可以提现啦！
-        <span style={{ marginTop: 5, color: '#367eef', marginBottom: 10 }}>立即提现</span>
-      </div>,
-      [{ text: '完成', onPress: () => history.push('/wallet') }],
-    )
+    const { history, wallet } = this.props
+    const { code } = this.state
+    wallet.verCode(code).then(res => {
+      if (res) {
+        Modal.alert(
+          <div>
+            绑定成功
+            <div style={{ marginTop: 25 }}>您已成功绑定银行卡！</div>
+          </div>,
+          <div style={{ marginTop: 20 }}>
+            可以提现啦！
+            <span style={{ marginTop: 5, color: '#367eef', marginBottom: 10 }}>立即提现</span>
+          </div>,
+          [{ text: '完成', onPress: () => history.push('/wallet') }],
+        )
+      }
+    })
   }
 
   render() {
-    const { cur, time } = this.state
+    const { cur, time, cardNo, phone, code } = this.state
     return (
       <>
         <NavBar title="验证银行卡信息" goBack />
@@ -48,9 +84,9 @@ class VerificationCard extends React.Component {
             <List>
               <List.Item extra="平安银行" align="top">
                 银行卡
-                <List.Item.Brief>219923912939129399</List.Item.Brief>
+                <List.Item.Brief>{cardNo}</List.Item.Brief>
               </List.Item>
-              <InputItem placeholder="银行使用的预留手机号码">手机号</InputItem>
+              <List.Item extra={phone}>手机号</List.Item>
             </List>
             <Button
               type="primary"
@@ -62,7 +98,7 @@ class VerificationCard extends React.Component {
               }}
               onClick={this.getCode}
             >
-              获取短信验证码
+              同意并验证
             </Button>
           </>
         ) : (
@@ -70,9 +106,11 @@ class VerificationCard extends React.Component {
             <List renderHeader="已发送至手机号189****2910">
               <InputItem
                 placeholder="短信验证码"
+                value={code}
+                onChange={val => this.setState({ code: val })}
                 extra={
                   time === 0 ? (
-                    <Button size="small" type="primary">
+                    <Button size="small" type="primary" onClick={this.getCode}>
                       获取
                     </Button>
                   ) : (

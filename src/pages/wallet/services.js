@@ -85,3 +85,27 @@ export const fetchMinPrice = () => axios.get('/appapi.php?c=Merchantapp&a=get_co
     ticket: localStorage.getItem('ticket'),
   },
 })
+
+export const fetchBankAps = (page, bank, province, city, key) => axios.post('/appapi.php?c=BankAccount&a=querybankaps', {
+  page,
+  bank,
+  province,
+  city,
+  key,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 绑定银行卡获取手机验证码
+export const bindBankCard = payload => axios.post('/appapi.php?c=BankAccount&a=BindRelateAcctUnionPay', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const verCode = code => axios.post('/appapi.php?c=BankAccount&a=BindRelateAccReUnionPay', {
+  messagecheckcode: code,
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const unBindBank = () => axios.post('/appapi.php?c=BankAccount&a=UnbindRelateAcct', {
+  ticket: localStorage.getItem('ticket'),
+})
