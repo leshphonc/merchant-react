@@ -41,7 +41,7 @@ class Bank extends React.Component {
 
   bindBankCard = () => {
     const { history, basicInformation } = this.props
-    if (basicInformation.noUser.uid) {
+    if (basicInformation.basicInfo.uid) {
       history.push('/wallet/addBankCard')
     } else {
       Toast.info('请先在基本信息中绑定微信')
