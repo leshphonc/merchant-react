@@ -19,7 +19,7 @@ class BasicInformationSotre {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.basicInfo = response.data.result.now_merchant
-        this.noUser = response.data.result.user
+        this.noUser = response.data.result.user || {}
       })
     }
   }
