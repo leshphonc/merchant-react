@@ -29,27 +29,32 @@ class VerificationCard extends React.Component {
     const { wallet } = this.props
     const cacheData = Utils.getCacheData()
     if (cacheData) {
-      wallet.bindBankCard({
-        membername: cacheData.membername,
-        memberglobaltype: cacheData.memberglobaltype[0],
-        memberglobalid: cacheData.memberglobalid,
-        memberacctno: cacheData.memberacctno.replace(/\s+/g, ''),
-        banktype: cacheData.banktype[0],
-        acctopenbranchname: cacheData.acctopenbranchname,
-        mobile: cacheData.mobile.replace(/\s+/g, ''),
-        cnapsbranchid: cacheData.cnapsbranchid,
-      })
-      this.setState({ cur: 2 })
-      const timer = setInterval(() => {
-        const { time } = this.state
-        if (time === 0) {
-          clearInterval(timer)
-          return false
-        }
-        this.setState({
-          time: time - 1,
+      wallet
+        .bindBankCard({
+          membername: cacheData.membername,
+          memberglobaltype: cacheData.memberglobaltype[0],
+          memberglobalid: cacheData.memberglobalid,
+          memberacctno: cacheData.memberacctno.replace(/\s+/g, ''),
+          banktype: cacheData.banktype[0],
+          acctopenbranchname: cacheData.acctopenbranchnameLabel,
+          mobile: cacheData.mobile.replace(/\s+/g, ''),
+          cnapsbranchid: cacheData.acctopenbranchname,
         })
-      }, 1000)
+        .then(res => {
+          if (res) {
+            this.setState({ cur: 2 })
+            const timer = setInterval(() => {
+              const { time } = this.state
+              if (time === 0) {
+                clearInterval(timer)
+                return false
+              }
+              this.setState({
+                time: time - 1,
+              })
+            }, 1000)
+          }
+        })
     }
   }
 

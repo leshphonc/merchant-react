@@ -35,7 +35,6 @@ class AddBankCard extends React.Component {
         khh: cacheData.acctopenbranchnameLabel,
         cnapsbranchid: cacheData.acctopenbranchname,
       })
-      Utils.clearCacheData()
     }
   }
 
@@ -55,8 +54,8 @@ class AddBankCard extends React.Component {
         return
       }
       const formData = form.getFieldsValue()
-      formData.cnapsbranchid = cnapsbranchid
-      formData.acctopenbranchname = khh
+      formData.acctopenbranchname = cnapsbranchid
+      formData.acctopenbranchnameLabel = khh
       Utils.cacheData(formData)
       history.push('/wallet/verificationCard')
     })

@@ -298,7 +298,10 @@ class WalletStore {
   // 绑定银行卡获取手机验证码
   @action
   bindBankCard = async payload => {
-    await services.bindBankCard(payload)
+    const response = await services.bindBankCard(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
   }
 
   // 输入验证码

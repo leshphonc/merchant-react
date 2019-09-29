@@ -9,12 +9,17 @@ import Bank from './bank'
 import AddBankCard from './addBankCard'
 import VerificationCard from './verificationCard'
 import SearchBankAps from './searchBankAps'
+import Utils from '@/utils'
 
 const { Item } = List
 
 class Wallet extends React.Component {
   state = {
     cur: '系统余额账户',
+  }
+
+  componentDidMount() {
+    Utils.clearCacheData()
   }
 
   render() {
