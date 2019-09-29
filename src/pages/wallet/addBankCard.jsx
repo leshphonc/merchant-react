@@ -74,9 +74,20 @@ class AddBankCard extends React.Component {
             {...getFieldProps('membername', {
               rules: [{ required: true }],
             })}
+            placeholder="持卡人姓名"
             clear
           >
             持卡人
+          </InputItem>
+          <InputItem
+            {...getFieldProps('mobile', {
+              rules: [{ required: true }],
+            })}
+            type="phone"
+            placeholder="银行预留手机号"
+            clear
+          >
+            手机号
           </InputItem>
           <Picker
             {...getFieldProps('memberglobaltype', {
@@ -92,6 +103,7 @@ class AddBankCard extends React.Component {
             {...getFieldProps('memberglobalid', {
               rules: [{ required: true }],
             })}
+            placeholder="证件号码"
             clear
           >
             证件号
@@ -120,6 +132,7 @@ class AddBankCard extends React.Component {
             })}
             maxLength="23"
             type="bankCard"
+            placeholder="银行卡号"
             clear
           >
             卡号
@@ -131,15 +144,6 @@ class AddBankCard extends React.Component {
           >
             开户行
           </List.Item>
-          <InputItem
-            {...getFieldProps('mobile', {
-              rules: [{ required: true }],
-            })}
-            type="phone"
-            clear
-          >
-            手机号
-          </InputItem>
         </List>
         <Button
           type="primary"

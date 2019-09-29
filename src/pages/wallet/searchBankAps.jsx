@@ -161,7 +161,7 @@ class SearchBankAps extends React.Component {
             {...getFieldProps('key', {
               rules: [{ required: false }],
             })}
-            placeholder="请输入银行关键词"
+            placeholder="银行名称关键词"
           >
             关键词
           </InputItem>
