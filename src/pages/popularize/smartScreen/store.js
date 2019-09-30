@@ -7,6 +7,10 @@ class SmartScreenStore {
 
   @observable charData = {}
 
+  @observable echartData = []
+
+  @observable storeMer = []
+
   @action
   fetchIMax = async () => {
     const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
@@ -25,6 +29,28 @@ class SmartScreenStore {
     const response = await services.fetchUserCome()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       console.log(response.data)
+    }
+  }
+
+  @action
+  fetchStoreMer = async () => {
+    const response = await services.fetchStoreMer()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.storeMer = response.data.result
+      })
+    }
+  }
+
+  fetchEchartData = async (type, date, search, id) => {
+    if (date === '二级筛选') {
+      date = ''
+    }
+    const response = await services.fetchEchartData(type, date, search, id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.echartData = response.data.result
+      })
     }
   }
 }
