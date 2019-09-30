@@ -101,11 +101,15 @@ export const bindBankCard = payload => axios.post('/appapi.php?c=BankAccount&a=B
   ticket: localStorage.getItem('ticket'),
 })
 
-export const verCode = code => axios.post('/appapi.php?c=BankAccount&a=BindRelateAccReUnionPay', {
-  messagecheckcode: code,
+export const verCode = payload => axios.post('/appapi.php?c=BankAccount&a=BindRelateAccReUnionPay', {
+  ...payload,
   ticket: localStorage.getItem('ticket'),
 })
 
 export const unBindBank = () => axios.post('/appapi.php?c=BankAccount&a=UnbindRelateAcct', {
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const createAccount = () => axios.post('/appapi.php?c=BankAccount&a=OpenCustAcctId', {
   ticket: localStorage.getItem('ticket'),
 })

@@ -306,8 +306,8 @@ class WalletStore {
 
   // 输入验证码
   @action
-  verCode = async code => {
-    const response = await services.verCode(code)
+  verCode = async payload => {
+    const response = await services.verCode(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }
@@ -316,6 +316,14 @@ class WalletStore {
   @action
   unBindBank = async () => {
     const response = await services.unBindBank()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  @action
+  createAccount = async () => {
+    const response = await services.createAccount()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }

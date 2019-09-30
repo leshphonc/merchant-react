@@ -45,6 +45,7 @@ class Bank extends React.Component {
       history.push('/wallet/addBankCard')
     } else {
       Toast.info('请先在基本信息中绑定微信')
+      history.push('/wallet')
     }
   }
 
@@ -61,7 +62,11 @@ class Bank extends React.Component {
           wallet.unBindBank().then(res => {
             if (res) {
               Toast.success('解绑成功', 1, () => {
-                basicInformation.fetchBasicInfo()
+                basicInformation.fetchBasicInfo().then(() => {
+                  this.setState({
+                    cur: 1,
+                  })
+                })
               })
             }
           })

@@ -1,11 +1,11 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import { WhiteSpace, List, InputItem, Button, Modal } from 'antd-mobile'
+import { WhiteSpace, List, InputItem, Button, Modal, Toast } from 'antd-mobile'
 import Utils from '@/utils'
 
 @observer
-@inject('wallet')
+@inject('wallet', 'basicInformation')
 class VerificationCard extends React.Component {
   state = {
     cur: 1,
@@ -26,56 +26,111 @@ class VerificationCard extends React.Component {
   }
 
   getCode = () => {
-    const { wallet } = this.props
+    const { wallet, history, basicInformation } = this.props
     const cacheData = Utils.getCacheData()
-    if (cacheData) {
-      wallet
-        .bindBankCard({
-          membername: cacheData.membername,
-          memberglobaltype: cacheData.memberglobaltype[0],
-          memberglobalid: cacheData.memberglobalid,
-          memberacctno: cacheData.memberacctno.replace(/\s+/g, ''),
-          banktype: cacheData.banktype[0],
-          acctopenbranchname: cacheData.acctopenbranchnameLabel,
-          mobile: cacheData.mobile.replace(/\s+/g, ''),
-          cnapsbranchid: cacheData.acctopenbranchname,
-        })
-        .then(res => {
-          if (res) {
-            this.setState({ cur: 2 })
-            const timer = setInterval(() => {
-              const { time } = this.state
-              if (time === 0) {
-                clearInterval(timer)
-                return false
-              }
-              this.setState({
-                time: time - 1,
-              })
-            }, 1000)
+    if (!basicInformation.noUser.ba_id) {
+      wallet.createAccount().then(res1 => {
+        if (res1) {
+          if (basicInformation.basicInfo.uid) {
+            if (cacheData) {
+              wallet
+                .bindBankCard({
+                  membername: cacheData.membername,
+                  memberglobaltype: cacheData.memberglobaltype[0],
+                  memberglobalid: cacheData.memberglobalid,
+                  memberacctno: cacheData.memberacctno.replace(/\s+/g, ''),
+                  banktype: cacheData.banktype[0],
+                  acctopenbranchname: cacheData.acctopenbranchnameLabel,
+                  mobile: cacheData.mobile.replace(/\s+/g, ''),
+                  cnapsbranchid: cacheData.acctopenbranchname,
+                })
+                .then(res => {
+                  if (res) {
+                    this.setState({ cur: 2 })
+                    const timer = setInterval(() => {
+                      const { time } = this.state
+                      if (time === 0) {
+                        clearInterval(timer)
+                        return false
+                      }
+                      this.setState({
+                        time: time - 1,
+                      })
+                    }, 1000)
+                  }
+                })
+            }
           }
-        })
+        } else {
+          Toast.info('开户失败，请重试')
+          history.push('/wallet')
+          return false
+        }
+      })
+    }
+    if (basicInformation.basicInfo.uid) {
+      if (cacheData) {
+        wallet
+          .bindBankCard({
+            membername: cacheData.membername,
+            memberglobaltype: cacheData.memberglobaltype[0],
+            memberglobalid: cacheData.memberglobalid,
+            memberacctno: cacheData.memberacctno.replace(/\s+/g, ''),
+            banktype: cacheData.banktype[0],
+            acctopenbranchname: cacheData.acctopenbranchnameLabel,
+            mobile: cacheData.mobile.replace(/\s+/g, ''),
+            cnapsbranchid: cacheData.acctopenbranchname,
+          })
+          .then(res => {
+            if (res) {
+              this.setState({ cur: 2 })
+              const timer = setInterval(() => {
+                const { time } = this.state
+                if (time === 0) {
+                  clearInterval(timer)
+                  return false
+                }
+                this.setState({
+                  time: time - 1,
+                })
+              }, 1000)
+            }
+          })
+      }
     }
   }
 
   submit = () => {
     const { history, wallet } = this.props
     const { code } = this.state
-    wallet.verCode(code).then(res => {
-      if (res) {
-        Modal.alert(
-          <div>
-            绑定成功
-            <div style={{ marginTop: 25 }}>您已成功绑定银行卡！</div>
-          </div>,
-          <div style={{ marginTop: 20 }}>
-            可以提现啦！
-            <span style={{ marginTop: 5, color: '#367eef', marginBottom: 10 }}>立即提现</span>
-          </div>,
-          [{ text: '完成', onPress: () => history.push('/wallet') }],
-        )
-      }
-    })
+    const cacheData = Utils.getCacheData()
+    wallet
+      .verCode({
+        messagecheckcode: code,
+        membername: cacheData.membername,
+        memberglobaltype: cacheData.memberglobaltype[0],
+        memberglobalid: cacheData.memberglobalid,
+        memberacctno: cacheData.memberacctno.replace(/\s+/g, ''),
+        banktype: cacheData.banktype[0],
+        acctopenbranchname: cacheData.acctopenbranchnameLabel,
+        mobile: cacheData.mobile.replace(/\s+/g, ''),
+        cnapsbranchid: cacheData.acctopenbranchname,
+      })
+      .then(res => {
+        if (res) {
+          Modal.alert(
+            <div>
+              绑定成功
+              <div style={{ marginTop: 25 }}>您已成功绑定银行卡！</div>
+            </div>,
+            <div style={{ marginTop: 20 }}>
+              可以提现啦！
+              <span style={{ marginTop: 5, color: '#367eef', marginBottom: 10 }}>立即提现</span>
+            </div>,
+            [{ text: '完成', onPress: () => history.push('/wallet') }],
+          )
+        }
+      })
   }
 
   render() {
