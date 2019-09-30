@@ -135,13 +135,7 @@ export const fetchGetSelStaffRule = staffId => axios.post('/appapi.php?c=SpaceMe
   ticket: localStorage.getItem('ticket'),
 })
 
-export const setStaffRule = payload => {
-  const body = {}
-  Object.keys(payload).forEach(item => {
-    body[item] = payload[item]
-  })
-  return axios.post('/appapi.php?c=Merchantapp&a=setStaffRule', {
-    ...body,
-    ticket: localStorage.getItem('ticket'),
-  })
-}
+export const setStaffRule = payload => axios.post('/appapi.php?c=SpaceMerchant&a=setStaffRule', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})

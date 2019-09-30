@@ -1,11 +1,10 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import { List, InputItem, WingBlank, Button, Picker, Toast, Switch } from 'antd-mobile'
+import { List, WingBlank, Button, Toast, Switch } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 
-const seasons = [{ label: '能', value: '1' }, { label: '不能', value: '0' }]
 @createForm()
 @inject('shopManager')
 @observer
@@ -17,13 +16,16 @@ class ECommerceAdd extends React.Component {
 
   componentDidMount() {
     const { shopManager, match, form } = this.props
-    shopManager.fetchGetStaffRule(match.params.id)
-    shopManager.fetchGetSelStaffRule(match.params.staffId)
     shopManager.fetchGetStaffRule(match.params.id).then(() => {
-      const { getStaffRule } = shopManager
-
-      form.setFieldsValue({
-        is_show: [getStaffRule.is_show],
+      shopManager.fetchGetSelStaffRule(match.params.staffId).then(() => {
+        const { getSelStaffRule } = shopManager
+        const selected = {}
+        getSelStaffRule.forEach(item => {
+          selected[item.staff_menu_id] = true
+        })
+        setTimeout(() => {
+          form.setFieldsValue(selected)
+        }, 500)
       })
     })
   }
@@ -31,19 +33,22 @@ class ECommerceAdd extends React.Component {
   submit = () => {
     const { shopManager, form, match, history } = this.props
     form.validateFields((error, value) => {
-      console.log(value)
       if (error) {
         Toast.info('请输入完整信息')
         return
       }
-
-      const obj = {
-        flag: 1,
-        menu_id: 1,
-      }
-      shopManager.setStaffRule({ ...obj, staff_id: match.params.staffId }).then(res => {
-        if (res) Toast.success('修改成功', 1, () => history.goBack())
+      const keys = Object.keys(value)
+      const json = []
+      keys.forEach(item => {
+        if (value[item]) {
+          json.push(item - 0)
+        }
       })
+      shopManager
+        .setStaffRule({ staff_id: match.params.staffId, menu_id: JSON.stringify(json) })
+        .then(res => {
+          if (res) Toast.success('修改成功', 1, () => history.goBack())
+        })
     })
   }
 
