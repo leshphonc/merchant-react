@@ -1,29 +1,26 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  List, InputItem, WingBlank, Button, Picker, Toast,
-} from 'antd-mobile'
+import { List, InputItem, WingBlank, Button, Picker, Toast } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 import Utils from '@/utils'
 
-const seasons = [{ label: '能', value: '1' }, { label: '不能', value: '0' }]
+// const seasons = [{ label: '能', value: '1' }, { label: '不能', value: '0' }]
 @createForm()
 @inject('shopManager')
 @observer
 class ECommerceAdd extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-    }
+    this.state = {}
   }
 
   componentDidMount() {
     const { shopManager, match, form } = this.props
     shopManager.fetchStaffType(match.params.id)
     shopManager.fetchECommerceValues()
-    shopManager.fetchBusinessList(match.params.id)
+    // shopManager.fetchBusinessList(match.params.id)
     if (!match.params.id) return
     shopManager.fetchStaffDetail(match.params.id, match.params.staffId).then(() => {
       const { staffDetail } = shopManager
@@ -32,18 +29,16 @@ class ECommerceAdd extends React.Component {
         username: staffDetail.username,
         password: '',
         tel: staffDetail.tel,
-        is_change: [staffDetail.is_change],
-        business_id: [staffDetail.business_id],
+        // is_change: [staffDetail.is_change],
+        // business_id: [staffDetail.business_id],
         type: [staffDetail.type],
-        spread_rato: staffDetail.spread_rato,
+        // spread_rato: staffDetail.spread_rato,
       })
     })
   }
 
   submit = () => {
-    const {
-      shopManager, form, match, history,
-    } = this.props
+    const { shopManager, form, match, history } = this.props
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请输入完整信息')
@@ -53,7 +48,7 @@ class ECommerceAdd extends React.Component {
       const obj = {
         ...value,
         password: value.password ? Utils.md5(value.password) : '',
-        is_change: value.is_change[0],
+        // is_change: value.is_change[0],
         type: value.type[0],
       }
       if (match.params.id) {
@@ -72,7 +67,7 @@ class ECommerceAdd extends React.Component {
 
   render() {
     const { match, form, shopManager } = this.props
-    const { staffType, businessList, eCommerceValues } = shopManager
+    const { staffType, eCommerceValues } = shopManager
     const { getFieldProps } = form
     return (
       <React.Fragment>
@@ -142,7 +137,7 @@ class ECommerceAdd extends React.Component {
               <List.Item arrow="horizontal">选择店铺</List.Item>
             </Picker>
           )}
-          <Picker
+          {/* <Picker
             {...getFieldProps('is_change', {
               rules: [{ required: true }],
             })}
@@ -150,8 +145,8 @@ class ECommerceAdd extends React.Component {
             cols={1}
           >
             <List.Item arrow="horizontal">能否修改订单价格</List.Item>
-          </Picker>
-          <Picker
+          </Picker> */}
+          {/* <Picker
             {...getFieldProps('business_id', {
               rules: [{ required: false }],
             })}
@@ -160,8 +155,8 @@ class ECommerceAdd extends React.Component {
             extra="请选择"
           >
             <List.Item arrow="horizontal">所属LBS商家连锁机构</List.Item>
-          </Picker>
-          <InputItem
+          </Picker> */}
+          {/* <InputItem
             {...getFieldProps('spread_rato', {
               rules: [{ required: false }],
             })}
@@ -170,7 +165,7 @@ class ECommerceAdd extends React.Component {
             placeholder="请填写分佣比例"
           >
             推广用户分佣比例
-          </InputItem>
+          </InputItem> */}
           <WingBlank style={{ padding: '10px 0' }}>
             <Button
               type="primary"
