@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Link } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
 import { WhiteSpace, List, SegmentedControl, WingBlank } from 'antd-mobile'
 import AddCredit from './addCredit'
@@ -10,33 +10,55 @@ import AddBankCard from './addBankCard'
 import VerificationCard from './verificationCard'
 import SearchBankAps from './searchBankAps'
 import Utils from '@/utils'
+import BankWithDraw from './bankWithDraw'
+import BankWithDrawRecord from './bankWithDrawRecord'
 
 const { Item } = List
 
 class Wallet extends React.Component {
   state = {
     cur: '系统余额账户',
+    index: 0,
   }
 
   componentDidMount() {
+    const curBar = sessionStorage.getItem('curBar') || '系统余额账户'
+    this.setState({
+      cur: curBar,
+      index: curBar === '系统余额账户' ? 0 : 1,
+    })
     Utils.clearCacheData()
   }
 
   render() {
     const { history } = this.props
-    const { cur } = this.state
+    const { cur, index } = this.state
     return (
       <React.Fragment>
-        <NavBar title="充值" goBack="/" />
+        <NavBar
+          title="充值"
+          goBack="/"
+          right={
+            cur === '平安提现账户' ? (
+              <Link style={{ color: '#fff' }} to="/wallet/bankWithDrawRecord">
+                提现记录
+              </Link>
+            ) : null
+          }
+        />
         <WhiteSpace />
         <WhiteSpace />
         <WingBlank>
           <SegmentedControl
+            selectedIndex={index}
             values={['系统余额账户', '平安提现账户']}
-            onValueChange={val => this.setState({
-              cur: val,
-            })
-            }
+            onValueChange={val => {
+              sessionStorage.setItem('curBar', val)
+              this.setState({
+                cur: val,
+                index: val === '系统余额账户' ? 0 : 1,
+              })
+            }}
           />
         </WingBlank>
         <WhiteSpace />
@@ -102,5 +124,7 @@ export default () => (
     <Route path="/wallet/addBankCard" component={AddBankCard} />
     <Route path="/wallet/verificationCard" component={VerificationCard} />
     <Route path="/wallet/searchBankAps" component={SearchBankAps} />
+    <Route path="/wallet/bankWithDraw" component={BankWithDraw} />
+    <Route path="/wallet/bankWithDrawRecord" component={BankWithDrawRecord} />
   </React.Fragment>
 )

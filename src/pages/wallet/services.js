@@ -113,3 +113,27 @@ export const unBindBank = () => axios.post('/appapi.php?c=BankAccount&a=UnbindRe
 export const createAccount = () => axios.post('/appapi.php?c=BankAccount&a=OpenCustAcctId', {
   ticket: localStorage.getItem('ticket'),
 })
+
+// 查询银行卡余额
+export const fetchBankBalance = () => axios.post('/appapi.php?c=BankAccount&a=CustAcctIdBalanceQuery', {
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取
+export const getBankWithDrawCode = real => axios.post('/appapi.php?c=BankAccount&a=ApplicationTextMsgDynamicCode', {
+  tranamt: real,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 银行卡提现
+export const bankWithDraw = payload => axios.post('/appapi.php?c=BankAccount&a=MemberWithdrawCash', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 银行卡提现记录
+export const fetchWithDrawRecord = page => axios.post('/appapi.php?c=BankAccount&a=withdraw_lists', {
+  page,
+  size: 10,
+  ticket: localStorage.getItem('ticket'),
+})
