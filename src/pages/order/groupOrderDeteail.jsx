@@ -142,6 +142,7 @@ class GroupOrderDetail extends React.Component {
   }
 
   groupPassList = passArr => passArr.map((item, index) => (
+    // eslint-disable-next-line react/no-array-index-key
     <Flex style={styleSpan.topDis} key={index}>
       <div style={styleSpan.passLeft}>核销码:{item.group_pass}</div>
       <div style={styleSpan.passRight}>
