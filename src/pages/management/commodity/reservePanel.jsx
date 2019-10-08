@@ -13,6 +13,7 @@ import {
   ImagePicker,
   WhiteSpace,
   Toast,
+  Menu,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -21,6 +22,7 @@ import { observer, inject } from 'mobx-react'
 import Editor from '@/common/Editor'
 import moment from 'moment'
 import Utils from '@/utils'
+import { MenuMask } from '@/styled'
 import { toJS } from 'mobx'
 // import MultipleImg from '@/common/UploadImg/Multiple'
 
@@ -346,8 +348,17 @@ class ReservePanel extends React.Component {
     })
   }
 
+  onOk = value => {
+    console.log(value)
+    this.setState({
+      category: value,
+      menu: false,
+    })
+  }
+
   render() {
     const { match, form, commodity, history } = this.props
+    const { reserveCategoryOption } = commodity
     const {
       store,
       // eslint-disable-next-line camelcase
@@ -360,15 +371,34 @@ class ReservePanel extends React.Component {
       custom_content,
       // eslint-disable-next-line camelcase
       use_time,
+      menu,
+      category,
     } = this.state
     const { getFieldProps } = form
     const { shopList } = this.state
+ 
     // eslint-disable-next-line camelcase
     const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const paymentValue = form.getFieldValue('payment_status')
     const storeChecked = form.getFieldValue('is_store')
     // eslint-disable-next-line camelcase
     const is_appoint_price = form.getFieldValue('is_appoint_price') || '0'
+    const menuEl = (
+      <Menu
+        className="menu-position "
+        data={reserveCategoryOption}
+        level={2}
+        value={category}
+        onChange = {this.onOk}
+        // onCancel={() =>
+        //   this.setState({
+        //     menu: false,
+        //   })
+        // }
+        height={document.documentElement.clientHeight * 0.6}
+        // multiSelect
+      />
+    )
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}预定商品`} goBack />
@@ -936,8 +966,8 @@ class ReservePanel extends React.Component {
           </Button>
           <WhiteSpace />
         </WingBlank>
-        {/* {menu ? menuEl : null}
-        {menu ? <MenuMask onClick={() => this.setState({ menu: false })} /> : null} */}
+        {menu ? menuEl : null}
+        {menu ? <MenuMask onClick={() => this.setState({ menu: false })} /> : null}
         {/* <MultipleImg
           visible={mul}
           close={() => this.setState({
