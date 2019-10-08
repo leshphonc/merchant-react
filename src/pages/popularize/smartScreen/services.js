@@ -22,6 +22,7 @@ export const fetchStoreMer = () => axios.get('/Appapi.php?g=Appapi&c=Ai_imax&a=g
   },
 })
 
+// 切换echart日期数据
 export const fetchEchartData = (type, date, search, id) => axios.get(`/appapi.php?c=Merchantapp&a=${search}`, {
   params: {
     date_type: type,

@@ -133,14 +133,6 @@ class SmartScreen extends React.Component {
     }
   }
 
-  // changeFilter1 = () => {
-  //   console.log('changeFilter1')
-  // }
-
-  changeFilter2 = () => {
-    console.log('changeFilter2')
-  }
-
   changeFilter1 = val => {
     const result = FilterData1.find(item => item.value === val[0])
     this.setState(
@@ -155,6 +147,10 @@ class SmartScreen extends React.Component {
         this.changeEchartType(cur, searchType)
       },
     )
+  }
+
+  changeFilter2 = () => {
+    console.log('changeFilter2')
   }
 
   changeYear = val => {
