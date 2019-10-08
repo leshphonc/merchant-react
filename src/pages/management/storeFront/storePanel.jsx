@@ -473,7 +473,6 @@ class StorePanel extends React.Component {
       open,
       goods,
     } = this.state
-    console.log(goods)
     const menuEl = (
       <Menu
         className="menu-position"

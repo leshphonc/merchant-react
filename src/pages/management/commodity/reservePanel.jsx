@@ -349,7 +349,6 @@ class ReservePanel extends React.Component {
   }
 
   onOk = value => {
-    console.log(value)
     this.setState({
       category: value,
       menu: false,
@@ -376,7 +375,6 @@ class ReservePanel extends React.Component {
     } = this.state
     const { getFieldProps } = form
     const { shopList } = this.state
- 
     // eslint-disable-next-line camelcase
     const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
     const paymentValue = form.getFieldValue('payment_status')
@@ -389,12 +387,7 @@ class ReservePanel extends React.Component {
         data={reserveCategoryOption}
         level={2}
         value={category}
-        onChange = {this.onOk}
-        // onCancel={() =>
-        //   this.setState({
-        //     menu: false,
-        //   })
-        // }
+        onChange={this.onOk}
         height={document.documentElement.clientHeight * 0.6}
         // multiSelect
       />
