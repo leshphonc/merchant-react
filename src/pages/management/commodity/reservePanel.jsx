@@ -647,11 +647,11 @@ class ReservePanel extends React.Component {
               />
             }
           >
-            是否开启选择店铺
+            选择服务店铺
             <Tooltip
               trigger="click"
               placement="topLeft"
-              overlay="关闭后，订单将由商家指定门店及技师进行服务"
+              overlay="选择后，用户预约时可自行选择服务店铺。"
               onClick={e => {
                 e.stopPropagation()
               }}

@@ -495,6 +495,15 @@ class OrderStore {
       })
     }
   }
+
+  // 接单
+  @action
+  orders = async id => {
+    const response = await services.orders(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      this.fetchShopOrderDetail(id)
+    }
+  }
 }
 
 export default new OrderStore()

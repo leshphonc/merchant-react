@@ -21,6 +21,8 @@ import ECommerceDeliveryTemplatePanel from './eCommerceDeliveryTemplatePanel'
 import EditSpread from './editSpread'
 import GroupDiscounts from './groupDiscounts'
 import AppointDiscounts from './appointDiscounts'
+import ServiceItems from './ServiceItems'
+import ServiceItemsPanel from './ServiceItemsPanel'
 
 const { Item } = List
 @inject('commodity')
@@ -65,6 +67,14 @@ class Commodity extends React.Component {
           >
             外卖商品
           </Item>
+          <Item
+            arrow="horizontal"
+            onClick={() => {
+              history.push('/management/commodity/serviceItems')
+            }}
+          >
+            服务项目
+          </Item>
         </List>
       </div>
     )
@@ -73,19 +83,22 @@ class Commodity extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/management/commodity" exact component={Commodity} />
+    {/* 团购商品 */}
     <Route path="/management/commodity/group" component={Group} />
     <Route path="/management/commodity/groupPanel/:str/:id?" component={GroupPanel} />
     {/* <Route path="/management/commodity/groupEdit" component={GroupEdit} /> */}
     <Route path="/management/commodity/groupMealAdd" component={GroupMealAdd} />
+    {/* 预定商品 */}
     <Route path="/management/commodity/reserve" component={Reserve} />
     <Route path="/management/commodity/reservePanel/:str/:id?" component={reservePanel} />
     {/* <Route path="/management/commodity/reserveEdit" component={ReserveEdit} /> */}
+    {/* 外卖商品 */}
     <Route path="/management/commodity/takeAway" component={TakeAway} />
     <Route
       path="/management/commodity/takeAwayPanel/:str/:id?/:goodid?"
       component={TakeAwayPanel}
     />
-
+    {/* 电商商品 */}
     <Route path="/management/commodity/eCommerce" component={ECommerce} />
     <Route
       path="/management/commodity/eCommercePanel/:str/:id?/:goodid?"
@@ -109,6 +122,12 @@ export default () => (
     <Route
       path="/management/commodity/eCommerceDeliveryTemplatePanel/:id?"
       component={ECommerceDeliveryTemplatePanel}
+    />
+    {/* 服务项目 */}
+    <Route path="/management/commodity/serviceItems" component={ServiceItems} />
+    <Route
+      path="/management/commodity/serviceItemsPanel/:str/:type"
+      component={ServiceItemsPanel}
     />
   </React.Fragment>
 )

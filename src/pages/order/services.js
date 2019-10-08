@@ -242,3 +242,9 @@ export const fetchStoreList = id => axios.post('/appapi.php?c=Merchantapp&a=getS
   mer_id: id,
   ticket: localStorage.getItem('ticket'),
 })
+
+export const orders = id => axios.post('/appapi.php?c=Merchantapp&a=shopOrderEdit', {
+  order_id: id,
+  status: '1',
+  ticket: localStorage.getItem('ticket'),
+})

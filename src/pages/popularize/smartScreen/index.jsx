@@ -4,9 +4,14 @@ import { observer, inject } from 'mobx-react'
 import ReactEcharts from 'echarts-for-react'
 import NavBar from '@/common/NavBar'
 import { FilterBox } from '@/styled'
-import { List, Icon, Picker, WhiteSpace, WingBlank, Badge, DatePicker } from 'antd-mobile'
+import { List, Icon, Picker, WhiteSpace, WingBlank, DatePicker } from 'antd-mobile'
 import moment from 'moment'
+import ScreenList from './screenList'
 import PromotionList from './promotionList'
+import PromotionPanel from './promotionPanel'
+import QrCodeMember from './qrcodeMember'
+import ViewTime from './viewTime'
+import PurchaseNum from './purchaseNum'
 
 const FilterData1 = [
   { label: '日', value: '1' },
@@ -103,9 +108,9 @@ class SmartScreen extends React.Component {
         formatter: format,
       },
       grid: {
-        top: 10,
+        top: 40,
         bottom: 30,
-        right: 0,
+        right: 20,
         left: '13%',
       },
       xAxis: [
@@ -120,7 +125,7 @@ class SmartScreen extends React.Component {
       yAxis: [
         {
           type: 'value',
-          name: '人数',
+          name: '进店人数',
         },
       ],
       series: [
@@ -217,7 +222,7 @@ class SmartScreen extends React.Component {
 
   render() {
     const { history } = this.props
-    const { open, value, filterLabel1, filterValue1, filterLabel2, filterValue2 } = this.state
+    const { open, value, filterLabel1, filterValue1, filterLabel2 } = this.state
     return (
       <>
         <NavBar
@@ -294,28 +299,31 @@ class SmartScreen extends React.Component {
           ) : null}
           <WhiteSpace />
         </WingBlank>
-
-        <ReactEcharts option={this.getOption()} style={{ height: 200, background: '#fff' }} />
+        <ReactEcharts option={this.getOption()} style={{ height: 250, background: '#fff' }} />
         <List style={{ marginTop: 10 }}>
           <List.Item
             arrow="horizontal"
-            onClick={() => history.push('/popularize/smartScreen/promotionList')}
+            onClick={() => history.push('/popularize/smartScreen/promotionList404')}
           >
             购买广告
           </List.Item>
           <List.Item
             arrow="horizontal"
-            extra={<Badge text={77} overflowCount={100} />}
-            onClick={() => history.push('/popularize/smartScreen/promotionList')}
+            onClick={() => history.push('/popularize/smartScreen/promotionList404')}
           >
             广告订单
           </List.Item>
           <List.Item
             arrow="horizontal"
-            extra={<Badge text={77} overflowCount={55} />}
+            onClick={() => history.push('/popularize/smartScreen/screenList')}
+          >
+            本店智能屏推广海报
+          </List.Item>
+          <List.Item
+            arrow="horizontal"
             onClick={() => history.push('/popularize/smartScreen/promotionList')}
           >
-            推广列表
+            同城智能屏推广海报
           </List.Item>
         </List>
       </>
@@ -326,6 +334,20 @@ class SmartScreen extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/popularize/smartScreen" exact component={SmartScreen} />
-    <Route path="/popularize/smartScreen/promotionList" component={PromotionList} />
+    {/* 本店智能屏推广海报屏幕列表 */}
+    <Route path="/popularize/smartScreen/screenList" exact component={ScreenList} />
+    {/* 屏幕内推广内容列表 */}
+    <Route path="/popularize/smartScreen/promotionList" exact component={PromotionList} />
+    {/* 添加推广内容 */}
+    <Route
+      path="/popularize/smartScreen/promotionList/promotionPanel/:str/:id?"
+      component={PromotionPanel}
+    />
+    {/* 扫码人数 */}
+    <Route path="/popularize/smartScreen/promotionList/qrcodeMember/:id" component={QrCodeMember} />
+    {/* 浏览时长 */}
+    <Route path="/popularize/smartScreen/promotionList/viewTime/:id" component={ViewTime} />
+    {/* 购买数量 */}
+    <Route path="/popularize/smartScreen/promotionList/purchaseNum/:id" component={PurchaseNum} />
   </React.Fragment>
 )

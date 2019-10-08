@@ -149,13 +149,18 @@ class RetailDetail extends React.Component {
       if (orderDetails.order_from !== '1' && orderDetails.order_from !== '6') {
         return (
           <Flex.Item>
-            <Button type="primary" onClick={this.getPickAddress}>
+            <Button type="primary" onClick={this.orders}>
               接单
             </Button>
           </Flex.Item>
         )
       }
     }
+  }
+
+  orders = () => {
+    const { order, match } = this.props
+    order.orders(match.params.id)
   }
 
   showConfirm = () => {
@@ -390,9 +395,7 @@ class RetailDetail extends React.Component {
   render() {
     const { order } = this.props
     const { shopOrderDetail, expressList } = order
-    const {
-      modal, copyModal, sendModal, expressListLabel, expressListValue, no,
-    } = this.state
+    const { modal, copyModal, sendModal, expressListLabel, expressListValue, no } = this.state
     const orderDetails = shopOrderDetail.order_details || {}
     return (
       <React.Fragment>
