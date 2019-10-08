@@ -16,6 +16,9 @@ class SmartScreenStore {
   @observable purchaseNumList=[]
 
   @observable promotionInfo=[]
+  @observable echartData = []
+
+  @observable storeMer = []
 
   @action
   fetchIMax = async () => {
@@ -45,6 +48,12 @@ class SmartScreenStore {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.promotionList = response.data.result.list
+  @action
+  fetchStoreMer = async () => {
+    const response = await services.fetchStoreMer()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.storeMer = response.data.result
       })
     }
   }
@@ -108,6 +117,14 @@ class SmartScreenStore {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.purchaseNumList = response.data.result.list
+  fetchEchartData = async (type, date, search, id) => {
+    if (date === '二级筛选') {
+      date = ''
+    }
+    const response = await services.fetchEchartData(type, date, search, id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.echartData = response.data.result
       })
     }
   }

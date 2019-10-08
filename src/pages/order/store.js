@@ -49,6 +49,17 @@ class OrderStore {
 
   @observable reservationCount = 0
 
+  // 到店订单列表
+  @observable ArrivalList = []
+
+  @observable ArrivalListPage = 1
+
+  @observable ArrivalListSize = 10
+
+  @observable ArrivalListTotal = null
+
+  @observable needResStore = {}
+
   // 获取订单种类列表
   @action
   fetchOrderList = async () => {
@@ -256,7 +267,7 @@ class OrderStore {
   }
 
   // 团购单个核销
-  verificOneGroup = async (orderId, groupPass) => { 
+  verificOneGroup = async (orderId, groupPass) => {
     const response = await services.verificOneGroup(orderId, groupPass)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
@@ -430,6 +441,57 @@ class OrderStore {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.reservationCount = response.data.result.total
+      })
+    }
+  }
+
+  // 获取到店订单列表
+  @action
+  fetchArrivalList = async (storeId, staffId, goodsName, stime, etime, merId, flag, push) => {
+    let page = this.ArrivalListPage
+    if (push) {
+      page = this.ArrivalListPage + 1
+    }
+    const response = await services.fetchArrivalList(
+      page,
+      storeId,
+      staffId,
+      goodsName,
+      stime,
+      etime,
+      merId,
+      flag,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        const arr = this.ArrivalList
+        const keys = Object.keys(response.data.result)
+        keys.forEach(item => {
+          arr.push(response.data.result[item])
+        })
+        this.ArrivalList = arr
+      })
+    }
+  }
+
+  // 重置页数请求到店订单列表
+  @action
+  resetAndFetchArrivalList = async (storeId, staffId, goodsName, stime, etime, merId, flag) => {
+    runInAction(() => {
+      this.ArrivalList = []
+      this.ArrivalListPage = 1
+      this.ArrivalListTotal = null
+    })
+    await this.fetchArrivalList(storeId, staffId, goodsName, stime, etime, merId, flag)
+  }
+
+  // 获取到店的商铺list
+  @action
+  fetchStoreList = async id => {
+    const response = await services.fetchStoreList(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.needResStore = response.data.result
       })
     }
   }

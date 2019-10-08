@@ -54,6 +54,18 @@ class Order extends React.Component {
         <NavBar title="订单列表" />
         <WhiteSpace />
         {this.mapList()}
+        <List>
+          <List.Item
+            arrow="horizontal"
+            extra={20}
+            onClick={() => {
+              const { history } = this.props
+              history.push('/order/arrival')
+            }}
+          >
+            到店消费订单
+          </List.Item>
+        </List>
       </React.Fragment>
     )
   }

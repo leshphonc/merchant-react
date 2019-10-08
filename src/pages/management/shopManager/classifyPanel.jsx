@@ -1,9 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  List, InputItem, WingBlank, Button, Toast,
-} from 'antd-mobile'
+import { List, WingBlank, Button, Toast, Switch } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 
@@ -11,59 +9,93 @@ import { createForm } from 'rc-form'
 @inject('shopManager')
 @observer
 class ECommerceAdd extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
   componentDidMount() {
     const { shopManager, match, form } = this.props
-    if (!match.params.id) return
-    shopManager.fetchClassifyDetail(match.params.id).then(() => {
-      const { classifyDetail } = shopManager
-      form.setFieldsValue({
-        name: classifyDetail.name,
+    shopManager.fetchGetStaffRule(match.params.id).then(() => {
+      shopManager.fetchGetSelStaffRule(match.params.staffId).then(() => {
+        const { getSelStaffRule } = shopManager
+        const selected = {}
+        getSelStaffRule.forEach(item => {
+          selected[item.staff_menu_id] = true
+        })
+        setTimeout(() => {
+          form.setFieldsValue(selected)
+        }, 500)
       })
     })
   }
 
   submit = () => {
-    const {
-      shopManager, form, match, history,
-    } = this.props
+    const { shopManager, form, match, history } = this.props
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请输入完整信息')
         return
       }
-      const obj = {
-        ...value,
-      }
-      // console.log(value)
-      // console.log(obj)
-      if (match.params.id) {
-        // console.log(match.params.id)
-        shopManager.addClassify({ ...obj, id: match.params.id }).then(res => {
-          if (res) Toast.success('编辑成功', 1, () => history.goBack())
+      const keys = Object.keys(value)
+      const json = []
+      keys.forEach(item => {
+        if (value[item]) {
+          json.push(item - 0)
+        }
+      })
+      shopManager
+        .setStaffRule({ staff_id: match.params.staffId, menu_id: JSON.stringify(json) })
+        .then(res => {
+          if (res) Toast.success('修改成功', 1, () => history.goBack())
         })
-      } else {
-        shopManager.modifyClassify({ ...obj }).then(res => {
-          if (res) Toast.success('新增成功', 1, () => history.goBack())
-        })
-      }
     })
   }
 
   render() {
-    const { match, form } = this.props
+    const { match, form, shopManager } = this.props
     const { getFieldProps } = form
+    const { getStaffRule } = shopManager
     return (
       <React.Fragment>
-        <NavBar title={`${match.params.str}分类`} goBack />
+        <NavBar title={`${match.params.str}权限`} goBack />
         <List>
-          <InputItem
-            {...getFieldProps('name', {
+          {getStaffRule.map(i => (
+            <List key={i.id}>
+              <List.Item
+                extra={
+                  <Switch
+                    {...getFieldProps(i.id, {
+                      initialValue: false,
+                      valuePropName: 'checked',
+                      rules: [{ required: true }],
+                    })}
+                  />
+                }
+              >
+                {i.name}
+              </List.Item>
+            </List>
+          ))}
+          {/* <Picker
+            {...getFieldProps('is_change', {
               rules: [{ required: true }],
             })}
-            placeholder="请填写分类名称"
+            data={seasons}
+            cols={1}
           >
-            分类名称
-          </InputItem>
+            <List.Item arrow="horizontal">能否修改订单价格</List.Item>
+          </Picker> */}
+          {/* <InputItem
+            {...getFieldProps('spread_rato', {
+              rules: [{ required: false }],
+            })}
+            extra="%"
+            labelNumber={7}
+            placeholder="请填写分佣比例"
+          >
+            推广用户分佣比例
+          </InputItem> */}
           <WingBlank style={{ padding: '10px 0' }}>
             <Button
               type="primary"

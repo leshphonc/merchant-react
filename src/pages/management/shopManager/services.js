@@ -114,3 +114,28 @@ export const fetchClassifyDelete = id => axios.post('/appapi.php?c=Merchantapp&a
   id,
   ticket: localStorage.getItem('ticket'),
 })
+
+// 调岗
+export const fetchRelocationPost = (storeId, staffId) => axios.post('/appapi.php?c=SpaceMerchant&a=relocationPost', {
+  store_id: storeId,
+  staff_id: staffId,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 权限模板
+export const fetchGetStaffRule = (storeId, id) => axios.post('/appapi.php?c=SpaceMerchant&a=getStaffRule', {
+  store_id: storeId,
+  mer_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 店员已选中权限
+export const fetchGetSelStaffRule = staffId => axios.post('/appapi.php?c=SpaceMerchant&a=getSelStaffRule', {
+  staff_id: staffId,
+  ticket: localStorage.getItem('ticket'),
+})
+
+export const setStaffRule = payload => axios.post('/appapi.php?c=SpaceMerchant&a=setStaffRule', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})

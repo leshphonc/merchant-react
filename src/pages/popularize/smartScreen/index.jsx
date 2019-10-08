@@ -4,10 +4,16 @@ import { observer, inject } from 'mobx-react'
 import ReactEcharts from 'echarts-for-react'
 import NavBar from '@/common/NavBar'
 import { FilterBox } from '@/styled'
-import { List, Icon, Picker, WhiteSpace, WingBlank, Badge } from 'antd-mobile'
+import { List, Icon, Picker, WhiteSpace, WingBlank, Badge, DatePicker } from 'antd-mobile'
+import moment from 'moment'
 import PromotionList from './promotionList'
 
-const seasons = [
+const FilterData1 = [
+  { label: '日', value: '1' },
+  { label: '月', value: '2' },
+  { label: '年', value: '3' },
+]
+const seasones = [
   [
     {
       label: '2013',
@@ -29,22 +35,34 @@ const seasons = [
     },
   ],
 ]
-
 @inject('smartScreen')
 @observer
 class SmartScreen extends React.Component {
   state = {
     open: false,
-    value: ['2013', '夏'],
-    filterLabel1: '年',
-    filterValue1: '',
-    filterLabel2: '2019',
+    value: [],
+    filterLabel1: '日',
+    filterValue1: '1',
+    filterLabel2: '2019-08-07',
     filterValue2: '',
+    echartData: [],
+    cur: '1',
+    searchType: 'all_money',
   }
 
   componentDidMount() {
     const { smartScreen } = this.props
+    const { filterValue1, filterLabel2, searchType, filterStoreValue } = this.state
     smartScreen.fetchIMax()
+    smartScreen.fetchUserCome()
+    smartScreen.fetchStoreMer()
+    smartScreen
+      .fetchEchartData(filterValue1, filterLabel2, searchType, filterStoreValue)
+      .then(() => {
+        this.setState({
+          echartData: smartScreen.echartData,
+        })
+      })
   }
 
   getOption = () => {
@@ -85,10 +103,10 @@ class SmartScreen extends React.Component {
         formatter: format,
       },
       grid: {
-        top: '8%',
-        bottom: '10%',
-        right: '2%',
-        left: '6%',
+        top: 10,
+        bottom: 30,
+        right: 0,
+        left: '13%',
       },
       xAxis: [
         {
@@ -115,12 +133,90 @@ class SmartScreen extends React.Component {
     }
   }
 
-  changeFilter1 = () => {
-    console.log('changeFilter1')
-  }
+  // changeFilter1 = () => {
+  //   console.log('changeFilter1')
+  // }
 
   changeFilter2 = () => {
     console.log('changeFilter2')
+  }
+
+  changeFilter1 = val => {
+    const result = FilterData1.find(item => item.value === val[0])
+    this.setState(
+      {
+        filterValue1: result.value,
+        filterLabel1: result.label,
+        filterLabel2: '二级筛选',
+        echartData: [],
+      },
+      () => {
+        const { cur, searchType } = this.state
+        this.changeEchartType(cur, searchType)
+      },
+    )
+  }
+
+  changeYear = val => {
+    const { smartScreen } = this.props
+    const { filterValue1, searchType, filterStoreValue } = this.state
+    smartScreen
+      .fetchEchartData(filterValue1, moment(val).format('YYYY'), searchType, filterStoreValue)
+      .then(() => {
+        this.setState({
+          echartData: smartScreen.echartData,
+          filterLabel2: `${moment(val).format('YYYY')}`,
+        })
+      })
+  }
+
+  changeMonth = val => {
+    const { smartScreen } = this.props
+    const { filterValue1, searchType, filterStoreValue } = this.state
+    smartScreen
+      .fetchEchartData(filterValue1, moment(val).format('YYYY-MM'), searchType, filterStoreValue)
+      .then(() => {
+        this.setState({
+          echartData: smartScreen.echartData,
+          filterLabel2: moment(val).format('YYYY-MM'),
+        })
+      })
+  }
+
+  changeDay = val => {
+    const { smartScreen } = this.props
+    const { filterValue1, searchType, filterStoreValue } = this.state
+    smartScreen
+      .fetchEchartData(filterValue1, moment(val).format('YYYY-MM-DD'), searchType, filterStoreValue)
+      .then(() => {
+        this.setState({
+          echartData: smartScreen.echartData,
+          filterLabel2: moment(val).format('YYYY-MM-DD'),
+        })
+      })
+  }
+
+  changeEchartType = (num, type) => {
+    const { smartScreen } = this.props
+    const { filterValue1, filterLabel2, filterStoreValue } = this.state
+    smartScreen.fetchEchartData(filterValue1, filterLabel2, type, filterStoreValue).then(() => {
+      this.setState({
+        echartData: smartScreen.echartData,
+      })
+    })
+    let label = ''
+    switch (num) {
+      case '1':
+        label = '人数'
+        break
+      default:
+        label = '人数'
+    }
+    this.setState({
+      cur: num,
+      searchType: type,
+      seriesLabel: label,
+    })
   }
 
   render() {
@@ -132,7 +228,7 @@ class SmartScreen extends React.Component {
           title="智能屏推广"
           goBack
           right={
-            <Picker data={seasons} title="选择季节" cascade={false} value={value}>
+            <Picker title="" cascade={false} cols={2} data={seasones} value={value}>
               <Icon type="ellipsis" onClick={() => this.setState({ open: !open })} />
             </Picker>
           }
@@ -140,7 +236,12 @@ class SmartScreen extends React.Component {
         <WingBlank size="sm">
           <WhiteSpace />
           <FilterBox style={{ marginRight: 5 }}>
-            <Picker data={[]} value={[filterValue1]} cols={1} onChange={this.changeFilter1}>
+            <Picker
+              data={FilterData1}
+              value={[filterValue1]}
+              cols={1}
+              onChange={this.changeFilter1}
+            >
               <div>
                 <span>{filterLabel1}</span>
                 <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
@@ -149,7 +250,7 @@ class SmartScreen extends React.Component {
               </div>
             </Picker>
           </FilterBox>
-          <FilterBox style={{ marginRight: 5 }}>
+          {/* <FilterBox style={{ marginRight: 5 }}>
             <Picker data={[]} value={[filterValue2]} cols={1} onChange={this.changeFilter2}>
               <div>
                 <span>{filterLabel2}</span>
@@ -158,7 +259,43 @@ class SmartScreen extends React.Component {
                 </i>
               </div>
             </Picker>
-          </FilterBox>
+          </FilterBox> */}
+          {filterValue1 === '3' ? (
+            <FilterBox style={{ marginRight: 5 }}>
+              <DatePicker mode="year" onChange={this.changeYear}>
+                <div>
+                  <span>{filterLabel2}</span>
+                  <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                    &#xe6f0;
+                  </i>
+                </div>
+              </DatePicker>
+            </FilterBox>
+          ) : null}
+          {filterValue1 === '2' ? (
+            <FilterBox style={{ marginRight: 5 }}>
+              <DatePicker mode="month" onChange={this.changeMonth}>
+                <div>
+                  <span>{filterLabel2}</span>
+                  <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                    &#xe6f0;
+                  </i>
+                </div>
+              </DatePicker>
+            </FilterBox>
+          ) : null}
+          {filterValue1 === '1' ? (
+            <FilterBox style={{ marginRight: 5 }}>
+              <DatePicker mode="date" onChange={this.changeDay}>
+                <div>
+                  <span>{filterLabel2}</span>
+                  <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                    &#xe6f0;
+                  </i>
+                </div>
+              </DatePicker>
+            </FilterBox>
+          ) : null}
           <WhiteSpace />
         </WingBlank>
 

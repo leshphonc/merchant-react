@@ -17,6 +17,10 @@ class MastSotre {
 
   @observable classifyDetail = {}
 
+  @observable getStaffRule = []
+
+  @observable getSelStaffRule = []
+
   // 店员列表
   @action
   fetchStaffList = async () => {
@@ -136,6 +140,42 @@ class MastSotre {
   @action
   fetchClassifyDelete = async id => {
     await services.fetchClassifyDelete(id)
+  }
+
+  // 调岗
+  @action
+  fetchRelocationPost = async (storeId, staffId) => {
+    await services.fetchRelocationPost(storeId, staffId)
+  }
+
+  @action
+  fetchGetStaffRule = async storeId => {
+    const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
+    const mer_id = userInfo ? userInfo.mer_id : ''
+    const response = await services.fetchGetStaffRule(storeId, mer_id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.getStaffRule = response.data.result
+      })
+    }
+  }
+
+  @action
+  fetchGetSelStaffRule = async staffId => {
+    const response = await services.fetchGetSelStaffRule(staffId)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.getSelStaffRule = response.data.result
+      })
+    }
+  }
+
+  @action
+  setStaffRule = async payload => {
+    const response = await services.setStaffRule(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
   }
 }
 export default new MastSotre()
