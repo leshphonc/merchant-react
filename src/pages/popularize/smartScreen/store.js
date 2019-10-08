@@ -7,6 +7,16 @@ class SmartScreenStore {
 
   @observable charData = {}
 
+  @observable promotionList=[]
+
+  @observable scanMemberList=[]
+
+  @observable viewTimeList=[]
+
+  @observable purchaseNumList=[]
+
+  @observable promotionInfo=[]
+
   @action
   fetchIMax = async () => {
     const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
@@ -25,6 +35,80 @@ class SmartScreenStore {
     const response = await services.fetchUserCome()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       console.log(response.data)
+    }
+  }
+
+  // 查看我的推广列表
+  @action
+  fetchPromotionList = async () => {
+    const response = await services.fetchPromotionList()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.promotionList = response.data.result.list
+      })
+    }
+  }
+
+  // 获取推广内容
+  @action
+  fetchPromotionInfo = async () => {
+    const response = await services.fetchPromotionInfo()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.promotionInfo= response.data.result
+        // console.log(this.promotionInfo)
+      })
+    }
+  }
+
+  // 上传推广内容
+  @action
+  insertPromotionList = async (payload) => {
+    const response = await services.insertPromotionList(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 编辑推广内容
+  @action
+  modifyPromotionInfo = async (payload) => {
+    const response = await services.modifyPromotionInfo(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 获取扫码人数
+  @action
+  fetchScanMember = async () => {
+    const response = await services.fetchScanMember()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.scanMemberList = response.data.result.list
+      })
+    }
+  }
+
+  // 获取浏览时长
+  @action
+  fetchViewTime = async () => {
+    const response = await services.fetchViewTime()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.viewTimeList = response.data.result.list
+      })
+    }
+  }
+
+  // 获取购买用户列表
+  @action
+  fetchPurchaseNum = async () => {
+    const response = await services.fetchPurchaseNum()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.purchaseNumList = response.data.result.list
+      })
     }
   }
 }

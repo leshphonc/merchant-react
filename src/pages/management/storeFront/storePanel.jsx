@@ -71,6 +71,7 @@ class StorePanel extends React.Component {
   componentDidMount() {
     const { storeFront, match, form } = this.props
     storeFront.fetchAllCategory()
+    
     // 首先判断是否有缓存
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
