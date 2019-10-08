@@ -241,3 +241,12 @@ export const Buttons = styled.div`
     border:0 !important;
   }
 `
+
+// 自定义标签
+export const CustomTag= styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    height: 24px;
+    align-items: center
+`
