@@ -355,6 +355,27 @@ class ReservePanel extends React.Component {
     })
   }
 
+  getMenuList = () => {
+    const { commodity } = this.props
+    const { reserveCategoryOption } = commodity
+    const { category } = this.state
+    const cateArr = []
+    if (!category.length) return false
+    reserveCategoryOption.forEach(item => {
+      if (item.value === category[0]) { 
+        cateArr.push(item.label)
+        if (item.children.length) { 
+          item.children.forEach(jItem => {
+            if (jItem.value === category[1]) { 
+              cateArr.push(jItem.label)
+            }
+          })
+        }
+      }
+    })
+    return `${cateArr[0]},${cateArr[1]}`
+  }
+
   render() {
     const { match, form, commodity, history } = this.props
     const { reserveCategoryOption } = commodity
@@ -618,6 +639,7 @@ class ReservePanel extends React.Component {
             <List.Item arrow="horizontal">服务类别</List.Item>
           </Picker>
           <Item
+            extra={this.getMenuList()}
             arrow="horizontal"
             onClick={() =>
               this.setState({
@@ -626,7 +648,6 @@ class ReservePanel extends React.Component {
             }
           >
             商户所属分类
-            <div>{}</div>
           </Item>
           <Item arrow="empty">
             商品图片
