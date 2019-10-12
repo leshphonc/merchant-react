@@ -15,36 +15,11 @@ export const fetchUserCome = () => axios.get('/Appapi.php?g=Appapi&c=Ai_imax&a=u
   },
 })
 
-// 查看我的推广列表
-export const fetchPromotionList = payload => axios.get('/Appapi.php?g=Appapi&c=Ai_imax&a=get_pushad_by_mer', {
-  params: {
-    ...payload,
-  },
-})
-
 // 获取店铺
 export const fetchStoreMer = () => axios.get('/Appapi.php?g=Appapi&c=Ai_imax&a=get_store_by_mer', {
   params: {
     ticket: localStorage.getItem('ticket'),
   },
-})
-
-// 上传推广内容
-export const insertPromotionList = payload => axios.post('/Appapi.php?g=Appapi&c=Ai_imax&a=pushad_add_by_mer', {
-  ...payload,
-  ticket: localStorage.getItem('ticket'),
-})
-
-// 获取推广内容
-export const fetchPromotionInfo = payload => axios.get('/Appapi.php?g=Appapi&c=Ai_imax&a=get_pushad_info', {
-  ...payload,
-  ticket: localStorage.getItem('ticket'),
-})
-
-// 编辑推广内容
-export const modifyPromotionInfo = payload => axios.post('/Appapi.php?g=Appapi&c=Ai_imax&a= pushad_edit_by_mer', {
-  ...payload,
-  ticket: localStorage.getItem('ticket'),
 })
 
 // 获取扫码人数
@@ -79,4 +54,47 @@ export const fetchEchartData = (type, date, search, id) => axios.get(`/appapi.ph
     mer_id: id,
     ticket: localStorage.getItem('ticket'),
   },
+})
+
+// 获取本店智能屏列表
+export const fetchLocalSmartScreen = () => axios.get('/appapi.php?c=Merchantimax&a=setting', {
+  params: {
+    ticket: localStorage.getItem('ticket'),
+  },
+})
+
+// 查看本店屏幕推广列表
+export const fetchPromotionList = id => axios.post('/appapi.php?c=Merchantimax&a=get_features', {
+  imax_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 上传推广内容
+export const insertPromotionList = payload => axios.post('/Appapi.php?c=Merchantimax&a=site_features_set', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 编辑推广内容
+export const modifyPromotionInfo = payload => axios.post('/Appapi.php?c=Merchantimax&a=site_features_set', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取推广内容详情
+export const fetchPromotionInfo = id => axios.post('/Appapi.php?c=Merchantimax&a=site_features_detail', {
+  site_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 修改上下架状态
+export const changeStatus = id => axios.post('/Appapi.php?c=Merchantimax&a=on', {
+  id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 删除推广内容
+export const deletePromotion = id => axios.post('/Appapi.php?c=Merchantimax&a=site_features_del', {
+  site_id: id,
+  ticket: localStorage.getItem('ticket'),
 })

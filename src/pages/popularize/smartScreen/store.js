@@ -1,4 +1,5 @@
 import { observable, action, runInAction } from 'mobx'
+import { Toast } from 'antd-mobile'
 import * as services from './services'
 import ErrorCode from '@/config/ErrorCode'
 
@@ -6,8 +7,6 @@ class SmartScreenStore {
   @observable iMax = []
 
   @observable charData = {}
-
-  @observable promotionList = []
 
   @observable scanMemberList = []
 
@@ -20,6 +19,10 @@ class SmartScreenStore {
   @observable echartData = []
 
   @observable storeMer = []
+
+  @observable smartScreenList = []
+
+  @observable promotionList = []
 
   @action
   fetchIMax = async () => {
@@ -42,17 +45,6 @@ class SmartScreenStore {
     }
   }
 
-  // 查看我的推广列表
-  @action
-  fetchPromotionList = async () => {
-    const response = await services.fetchPromotionList()
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        this.promotionList = response.data.result.list
-      })
-    }
-  }
-
   @action
   fetchStoreMer = async () => {
     const response = await services.fetchStoreMer()
@@ -60,36 +52,6 @@ class SmartScreenStore {
       runInAction(() => {
         this.storeMer = response.data.result
       })
-    }
-  }
-
-  // 获取推广内容
-  @action
-  fetchPromotionInfo = async () => {
-    const response = await services.fetchPromotionInfo()
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        this.promotionInfo = response.data.result
-        // console.log(this.promotionInfo)
-      })
-    }
-  }
-
-  // 上传推广内容
-  @action
-  insertPromotionList = async payload => {
-    const response = await services.insertPromotionList(payload)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(true)
-    }
-  }
-
-  // 编辑推广内容
-  @action
-  modifyPromotionInfo = async payload => {
-    const response = await services.modifyPromotionInfo(payload)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(true)
     }
   }
 
@@ -135,6 +97,79 @@ class SmartScreenStore {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.echartData = response.data.result
+      })
+    }
+  }
+
+  // 获取本店智能屏列表
+  @action
+  fetchLocalSmartScreen = async () => {
+    const response = await services.fetchLocalSmartScreen()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.smartScreenList = response.data.result
+      })
+    }
+  }
+
+  // 查看本店屏幕推广列表
+  @action
+  fetchPromotionList = async id => {
+    const response = await services.fetchPromotionList(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.promotionList = response.data.result
+      })
+    }
+  }
+
+  // 上传推广内容
+  @action
+  insertPromotionList = async payload => {
+    const response = await services.insertPromotionList(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 编辑推广内容
+  @action
+  modifyPromotionInfo = async payload => {
+    const response = await services.modifyPromotionInfo(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 获取推广内容详情
+  @action
+  fetchPromotionInfo = async id => {
+    const response = await services.fetchPromotionInfo(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.promotionInfo = response.data.result
+        // console.log(this.promotionInfo)
+      })
+    }
+  }
+
+  // 修改上下架状态
+  @action
+  changeStatus = async (id, storeId) => {
+    const response = await services.changeStatus(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      this.fetchPromotionList(storeId).then(() => {
+        Toast.success('状态修改成功', 1)
+      })
+    }
+  }
+
+  // 删除推广内容
+  deletePromotion = async (id, storeId) => {
+    const response = await services.deletePromotion(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      this.fetchPromotionList(storeId).then(() => {
+        Toast.success('状态修改成功', 1)
       })
     }
   }

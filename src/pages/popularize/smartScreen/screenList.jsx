@@ -1,25 +1,33 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import { WhiteSpace, Card } from 'antd-mobile'
+import { WhiteSpace, WingBlank, Card } from 'antd-mobile'
+import { observer, inject } from 'mobx-react'
 
+@inject('smartScreen')
+@observer
 class ScreenList extends React.Component {
+  componentDidMount() {
+    const { smartScreen } = this.props
+    smartScreen.fetchLocalSmartScreen()
+  }
+
   mapList = () => {
-    const { history } = this.props
-    return (
+    const { history, smartScreen } = this.props
+    return smartScreen.smartScreenList.map(item => (
       <React.Fragment>
-        <Card onClick={() => history.push('/popularize/smartScreen/promotionList')}>
-          <Card.Header title="新天地店"></Card.Header>
+        <Card onClick={() => history.push(`/popularize/smartScreen/promotionList/${item.imax_id}`)}>
+          <Card.Header title={item.store_name}></Card.Header>
           <Card.Body>
-            <div>屏幕地址：新天地</div>
+            <div>屏幕地址：{item.address}</div>
             <WhiteSpace />
-            <div>管理员：林俊杰</div>
+            <div>管理员：{item.contact}</div>
             <WhiteSpace />
-            <div>联系电话：138292819293</div>
+            <div>联系电话：{item.tel}</div>
           </Card.Body>
         </Card>
         <WhiteSpace />
       </React.Fragment>
-    )
+    ))
   }
 
   render() {
@@ -27,7 +35,7 @@ class ScreenList extends React.Component {
       <>
         <NavBar title="本店智能屏列表" goBack />
         <WhiteSpace />
-        {this.mapList()}
+        <WingBlank size="md">{this.mapList()}</WingBlank>
       </>
     )
   }

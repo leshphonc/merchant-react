@@ -93,6 +93,23 @@ class MastSotre {
 
   @observable openUserSpread = 0
 
+  @observable serviceCategory = []
+
+  @observable serviceCategoryChild = {
+    project: [],
+    twoCate: [],
+  }
+
+  @observable singleServiceList = []
+
+  @observable singleServiceListPage = 1
+
+  @observable singleServiceListSize = 10
+
+  @observable singleServiceListTotal = null
+
+  @observable singleServiceDetail = {}
+
   @action
   fetchGroupList = async keyword => {
     let hasMore = true
@@ -698,6 +715,7 @@ class MastSotre {
   }
 
   // 积分兑换币是否开启
+  @action
   fetchscoreAndDhb = async () => {
     const response = await services.fetchscoreAndDhb()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -710,11 +728,122 @@ class MastSotre {
   }
 
   // 三级分佣
+  @action
   fetchShowCommission = async () => {
     const response = await services.fetchShowCommission()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.openUserSpread = response.data.result[0].value
+      })
+    }
+  }
+
+  // 获取服务项目的分类
+  @action
+  fetchServiceCategory = async () => {
+    const response = await services.fetchServiceCategory()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.serviceCategory = response.data.result
+      })
+    }
+  }
+
+  // 新增一级分类
+  @action
+  createFirstCategory = async value => {
+    const response = await services.createFirstCategory(value)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      this.fetchServiceCategory()
+    }
+  }
+
+  // 编辑一级分类
+  @action
+  modifyFirstCategory = async payload => {
+    const response = await services.modifyFirstCategory(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      this.fetchServiceCategory()
+    }
+  }
+
+  // 新增二级分类
+  @action
+  createSecondCategory = async (value, id) => {
+    const response = await services.createSecondCategory(value)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      this.fetchCategoryChild(id)
+    }
+  }
+
+  // 编辑二级分类
+  @action
+  modifySecondCategory = async (payload, id) => {
+    const response = await services.modifySecondCategory(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      this.fetchCategoryChild(id)
+    }
+  }
+
+  // 删除二级分类
+  @action
+  deleteSecondCategory = async id => {
+    const response = await services.deleteSecondCategory(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 查询分类下的内容
+  @action
+  fetchCategoryChild = async id => {
+    const response = await services.fetchCategoryChild(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.serviceCategoryChild = response.data.result
+      })
+    }
+  }
+
+  // 查询服务项目
+  @action
+  fetchSingle = async flag => {
+    if (flag) {
+      runInAction(() => {
+        this.singleServiceListPage += 1
+      })
+    }
+    const response = await services.fetchSingle(this.singleServiceListPage)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        if (flag) {
+          this.singleServiceList = [...this.singleServiceList, ...response.data.result]
+          if (response.data.result.length === 0) {
+            this.singleServiceListPage -= 1
+          }
+        } else {
+          this.singleServiceList = response.data.result
+        }
+      })
+    }
+  }
+
+  // 添加服务项目
+  @action
+  addSingleService = async payload => {
+    const response = await services.addSingleService(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 查询服务项目详情
+  @action
+  fetchSingleServiceDetail = async id => {
+    const response = await services.fetchSingleServiceDetail(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.singleServiceDetail = response.data.result
       })
     }
   }

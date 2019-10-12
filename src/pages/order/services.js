@@ -125,6 +125,13 @@ export const fetchPickAddress = id => axios.get('/appapi.php?c=Merchantapp&a=get
   },
 })
 
+// 接单
+export const orders = id => axios.post('/appapi.php?c=Merchantapp&a=shopOrderEdit', {
+  order_id: id,
+  status: '1',
+  ticket: localStorage.getItem('ticket'),
+})
+
 // 发货到自提点
 export const shipToSelfLifting = id => axios.post('/appapi.php?c=Merchantapp&a=shopOrderEdit', {
   order_id: id,
@@ -240,11 +247,5 @@ export const fetchArrivalList = (page, storeId, staffId, goodsName, stime, etime
 // 获取到店的商铺list
 export const fetchStoreList = id => axios.post('/appapi.php?c=Merchantapp&a=getStoreStaff', {
   mer_id: id,
-  ticket: localStorage.getItem('ticket'),
-})
-
-export const orders = id => axios.post('/appapi.php?c=Merchantapp&a=shopOrderEdit', {
-  order_id: id,
-  status: '1',
   ticket: localStorage.getItem('ticket'),
 })

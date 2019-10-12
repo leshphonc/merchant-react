@@ -226,27 +226,40 @@ export const Buttons = styled.div`
   display: flex;
   justify-content: space-between;
   height: 24px;
-  align-items: center
-  .am-button{
+  align-items: center .am-button {
     font-size: 16px;
     overflow: initial;
     height: 0;
-    line-height:1;
+    line-height: 1;
     background: #ffb000;
     height: 24px;
     line-height: 24px;
     width: 60px;
   }
-  .am-button::before{
-    border:0 !important;
+  .am-button::before {
+    border: 0 !important;
   }
 `
 
 // 自定义标签
-export const CustomTag= styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    height: 24px;
-    align-items: center
+export const CustomTag = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 24px;
+  align-items: center;
+`
+
+// 颜色框
+export const ColorCard = styled.div`
+  border-radius: 8px;
+  height: 80px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
+export const CardLeft = styled.div`
+  color: #fff;
 `

@@ -21,8 +21,13 @@ import ECommerceDeliveryTemplatePanel from './eCommerceDeliveryTemplatePanel'
 import EditSpread from './editSpread'
 import GroupDiscounts from './groupDiscounts'
 import AppointDiscounts from './appointDiscounts'
+import ServiceDashboard from './ServiceDashboard'
+import ServiceCategory from './ServiceCategory'
+import ServiceCategoryProject from './ServiceCategoryProject'
+import serviceCategorySecondCategory from './ServiceCategorySecondCategory'
 import ServiceItems from './ServiceItems'
 import ServiceItemsPanel from './ServiceItemsPanel'
+import ServiceItemsSelectSingle from './ServiceItemsSelectSingle'
 
 const { Item } = List
 @inject('commodity')
@@ -70,7 +75,7 @@ class Commodity extends React.Component {
           <Item
             arrow="horizontal"
             onClick={() => {
-              history.push('/management/commodity/serviceItems')
+              history.push('/management/commodity/serviceDashboard')
             }}
           >
             服务项目
@@ -124,10 +129,24 @@ export default () => (
       component={ECommerceDeliveryTemplatePanel}
     />
     {/* 服务项目 */}
+    <Route path="/management/commodity/serviceDashboard" component={ServiceDashboard} />
+    <Route path="/management/commodity/serviceCategory" component={ServiceCategory} />
+    <Route
+      path="/management/commodity/serviceCategoryProject/:id"
+      component={ServiceCategoryProject}
+    />
+    <Route
+      path="/management/commodity/serviceCategorySecondCategory/:id"
+      component={serviceCategorySecondCategory}
+    />
     <Route path="/management/commodity/serviceItems" component={ServiceItems} />
     <Route
-      path="/management/commodity/serviceItemsPanel/:str/:type"
+      path="/management/commodity/serviceItemsPanel/:str/:type/:id?"
       component={ServiceItemsPanel}
+    />
+    <Route
+      path="/management/commodity/serviceItemsSelectSingle"
+      component={ServiceItemsSelectSingle}
     />
   </React.Fragment>
 )

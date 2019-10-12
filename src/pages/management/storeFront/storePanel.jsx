@@ -71,7 +71,7 @@ class StorePanel extends React.Component {
   componentDidMount() {
     const { storeFront, match, form } = this.props
     storeFront.fetchAllCategory()
-    
+
     // 首先判断是否有缓存
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
@@ -119,7 +119,7 @@ class StorePanel extends React.Component {
         pic: cacheData.pic,
         discount_type: cacheData.discount_type,
         open_1: cacheData.open_1 && new Date(cacheData.open_1),
-        close_1: cacheData.open_1 && new Date(cacheData.close_1),
+        close_1: cacheData.close_1 && new Date(cacheData.close_1),
       })
       setTimeout(() => {
         if (this.editor.current) {

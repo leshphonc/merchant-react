@@ -303,13 +303,13 @@ class SmartScreen extends React.Component {
         <List style={{ marginTop: 10 }}>
           <List.Item
             arrow="horizontal"
-            onClick={() => history.push('/popularize/smartScreen/promotionList404')}
+            // onClick={() => history.push('/popularize/smartScreen/promotionList404')}
           >
             购买广告
           </List.Item>
           <List.Item
             arrow="horizontal"
-            onClick={() => history.push('/popularize/smartScreen/promotionList404')}
+            // onClick={() => history.push('/popularize/smartScreen/promotionList404')}
           >
             广告订单
           </List.Item>
@@ -317,14 +317,14 @@ class SmartScreen extends React.Component {
             arrow="horizontal"
             onClick={() => history.push('/popularize/smartScreen/screenList')}
           >
-            本店智能屏推广海报
+            智能屏推广海报
           </List.Item>
-          <List.Item
+          {/* <List.Item
             arrow="horizontal"
             onClick={() => history.push('/popularize/smartScreen/promotionList')}
           >
             同城智能屏推广海报
-          </List.Item>
+          </List.Item> */}
         </List>
       </>
     )
@@ -337,10 +337,10 @@ export default () => (
     {/* 本店智能屏推广海报屏幕列表 */}
     <Route path="/popularize/smartScreen/screenList" exact component={ScreenList} />
     {/* 屏幕内推广内容列表 */}
-    <Route path="/popularize/smartScreen/promotionList" exact component={PromotionList} />
+    <Route path="/popularize/smartScreen/promotionList/:id" exact component={PromotionList} />
     {/* 添加推广内容 */}
     <Route
-      path="/popularize/smartScreen/promotionList/promotionPanel/:str/:id?"
+      path="/popularize/smartScreen/promotionList/promotionPanel/:str/:id"
       component={PromotionPanel}
     />
     {/* 扫码人数 */}
