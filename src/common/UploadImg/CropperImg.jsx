@@ -47,7 +47,7 @@ class CropperImg extends React.Component {
           })
         })
         .catch(e => Toast.fail(e))
-    })
+    }, 'image/jpeg')
   }
 
   save = () => {
@@ -82,7 +82,6 @@ class CropperImg extends React.Component {
             // Cropper.js options
             aspectRatio={aspectratio}
             guides={false}
-            crop={this.crop}
           />
         ) : null}
         {files.length < 1 && !resultImgUrl ? (

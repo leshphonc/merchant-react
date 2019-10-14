@@ -462,3 +462,15 @@ export const fetchSingleServiceDetail = id => axios.post('/appapi.php?c=SpaceMer
   app_id: id,
   ticket: localStorage.getItem('ticket'),
 })
+
+// 删除服务项目
+export const deleteSingleService = id => axios.post('/appapi.php?c=SpaceMerchant&a=delPro', {
+  app_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+//
+export const fetchPackage = page => axios.post('/appapi.php?c=SpaceMerchant&a=getMealList', {
+  page,
+  ticket: localStorage.getItem('ticket'),
+})

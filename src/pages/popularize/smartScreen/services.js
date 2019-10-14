@@ -64,8 +64,9 @@ export const fetchLocalSmartScreen = () => axios.get('/appapi.php?c=Merchantimax
 })
 
 // 查看本店屏幕推广列表
-export const fetchPromotionList = id => axios.post('/appapi.php?c=Merchantimax&a=get_features', {
+export const fetchPromotionList = (id, status) => axios.post('/appapi.php?c=Merchantimax&a=get_features', {
   imax_id: id,
+  status,
   ticket: localStorage.getItem('ticket'),
 })
 
@@ -94,7 +95,7 @@ export const changeStatus = id => axios.post('/Appapi.php?c=Merchantimax&a=on', 
 })
 
 // 删除推广内容
-export const deletePromotion = id => axios.post('/Appapi.php?c=Merchantimax&a=site_features_del', {
-  site_id: id,
+export const usingPromotion = id => axios.post('/Appapi.php?c=Merchantimax&a=using', {
+  id,
   ticket: localStorage.getItem('ticket'),
 })

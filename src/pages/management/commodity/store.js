@@ -104,11 +104,11 @@ class MastSotre {
 
   @observable singleServiceListPage = 1
 
-  @observable singleServiceListSize = 10
-
-  @observable singleServiceListTotal = null
-
   @observable singleServiceDetail = {}
+
+  @observable packageList = []
+
+  @observable packageListPage = 1
 
   @action
   fetchGroupList = async keyword => {
@@ -844,6 +844,38 @@ class MastSotre {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.singleServiceDetail = response.data.result
+      })
+    }
+  }
+
+  // 删除单个服务项目
+  @action
+  deleteSingleService = async id => {
+    const response = await services.deleteSingleService(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 获取套餐列表
+  @action
+  fetchPackage = async flag => {
+    if (flag) {
+      runInAction(() => {
+        this.packageListPage += 1
+      })
+    }
+    const response = await services.fetchPackage(this.packageListPage)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        if (flag) {
+          this.packageList = [...this.packageList, ...response.data.result]
+          if (response.data.result.length === 0) {
+            this.packageListPage -= 1
+          }
+        } else {
+          this.packageList = response.data.result
+        }
       })
     }
   }

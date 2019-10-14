@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { Link } from 'react-router-dom'
-import { WhiteSpace, WingBlank, Card, Flex, Button } from 'antd-mobile'
+import { WhiteSpace, WingBlank, Card, Flex, Button, SegmentedControl } from 'antd-mobile'
 import { inject, observer } from 'mobx-react'
 
 const STATUS = {
@@ -16,12 +16,16 @@ const STATUS = {
 class PromotionList extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      cur: '1',
+      curIndex: 0,
+    }
   }
 
   componentDidMount() {
     const { smartScreen, match } = this.props
-    smartScreen.fetchPromotionList(match.params.id)
+    const { cur } = this.state
+    smartScreen.fetchPromotionList(match.params.id, cur)
   }
 
   mapList = () => {
@@ -38,7 +42,7 @@ class PromotionList extends React.Component {
                 </span>
               }
               thumb={item.pic}
-              extra={STATUS[item.ai.status]}
+              extra={STATUS[item.ai.audit]}
               // thumb= {item.img}
             />
             <Card.Body>
@@ -70,7 +74,7 @@ class PromotionList extends React.Component {
                           type="primary"
                           onClick={() => this.changeStatus(item.ai.id)}
                         >
-                          下架
+                          取消发布
                         </Button>
                       </Flex.Item>
                     </Flex>
@@ -95,16 +99,16 @@ class PromotionList extends React.Component {
                             type="primary"
                             onClick={() => this.changeStatus(item.ai.id)}
                           >
-                            上架
+                            全城发布
                           </Button>
                         </Flex.Item>
                         <Flex.Item>
                           <Button
                             size="small"
                             type="warning"
-                            onClick={() => this.deletePromotion(item.id)}
+                            onClick={() => this.usingPromotion(item.ai.id)}
                           >
-                            删除
+                            {item.status === '1' ? '禁用' : '启用'}
                           </Button>
                         </Flex.Item>
                       </Flex>
@@ -125,16 +129,33 @@ class PromotionList extends React.Component {
 
   changeStatus = id => {
     const { smartScreen, match } = this.props
-    smartScreen.changeStatus(id, match.params.id)
+    const { cur } = this.state
+    smartScreen.changeStatus(id, match.params.id, cur)
   }
 
-  deletePromotion = id => {
+  usingPromotion = id => {
     const { smartScreen, match } = this.props
-    smartScreen.deletePromotion(id, match.params.id)
+    const { cur } = this.state
+    smartScreen.usingPromotion(id, match.params.id, cur)
+  }
+
+  curOnChange = e => {
+    this.setState(
+      {
+        cur: e.nativeEvent.selectedSegmentIndex === 0 ? '1' : '0',
+        curIndex: e.nativeEvent.selectedSegmentIndex,
+      },
+      () => {
+        const { smartScreen, match } = this.props
+        const { cur } = this.state
+        smartScreen.fetchPromotionList(match.params.id, cur)
+      },
+    )
   }
 
   render() {
     const { smartScreen } = this.props
+    const { curIndex } = this.state
     const { promotionList } = smartScreen
     const { site_id } = promotionList[0] ? promotionList[0] : {}
     return (
@@ -151,6 +172,14 @@ class PromotionList extends React.Component {
             </Link>
           }
         />
+        <WhiteSpace />
+        <WingBlank>
+          <SegmentedControl
+            values={['启用中', '禁用列表']}
+            selectedIndex={curIndex}
+            onChange={this.curOnChange}
+          />
+        </WingBlank>
         <WhiteSpace />
         <WingBlank size="sm">{this.mapList()}</WingBlank>
       </React.Fragment>

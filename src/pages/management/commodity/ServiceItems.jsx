@@ -9,6 +9,8 @@ import {
   SegmentedControl,
   Flex,
   PullToRefresh,
+  Toast,
+  Modal,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import moment from 'moment'
@@ -43,7 +45,10 @@ class ServiceItems extends React.Component {
     commodity.fetchSingle(flag)
   }
 
-  fetchPackage = () => {}
+  fetchPackage = flag => {
+    const { commodity } = this.props
+    commodity.fetchPackage(flag)
+  }
 
   mapList = () => {
     const { history, commodity } = this.props
@@ -52,10 +57,7 @@ class ServiceItems extends React.Component {
       moment(2147483647)
       return commodity.singleServiceList.map(item => (
         <React.Fragment key={item.appoint_id}>
-          <Card
-            onClick={() => history.push(`/management/commodity/serviceItemsPanel/编辑/${cur}/${item.appoint_id}`)
-            }
-          >
+          <Card>
             <Card.Header
               title={item.appoint_name}
               thumb={item.pic}
@@ -99,11 +101,56 @@ class ServiceItems extends React.Component {
                 </Flex.Item>
               </Flex>
             </Card.Body>
+            <WhiteSpace />
+            <Card.Footer
+              content={
+                <Flex>
+                  <Flex.Item>
+                    <Button
+                      size="small"
+                      type="primary"
+                      onClick={() => history.push(
+                        `/management/commodity/serviceItemsPanel/编辑/${cur}/${item.appoint_id}`,
+                      )
+                      }
+                    >
+                      编辑
+                    </Button>
+                  </Flex.Item>
+                  <Flex.Item>
+                    <Button
+                      size="small"
+                      type="warning"
+                      onClick={() => this.deleteSingleService(item.appoint_id)}
+                    >
+                      删除
+                    </Button>
+                  </Flex.Item>
+                </Flex>
+              }
+            >
+            </Card.Footer>
+            <WhiteSpace />
           </Card>
           <WhiteSpace />
         </React.Fragment>
       ))
     }
+  }
+
+  deleteSingleService = id => {
+    const { commodity } = this.props
+    Modal.alert('删除服务项目', '确定删除此项目？', [
+      { text: '取消' },
+      {
+        text: '确定',
+        onPress: () => commodity.deleteSingleService(id).then(res => {
+          if (res) {
+            Toast.success('删除成功', 1, () => this.fetchSingle())
+          }
+        }),
+      },
+    ])
   }
 
   loadMore = () => {

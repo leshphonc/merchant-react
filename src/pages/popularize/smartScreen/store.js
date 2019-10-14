@@ -114,8 +114,8 @@ class SmartScreenStore {
 
   // 查看本店屏幕推广列表
   @action
-  fetchPromotionList = async id => {
-    const response = await services.fetchPromotionList(id)
+  fetchPromotionList = async (id, status) => {
+    const response = await services.fetchPromotionList(id, status)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.promotionList = response.data.result
@@ -155,20 +155,20 @@ class SmartScreenStore {
 
   // 修改上下架状态
   @action
-  changeStatus = async (id, storeId) => {
+  changeStatus = async (id, storeId, cur) => {
     const response = await services.changeStatus(id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      this.fetchPromotionList(storeId).then(() => {
+      this.fetchPromotionList(storeId, cur).then(() => {
         Toast.success('状态修改成功', 1)
       })
     }
   }
 
   // 删除推广内容
-  deletePromotion = async (id, storeId) => {
-    const response = await services.deletePromotion(id)
+  usingPromotion = async (id, storeId, cur) => {
+    const response = await services.usingPromotion(id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      this.fetchPromotionList(storeId).then(() => {
+      this.fetchPromotionList(storeId, cur).then(() => {
         Toast.success('状态修改成功', 1)
       })
     }

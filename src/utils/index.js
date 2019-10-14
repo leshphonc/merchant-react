@@ -3,6 +3,8 @@ import crypto from 'crypto'
 import axios from 'axios'
 import { Toast } from 'antd-mobile'
 
+const FILE_SIZE = 300 * 1024 // 文件最大限制为5M
+
 /**
  * @author cc
  * @description 公共函数
@@ -76,10 +78,14 @@ export default {
   },
   // 上传单个图片 blob
   compressionAndUploadImg(blob) {
+    let quality = 0.95
+    if (blob.size > FILE_SIZE) {
+      quality = FILE_SIZE / blob.size
+    }
     return new Promise((resolve, reject) => {
       /* eslint no-new: 0 */
       new Compressor(blob, {
-        quality: 0.1,
+        quality,
         success: result => {
           const reader = new window.FileReader()
           reader.readAsDataURL(result)
@@ -150,8 +156,7 @@ export default {
       account: '/^[A-Za-z0-9]{1,30}$/',
       password: '/^(\\w){6,16}$/',
       tel: '/^[1][3-9][0-9]{9}$/',
-      email:
-        '/^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})$/',
+      email: '/^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})$/',
     }
     return new RegExp(REGS[rule]).test(value)
   },

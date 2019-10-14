@@ -13,8 +13,8 @@ class ScreenList extends React.Component {
 
   mapList = () => {
     const { history, smartScreen } = this.props
-    return smartScreen.smartScreenList.map(item => (
-      <React.Fragment>
+    return smartScreen.smartScreenList.map((item, index) => (
+      <React.Fragment key={index}>
         <Card onClick={() => history.push(`/popularize/smartScreen/promotionList/${item.imax_id}`)}>
           <Card.Header title={item.store_name}></Card.Header>
           <Card.Body>

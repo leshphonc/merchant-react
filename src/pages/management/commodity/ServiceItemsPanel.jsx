@@ -24,7 +24,9 @@ import moment from 'moment'
 class ServiceItemsPanel extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      projectData: [],
+    }
     this.editor = React.createRef()
   }
 
@@ -33,23 +35,37 @@ class ServiceItemsPanel extends React.Component {
     // 先判断是否有缓存值
     const cacheData = Utils.getCacheData()
     if (cacheData) {
-      setTimeout(() => {
-        form.setFieldsValue({
-          ...cacheData,
-          start_time: cacheData.start_time && new Date(cacheData.start_time),
-          end_time: cacheData.end_time && new Date(cacheData.end_time),
-        })
-        if (cacheData.payment_status) {
+      if (match.params.type === '单项目') {
+        setTimeout(() => {
           form.setFieldsValue({
-            payment_money: cacheData.payment_money,
+            ...cacheData,
+            start_time: cacheData.start_time && new Date(cacheData.start_time),
+            end_time: cacheData.end_time && new Date(cacheData.end_time),
           })
-        }
-        this.editor.current.state.editor.txt.html(cacheData.des)
-        delete cacheData.des
-      }, 500)
+          if (cacheData.payment_status) {
+            form.setFieldsValue({
+              payment_money: cacheData.payment_money,
+            })
+          }
+          this.editor.current.state.editor.txt.html(cacheData.des)
+          delete cacheData.des
+        }, 500)
+        Utils.clearCacheData()
+        return false
+      }
+      form.setFieldsValue({
+        name: cacheData.name,
+        price: cacheData.price,
+        total_num: cacheData.total_num,
+        person_num: cacheData.person_num,
+      })
+      this.setState({
+        projectData: cacheData.project_data,
+      })
       Utils.clearCacheData()
       return false
     }
+
     if (match.params.str === '新增') {
       // 新增
       if (match.params.type === '单项目') {
@@ -92,6 +108,15 @@ class ServiceItemsPanel extends React.Component {
     }
   }
 
+  goPackage = () => {
+    const { history, form } = this.props
+    const { projectData } = this.state
+    const formData = form.getFieldsValue()
+    formData.project_data = projectData
+    Utils.cacheData(formData)
+    history.push('/management/commodity/serviceItemsSelectSingle')
+  }
+
   submit = () => {
     const { match, form, commodity, history } = this.props
     const id = match.params.id ? match.params.id : 0
@@ -121,7 +146,16 @@ class ServiceItemsPanel extends React.Component {
             }
           })
       } else {
-        commodity.addPackage({})
+        commodity
+          .addPackage({
+            ...value,
+            project_data: JSON.stringify([]),
+          })
+          .then(res => {
+            if (res) {
+              Toast.success('成功', 1, () => history.goBack())
+            }
+          })
       }
     })
   }
@@ -325,14 +359,42 @@ class ServiceItemsPanel extends React.Component {
         ) : (
           <>
             <List>
-              <InputItem placeholder="套餐名称">套餐名称</InputItem>
-              <InputItem placeholder="保留两位小数">套餐价格</InputItem>
-              <InputItem placeholder="套餐库存数量">套餐总数</InputItem>
-              <InputItem placeholder="每人可购买数量">每人可购买</InputItem>
-              <List.Item
-                arrow="horizontal"
-                onClick={() => history.push('/management/commodity/serviceItemsSelectSingle')}
+              <InputItem
+                {...getFieldProps('name', {
+                  rules: [{ required: true }],
+                })}
+                placeholder="套餐名称"
               >
+                套餐名称
+              </InputItem>
+              <InputItem
+                {...getFieldProps('price', {
+                  rules: [{ required: true }],
+                })}
+                type="money"
+                placeholder="保留两位小数"
+              >
+                套餐价格
+              </InputItem>
+              <InputItem
+                {...getFieldProps('total_num', {
+                  rules: [{ required: true }],
+                })}
+                type="number"
+                placeholder="套餐库存数量"
+              >
+                套餐总数
+              </InputItem>
+              <InputItem
+                {...getFieldProps('person_num', {
+                  rules: [{ required: true }],
+                })}
+                type="number"
+                placeholder="每人可购买数量"
+              >
+                每人可购买
+              </InputItem>
+              <List.Item arrow="horizontal" onClick={this.goPackage}>
                 套餐包含项目
               </List.Item>
             </List>
