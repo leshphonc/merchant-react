@@ -4,8 +4,8 @@ import { observer, inject } from 'mobx-react'
 import { WhiteSpace, List, InputItem, Button, Modal, Toast } from 'antd-mobile'
 import Utils from '@/utils'
 
-@observer
 @inject('wallet', 'basicInformation')
+@observer
 class VerificationCard extends React.Component {
   state = {
     cur: 1,
