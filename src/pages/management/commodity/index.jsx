@@ -21,13 +21,15 @@ import ECommerceDeliveryTemplatePanel from './eCommerceDeliveryTemplatePanel'
 import EditSpread from './editSpread'
 import GroupDiscounts from './groupDiscounts'
 import AppointDiscounts from './appointDiscounts'
-import ServiceDashboard from './ServiceDashboard'
-import ServiceCategory from './ServiceCategory'
-import ServiceCategoryProject from './ServiceCategoryProject'
-import serviceCategorySecondCategory from './ServiceCategorySecondCategory'
-import ServiceItems from './ServiceItems'
-import ServiceItemsPanel from './ServiceItemsPanel'
-import ServiceItemsSelectSingle from './ServiceItemsSelectSingle'
+import ServiceDashboard from './serviceDashboard'
+import ServiceCategory from './serviceCategory'
+import ServiceCategoryProject from './serviceCategoryProject'
+import serviceCategorySecondCategory from './serviceCategorySecondCategory'
+import ServiceItems from './serviceItems'
+import ServiceItemsPanel from './serviceItemsPanel'
+import ServiceItemsSelectSingle from './serviceItemsSelectSingle'
+import serviceSingleRecord from './serviceSingleRecord'
+import ServicePackageRecord from './servicePackageRecord'
 
 const { Item } = List
 @inject('commodity')
@@ -148,5 +150,7 @@ export default () => (
       path="/management/commodity/serviceItemsSelectSingle"
       component={ServiceItemsSelectSingle}
     />
+    <Route path="/management/commodity/serviceSingleRecord/:id" component={serviceSingleRecord} />
+    <Route path="/management/commodity/servicePackageRecord/:id" component={ServicePackageRecord} />
   </React.Fragment>
 )

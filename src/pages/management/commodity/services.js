@@ -421,6 +421,12 @@ export const modifyFirstCategory = payload => axios.post('/appapi.php?c=SpaceMer
   ticket: localStorage.getItem('ticket'),
 })
 
+// 删除一级分类
+export const deleteFirstCategory = id => axios.post('/appapi.php?c=SpaceMerchant&a=addEditAppCate', {
+  cat_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
 // 新增二级分类
 export const createSecondCategory = value => axios.post('/appapi.php?c=SpaceMerchant&a=addTwoCate', {
   data: value,
@@ -442,6 +448,12 @@ export const deleteSecondCategory = id => axios.post('/appapi.php?c=SpaceMerchan
 // 查询分类下的内容
 export const fetchCategoryChild = id => axios.post('/appapi.php?c=SpaceMerchant&a=selTwoCateList', {
   cat_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 解绑服务项目
+export const unbindCategory = id => axios.post('/appapi.php?c=SpaceMerchant&a=delbind', {
+  app_id: id,
   ticket: localStorage.getItem('ticket'),
 })
 
@@ -471,6 +483,50 @@ export const deleteSingleService = id => axios.post('/appapi.php?c=SpaceMerchant
 
 //
 export const fetchPackage = page => axios.post('/appapi.php?c=SpaceMerchant&a=getMealList', {
+  page,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 新增套餐卡
+export const addPackage = payload => axios.post('/appapi.php?c=SpaceMerchant&a=addMeal', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 删除套餐卡
+export const deletePackage = id => axios.post('/appapi.php?c=SpaceMerchant&a=delMeal', {
+  meal_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取套餐详情
+export const fetchPackageDetail = id => axios.post('/appapi.php?c=SpaceMerchant&a=getMealList', {
+  meal_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取套餐内服务列表
+export const fetchServiceOfPackage = id => axios.post('/appapi.php?c=SpaceMerchant&a=getMealProList', {
+  meal_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 编辑套餐
+export const modifyPackage = payload => axios.post('/appapi.php?c=SpaceMerchant&a=editMeal', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取套餐销售记录
+export const fetchPackageRecord = (id, page) => axios.post('/appapi.php?c=SpaceMerchant&a=getUserBuyMeal', {
+  meal_id: id,
+  page,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取项目销售记录
+export const fetchSingleRecord = (id, page) => axios.post('/appapi.php?c=SpaceMerchant&a=getUserBuyMeal', {
+  meal_id: id,
   page,
   ticket: localStorage.getItem('ticket'),
 })

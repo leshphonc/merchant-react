@@ -121,9 +121,9 @@ class PromotionPanel extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps('main_key', {
-              rules: [{ required: true }],
+              rules: [{ required: true, min: 2, max: 4 }],
             })}
-            placeholder="出现在智能屏上，用于引导用户对话"
+            placeholder="出现在智能屏上，用于引导用户对话(2-4个字)"
           >
             命令词
             <Tooltip
@@ -141,17 +141,16 @@ class PromotionPanel extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps('keywords', {
-              rules: [{ required: true }],
+              rules: [{ required: true, min: 2, max: 6 }],
             })}
-            maxLength="6"
             labelNumber="7"
-            placeholder="请输入推广关键字（6字内）"
+            placeholder="请输入推广关键字（2-6个字）"
           >
             对话关键词1
             <Tooltip
               trigger="click"
               placement="topLeft"
-              overlay="用户与智能屏对话时，识别到该关键词将向用户返回本条内容（关键词字数不得超过6个字）"
+              overlay="用户与智能屏对话时，识别到该关键词将向用户返回本条内容（2-6个字）"
               onClick={e => {
                 e.stopPropagation()
               }}
@@ -163,17 +162,16 @@ class PromotionPanel extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps('keywords2', {
-              rules: [{ required: false }],
+              rules: [{ required: false, min: 2, max: 6 }],
             })}
-            maxLength="6"
             labelNumber="7"
-            placeholder="选填（6字内）"
+            placeholder="选填（2-6个字）"
           >
             对话关键词2
             <Tooltip
               trigger="click"
               placement="topLeft"
-              overlay="选填（关键词字数不得超过6个字）"
+              overlay="选填（2-6个字）"
               onClick={e => {
                 e.stopPropagation()
               }}
@@ -185,17 +183,16 @@ class PromotionPanel extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps('keywords3', {
-              rules: [{ required: false }],
+              rules: [{ required: false, min: 2, max: 6 }],
             })}
-            maxLength="6"
             labelNumber="7"
-            placeholder="选填（6字内）"
+            placeholder="选填（2-6个字）"
           >
             对话关键词3
             <Tooltip
               trigger="click"
               placement="topLeft"
-              overlay="选填（关键词字数不得超过6个字）"
+              overlay="选填（2-6个字）"
               onClick={e => {
                 e.stopPropagation()
               }}

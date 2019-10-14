@@ -110,6 +110,18 @@ class MastSotre {
 
   @observable packageListPage = 1
 
+  @observable packageDetail = []
+
+  @observable serviceOfPackage = []
+
+  @observable packageRecordList = 0
+
+  @observable packageRecordListPage = 1
+
+  @observable singleRecordList = 0
+
+  @observable singleRecordListPage = 1
+
   @action
   fetchGroupList = async keyword => {
     let hasMore = true
@@ -767,6 +779,15 @@ class MastSotre {
     }
   }
 
+  // 删除一级分类
+  @action
+  deleteFirstCategory = async id => {
+    const response = await services.deleteFirstCategory(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
   // 新增二级分类
   @action
   createSecondCategory = async (value, id) => {
@@ -802,6 +823,15 @@ class MastSotre {
       runInAction(() => {
         this.serviceCategoryChild = response.data.result
       })
+    }
+  }
+
+  // 解除分类绑定
+  @action
+  unbindCategory = async id => {
+    const response = await services.unbindCategory(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
     }
   }
 
@@ -875,6 +905,101 @@ class MastSotre {
           }
         } else {
           this.packageList = response.data.result
+        }
+      })
+    }
+  }
+
+  // 添加套餐
+  @action
+  addPackage = async payload => {
+    const response = await services.addPackage(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 删除套餐
+  @action
+  deletePackage = async id => {
+    const response = await services.deletePackage(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 查询套餐详情
+  @action
+  fetchPackageDetail = async id => {
+    const response = await services.fetchPackageDetail(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.packageDetail = response.data.result
+      })
+    }
+  }
+
+  // 获取套餐下的项目
+  @action
+  fetchServiceOfPackage = async id => {
+    const response = await services.fetchServiceOfPackage(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.serviceOfPackage = response.data.result
+      })
+    }
+  }
+
+  // 编辑套餐
+  @action
+  modifyPackage = async payload => {
+    const response = await services.modifyPackage(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 获取套餐销售记录
+  @action
+  fetchPackageRecord = async (id, flag) => {
+    if (flag) {
+      runInAction(() => {
+        this.packageRecordList += 1
+      })
+    }
+    const response = await services.fetchPackageRecord(this.packageRecordListPage)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        if (flag) {
+          this.packageRecordList = [...this.packageRecordList, ...response.data.result]
+          if (response.data.result.length === 0) {
+            this.packageRecordListPage -= 1
+          }
+        } else {
+          this.packageRecordList = response.data.result
+        }
+      })
+    }
+  }
+
+  // 获取项目销售记录
+  @action
+  fetchSingleRecord = async (id, flag) => {
+    if (flag) {
+      runInAction(() => {
+        this.singleRecordList += 1
+      })
+    }
+    const response = await services.fetchSingleRecord(this.singleRecordListPage)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        if (flag) {
+          this.singleRecordList = [...this.singleRecordList, ...response.data.result]
+          if (response.data.result.length === 0) {
+            this.singleRecordListPage -= 1
+          }
+        } else {
+          this.singleRecordList = response.data.result
         }
       })
     }
