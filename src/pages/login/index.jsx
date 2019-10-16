@@ -33,7 +33,7 @@ class Login extends React.Component {
       <Container>
         <Box>
           <Avatar>
-            <img src={require('@/assets/image/czg_logo.jpg')} alt="" />
+            <img src={require('@/assets/image/logo.jpg')} alt="" />
           </Avatar>
           <InputBox>
             <i className="iconfont">&#xe640;</i>

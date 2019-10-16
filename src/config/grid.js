@@ -54,12 +54,12 @@ const PopularizeGrid = {
       enable: require('../assets/image/qmfx.png'),
       disable: require('../assets/image/qmfx_gray.png'),
     },
-    // {
-    //   name: '红包推广',
-    //   path: '/popularize/redEnvelope',
-    //   enable: require('../assets/image/hbtg.png'),
-    //   disable: require('../assets/image/hbtg_gray.png'),
-    // },
+    {
+      name: '红包推广',
+      path: '/popularize/redEnvelope',
+      enable: require('../assets/image/hbtg.png'),
+      disable: require('../assets/image/hbtg_gray.png'),
+    },
     {
       name: '智能屏推广',
       path: '/popularize/smartScreen',
