@@ -85,7 +85,7 @@ class ECommerce extends React.Component {
             <Flex>
               <Flex.Item>
                 <Button
-                  type="primary"
+                  type="warning"
                   size="small"
                   onClick={() => this.detele(item.goods_id, item.store_id)}
                 >
@@ -134,7 +134,7 @@ class ECommerce extends React.Component {
           <Card.Footer
             extra={
               <React.Fragment>
-                状态：
+                启用状态：
                 <Switch
                   checked={item.status === '1'}
                   onClick={() => this.stand(item.goods_id, item.status, item.store_id)}

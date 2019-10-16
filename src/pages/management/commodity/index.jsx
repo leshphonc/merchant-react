@@ -11,8 +11,12 @@ import reservePanel from './reservePanel'
 // import ReserveEdit from './reserveEdit'
 import TakeAway from './takeAway'
 import TakeAwayPanel from './takeAwayPanel'
+import ECommerceDashboard from './eCommerceDashboard'
+import ECommerceCategory from './eCommerceCategory'
+import ECommerceSecondCategory from './eCommerceSecondCategory'
 import ECommerce from './eCommerce'
 import ECommercePanel from './eCommercePanel'
+import ECommerceCategoryPanel from './eCommerceCategoryPanel'
 import ECommerceSpread from './eCommerceSpread'
 import ECommerceDiscounts from './eCommerceDiscounts'
 import ECommerceDeliveryTemplate from './eCommerceDeliveryTemplate'
@@ -44,43 +48,84 @@ class Commodity extends React.Component {
         <List>
           <Item
             arrow="horizontal"
+            thumb={require('@/assets/image/dsgl.png')}
             onClick={() => {
-              history.push('/management/commodity/group')
+              history.push('/management/commodity/eCommerceDashboard')
             }}
           >
-            团购商品
+            电商
           </Item>
           <Item
-            arrow="horizontal"
-            onClick={() => {
-              history.push('/management/commodity/reserve')
-            }}
-          >
-            预定商品
-          </Item>
-          <Item
-            arrow="horizontal"
-            onClick={() => {
-              history.push('/management/commodity/eCommerce')
-            }}
-          >
-            电商商品
-          </Item>
-          <Item
+            thumb={require('@/assets/image/wmgl.png')}
             arrow="horizontal"
             onClick={() => {
               history.push('/management/commodity/takeAway')
             }}
           >
-            外卖商品
+            外卖
           </Item>
           <Item
+            thumb={require('@/assets/image/cygl.png')}
+            arrow="horizontal"
+            onClick={() => {
+              history.push('1')
+            }}
+          >
+            餐饮
+          </Item>
+          <Item
+            thumb={require('@/assets/image/jdgl.png')}
+            arrow="horizontal"
+            onClick={() => {
+              history.push('1')
+            }}
+          >
+            酒店
+          </Item>
+          <Item
+            thumb={require('@/assets/image/yygl.png')}
+            arrow="horizontal"
+            onClick={() => {
+              history.push('/management/commodity/reserve')
+            }}
+          >
+            预定
+          </Item>
+          <Item
+            thumb={require('@/assets/image/tggl.png')}
+            arrow="horizontal"
+            onClick={() => {
+              history.push('/management/commodity/group')
+            }}
+          >
+            团购
+          </Item>
+          <Item
+            thumb={require('@/assets/image/pfgh.png')}
+            arrow="horizontal"
+            onClick={() => {
+              history.push('1')
+            }}
+          >
+            批发
+          </Item>
+          <Item
+            thumb={require('@/assets/image/qpgl.png')}
+            arrow="horizontal"
+            onClick={() => {
+              history.push('1')
+            }}
+          >
+            汽配
+          </Item>
+          <Item
+            thumb={require('@/assets/image/fwgl.png')}
             arrow="horizontal"
             onClick={() => {
               history.push('/management/commodity/serviceDashboard')
             }}
           >
-            服务项目
+            服务
           </Item>
         </List>
       </div>
@@ -106,6 +151,17 @@ export default () => (
       component={TakeAwayPanel}
     />
     {/* 电商商品 */}
+    <Route path="/management/commodity/eCommerceDashboard" component={ECommerceDashboard} />
+    <Route path="/management/commodity/eCommerceCategory" component={ECommerceCategory} />
+    <Route
+      path="/management/commodity/eCommerceSecondCategory/:id"
+      component={ECommerceSecondCategory}
+    />
+    <Route
+      path="/management/commodity/eCommerceCategoryPanel/:type/:level/:id?"
+      component={ECommerceCategoryPanel}
+    />
+
     <Route path="/management/commodity/eCommerce" component={ECommerce} />
     <Route
       path="/management/commodity/eCommercePanel/:str/:id?/:goodid?"

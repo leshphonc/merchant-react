@@ -122,6 +122,17 @@ class MastSotre {
 
   @observable singleRecordListPage = 1
 
+  @observable noBindProject = []
+
+  @observable shopCategory = []
+
+  @observable shopCategoryChild = {
+    project: [],
+    twoCate: [],
+  }
+
+  @observable shopCategoryDetail = {}
+
   @action
   fetchGroupList = async keyword => {
     let hasMore = true
@@ -1002,6 +1013,95 @@ class MastSotre {
           this.singleRecordList = response.data.result
         }
       })
+    }
+  }
+
+  // 获取未被绑定的项目
+  @action
+  fetchNoBindProject = async () => {
+    const response = await services.fetchNoBindProject()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.noBindProject = response.data.result
+      })
+    }
+  }
+
+  // 绑定服务到指定分类下
+  @action
+  bindProjectToCategory = async (appId, id) => {
+    const response = await services.bindProjectToCategory(appId, id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 获取零售电商一级分类
+  @action
+  fetchShopCategory = async () => {
+    const response = await services.fetchShopCategory()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.shopCategory = response.data.result
+      })
+    }
+  }
+
+  // 添加编辑零售电商一级分类
+  @action
+  modifyShopFirstCategory = async payload => {
+    const response = await services.modifyShopFirstCategory(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 删除零售电商一级分类
+  @action
+  deleteShopFirstCategory = async id => {
+    const response = await services.deleteShopFirstCategory(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 获取零售电商二级分类
+  @action
+  fetchShopSecondCategory = async id => {
+    const response = await services.fetchShopSecondCategory(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.shopCategoryChild = response.data.result
+      })
+    }
+  }
+
+  // 添加编辑零售电商二级分类
+  @action
+  modifyShopSecondCategory = async payload => {
+    const response = await services.modifyShopSecondCategory(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 获取零售电商分类详情
+  @action
+  fetchShopCategoryDetail = async id => {
+    const response = await services.fetchShopCategoryDetail(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.shopCategoryDetail = response.data.result
+      })
+    }
+  }
+
+  // 删除零售电商二级分类
+  @action
+  deleteShopSecondCategory = async id => {
+    const response = await services.deleteShopSecondCategory(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
     }
   }
 }

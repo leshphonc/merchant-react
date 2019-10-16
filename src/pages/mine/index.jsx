@@ -2,7 +2,7 @@ import React from 'react'
 import UserCard from '@/common/UserCard'
 import GridCard from '@/common/GridCard'
 import { Paper } from '@/styled'
-import { SettingGrid, BusinessGrid, BillGrid } from '@/config/grid'
+import { SettingGrid, BillGrid } from '@/config/grid'
 import { WingBlank, WhiteSpace } from 'antd-mobile'
 
 export default () => (
@@ -15,12 +15,11 @@ export default () => (
       </Paper>
     </WingBlank>
     <WhiteSpace />
-    <WingBlank size="md">
+    {/* <WingBlank size="md">
       <Paper>
         <GridCard data={BusinessGrid} col={4} />
       </Paper>
-    </WingBlank>
-    <WhiteSpace />
+    </WingBlank> */}
     <WingBlank size="md">
       <Paper>
         <GridCard data={BillGrid} col={4} />

@@ -15,7 +15,7 @@ class ServiceDashboard extends React.Component {
         <WingBlank>
           <Link to="/management/commodity/serviceCategory">
             <ColorCard style={{ background: 'rgb(187, 219, 156)' }}>
-              <CardLeft>分类管理</CardLeft>
+              <CardLeft>服务项目分类</CardLeft>
               <Flex>
                 <span style={{ verticalAlign: 'super', color: '#fff' }} />
                 <Icon type="right" color="#fff" />
@@ -25,7 +25,7 @@ class ServiceDashboard extends React.Component {
           <WhiteSpace size="lg" />
           <Link to="/management/commodity/serviceItems">
             <ColorCard style={{ background: 'rgb(124, 214, 222)' }}>
-              <CardLeft>服务项目</CardLeft>
+              <CardLeft>服务项目（创建服务前请先创建分类）</CardLeft>
               <Flex>
                 <span style={{ verticalAlign: 'super', color: '#fff' }} />
                 <Icon type="right" color="#fff" />

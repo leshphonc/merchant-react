@@ -66,28 +66,22 @@ class ServiceCategorySecondCategory extends React.Component {
             style={{ lineHeight: '25px', color: '#666' }}
             onClick={e => {
               e.stopPropagation()
-              alert(
-                '删除二级分类',
-                '二级分类内的项目将会自动解绑',
-                [
-                  {
-                    text: '取消',
+              alert('删除二级分类', '二级分类内的项目将会自动解绑', [
+                {
+                  text: '取消',
+                },
+                {
+                  text: '确定',
+                  style: { color: 'red' },
+                  onPress: () => {
+                    commodity.deleteSecondCategory(item.cat_id).then(res => {
+                      if (res) {
+                        Toast.success('删除成功', 1, () => commodity.fetchCategoryChild(match.params.id))
+                      }
+                    })
                   },
-                  {
-                    text: '确定',
-                    style: { color: 'red' },
-                    onPress: () => {
-                      commodity.deleteSecondCategory(item.cat_id).then(res => {
-                        if (res) {
-                          Toast.success('删除成功', 1, () => commodity.fetchCategoryChild(match.params.id))
-                        }
-                      })
-                    },
-                  },
-                ],
-                'default',
-                item.cat_name,
-              )
+                },
+              ])
             }}
           >
             <i
@@ -111,7 +105,7 @@ class ServiceCategorySecondCategory extends React.Component {
   createCategory = () => {
     const { commodity, match } = this.props
     // () => history.push('/management/commodity/serviceCategoryPanel/添加')
-    prompt('新增分类', '请输入分类名称', [
+    prompt('新增二级分类', '请输入二级分类名称', [
       {
         text: '取消',
       },

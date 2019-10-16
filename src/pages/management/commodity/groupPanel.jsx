@@ -155,7 +155,7 @@ class GroupPanel extends React.Component {
           no_refund: groupDetail.no_refund === '0',
           status: groupDetail.status !== '0',
         })
-        if ( sessionStorage.getItem('cacheData') ) { 
+        if (sessionStorage.getItem('cacheData')) {
           const arr_pic = JSON.parse(sessionStorage.getItem('cacheData')).pic
           form.setFieldsValue({
             pic: arr_pic,
@@ -223,7 +223,7 @@ class GroupPanel extends React.Component {
         no_refund: false,
         status: false,
       })
-      if ( sessionStorage.getItem('cacheData') ) { 
+      if (sessionStorage.getItem('cacheData')) {
         const arr_pic = JSON.parse(sessionStorage.getItem('cacheData')).pic
         form.setFieldsValue({
           pic: arr_pic,
@@ -234,9 +234,7 @@ class GroupPanel extends React.Component {
 
   submit = () => {
     // const { editorContent } = this.state
-    const {
-      form, match, commodity, history,
-    } = this.props
+    const { form, match, commodity, history } = this.props
 
     form.validateFields((error, value) => {
       if (error) {
@@ -300,6 +298,7 @@ class GroupPanel extends React.Component {
       }
     })
   }
+
   changePermission = bool => {
     const { basicInformation } = this.props
     basicInformation.modifyPermission(bool ? '1' : '0')
@@ -336,8 +335,8 @@ class GroupPanel extends React.Component {
       shopList,
     } = this.state
     // eslint-disable-next-line camelcase
-    const pic_arr =  form.getFieldValue('pic') ? form.getFieldValue('pic') : []
- 
+    const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
+
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}团购商品`} goBack />

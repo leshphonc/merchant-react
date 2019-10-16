@@ -434,7 +434,7 @@ class ServiceItemsPanel extends React.Component {
               </Picker>
               <Picker
                 {...getFieldProps('cat_fid', {
-                  rules: [{ required: false }],
+                  rules: [{ required: true }],
                   getValueFromEvent: item => {
                     this.fetchCategoryChild(item[0])
                     return item

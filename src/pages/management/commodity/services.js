@@ -403,7 +403,12 @@ export const fetchShowCommission = () => axios.get('/appapi.php?c=Merchantapp&a=
 })
 
 // 获取服务项目的分类
-export const fetchServiceCategory = () => axios.get('/appapi.php?c=SpaceMerchant&a=selCateList', {
+export const fetchServiceCategory = () => axios.post('/appapi.php?c=SpaceMerchant&a=selCateList', {
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取电商商品的分类
+export const fetchECommerceCategory = () => axios.get('/appapi.php?c=SpaceMerchant&a=selCateList', {
   params: {
     ticket: localStorage.getItem('ticket'),
   },
@@ -422,7 +427,7 @@ export const modifyFirstCategory = payload => axios.post('/appapi.php?c=SpaceMer
 })
 
 // 删除一级分类
-export const deleteFirstCategory = id => axios.post('/appapi.php?c=SpaceMerchant&a=addEditAppCate', {
+export const deleteFirstCategory = id => axios.post('/appapi.php?c=SpaceMerchant&a=delAppCate', {
   cat_id: id,
   ticket: localStorage.getItem('ticket'),
 })
@@ -528,5 +533,58 @@ export const fetchPackageRecord = (id, page) => axios.post('/appapi.php?c=SpaceM
 export const fetchSingleRecord = (id, page) => axios.post('/appapi.php?c=SpaceMerchant&a=getUserBuyMeal', {
   meal_id: id,
   page,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取未绑定分类的项目
+export const fetchNoBindProject = () => axios.post('/appapi.php?c=SpaceMerchant&a=selNoBindPro', {
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 绑定服务到指定分类下
+export const bindProjectToCategory = (appId, id) => axios.post('/appapi.php?c=SpaceMerchant&a=bindProject', {
+  cat_id: id,
+  app_id: appId,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取零售电商一级分类
+export const fetchShopCategory = () => axios.post('/appapi.php?c=SpaceMerchant&a=getShopCate', {
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 添加编辑零售电商一级分类
+export const modifyShopFirstCategory = payload => axios.post('/appapi.php?c=SpaceMerchant&a=addEditShopCate', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 删除零售电商一级分类
+export const deleteShopFirstCategory = id => axios.post('/appapi.php?c=SpaceMerchant&a=delShopCate', {
+  sort_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取零售电商二级分类
+export const fetchShopSecondCategory = id => axios.post('/appapi.php?c=SpaceMerchant&a=getShopTwoCate', {
+  sort_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 添加编辑零售电商二级分类
+export const modifyShopSecondCategory = payload => axios.post('/appapi.php?c=SpaceMerchant&a=addEditShopTwo', {
+  ...payload,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 获取零售电商分类详情
+export const fetchShopCategoryDetail = id => axios.post('/appapi.php?c=SpaceMerchant&a=getShopCateDetail', {
+  sort_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 删除零售电商二级分类
+export const deleteShopSecondCategory = id => axios.post('/appapi.php?c=SpaceMerchant&a=delShopTwo', {
+  sort_id: id,
   ticket: localStorage.getItem('ticket'),
 })

@@ -1,28 +1,40 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import { Flex, WhiteSpace, WingBlank, Button, Card, Modal, Toast } from 'antd-mobile'
+import {
+  Flex,
+  WhiteSpace,
+  WingBlank,
+  Button,
+  Card,
+  Modal,
+  Toast,
+  Drawer,
+  List,
+  Radio,
+} from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import moment from 'moment'
 
 const { alert } = Modal
+const { RadioItem } = Radio
 
 @inject('commodity')
 @observer
 class ServiceCategoryProject extends React.Component {
+  state = { open: false, checked: '' }
+
   componentDidMount() {
     const { commodity, match } = this.props
     if (!commodity.serviceCategoryChild.project.length) {
       commodity.fetchCategoryChild(match.params.id)
     }
+    commodity.fetchNoBindProject()
   }
 
   mapList = () => {
     const { commodity } = this.props
     return commodity.serviceCategoryChild.project.map(item => (
-      <React.Fragment
-        key={item.create_time}
-        style={{ background: '#fff', borderRadius: 4, padding: 10 }}
-      >
+      <React.Fragment key={item.appoint_id}>
         <Card>
           <Card.Header
             title={item.appoint_name}
@@ -93,7 +105,10 @@ class ServiceCategoryProject extends React.Component {
         onPress: () => {
           commodity.unbindCategory(id).then(res => {
             if (res) {
-              Toast.success('解绑成功', 1, () => commodity.fetchCategoryChild(match.params.id))
+              Toast.success('解绑成功', 1, () => {
+                commodity.fetchCategoryChild(match.params.id)
+                commodity.fetchNoBindProject()
+              })
             }
           })
         },
@@ -101,12 +116,87 @@ class ServiceCategoryProject extends React.Component {
     ])
   }
 
+  bindProjectToCategory = () => {
+    const { commodity, match } = this.props
+    const { checked } = this.state
+    commodity.bindProjectToCategory(checked, match.params.id).then(res => {
+      if (res) {
+        Toast.success('绑定成功', 1, () => {
+          commodity.fetchCategoryChild(match.params.id)
+          commodity.fetchNoBindProject()
+          this.changeOpenStatus()
+        })
+      }
+    })
+  }
+
+  changeOpenStatus = () => {
+    const { open } = this.state
+    this.setState({
+      open: !open,
+      checked: '',
+    })
+  }
+
+  mapSingleList = () => {}
+
   render() {
+    const { commodity } = this.props
+    const { open, checked } = this.state
+    const sidebar = (
+      <>
+        <List style={{ maxHeight: 'calc(100% - 47px)', overflow: 'auto' }}>
+          {commodity.noBindProject.map((i, index) => (
+            <RadioItem
+              key={index}
+              checked={checked === i.appoint_id}
+              onChange={() => this.setState({
+                checked: i.appoint_id,
+              })
+              }
+            >
+              <img src={i.pic} alt="" style={{ width: 30, height: 30, marginRight: 20 }} />
+              {i.appoint_name}
+            </RadioItem>
+          ))}
+        </List>
+        <Button
+          type="primary"
+          style={{ borderRadius: 0 }}
+          onClick={() => this.bindProjectToCategory()}
+        >
+          确定
+        </Button>
+      </>
+    )
     return (
       <>
-        <NavBar title="服务项目" goBack />
-        <WhiteSpace size="lg" />
-        <WingBlank>{this.mapList()}</WingBlank>
+        <NavBar
+          title="服务项目"
+          goBack
+          right={
+            <Button
+              type="ghost"
+              size="small"
+              style={{ color: '#fff', border: '1px solid #fff' }}
+              onClick={this.changeOpenStatus}
+            >
+              添加
+            </Button>
+          }
+        />
+        <Drawer
+          className="my-drawer"
+          style={{ minHeight: document.documentElement.clientHeight - 54 }}
+          contentStyle={{ color: '#A6A6A6', textAlign: 'center' }}
+          sidebar={sidebar}
+          position="right"
+          open={open}
+          onOpenChange={this.changeOpenStatus}
+        >
+          <WhiteSpace size="lg" />
+          <WingBlank>{this.mapList()}</WingBlank>
+        </Drawer>
       </>
     )
   }
