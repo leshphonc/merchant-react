@@ -1,13 +1,7 @@
 import styled from 'styled-components'
 
 // 底部导航栏组件
-export const TabBarContainer = styled.div`
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-`
+export const TabBarContainer = styled.div``
 
 // 公用白底阴影组件
 export const Paper = styled.div`
@@ -177,7 +171,7 @@ export const AddBtnBox = styled.div`
     width: 116%;
     left: -8%;
     height: 50px;
-    bottom: -17px;
+    bottom: -18px;
     z-index: 1;
   }
 `

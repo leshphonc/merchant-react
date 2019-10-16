@@ -58,6 +58,8 @@ class WalletStore {
 
   @observable withDrawListTotal = null
 
+  @observable userConfig = []
+
   @action
   getWxCode = async () => {
     const response = await services.getWxConfig()
@@ -405,6 +407,17 @@ class WalletStore {
           this.withDrawList = [...list, ...response.data.result.list]
           this.withDrawListTotal = response.data.result.count
         }
+      })
+    }
+  }
+
+  // 获取平安权限
+  @action
+  getUserConfig = async () => {
+    const response = await services.getUserConfig()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.userConfig = response.data.result
       })
     }
   }

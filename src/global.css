@@ -94,6 +94,13 @@ body {
   z-index: -1;
 }
 
+.am-tabs-tab-bar-wrap {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 /* antd-mobil Menu左侧滚动 */
 .am-flexbox-item {
   align-self: stretch;

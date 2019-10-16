@@ -137,3 +137,8 @@ export const fetchWithDrawRecord = page => axios.post('/appapi.php?c=BankAccount
   size: 10,
   ticket: localStorage.getItem('ticket'),
 })
+
+// 获取平安权限
+export const getUserConfig = () => axios.post('/appapi.php?c=Merchantapp&a=get_config', {
+  ticket: localStorage.getItem('ticket'),
+})

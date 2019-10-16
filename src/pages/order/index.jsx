@@ -1,7 +1,6 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import { withRouter } from 'react-router-dom'
-import NavBar from '@/common/NavBar'
 import { WhiteSpace, List, Toast } from 'antd-mobile'
 
 @withRouter
@@ -50,8 +49,9 @@ class Order extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        <NavBar title="订单列表" />
+      <div style={{ marginBottom: 50 }}>
+        <WhiteSpace />
+        <List renderHeader="订单列表" />
         <WhiteSpace />
         {this.mapList()}
         <List>
@@ -66,7 +66,7 @@ class Order extends React.Component {
             到店消费订单
           </List.Item>
         </List>
-      </React.Fragment>
+      </div>
     )
   }
 }

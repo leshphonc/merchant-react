@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Link } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
 import { WhiteSpace, List, SegmentedControl, WingBlank } from 'antd-mobile'
+import { observer, inject } from 'mobx-react'
 import AddCredit from './addCredit'
 import WithDraw from './withDraw'
 import WalletDetail from './detail'
@@ -15,13 +16,23 @@ import BankWithDrawRecord from './bankWithDrawRecord'
 
 const { Item } = List
 
+@inject('wallet')
+@observer
 class Wallet extends React.Component {
   state = {
     cur: '系统余额账户',
     index: 0,
+    auth: false,
   }
 
   componentDidMount() {
+    const { wallet } = this.props
+    wallet.getUserConfig().then(() => {
+      const auth = wallet.userConfig.find(item => item.name === 'open_user_spread' && item.value === '1')
+      this.setState({
+        auth,
+      })
+    })
     const curBar = sessionStorage.getItem('curBar') || '系统余额账户'
     this.setState({
       cur: curBar,
@@ -32,7 +43,7 @@ class Wallet extends React.Component {
 
   render() {
     const { history } = this.props
-    const { cur, index } = this.state
+    const { cur, index, auth } = this.state
     return (
       <React.Fragment>
         <NavBar
@@ -47,22 +58,26 @@ class Wallet extends React.Component {
           }
         />
         <WhiteSpace />
-        <WhiteSpace />
-        <WingBlank>
-          <SegmentedControl
-            selectedIndex={index}
-            values={['系统余额账户', '平安提现账户']}
-            onValueChange={val => {
-              sessionStorage.setItem('curBar', val)
-              this.setState({
-                cur: val,
-                index: val === '系统余额账户' ? 0 : 1,
-              })
-            }}
-          />
-        </WingBlank>
-        <WhiteSpace />
-        <WhiteSpace />
+        {auth ? (
+          <React.Fragment>
+            <WhiteSpace />
+            <WingBlank>
+              <SegmentedControl
+                selectedIndex={index}
+                values={['系统余额账户', '平安提现账户']}
+                onValueChange={val => {
+                  sessionStorage.setItem('curBar', val)
+                  this.setState({
+                    cur: val,
+                    index: val === '系统余额账户' ? 0 : 1,
+                  })
+                }}
+              />
+            </WingBlank>
+            <WhiteSpace />
+            <WhiteSpace />
+          </React.Fragment>
+        ) : null}
         {cur === '系统余额账户' ? (
           <List>
             <Item

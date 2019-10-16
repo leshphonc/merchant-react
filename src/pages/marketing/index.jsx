@@ -1,5 +1,4 @@
 import React from 'react'
-import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 import { WhiteSpace, List, Toast } from 'antd-mobile'
 
@@ -33,11 +32,12 @@ class Marketing extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        <NavBar title="营销活动列表" />
+      <div style={{ marginBottom: 50 }}>
+        <WhiteSpace />
+        <List renderHeader="营销活动列表" />
         <WhiteSpace />
         {this.mapList()}
-      </React.Fragment>
+      </div>
     )
   }
 }

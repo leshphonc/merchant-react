@@ -6,7 +6,7 @@ import { SettingGrid, BillGrid } from '@/config/grid'
 import { WingBlank, WhiteSpace } from 'antd-mobile'
 
 export default () => (
-  <React.Fragment>
+  <div style={{ marginBottom: 50 }}>
     <UserCard />
     <WhiteSpace />
     <WingBlank size="md">
@@ -26,5 +26,5 @@ export default () => (
       </Paper>
     </WingBlank>
     <WhiteSpace />
-  </React.Fragment>
+  </div>
 )
