@@ -32,11 +32,10 @@ class Marketing extends React.Component {
 
   render() {
     return (
-      <div style={{ marginBottom: 50 }}>
-        <WhiteSpace />
-        <List renderHeader="营销活动列表" />
+      <div>
         <WhiteSpace />
         {this.mapList()}
+        <div style={{ height: 50 }} />
       </div>
     )
   }

@@ -16,7 +16,13 @@ export default withRouter(props => {
     <Placeholder>
       <NavBar
         mode="dark"
-        leftContent={goBack ? <i className="iconfont">&#xe654;</i> : null}
+        leftContent={
+          goBack ? (
+            <i className="iconfont" style={{ fontSize: 20 }}>
+              &#xe654;
+            </i>
+          ) : null
+        }
         rightContent={right}
         onLeftClick={handler}
         style={{

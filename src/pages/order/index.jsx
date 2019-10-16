@@ -49,9 +49,7 @@ class Order extends React.Component {
 
   render() {
     return (
-      <div style={{ marginBottom: 50 }}>
-        <WhiteSpace />
-        <List renderHeader="订单列表" />
+      <div>
         <WhiteSpace />
         {this.mapList()}
         <List>
@@ -66,6 +64,7 @@ class Order extends React.Component {
             到店消费订单
           </List.Item>
         </List>
+        <div style={{ marginBottom: 50 }} />
       </div>
     )
   }

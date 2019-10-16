@@ -250,7 +250,7 @@ class Home extends React.Component {
       filterStoreValue,
     } = this.state
     return (
-      <div style={{ overflow: 'hidden', marginBottom: 50 }}>
+      <div style={{ overflow: 'hidden' }}>
         {this.mapAd()}
         <UserCard />
         <WhiteSpace />
@@ -384,6 +384,7 @@ class Home extends React.Component {
           </Paper>
         </WingBlank>
         <WhiteSpace />
+        <div style={{ height: 50 }} />
       </div>
     )
   }

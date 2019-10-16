@@ -6,7 +6,7 @@ import { SettingGrid, BillGrid } from '@/config/grid'
 import { WingBlank, WhiteSpace } from 'antd-mobile'
 
 export default () => (
-  <div style={{ marginBottom: 50 }}>
+  <div>
     <UserCard />
     <WhiteSpace />
     <WingBlank size="md">
@@ -26,5 +26,6 @@ export default () => (
       </Paper>
     </WingBlank>
     <WhiteSpace />
+    <div style={{ height: 50 }} />
   </div>
 )
