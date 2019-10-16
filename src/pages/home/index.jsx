@@ -4,7 +4,7 @@ import GridCard from '@/common/GridCard'
 import ReactEcharts from 'echarts-for-react'
 import { Paper, FilterBox } from '@/styled'
 import { observer, inject } from 'mobx-react'
-import { ManagementGrid, PopularizeGrid } from '@/config/grid'
+import { ManagementGrid, PopularizeGrid, AllianceGrid } from '@/config/grid'
 import { WingBlank, WhiteSpace, Carousel, Flex, Picker, DatePicker } from 'antd-mobile'
 import moment from 'moment'
 import FlexBox from './styled'
@@ -378,12 +378,12 @@ class Home extends React.Component {
           </Paper>
         </WingBlank>
         <WhiteSpace />
-        {/* <WingBlank size="md">
+        <WingBlank size="md">
           <Paper>
             <GridCard data={AllianceGrid} col={4} />
           </Paper>
         </WingBlank>
-        <WhiteSpace /> */}
+        <WhiteSpace />
       </div>
     )
   }
