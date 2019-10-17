@@ -28,9 +28,9 @@
     "wangeditor": "^3.1.1"
   },
   "scripts": {
-    "start": "NODE_ENV_CUR=cs react-app-rewired start",
+    "start": "REACT_APP_CUR=cs react-app-rewired start",
     "analyze": "NODE_ENV=production npm_config_report=true npm run build",
-    "build": "NODE_ENV_CUR=cs react-app-rewired build",
+    "buildcs": "NODE_ENV_CUR=cs react-app-rewired build",
     "buildczg": "NODE_ENV_CUR=czg react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"

@@ -7,7 +7,7 @@ export default props => {
   const { data, col, imgSize, style } = props
   const { title } = data
   const result = JSON.parse(JSON.stringify(data.list))
-  const index = result.findIndex(item => item.name === '红包推广' && process.env.CUR !== 'cs')
+  const index = result.findIndex(item => item.name === '红包推广' && process.env.REACT_APP_CUR !== 'cs')
   if (index !== -1) {
     result.splice(index, 1)
   }
@@ -23,7 +23,7 @@ export default props => {
       )
     }
     if (item.name === '红包推广') {
-      if (process.env.CUR === 'cs') {
+      if (process.env.REACT_APP_CUR === 'cs') {
         return (
           <LinkBox style={style}>
             <Link to={item.path} style={{ display: 'block' }}>

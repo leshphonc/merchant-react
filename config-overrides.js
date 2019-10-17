@@ -125,6 +125,6 @@ module.exports = override(
   }),
   addCustomize(),
   overrideProcessEnv({
-    CUR: JSON.stringify(process.env.NODE_ENV_CUR),
+    TEST: JSON.stringify('testenv'),
   }),
 )

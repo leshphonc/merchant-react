@@ -1,4 +1,4 @@
-const cur = process.env.CUR
+const cur = process.env.REACT_APP_CUR
 
 const result = {
   cs: {

@@ -43,6 +43,7 @@ class Home extends React.Component {
         echartData: home.echartData,
       })
     })
+    console.log(process.env)
   }
 
   getOption = () => {
@@ -378,7 +379,7 @@ class Home extends React.Component {
           </Paper>
         </WingBlank>
         <WhiteSpace />
-        {process.env.CUR === 'cs' ? (
+        {process.env.REACT_APP_CUR === 'cs' ? (
           <React.Fragment>
             <WingBlank size="md">
               <Paper>
