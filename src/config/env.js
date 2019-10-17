@@ -1,5 +1,12 @@
-const cur = 'czg'
+const cur = process.env.CUR
 
-export default {
-  env: cur,
+const result = {
+  cs: {
+    logo: require('@/assets/image/logo.jpg'),
+  },
+  czg: {
+    logo: require('@/assets/image/czg_logo.jpg'),
+  },
 }
+
+export default result[cur]

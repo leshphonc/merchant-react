@@ -15,6 +15,7 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
+    console.log(process.env)
     const { home, history } = this.props
     const ticket = localStorage.getItem('ticket')
     if (!ticket) {

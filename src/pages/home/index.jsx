@@ -378,12 +378,16 @@ class Home extends React.Component {
           </Paper>
         </WingBlank>
         <WhiteSpace />
-        <WingBlank size="md">
-          <Paper>
-            <GridCard data={AllianceGrid} col={4} />
-          </Paper>
-        </WingBlank>
-        <WhiteSpace />
+        {process.env.CUR === 'cs' ? (
+          <React.Fragment>
+            <WingBlank size="md">
+              <Paper>
+                <GridCard data={AllianceGrid} col={4} />
+              </Paper>
+            </WingBlank>
+            <WhiteSpace />
+          </React.Fragment>
+        ) : null}
         <div style={{ height: 50 }} />
       </div>
     )

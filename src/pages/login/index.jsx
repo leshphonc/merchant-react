@@ -2,6 +2,7 @@ import React from 'react'
 import { InputItem, Button, Toast } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import { Container, Box, Avatar, InputBox } from './styled'
+import env from '@/config/env'
 
 @inject('login')
 @observer
@@ -33,7 +34,7 @@ class Login extends React.Component {
       <Container>
         <Box>
           <Avatar>
-            <img src={require('@/assets/image/logo.jpg')} alt="" />
+            <img src={env.logo} alt="" />
           </Avatar>
           <InputBox>
             <i className="iconfont">&#xe640;</i>
@@ -57,11 +58,7 @@ class Login extends React.Component {
               <span style={{ color: '#ffb000', fontSize: 13 }}>找回密码？</span>
             </Flex>
           </WingBlank> */}
-          <Button
-            onClick={this.submit}
-            type="primary"
-            style={{ marginTop: '15vh' }}
-          >
+          <Button onClick={this.submit} type="primary" style={{ marginTop: '15vh' }}>
             登录
           </Button>
         </Box>

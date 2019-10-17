@@ -12,6 +12,20 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const path = require('path')
 const { theme } = require('./package.json')
 
+const findWebpackPlugin = (plugins, pluginName) => plugins.find(plugin => plugin.constructor.name === pluginName)
+
+const overrideProcessEnv = value => config => {
+  const plugin = findWebpackPlugin(config.plugins, 'DefinePlugin')
+  const processEnv = plugin.definitions['process.env'] || {}
+
+  plugin.definitions['process.env'] = {
+    ...processEnv,
+    ...value,
+  }
+
+  return config
+}
+
 const addCustomize = () => config => {
   if (process.env.NODE_ENV === 'production') {
     config.devtool = false // 去掉map文件
@@ -110,4 +124,7 @@ module.exports = override(
     modifyVars: theme,
   }),
   addCustomize(),
+  overrideProcessEnv({
+    CUR: JSON.stringify(process.env.NODE_ENV_CUR),
+  }),
 )
