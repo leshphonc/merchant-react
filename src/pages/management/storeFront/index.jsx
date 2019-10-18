@@ -2,9 +2,7 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { Route, Link } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
-import {
-  WhiteSpace, WingBlank, Card, Flex, Button,
-} from 'antd-mobile'
+import { WhiteSpace, WingBlank, Card, Flex, Button } from 'antd-mobile'
 import StorePanel from './storePanel'
 import CoordinatePicker from './modify/coordinate'
 import StoreFrontBusiness from './storeFrontBusiness'
@@ -51,7 +49,10 @@ class StoreFront extends React.Component {
           />
           <Card.Body>
             <Flex>
-              {item.have_mall === '1' ? (
+              {item.have_service === '1' ? (
+                <PrimaryTag style={{ marginRight: 5 }}> 标准</PrimaryTag>
+              ) : null}
+              {item.have_mall === '1' && item.have_service !== '1' ? (
                 <PrimaryTag style={{ marginRight: 5 }}>电商</PrimaryTag>
               ) : null}
               {item.have_peisong === '1' ? (

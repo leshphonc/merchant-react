@@ -1043,7 +1043,7 @@ class MastSotre {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         const { result } = response.data
-        result.map(item => {
+        result.forEach(item => {
           item.label = item.sort_name
           item.value = item.sort_id
         })
