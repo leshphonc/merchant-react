@@ -1,6 +1,6 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import { WhiteSpace, WingBlank, Card } from 'antd-mobile'
+import { WhiteSpace, WingBlank, Card, Button } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 
 @inject('smartScreen')
@@ -23,6 +23,17 @@ class ScreenList extends React.Component {
             <div>管理员：{item.contact}</div>
             <WhiteSpace />
             <div>联系电话：{item.tel}</div>
+            <WhiteSpace />
+            <Button
+              type="primary"
+              size="small"
+              onClick={e => {
+                e.stopPropagation()
+                history.push(`/popularize/smartScreen/smartScreenSlogan/${item.imax_id}`)
+              }}
+            >
+              修改广告语
+            </Button>
           </Card.Body>
         </Card>
         <WhiteSpace />

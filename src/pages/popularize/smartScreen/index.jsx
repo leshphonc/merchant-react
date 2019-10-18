@@ -8,6 +8,7 @@ import { List, Icon, Picker, WhiteSpace, WingBlank, DatePicker } from 'antd-mobi
 import moment from 'moment'
 import ScreenList from './screenList'
 import PromotionList from './promotionList'
+import SmartScreenSlogan from './smartScreenSlogan'
 import PromotionPanel from './promotionPanel'
 import QrCodeMember from './qrcodeMember'
 import ViewTime from './viewTime'
@@ -338,6 +339,12 @@ export default () => (
     <Route path="/popularize/smartScreen/screenList" exact component={ScreenList} />
     {/* 屏幕内推广内容列表 */}
     <Route path="/popularize/smartScreen/promotionList/:id" exact component={PromotionList} />
+    {/* 编辑屏幕广告语 */}
+    <Route
+      path="/popularize/smartScreen/smartScreenSlogan/:id"
+      exact
+      component={SmartScreenSlogan}
+    />
     {/* 添加推广内容 */}
     <Route
       path="/popularize/smartScreen/promotionList/promotionPanel/:str/:id"

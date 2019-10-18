@@ -99,3 +99,16 @@ export const usingPromotion = id => axios.post('/Appapi.php?c=Merchantimax&a=usi
   id,
   ticket: localStorage.getItem('ticket'),
 })
+
+// 获取智能屏广告语
+export const fetchImaxSlogan = id => axios.post('/Appapi.php?c=Merchantimax&a=sea', {
+  imax_id: id,
+  ticket: localStorage.getItem('ticket'),
+})
+
+// 修改智能屏广告语
+export const upDateSlogan = (id, txt) => axios.post('/Appapi.php?c=Merchantimax&a=update_sea', {
+  imax_id: id,
+  slogan: txt,
+  ticket: localStorage.getItem('ticket'),
+})

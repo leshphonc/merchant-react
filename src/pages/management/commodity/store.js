@@ -1042,7 +1042,12 @@ class MastSotre {
     const response = await services.fetchShopCategory()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.shopCategory = response.data.result
+        const { result } = response.data
+        result.map(item => {
+          item.label = item.sort_name
+          item.value = item.sort_id
+        })
+        this.shopCategory = result
       })
     }
   }

@@ -24,6 +24,8 @@ class SmartScreenStore {
 
   @observable promotionList = []
 
+  @observable imaxSlogan = {}
+
   @action
   fetchIMax = async () => {
     const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
@@ -165,12 +167,33 @@ class SmartScreenStore {
   }
 
   // 删除推广内容
+  @action
   usingPromotion = async (id, storeId, cur) => {
     const response = await services.usingPromotion(id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       this.fetchPromotionList(storeId, cur).then(() => {
         Toast.success('状态修改成功', 1)
       })
+    }
+  }
+
+  // 获取智能屏广告语
+  @action
+  fetchImaxSlogan = async id => {
+    const response = await services.fetchImaxSlogan(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.imaxSlogan = response.data.result
+      })
+    }
+  }
+
+  // 修改智能屏广告语
+  @action
+  upDateSlogan = async (id, txt) => {
+    const response = await services.upDateSlogan(id, txt)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
     }
   }
 }
