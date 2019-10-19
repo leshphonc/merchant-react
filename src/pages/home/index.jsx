@@ -2,10 +2,18 @@ import React from 'react'
 import UserCard from '@/common/UserCard'
 import GridCard from '@/common/GridCard'
 import ReactEcharts from 'echarts-for-react'
+import { withRouter } from 'react-router-dom'
 import { Paper, FilterBox } from '@/styled'
 import { observer, inject } from 'mobx-react'
 import { ManagementGrid, PopularizeGrid, AllianceGrid } from '@/config/grid'
-import { WingBlank, WhiteSpace, Carousel, Flex, Picker, DatePicker } from 'antd-mobile'
+import {
+  WingBlank,
+  WhiteSpace,
+  Carousel,
+  Flex,
+  Picker,
+  DatePicker,
+} from 'antd-mobile'
 import moment from 'moment'
 import FlexBox from './styled'
 
@@ -17,6 +25,7 @@ const FilterData1 = [
   { label: '年', value: '3' },
 ]
 
+@withRouter
 @inject('home')
 @observer
 class Home extends React.Component {
@@ -34,15 +43,22 @@ class Home extends React.Component {
 
   componentDidMount() {
     const { home } = this.props
-    const { filterValue1, filterLabel2, searchType, filterStoreValue } = this.state
+    const {
+      filterValue1,
+      filterLabel2,
+      searchType,
+      filterStoreValue,
+    } = this.state
     const ticket = localStorage.getItem('ticket')
     if (!ticket) return
     home.fetchStoreList()
-    home.fetchEchartData(filterValue1, filterLabel2, searchType, filterStoreValue).then(() => {
-      this.setState({
-        echartData: home.echartData,
+    home
+      .fetchEchartData(filterValue1, filterLabel2, searchType, filterStoreValue)
+      .then(() => {
+        this.setState({
+          echartData: home.echartData,
+        })
       })
-    })
     console.log(process.env)
   }
 
@@ -63,7 +79,10 @@ class Home extends React.Component {
     let format = null
     if (custom) {
       format = params => {
-        const str = params[0].axisValue.substr(0, params[0].axisValue.length - 1)
+        const str = params[0].axisValue.substr(
+          0,
+          params[0].axisValue.length - 1,
+        )
         const result = `${str - 2}点 - ${str}点<br />
         <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#ffb000;"></span>${
           params[0].seriesName
@@ -86,7 +105,7 @@ class Home extends React.Component {
       grid: {
         top: 10,
         bottom: 30,
-        right: 0,
+        right: 20,
         left: '13%',
       },
       xAxis: [
@@ -114,6 +133,77 @@ class Home extends React.Component {
     }
   }
 
+  getOption2 = () => {
+    let xData = []
+    let custom = false
+    const { filterValue1, echartData, seriesLabel } = this.state
+    if (filterValue1 === '1') {
+      xData = echartData.map((item, index) => `${(index + 1) * 2}点`)
+      custom = true
+    } else if (filterValue1 === '2') {
+      xData = echartData.map((item, index) => `${index + 1}号`)
+      custom = false
+    } else if (filterValue1 === '3') {
+      xData = echartData.map((item, index) => `${index + 1}月`)
+      custom = false
+    }
+    let format = null
+    if (custom) {
+      format = params => {
+        const str = params[0].axisValue.substr(
+          0,
+          params[0].axisValue.length - 1,
+        )
+        const result = `${str - 2}点 - ${str}点<br />
+        <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#ffb000;"></span>${
+          params[0].seriesName
+        }: ${params[0].data}`
+        return result
+      }
+    }
+    return {
+      color: ['#ffb000'],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow',
+          crossStyle: {
+            color: '#999',
+          },
+        },
+        formatter: format,
+      },
+      grid: {
+        top: 40,
+        bottom: 30,
+        right: 20,
+        left: '13%',
+      },
+      xAxis: [
+        {
+          type: 'category',
+          data: xData,
+          axisPointer: {
+            type: 'shadow',
+          },
+        },
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          name: '进店人数',
+        },
+      ],
+      series: [
+        {
+          name: seriesLabel,
+          type: 'line',
+          data: echartData,
+        },
+      ],
+    }
+  }
+
   changeFilter1 = val => {
     const result = FilterData1.find(item => item.value === val[0])
     this.setState(
@@ -134,7 +224,12 @@ class Home extends React.Component {
     const { home } = this.props
     const { filterValue1, searchType, filterStoreValue } = this.state
     home
-      .fetchEchartData(filterValue1, moment(val).format('YYYY'), searchType, filterStoreValue)
+      .fetchEchartData(
+        filterValue1,
+        moment(val).format('YYYY'),
+        searchType,
+        filterStoreValue,
+      )
       .then(() => {
         this.setState({
           echartData: home.echartData,
@@ -147,7 +242,12 @@ class Home extends React.Component {
     const { home } = this.props
     const { filterValue1, searchType, filterStoreValue } = this.state
     home
-      .fetchEchartData(filterValue1, moment(val).format('YYYY-MM'), searchType, filterStoreValue)
+      .fetchEchartData(
+        filterValue1,
+        moment(val).format('YYYY-MM'),
+        searchType,
+        filterStoreValue,
+      )
       .then(() => {
         this.setState({
           echartData: home.echartData,
@@ -160,7 +260,12 @@ class Home extends React.Component {
     const { home } = this.props
     const { filterValue1, searchType, filterStoreValue } = this.state
     home
-      .fetchEchartData(filterValue1, moment(val).format('YYYY-MM-DD'), searchType, filterStoreValue)
+      .fetchEchartData(
+        filterValue1,
+        moment(val).format('YYYY-MM-DD'),
+        searchType,
+        filterStoreValue,
+      )
       .then(() => {
         this.setState({
           echartData: home.echartData,
@@ -173,23 +278,27 @@ class Home extends React.Component {
     const { home } = this.props
     const { filterValue1, filterLabel2, searchType } = this.state
     const result = home.storeList.find(item => item.value === val[0])
-    home.fetchEchartData(filterValue1, filterLabel2, searchType, val[0]).then(() => {
-      this.setState({
-        echartData: home.echartData,
-        filterStoreLabel: result.label,
-        filterStoreValue: val[0],
+    home
+      .fetchEchartData(filterValue1, filterLabel2, searchType, val[0])
+      .then(() => {
+        this.setState({
+          echartData: home.echartData,
+          filterStoreLabel: result.label,
+          filterStoreValue: val[0],
+        })
       })
-    })
   }
 
   changeEchartType = (num, type) => {
     const { home } = this.props
     const { filterValue1, filterLabel2, filterStoreValue } = this.state
-    home.fetchEchartData(filterValue1, filterLabel2, type, filterStoreValue).then(() => {
-      this.setState({
-        echartData: home.echartData,
+    home
+      .fetchEchartData(filterValue1, filterLabel2, type, filterStoreValue)
+      .then(() => {
+        this.setState({
+          echartData: home.echartData,
+        })
       })
-    })
     let label = ''
     switch (num) {
       case '1':
@@ -240,7 +349,8 @@ class Home extends React.Component {
   }
 
   render() {
-    const { home } = this.props
+    const { home, history } = this.props
+    console.log(history)
     const { storeList } = home
     const {
       filterValue1,
@@ -269,9 +379,6 @@ class Home extends React.Component {
                   <div>{home.indexData.total_earn || 0}</div>
                 </FlexBox>
               </Flex.Item>
-            </Flex>
-            <WhiteSpace />
-            <Flex>
               <Flex.Item>
                 <FlexBox
                   className={cur === '2' ? 'cur' : ''}
@@ -281,10 +388,22 @@ class Home extends React.Component {
                   <div>{home.indexData.total_order || 0}</div>
                 </FlexBox>
               </Flex.Item>
+            </Flex>
+            <WhiteSpace />
+            <Flex>
               <Flex.Item>
                 <FlexBox
                   className={cur === '3' ? 'cur' : ''}
-                  onClick={() => this.changeEchartType('3', 'all_visit')}
+                  onClick={() => this.changeEchartType('3', 'all_fans')}
+                >
+                  <div>粉丝人数</div>
+                  <div>{home.indexData.total_fans || 0}</div>
+                </FlexBox>
+              </Flex.Item>
+              <Flex.Item>
+                <FlexBox
+                  className={cur === '4' ? 'cur' : ''}
+                  onClick={() => this.changeEchartType('4', 'all_visit')}
                 >
                   <div>访问人数</div>
                   <div>{home.indexData.total_visit || 0}</div>
@@ -292,11 +411,11 @@ class Home extends React.Component {
               </Flex.Item>
               <Flex.Item>
                 <FlexBox
-                  className={cur === '4' ? 'cur' : ''}
-                  onClick={() => this.changeEchartType('4', 'all_fans')}
+                  className={cur === '5' ? 'cur' : ''}
+                  // onClick={() => this.changeEchartType('6', 'all_visit')}
                 >
-                  <div>粉丝人数</div>
-                  <div>{home.indexData.total_fans || 0}</div>
+                  <div>访问次数</div>
+                  <div>{home.indexData.total_visit || 0}</div>
                 </FlexBox>
               </Flex.Item>
             </Flex>
@@ -310,7 +429,10 @@ class Home extends React.Component {
               >
                 <div>
                   <span>{filterStoreLabel}</span>
-                  <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                  <i
+                    className="iconfont"
+                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                  >
                     &#xe6f0;
                   </i>
                 </div>
@@ -325,7 +447,10 @@ class Home extends React.Component {
               >
                 <div>
                   <span>{filterLabel1}</span>
-                  <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                  <i
+                    className="iconfont"
+                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                  >
                     &#xe6f0;
                   </i>
                 </div>
@@ -337,7 +462,10 @@ class Home extends React.Component {
                 <DatePicker mode="year" onChange={this.changeYear}>
                   <div>
                     <span>{filterLabel2}</span>
-                    <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                    >
                       &#xe6f0;
                     </i>
                   </div>
@@ -349,7 +477,10 @@ class Home extends React.Component {
                 <DatePicker mode="month" onChange={this.changeMonth}>
                   <div>
                     <span>{filterLabel2}</span>
-                    <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                    >
                       &#xe6f0;
                     </i>
                   </div>
@@ -361,7 +492,10 @@ class Home extends React.Component {
                 <DatePicker mode="date" onChange={this.changeDay}>
                   <div>
                     <span>{filterLabel2}</span>
-                    <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                    >
                       &#xe6f0;
                     </i>
                   </div>
@@ -370,6 +504,122 @@ class Home extends React.Component {
             ) : null}
             <WhiteSpace />
             <ReactEcharts option={this.getOption()} style={{ height: 200 }} />
+          </Paper>
+        </WingBlank>
+        <WhiteSpace />
+        <WingBlank size="md">
+          <Paper>
+            <div
+              style={{ textAlign: 'center', fontWeight: 600, fontSize: '1rem' }}
+            >
+              门店AI助手
+            </div>
+            <WhiteSpace />
+            <FilterBox style={{ marginRight: 5 }}>
+              <Picker
+                data={storeList}
+                value={[filterStoreValue]}
+                cols={1}
+                onChange={this.changeFilterStore}
+              >
+                <div>
+                  <span>{filterStoreLabel}</span>
+                  <i
+                    className="iconfont"
+                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                  >
+                    &#xe6f0;
+                  </i>
+                </div>
+              </Picker>
+            </FilterBox>
+            <FilterBox style={{ marginRight: 5 }}>
+              <Picker
+                data={FilterData1}
+                value={[filterValue1]}
+                cols={1}
+                onChange={this.changeFilter1}
+              >
+                <div>
+                  <span>{filterLabel1}</span>
+                  <i
+                    className="iconfont"
+                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                  >
+                    &#xe6f0;
+                  </i>
+                </div>
+              </Picker>
+            </FilterBox>
+            {filterValue1 === '3' ? (
+              <FilterBox style={{ marginRight: 5 }}>
+                <DatePicker mode="year" onChange={this.changeYear}>
+                  <div>
+                    <span>{filterLabel2}</span>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                    >
+                      &#xe6f0;
+                    </i>
+                  </div>
+                </DatePicker>
+              </FilterBox>
+            ) : null}
+            {filterValue1 === '2' ? (
+              <FilterBox style={{ marginRight: 5 }}>
+                <DatePicker mode="month" onChange={this.changeMonth}>
+                  <div>
+                    <span>{filterLabel2}</span>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                    >
+                      &#xe6f0;
+                    </i>
+                  </div>
+                </DatePicker>
+              </FilterBox>
+            ) : null}
+            {filterValue1 === '1' ? (
+              <FilterBox style={{ marginRight: 5 }}>
+                <DatePicker mode="date" onChange={this.changeDay}>
+                  <div>
+                    <span>{filterLabel2}</span>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                    >
+                      &#xe6f0;
+                    </i>
+                  </div>
+                </DatePicker>
+              </FilterBox>
+            ) : null}
+            <ReactEcharts
+              option={this.getOption2()}
+              style={{ height: 250, background: '#fff' }}
+            />
+            <WhiteSpace />
+            <Flex>
+              <Flex.Item>
+                <FlexBox
+                  style={{ minHeight: 50, paddingTop: 4, fontWeight: 600 }}
+                >
+                  <div>广告订单</div>
+                </FlexBox>
+              </Flex.Item>
+              <Flex.Item>
+                <FlexBox
+                  style={{ minHeight: 50, paddingTop: 4, fontWeight: 600 }}
+                  onClick={() =>
+                    history.push('/popularize/smartScreen/screenList')
+                  }
+                >
+                  <div>推广内容</div>
+                </FlexBox>
+              </Flex.Item>
+            </Flex>
           </Paper>
         </WingBlank>
         <WhiteSpace />

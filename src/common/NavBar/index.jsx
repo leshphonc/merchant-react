@@ -18,7 +18,7 @@ export default withRouter(props => {
         mode="dark"
         leftContent={
           goBack ? (
-            <i className="iconfont" style={{ fontSize: 20 }}>
+            <i className="iconfont" style={{ fontSize: 22 }}>
               &#xe654;
             </i>
           ) : null

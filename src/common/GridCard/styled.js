@@ -4,6 +4,7 @@ export const Title = styled.div`
   font-size: 1rem;
   font-weight: 600;
   padding: 5px;
+  text-align: center;
 `
 
 export const LinkBox = styled.div`

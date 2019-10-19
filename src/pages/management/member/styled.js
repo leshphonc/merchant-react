@@ -26,15 +26,15 @@ export const ItemTop = styled.div`
   flex: 1;
   padding: 10px;
   .avatar {
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
     border-radius: 4px;
     padding-right: 12px;
   }
 
   .top-content {
     display: flex;
-    justify-content: space-around;
+    justify-content: start;
     flex: 1;
     max-width: 100%;
     font-size: 12px;
@@ -52,6 +52,7 @@ export const ItemTop = styled.div`
     }
     .content-left {
       display: flex;
+      flex: 1;
       max-width: 50%;
       align-items: center;
       flex-direction: column;
@@ -66,6 +67,7 @@ export const ItemTop = styled.div`
     }
 
     .content-right {
+      flex: 1;
       display: flex;
       max-width: 50%;
       align-items: center;
@@ -90,6 +92,7 @@ export const ItemBottom = styled.div`
   flex-direction: column;
   border-top: 1px solid #eee;
   padding: 10px;
+  position: relative;
   font-size: 12px;
   .bottom-feature {
     display: flex;

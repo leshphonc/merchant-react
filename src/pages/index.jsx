@@ -31,7 +31,11 @@ class Index extends React.Component {
     const { cur } = this.state
     return (
       <TabBarContainer>
-        <TabBar tintColor="#ffb000" tabBarPosition="bottom" prerenderingSiblingsNumber={0}>
+        <TabBar
+          tintColor="#ffb000"
+          tabBarPosition="bottom"
+          prerenderingSiblingsNumber={0}
+        >
           <TabBar.Item
             title="首页"
             key="home"

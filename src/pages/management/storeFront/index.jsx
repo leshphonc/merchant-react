@@ -36,9 +36,37 @@ class StoreFront extends React.Component {
         <Card>
           <Card.Header
             title={
-              <span style={{ width: 200 }} className="ellipsis">
-                {item.name}
-              </span>
+              <Flex
+                direction="column"
+                justify="start"
+                align="start"
+                style={{ marginLeft: 10 }}
+              >
+                <span style={{ width: 200 }} className="ellipsis">
+                  {item.name}
+                </span>
+                <WhiteSpace></WhiteSpace>
+                <Flex>
+                  {item.have_service === '1' ? (
+                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}> 标准</PrimaryTag>
+                  ) : null}
+                  {item.have_mall === '1' && item.have_service !== '1' ? (
+                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}>电商</PrimaryTag>
+                  ) : null}
+                  {item.have_peisong === '1' ? (
+                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}>外卖</PrimaryTag>
+                  ) : null}
+                  {item.have_meal === '1' ? (
+                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}>餐饮</PrimaryTag>
+                  ) : null}
+                  {item.have_hotel === '1' ? (
+                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}>酒店</PrimaryTag>
+                  ) : null}
+                  {item.have_auto_parts === '1' ? (
+                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}> 汽配</PrimaryTag>
+                  ) : null}
+                </Flex>
+              </Flex>
             }
             thumb={item.shop_logo}
             extra={
@@ -47,28 +75,6 @@ class StoreFront extends React.Component {
               </span>
             }
           />
-          <Card.Body>
-            <Flex>
-              {item.have_service === '1' ? (
-                <PrimaryTag style={{ marginRight: 5 }}> 标准</PrimaryTag>
-              ) : null}
-              {item.have_mall === '1' && item.have_service !== '1' ? (
-                <PrimaryTag style={{ marginRight: 5 }}>电商</PrimaryTag>
-              ) : null}
-              {item.have_peisong === '1' ? (
-                <PrimaryTag style={{ marginRight: 5 }}>外卖</PrimaryTag>
-              ) : null}
-              {item.have_meal === '1' ? (
-                <PrimaryTag style={{ marginRight: 5 }}>餐饮</PrimaryTag>
-              ) : null}
-              {item.have_hotel === '1' ? (
-                <PrimaryTag style={{ marginRight: 5 }}>酒店</PrimaryTag>
-              ) : null}
-              {item.have_auto_parts === '1' ? (
-                <PrimaryTag style={{ marginRight: 5 }}> 汽配</PrimaryTag>
-              ) : null}
-            </Flex>
-          </Card.Body>
           <Card.Footer
             content={
               <React.Fragment>
@@ -77,7 +83,10 @@ class StoreFront extends React.Component {
                     <Button
                       type="primary"
                       size="small"
-                      onClick={() => history.push(`/management/storefront/storePanel/编辑/${item.store_id}`)
+                      onClick={() =>
+                        history.push(
+                          `/management/storefront/storePanel/编辑/${item.store_id}`,
+                        )
                       }
                     >
                       基础信息
@@ -87,32 +96,31 @@ class StoreFront extends React.Component {
                     <Button
                       type="primary"
                       size="small"
-                      onClick={() => history.push(
-                        `/management/storefront/storeFrontBusiness/${item.store_id}/${item.have_mall}/${item.have_peisong}`,
-                      )
+                      onClick={() =>
+                        history.push(
+                          `/management/storefront/storeFrontBusiness/${item.store_id}/${item.have_mall}/${item.have_peisong}`,
+                        )
                       }
                     >
                       业务信息
                     </Button>
                   </Flex.Item>
+                  {item.have_mall === '1' || item.have_peisong === '1' ? (
+                    <Flex.Item>
+                      <Button
+                        type="primary"
+                        size="small"
+                        onClick={() =>
+                          history.push(
+                            `/management/storefront/qualification/${item.store_id}`,
+                          )
+                        }
+                      >
+                        资质审核
+                      </Button>
+                    </Flex.Item>
+                  ) : null}
                 </Flex>
-                {item.have_mall === '1' || item.have_peisong === '1' ? (
-                  <React.Fragment>
-                    <WhiteSpace />
-                    <Flex>
-                      <Flex.Item>
-                        <Button
-                          type="primary"
-                          size="small"
-                          onClick={() => history.push(`/management/storefront/qualification/${item.store_id}`)
-                          }
-                        >
-                          资质审核
-                        </Button>
-                      </Flex.Item>
-                    </Flex>
-                  </React.Fragment>
-                ) : null}
               </React.Fragment>
             }
           />
@@ -130,7 +138,10 @@ class StoreFront extends React.Component {
           title="店铺管理"
           goBack
           right={
-            <Link style={{ color: '#fff' }} to="/management/storefront/storePanel/添加">
+            <Link
+              style={{ color: '#fff' }}
+              to="/management/storefront/storePanel/添加"
+            >
               添加店铺
             </Link>
           }
@@ -146,7 +157,10 @@ export default () => (
   <React.Fragment>
     <Route path="/management/storefront" exact component={StoreFront} />
     {/* 店铺基本信息编辑 */}
-    <Route path="/management/storefront/storePanel/:str/:id?" component={StorePanel} />
+    <Route
+      path="/management/storefront/storePanel/:str/:id?"
+      component={StorePanel}
+    />
     {/* 坐标拾取 */}
     <Route
       path="/management/storefront/coordinatePicker/:lng?/:lat?"
@@ -193,8 +207,14 @@ export default () => (
       component={StoreDiscountPanel}
     />
     {/* 资质审核 */}
-    <Route path="/management/storefront/qualification/:id" component={StoreFrontQualification} />
+    <Route
+      path="/management/storefront/qualification/:id"
+      component={StoreFrontQualification}
+    />
     {/* 餐饮信息 */}
-    <Route path="/management/storefront/diningInformation" component={DiningInformation} />
+    <Route
+      path="/management/storefront/diningInformation"
+      component={DiningInformation}
+    />
   </React.Fragment>
 )

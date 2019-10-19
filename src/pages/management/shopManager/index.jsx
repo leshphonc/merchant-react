@@ -2,14 +2,24 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { Link, Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
-import { WingBlank, WhiteSpace, Button, Modal, Picker, List, Toast } from 'antd-mobile'
-import { ListItem, ItemTop, TopContent } from '@/styled'
+import {
+  WingBlank,
+  WhiteSpace,
+  Button,
+  Modal,
+  Picker,
+  List,
+  Toast,
+  SegmentedControl,
+  Card,
+  Flex,
+} from 'antd-mobile'
 import moment from 'moment'
 import { createForm } from 'rc-form'
 import ShopPanel from './shopPanel'
-import { Btn } from './styled'
 import Classify from './classify'
 import ClassifyPanel from './classifyPanel'
+import ShopManagerWorkRecord from './shopManagerWorkRecord'
 
 @createForm()
 @inject('shopManager')
@@ -60,78 +70,263 @@ class ShopManager extends React.Component {
     const { staffList } = shopManager
     return staffList.map(item => (
       <React.Fragment key={item.staff_id}>
-        <ListItem>
-          <ItemTop style={{ width: '70%', display: 'inline-block' }}>
-            <TopContent>
-              <div className="top-title" style={{ fontSize: '15px' }}>
-                电话：{item.tel}
-              </div>
-              <WhiteSpace />
-              <div>店员账号: {item.username}</div>
-              <WhiteSpace />
-              <div>店员姓名: {item.name}</div>
-              <WhiteSpace />
-              <div>所属店铺: {item.storename}</div>
-              <WhiteSpace />
-              <div>添加时间: {moment(item.time * 1000).format('YYYY-MM-DD HH:mm')}</div>
-            </TopContent>
-          </ItemTop>
-          <div style={{ width: '20%', display: 'inline-block', float: 'right' }}>
-            <Btn>
-              <Button
-                // style={{ marginTop: '20px' }}
-                type="button"
-                onClick={() => history.push(
+        <Card>
+          <Card.Header
+            thumb={
+              <img
+                src={require('@/assets/image/avatar.jpeg')}
+                alt=""
+                style={{ borderRadius: 50, marginRight: 10 }}
+              />
+            }
+            title={item.name}
+            extra={item.tel}
+          />
+          <Card.Body>
+            <i
+              style={{ position: 'absolute', top: 10, right: 20, fontSize: 20 }}
+              className="iconfont"
+              onClick={() =>
+                history.push(
                   `/management/shopManager/shopPanel/编辑/${item.store_id}/${item.staff_id}`,
                 )
-                }
-              >
-                编辑
-              </Button>
-            </Btn>
-            <Btn>
-              <Button style={{ marginTop: '10px' }} onClick={() => this.detele(item.staff_id)}>
-                删除
-              </Button>
-            </Btn>
-            <Btn>
-              <Button
-                style={{ marginTop: '10px' }}
-                type="button"
-                onClick={() => history.push(
-                  `/management/shopManager/classifyPanel/修改/${item.store_id}/${item.staff_id}`,
-                )
-                }
-              >
-                权限
-              </Button>
-            </Btn>
-            <Btn>
-              <Button
-                style={{ marginTop: '10px' }}
-                onClick={this.showModal('modal1', item.store_id, item.staff_id)}
-              >
-                调岗
-              </Button>
-            </Btn>
-          </div>
-        </ListItem>
-        <WhiteSpace size="sm" />
+              }
+            >
+              &#xe634;
+            </i>
+            <Flex>
+              <Flex.Item>
+                <div
+                  style={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    minWidth: '100%',
+                  }}
+                >
+                  账号: {item.username}
+                </div>
+              </Flex.Item>
+            </Flex>
+            <WhiteSpace />
+            <Flex>
+              <Flex.Item>
+                <div
+                  style={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    minWidth: '100%',
+                  }}
+                >
+                  销售报酬: 123
+                </div>
+              </Flex.Item>
+              <Flex.Item>
+                <div
+                  style={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    minWidth: '100%',
+                  }}
+                >
+                  服务报酬: 1234
+                </div>
+              </Flex.Item>
+            </Flex>
+            <WhiteSpace />
+            <Flex>
+              <Flex.Item>
+                <div
+                  style={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    minWidth: '100%',
+                  }}
+                >
+                  所属店铺: {item.storename}
+                </div>
+              </Flex.Item>
+            </Flex>
+            <WhiteSpace />
+            <Flex>
+              <Flex.Item>
+                <div
+                  style={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    minWidth: '100%',
+                  }}
+                >
+                  添加时间：
+                  {moment(item.time * 1000).format('YYYY-MM-DD HH:mm')}
+                </div>
+              </Flex.Item>
+            </Flex>
+          </Card.Body>
+          <Card.Footer
+            content={
+              <Flex>
+                <Flex.Item>
+                  <Button
+                    type="primary"
+                    size="small"
+                    onClick={() =>
+                      history.push(
+                        `/management/shopManager/classifyPanel/修改/${item.store_id}/${item.staff_id}`,
+                      )
+                    }
+                  >
+                    权限
+                  </Button>
+                </Flex.Item>
+                <Flex.Item>
+                  <Button
+                    type="primary"
+                    size="small"
+                    onClick={this.showModal(
+                      'modal1',
+                      item.store_id,
+                      item.staff_id,
+                    )}
+                  >
+                    调岗
+                  </Button>
+                </Flex.Item>
+                <Flex.Item>
+                  <Button
+                    type="primary"
+                    size="small"
+                    onClick={() =>
+                      history.push(
+                        '/management/shopManager/shopManagerWorkRecord',
+                      )
+                    }
+                  >
+                    工作记录
+                  </Button>
+                </Flex.Item>
+                <Flex.Item>
+                  <Button
+                    type="warning"
+                    size="small"
+                    onClick={() => this.detele(item.staff_id)}
+                  >
+                    禁用
+                  </Button>
+                </Flex.Item>
+              </Flex>
+            }
+          ></Card.Footer>
+          <WhiteSpace></WhiteSpace>
+        </Card>
+        <WhiteSpace></WhiteSpace>
       </React.Fragment>
     ))
   }
 
+  // <ListItem>
+  //         <ItemTop style={{ width: '70%', display: 'inline-block' }}>
+  //           <TopContent>
+  //             <div className="top-title" style={{ fontSize: '15px' }}>
+  //               电话：{item.tel}
+  //             </div>
+  //             <WhiteSpace />
+  //             <div>店员账号: {item.username}</div>
+  //             <WhiteSpace />
+  //             <div>店员姓名: {item.name}</div>
+  //             <WhiteSpace />
+  //             <div>所属店铺: {item.storename}</div>
+  //             <WhiteSpace />
+  //             <div>
+  //               添加时间: {moment(item.time * 1000).format('YYYY-MM-DD HH:mm')}
+  //             </div>
+  //           </TopContent>
+  //         </ItemTop>
+  //         <div
+  //           style={{ width: '20%', display: 'inline-block', float: 'right' }}
+  //         >
+  //           <Btn>
+  //             <Button
+  //               // style={{ marginTop: '20px' }}
+  //               type="button"
+  //               onClick={() =>
+  //                 history.push(
+  //                   `/management/shopManager/shopPanel/编辑/${item.store_id}/${item.staff_id}`,
+  //                 )
+  //               }
+  //             >
+  //               编辑
+  //             </Button>
+  //           </Btn>
+  //           <Btn>
+  //             <Button
+  //               style={{ marginTop: '10px' }}
+  //               onClick={() => this.detele(item.staff_id)}
+  //             >
+  //               删除
+  //             </Button>
+  //           </Btn>
+  //           <Btn>
+  //             <Button
+  //               style={{ marginTop: '10px' }}
+  //               type="button"
+  //               onClick={() =>
+  //                 history.push(
+  //                   `/management/shopManager/classifyPanel/修改/${item.store_id}/${item.staff_id}`,
+  //                 )
+  //               }
+  //             >
+  //               权限
+  //             </Button>
+  //           </Btn>
+  //           <Btn>
+  //             <Button
+  //               style={{ marginTop: '10px' }}
+  //               onClick={this.showModal('modal1', item.store_id, item.staff_id)}
+  //             >
+  //               调岗
+  //             </Button>
+  //           </Btn>
+  //         </div>
+  //       </ListItem>
+  //       <WhiteSpace size="sm" />
+
   render() {
-    const { shopManager, form } = this.props
+    const { shopManager, form, history } = this.props
     const { eCommerceValues, staffDetail } = shopManager
     const { getFieldProps } = form
     const { modal1 } = this.state
     // console.log(toJS(eCommerceValues))
     return (
       <React.Fragment>
-        <NavBar title="店员管理" goBack />
+        <NavBar
+          title="店员管理"
+          goBack
+          right={
+            <Button
+              type="ghost"
+              size="small"
+              style={{ color: '#fff', fontSize: 16 }}
+              onClick={() => {
+                history.push('/management/shopManager/shopPanel/添加')
+              }}
+            >
+              添加
+            </Button>
+          }
+        />
         <WhiteSpace />
-        <WingBlank size="sm">{this.mapList()}</WingBlank>
+        <WingBlank>
+          <SegmentedControl
+            values={['在岗', '离岗', '禁用']}
+          ></SegmentedControl>
+        </WingBlank>
+        <WhiteSpace></WhiteSpace>
+        <WingBlank>{this.mapList()}</WingBlank>
         <WhiteSpace />
         <WhiteSpace />
         <WhiteSpace />
@@ -154,28 +349,16 @@ class ShopManager extends React.Component {
               style={{
                 color: '#fff',
                 background: '#ffb000',
-                width: '140px',
-                height: '30px',
-                lineHeight: '30px',
-                textAlign: 'center',
-                borderRadius: '5px',
-              }}
-              to="/management/shopManager/shopPanel/添加"
-            >
-              添加店员
-            </Link>
-            <Link
-              style={{
-                color: '#fff',
-                background: '#ffb000',
-                width: '140px',
-                height: '30px',
-                lineHeight: '30px',
+                width: '240px',
+                height: '32px',
+                lineHeight: '32px',
                 textAlign: 'center',
                 borderRadius: '5px',
               }}
               to="/"
-              onClick={() => (window.location.href = 'http://www.czg365.cn/packapp/storestaff/login.html?back=index')
+              onClick={() =>
+                (window.location.href =
+                  'http://www.czg365.cn/packapp/storestaff/login.html?back=index')
               }
             >
               店员登陆
@@ -191,13 +374,18 @@ class ShopManager extends React.Component {
           footer={[
             {
               text: '取消',
-              onPress: () => { this.onClose('modal1')() },
+              onPress: () => {
+                this.onClose('modal1')()
+              },
             },
             {
               text: '确定',
               onPress: () => {
                 shopManager
-                  .fetchRelocationPost(form.getFieldValue('store_id')[0], staffDetail.id)
+                  .fetchRelocationPost(
+                    form.getFieldValue('store_id')[0],
+                    staffDetail.id,
+                  )
                   .then(() => {
                     Toast.success('调岗成功', 1, () => {
                       shopManager.fetchStaffList()
@@ -226,11 +414,18 @@ class ShopManager extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/management/shopManager" exact component={ShopManager} />
-    <Route path="/management/shopManager/shopPanel/:str/:id?/:staffId?" component={ShopPanel} />
+    <Route
+      path="/management/shopManager/shopPanel/:str/:id?/:staffId?"
+      component={ShopPanel}
+    />
     <Route path="/management/shopManager/classify" component={Classify} />
     <Route
       path="/management/shopManager/classifyPanel/:str/:id?/:staffId?"
       component={ClassifyPanel}
+    />
+    <Route
+      path="/management/shopManager/shopManagerWorkRecord"
+      component={ShopManagerWorkRecord}
     />
   </React.Fragment>
 )

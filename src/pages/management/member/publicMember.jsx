@@ -1,7 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
-import { WhiteSpace, PullToRefresh } from 'antd-mobile'
+import {
+  WhiteSpace,
+  PullToRefresh,
+  Button,
+  SegmentedControl,
+  WingBlank,
+} from 'antd-mobile'
 import NavBar from '@/common/NavBar'
 import moment from 'moment'
 import { ListItem, ItemTop, ItemBottom } from './styled'
@@ -41,31 +47,40 @@ class PublicMember extends React.Component {
             <img className="avatar" src={item.avatar} alt="" />
             <div className="top-content">
               <div className="content-left" style={{ alignItems: 'start' }}>
+                <div>昵称：{item.nickname}</div>
                 <div>编号：{item.uid}</div>
-                <div>电话号码：{item.phone || '暂无'}</div>
-                <div>性别：{item.sex === '1' ? '男' : '女'}</div>
               </div>
               <div className="content-right" style={{ alignItems: 'start' }}>
-                <div>昵称：{item.nickname}</div>
-                <div className="hide">hide</div>
-                <div>
-                  注册时间：
-                  {item.add_time
-                    ? moment(item.add_time * 1000).format('YYYY-MM-DD')
-                    : '暂无数据'}
-                </div>
+                <div>性别：{item.sex === '1' ? '男' : '女'}</div>
+                <div>电话号码：{item.phone || '暂无'}</div>
               </div>
             </div>
           </ItemTop>
           <ItemBottom>
-            <div>关注时间：{moment(item.dateline * 1000).format('YYYY-MM-DD')}</div>
+            <div>
+              关注时间：{moment(item.dateline * 1000).format('YYYY-MM-DD')}
+            </div>
             <WhiteSpace />
             <div>
               最后登录：
-              {item.last_time ? moment(item.last_time * 1000).format('YYYY-MM-DD') : '暂无数据'}
+              {item.last_time
+                ? moment(item.last_time * 1000).format('YYYY-MM-DD')
+                : '暂无数据'}
             </div>
             <WhiteSpace />
-            <div>获取渠道：{item.type}</div>
+            <div>
+              注册时间：
+              {item.add_time
+                ? moment(item.add_time * 1000).format('YYYY-MM-DD')
+                : '暂无数据'}
+            </div>
+            <Button
+              style={{ position: 'absolute', bottom: 10, right: 10 }}
+              size="small"
+              type="primary"
+            >
+              用户行为
+            </Button>
           </ItemBottom>
         </ListItem>
         <WhiteSpace />
@@ -87,6 +102,11 @@ class PublicMember extends React.Component {
     return (
       <React.Fragment>
         <NavBar title="公众号粉丝" goBack />
+        <WhiteSpace />
+        <WingBlank>
+          <SegmentedControl values={['全部用户', '消费用户', '到店用户']} />
+        </WingBlank>
+        <WhiteSpace />
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}
@@ -98,7 +118,6 @@ class PublicMember extends React.Component {
           direction="up"
           onRefresh={this.loadMore}
         >
-          <WhiteSpace />
           {this.mapList()}
         </PullToRefresh>
       </React.Fragment>

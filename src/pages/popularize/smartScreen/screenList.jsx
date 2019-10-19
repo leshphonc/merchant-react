@@ -1,6 +1,6 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import { WhiteSpace, WingBlank, Card, Button } from 'antd-mobile'
+import { WhiteSpace, WingBlank, Card, Button, Flex } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 
 @inject('smartScreen')
@@ -15,25 +15,59 @@ class ScreenList extends React.Component {
     const { history, smartScreen } = this.props
     return smartScreen.smartScreenList.map((item, index) => (
       <React.Fragment key={index}>
-        <Card onClick={() => history.push(`/popularize/smartScreen/promotionList/${item.imax_id}`)}>
+        <Card>
           <Card.Header title={item.store_name}></Card.Header>
           <Card.Body>
-            <div>屏幕地址：{item.address}</div>
+            <div>设备地址：{item.address}</div>
             <WhiteSpace />
             <div>管理员：{item.contact}</div>
             <WhiteSpace />
             <div>联系电话：{item.tel}</div>
             <WhiteSpace />
-            <Button
-              type="primary"
-              size="small"
-              onClick={e => {
-                e.stopPropagation()
-                history.push(`/popularize/smartScreen/smartScreenSlogan/${item.imax_id}`)
-              }}
-            >
-              修改广告语
-            </Button>
+            <Flex>
+              <Flex.Item>
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={e => {
+                    e.stopPropagation()
+                    history.push(
+                      `/popularize/smartScreen/smartScreenCustomerSlogan`,
+                    )
+                  }}
+                >
+                  顾客见面语
+                </Button>
+              </Flex.Item>
+              <Flex.Item>
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={e => {
+                    e.stopPropagation()
+                    history.push(
+                      `/popularize/smartScreen/smartScreenSloganManagement`,
+                    )
+                  }}
+                >
+                  员工见面语
+                </Button>
+              </Flex.Item>
+              <Flex.Item>
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={e => {
+                    e.stopPropagation()
+                    history.push(
+                      `/popularize/smartScreen/promotionList/${item.imax_id}`,
+                    )
+                  }}
+                >
+                  推广海报
+                </Button>
+              </Flex.Item>
+            </Flex>
           </Card.Body>
         </Card>
         <WhiteSpace />
@@ -44,7 +78,7 @@ class ScreenList extends React.Component {
   render() {
     return (
       <>
-        <NavBar title="本店智能屏列表" goBack />
+        <NavBar title="设备列表" goBack />
         <WhiteSpace />
         <WingBlank size="md">{this.mapList()}</WingBlank>
       </>
