@@ -47,6 +47,22 @@ class StoreFrontStore {
 
   @observable levelOption = []
 
+  @observable storeCommodityForSale = []
+
+  @observable storeCommodityForSalePage = 1
+
+  @observable storePackageForSale = []
+
+  @observable storePackageForSalePage = 1
+
+  @observable unBindstoreCommodityForSale = []
+
+  @observable unBindstoreCommodityForSalePage = 1
+
+  @observable unBindstorePackageForSale = []
+
+  @observable unBindstorePackageForSalePage = 1
+
   // 商铺列表
   @action
   fetchStoreList = async () => {
@@ -201,7 +217,6 @@ class StoreFrontStore {
   // 缓存编辑商铺信息
   @action
   cacheStoreDetail = async data => {
-    console.log(data)
     this.cacheStore = data
   }
 
@@ -315,7 +330,11 @@ class StoreFrontStore {
         })
       })
       if (response.data.result.length) {
-        return Promise.resolve([provinceId, cityId, response.data.result[0].value])
+        return Promise.resolve([
+          provinceId,
+          cityId,
+          response.data.result[0].value,
+        ])
       }
     }
   }
@@ -477,6 +496,180 @@ class StoreFrontStore {
       runInAction(() => {
         this.levelOption = response.data.result
       })
+    }
+  }
+
+  // 商铺在售服务
+  @action
+  getStoreCommodityForSale = async (id, flag) => {
+    if (flag) {
+      runInAction(() => {
+        this.storeCommodityForSalePage += 1
+      })
+    }
+    const response = await services.getStoreCommodityForSale(
+      id,
+      this.storeCommodityForSalePage,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        if (flag) {
+          this.storeCommodityForSale = [
+            ...this.storeCommodityForSale,
+            ...response.data.result,
+          ]
+          if (response.data.result.length === 0) {
+            this.storeCommodityForSalePage -= 1
+          }
+        } else {
+          this.storeCommodityForSale = response.data.result
+        }
+      })
+    }
+  }
+
+  // 商铺在售套餐
+  @action
+  getStorePackageForSale = async (id, flag) => {
+    runInAction(() => {
+      if (flag) {
+        this.storePackageForSalePage += 1
+      }
+    })
+    const response = await services.getStorePackageForSale(
+      id,
+      this.storePackageForSalePage,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        if (flag) {
+          this.storePackageForSale = [
+            ...this.storePackageForSale,
+            ...response.data.result,
+          ]
+          if (response.data.result.length === 0) {
+            this.storePackageForSalePage -= 1
+          }
+        } else {
+          this.storePackageForSale = response.data.result
+        }
+      })
+    }
+  }
+
+  // 店铺绑定在售商品
+  @action
+  bindCommodityForSale = async () => {
+    const response = await services.bindCommodityForSale()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.storeCommodityForSale = response.data.result
+      })
+    }
+  }
+
+  // 店铺绑定在售套餐
+  @action
+  bindPackageForSale = async () => {
+    const response = await services.bindPackageForSale()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.storeCommodityForSale = response.data.result
+      })
+    }
+  }
+
+  // 获取店铺未绑定服务
+  @action
+  getUnBindStoreCommodityForSale = async (id, flag) => {
+    runInAction(() => {
+      if (flag) {
+        this.unBindstoreCommodityForSalePage += 1
+      }
+    })
+    const response = await services.getUnBindStoreCommodityForSale(
+      id,
+      this.unBindstoreCommodityForSalePage,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        if (flag) {
+          this.unBindstoreCommodityForSale = [
+            ...this.unBindstoreCommodityForSale,
+            ...response.data.result,
+          ]
+          if (response.data.result.length === 0) {
+            this.unBindstoreCommodityForSalePage -= 1
+          }
+        } else {
+          this.unBindstoreCommodityForSale = response.data.result
+        }
+      })
+    }
+  }
+
+  // 获取店铺未绑定套餐
+  @action
+  getUnBindStorePackageForSale = async (id, flag) => {
+    runInAction(() => {
+      if (flag) {
+        this.unBindstorePackageForSalePage += 1
+      }
+    })
+    const response = await services.getUnBindStorePackageForSale(
+      id,
+      this.unBindstorePackageForSalePage,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        if (flag) {
+          this.unBindstorePackageForSale = [
+            ...this.unBindstorePackageForSale,
+            ...response.data.result,
+          ]
+          if (response.data.result.length === 0) {
+            this.unBindstorePackageForSalePage -= 1
+          }
+        } else {
+          this.unBindstorePackageForSale = response.data.result
+        }
+      })
+    }
+  }
+
+  // 商铺绑定服务
+  @action
+  bindStoreCommodity = async (id, ids) => {
+    const response = await services.bindStoreCommodity(id, ids)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 商铺绑定套餐
+  @action
+  bindStorePackage = async (id, ids) => {
+    const response = await services.bindStorePackage(id, ids)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 解绑店铺服务
+  @action
+  unBindCommodity = async (id, cid) => {
+    const response = await services.unBindCommodity(id, cid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 解绑店铺套餐
+  @action
+  unBindPackage = async (id, cid) => {
+    const response = await services.unBindPackage(id, cid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
     }
   }
 }

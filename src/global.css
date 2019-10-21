@@ -122,6 +122,20 @@ body {
   flex: 1;
 }
 
+/* mask */
+.am-modal-wrap {
+  z-index: 99999;
+}
+
+.am-modal-mask {
+  z-index: 99999;
+}
+
+/* Toast */
+.am-toast {
+  z-index: 100000;
+}
+
 /* 富文本工具栏换行 */
 .w-e-toolbar {
   flex-wrap: wrap;

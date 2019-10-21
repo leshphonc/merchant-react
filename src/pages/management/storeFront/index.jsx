@@ -15,6 +15,8 @@ import StoreDiscount from './storeDiscount'
 import StoreDiscountPanel from './storeDiscountPanel'
 import DiningInformation from './diningInformation'
 import StoreFrontQualification from './storeFrontQualification'
+import StoreFrontCommodityList from './storeFrontCommodityList'
+import StoreFrontPackageList from './storeFrontPackageList'
 import { StoreStatus } from '@/config/constant'
 import { PrimaryTag } from '@/styled'
 import Utils from '@/utils'
@@ -45,25 +47,79 @@ class StoreFront extends React.Component {
                 <span style={{ width: 200 }} className="ellipsis">
                   {item.name}
                 </span>
-                <WhiteSpace></WhiteSpace>
+                <WhiteSpace />
                 <Flex>
                   {item.have_service === '1' ? (
-                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}> 标准</PrimaryTag>
+                    <PrimaryTag
+                      style={{
+                        marginRight: 5,
+                        color: '#999',
+                        borderColor: '#999',
+                        fontSize: 13,
+                      }}
+                    >
+                      标准
+                    </PrimaryTag>
                   ) : null}
                   {item.have_mall === '1' && item.have_service !== '1' ? (
-                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}>电商</PrimaryTag>
+                    <PrimaryTag
+                      style={{
+                        marginRight: 5,
+                        color: '#999',
+                        borderColor: '#999',
+                        fontSize: 13,
+                      }}
+                    >
+                      电商
+                    </PrimaryTag>
                   ) : null}
                   {item.have_peisong === '1' ? (
-                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}>外卖</PrimaryTag>
+                    <PrimaryTag
+                      style={{
+                        marginRight: 5,
+                        color: '#999',
+                        borderColor: '#999',
+                        fontSize: 13,
+                      }}
+                    >
+                      外卖
+                    </PrimaryTag>
                   ) : null}
                   {item.have_meal === '1' ? (
-                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}>餐饮</PrimaryTag>
+                    <PrimaryTag
+                      style={{
+                        marginRight: 5,
+                        color: '#999',
+                        borderColor: '#999',
+                        fontSize: 13,
+                      }}
+                    >
+                      餐饮
+                    </PrimaryTag>
                   ) : null}
                   {item.have_hotel === '1' ? (
-                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}>酒店</PrimaryTag>
+                    <PrimaryTag
+                      style={{
+                        marginRight: 5,
+                        color: '#999',
+                        borderColor: '#999',
+                        fontSize: 13,
+                      }}
+                    >
+                      酒店
+                    </PrimaryTag>
                   ) : null}
                   {item.have_auto_parts === '1' ? (
-                    <PrimaryTag style={{ marginRight: 5, color: '#999', borderColor: '#999', fontSize: 13 }}> 汽配</PrimaryTag>
+                    <PrimaryTag
+                      style={{
+                        marginRight: 5,
+                        color: '#999',
+                        borderColor: '#999',
+                        fontSize: 13,
+                      }}
+                    >
+                      汽配
+                    </PrimaryTag>
                   ) : null}
                 </Flex>
               </Flex>
@@ -121,6 +177,35 @@ class StoreFront extends React.Component {
                     </Flex.Item>
                   ) : null}
                 </Flex>
+                <WhiteSpace size="sm" />
+                <Flex>
+                  <Flex.Item>
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={() =>
+                        history.push(
+                          `/management/storefront/storeFrontCommodityList/${item.store_id}`,
+                        )
+                      }
+                    >
+                      在售服务
+                    </Button>
+                  </Flex.Item>
+                  <Flex.Item>
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={() =>
+                        history.push(
+                          `/management/storefront/storeFrontPackageList/${item.store_id}`,
+                        )
+                      }
+                    >
+                      在售套餐
+                    </Button>
+                  </Flex.Item>
+                </Flex>
               </React.Fragment>
             }
           />
@@ -160,6 +245,16 @@ export default () => (
     <Route
       path="/management/storefront/storePanel/:str/:id?"
       component={StorePanel}
+    />
+    {/* 店铺服务列表 */}
+    <Route
+      path="/management/storefront/storeFrontCommodityList/:id"
+      component={StoreFrontCommodityList}
+    />
+    {/* 店铺套餐列表 */}
+    <Route
+      path="/management/storefront/storeFrontPackageList/:id"
+      component={StoreFrontPackageList}
     />
     {/* 坐标拾取 */}
     <Route
