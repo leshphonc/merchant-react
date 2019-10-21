@@ -1,9 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  List, Picker, WingBlank, Button, InputItem, Toast,
-} from 'antd-mobile'
+import { List, Picker, WingBlank, Button, InputItem, Toast } from 'antd-mobile'
 import { createForm } from 'rc-form'
 
 @createForm()
@@ -29,9 +27,7 @@ class OressGoods extends React.Component {
   }
 
   submit = () => {
-    const {
-      giftManagement, form, match, history,
-    } = this.props
+    const { giftManagement, form, match, history } = this.props
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请输入完整信息')
@@ -42,14 +38,16 @@ class OressGoods extends React.Component {
         express_id: value.express_id,
         express_number: value.express_number[0],
       }
-      giftManagement.modifyExpress({ ...obj, order_id: match.params.orderId }).then(res => {
-        if (res) {
-          Toast.success('发货成功', 1, () => {
-            giftManagement.resetAndFetchGiftOrderList()
-            history.goBack()
-          })
-        }
-      })
+      giftManagement
+        .modifyExpress({ ...obj, order_id: match.params.orderId })
+        .then(res => {
+          if (res) {
+            Toast.success('发货成功', 1, () => {
+              giftManagement.resetAndFetchGiftOrderList()
+              history.goBack()
+            })
+          }
+        })
     })
   }
 

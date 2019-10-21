@@ -27,8 +27,8 @@ class SmartScreenSloganCRU extends React.Component {
     const { getFieldProps } = form
     return (
       <>
-        <NavBar title="编辑见面语" goBack></NavBar>
-        <WhiteSpace></WhiteSpace>
+        <NavBar title="编辑见面语" goBack />
+        <WhiteSpace />
         <List renderFooter="已播报4次">
           <InputItem placeholder="请输入见面语名称">见面语名称</InputItem>
           <TextareaItem
@@ -36,7 +36,7 @@ class SmartScreenSloganCRU extends React.Component {
             rows={4}
             count={200}
             placeholder="请输入见面语播报内容"
-          ></TextareaItem>
+          />
           <DatePicker
             {...getFieldProps('start_time', {
               rules: [{ required: true }],
@@ -53,7 +53,7 @@ class SmartScreenSloganCRU extends React.Component {
           </DatePicker>
           <InputItem placeholder="此条语音总播报次数">播报次数</InputItem>
         </List>
-        <WhiteSpace></WhiteSpace>
+        <WhiteSpace />
         <WingBlank>
           <Button type="primary" onClick={this.submit}>
             确定

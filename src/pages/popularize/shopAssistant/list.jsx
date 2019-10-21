@@ -26,7 +26,9 @@ class ShopAssistant extends React.Component {
     const { staffList } = shopAssistant
     return staffList.map(item => (
       <ListItem key={item.id}>
-        <ItemTop style={{ paddingBottom: '10px', borderBottom: '1px solid #aaa' }}>
+        <ItemTop
+          style={{ paddingBottom: '10px', borderBottom: '1px solid #aaa' }}
+        >
           {item.pic ? (
             <img src={item.pic} alt="" />
           ) : (
@@ -39,28 +41,48 @@ class ShopAssistant extends React.Component {
             <WhiteSpace />
             <div
               className="top-features"
-              style={{ position: 'initial', fontSize: '14px', margin: '14px 0' }}
+              style={{
+                position: 'initial',
+                fontSize: '14px',
+                margin: '14px 0',
+              }}
             >
               推广佣金: {item.sale_money || '0'}
             </div>
             <WhiteSpace />
             <div
               className="top-features"
-              style={{ position: 'initial', display: 'block', fontSize: '14px' }}
+              style={{
+                position: 'initial',
+                display: 'block',
+                fontSize: '14px',
+              }}
             >
               销售佣金: {item.spread_money || '0'}
             </div>
           </TopContent>
         </ItemTop>
-        <TopContent style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+        <TopContent
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '10px',
+          }}
+        >
           <div className="top-tags">
-            <Link to={`/popularize/shopAssistant/scanList/${item.id}`}>扫码人数</Link>
+            <Link to={`/popularize/shopAssistant/scanList/${item.id}`}>
+              扫码人数
+            </Link>
           </div>
           <div className="top-tags">
-            <Link to={`/popularize/shopAssistant/fansList/${item.id}`}>绑粉人数</Link>
+            <Link to={`/popularize/shopAssistant/fansList/${item.id}`}>
+              绑粉人数
+            </Link>
           </div>
           <div className="top-tags">
-            <Link to={`/popularize/shopAssistant/saleList/${item.id}`}>购买人数</Link>
+            <Link to={`/popularize/shopAssistant/saleList/${item.id}`}>
+              购买人数
+            </Link>
           </div>
         </TopContent>
       </ListItem>

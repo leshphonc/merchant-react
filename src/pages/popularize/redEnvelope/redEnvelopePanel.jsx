@@ -18,7 +18,10 @@ import Utils from '@/utils'
 import moment from 'moment'
 import { CustomizeList, ListTitle, ListContent } from '@/styled'
 
-const packetType = [{ label: '手气红包', value: '1' }, { label: '普通红包', value: '2' }]
+const packetType = [
+  { label: '手气红包', value: '1' },
+  { label: '普通红包', value: '2' },
+]
 const isOpen = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
 @createForm()
 @inject('redEnvelop', 'common')
@@ -84,7 +87,11 @@ class RetailAdd extends React.Component {
     redEnvelop.fetchGetRedPacket(match.params.id).then(() => {
       const { getRedPacket } = redEnvelop
       redEnvelop
-        .fetchCascadeOption(getRedPacket.province_id, getRedPacket.city_id, getRedPacket.area_id)
+        .fetchCascadeOption(
+          getRedPacket.province_id,
+          getRedPacket.city_id,
+          getRedPacket.area_id,
+        )
         .then(() => {
           const { asyncCascadeValue } = redEnvelop
           // 整理默认数据存入state
@@ -97,7 +104,11 @@ class RetailAdd extends React.Component {
         title: getRedPacket.title,
         share_url: getRedPacket.share_url,
         desc: getRedPacket.desc,
-        cascade: [getRedPacket.province_id, getRedPacket.city_id, getRedPacket.area_id],
+        cascade: [
+          getRedPacket.province_id,
+          getRedPacket.city_id,
+          getRedPacket.area_id,
+        ],
         start_time: new Date(moment(getRedPacket.start_time * 1000)),
         end_time: new Date(moment(getRedPacket.end_time * 1000)),
         is_open: [getRedPacket.is_open],
@@ -182,9 +193,7 @@ class RetailAdd extends React.Component {
   }
 
   submit = () => {
-    const {
-      redEnvelop, form, match, history,
-    } = this.props
+    const { redEnvelop, form, match, history } = this.props
     const { pics } = this.state
     if (!pics) {
       Toast.info('请输入完整信息')
@@ -242,7 +251,9 @@ class RetailAdd extends React.Component {
     const { asyncCascadeValue } = this.state
     const { cascadeOption } = redEnvelop
     const { pics } = this.state
-    const packettype = form.getFieldValue('packet_type') ? form.getFieldValue('packet_type')[0] : ''
+    const packettype = form.getFieldValue('packet_type')
+      ? form.getFieldValue('packet_type')[0]
+      : ''
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}活动`} goBack />
@@ -309,7 +320,11 @@ class RetailAdd extends React.Component {
           )}
           <List.Item>
             活动介绍
-            <TextareaItem {...getFieldProps('desc')} rows={3} placeholder="请填写简短描述" />
+            <TextareaItem
+              {...getFieldProps('desc')}
+              rows={3}
+              placeholder="请填写简短描述"
+            />
           </List.Item>
           {getRedPacket.is_fabu === '0' ? (
             <Picker
@@ -383,7 +398,10 @@ class RetailAdd extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -405,7 +423,10 @@ class RetailAdd extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -428,7 +449,10 @@ class RetailAdd extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -451,7 +475,10 @@ class RetailAdd extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -475,7 +502,10 @@ class RetailAdd extends React.Component {
                     e.stopPropagation()
                   }}
                 >
-                  <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  <i
+                    className="iconfont"
+                    style={{ marginLeft: 10, color: '#bbb' }}
+                  >
                     &#xe628;
                   </i>
                 </Tooltip>
@@ -500,7 +530,10 @@ class RetailAdd extends React.Component {
                     e.stopPropagation()
                   }}
                 >
-                  <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  <i
+                    className="iconfont"
+                    style={{ marginLeft: 10, color: '#bbb' }}
+                  >
                     &#xe628;
                   </i>
                 </Tooltip>
@@ -525,7 +558,10 @@ class RetailAdd extends React.Component {
                       e.stopPropagation()
                     }}
                   >
-                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                    <i
+                      className="iconfont"
+                      style={{ marginLeft: 10, color: '#bbb' }}
+                    >
                       &#xe628;
                     </i>
                   </Tooltip>
@@ -547,7 +583,10 @@ class RetailAdd extends React.Component {
                       e.stopPropagation()
                     }}
                   >
-                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                    <i
+                      className="iconfont"
+                      style={{ marginLeft: 10, color: '#bbb' }}
+                    >
                       &#xe628;
                     </i>
                   </Tooltip>
@@ -569,7 +608,10 @@ class RetailAdd extends React.Component {
                       e.stopPropagation()
                     }}
                   >
-                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                    <i
+                      className="iconfont"
+                      style={{ marginLeft: 10, color: '#bbb' }}
+                    >
                       &#xe628;
                     </i>
                   </Tooltip>
@@ -591,7 +633,10 @@ class RetailAdd extends React.Component {
                       e.stopPropagation()
                     }}
                   >
-                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                    <i
+                      className="iconfont"
+                      style={{ marginLeft: 10, color: '#bbb' }}
+                    >
                       &#xe628;
                     </i>
                   </Tooltip>
@@ -613,7 +658,10 @@ class RetailAdd extends React.Component {
                       e.stopPropagation()
                     }}
                   >
-                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                    <i
+                      className="iconfont"
+                      style={{ marginLeft: 10, color: '#bbb' }}
+                    >
                       &#xe628;
                     </i>
                   </Tooltip>
@@ -635,7 +683,10 @@ class RetailAdd extends React.Component {
                       e.stopPropagation()
                     }}
                   >
-                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                    <i
+                      className="iconfont"
+                      style={{ marginLeft: 10, color: '#bbb' }}
+                    >
                       &#xe628;
                     </i>
                   </Tooltip>
@@ -663,7 +714,10 @@ class RetailAdd extends React.Component {
                       e.stopPropagation()
                     }}
                   >
-                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                    <i
+                      className="iconfont"
+                      style={{ marginLeft: 10, color: '#bbb' }}
+                    >
                       &#xe628;
                     </i>
                   </Tooltip>
@@ -685,7 +739,10 @@ class RetailAdd extends React.Component {
                       e.stopPropagation()
                     }}
                   >
-                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                    <i
+                      className="iconfont"
+                      style={{ marginLeft: 10, color: '#bbb' }}
+                    >
                       &#xe628;
                     </i>
                   </Tooltip>
@@ -707,7 +764,10 @@ class RetailAdd extends React.Component {
                       e.stopPropagation()
                     }}
                   >
-                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                    <i
+                      className="iconfont"
+                      style={{ marginLeft: 10, color: '#bbb' }}
+                    >
                       &#xe628;
                     </i>
                   </Tooltip>
@@ -729,7 +789,10 @@ class RetailAdd extends React.Component {
                       e.stopPropagation()
                     }}
                   >
-                    <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                    <i
+                      className="iconfont"
+                      style={{ marginLeft: 10, color: '#bbb' }}
+                    >
                       &#xe628;
                     </i>
                   </Tooltip>

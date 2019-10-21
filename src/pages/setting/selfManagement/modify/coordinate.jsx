@@ -17,7 +17,11 @@ class CoordinatePicker extends React.Component {
     return (
       <React.Fragment>
         <NavBar title="商户坐标拾取" goBack />
-        <Picker lng={match.params.lng} lat={match.params.lat} callback={this.saveLngLat} />
+        <Picker
+          lng={match.params.lng}
+          lat={match.params.lat}
+          callback={this.saveLngLat}
+        />
       </React.Fragment>
     )
   }

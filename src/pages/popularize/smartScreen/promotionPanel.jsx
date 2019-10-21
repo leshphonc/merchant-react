@@ -1,6 +1,14 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import { WhiteSpace, InputItem, List, ImagePicker, TextareaItem, Button, Toast } from 'antd-mobile'
+import {
+  WhiteSpace,
+  InputItem,
+  List,
+  ImagePicker,
+  TextareaItem,
+  Button,
+  Toast,
+} from 'antd-mobile'
 import { createForm } from 'rc-form'
 import { inject } from 'mobx-react'
 import Utils from '@/utils'
@@ -226,7 +234,10 @@ class PromotionPanel extends React.Component {
                     e.stopPropagation()
                   }}
                 >
-                  <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  <i
+                    className="iconfont"
+                    style={{ marginLeft: 10, color: '#bbb' }}
+                  >
                     &#xe628;
                   </i>
                 </Tooltip>

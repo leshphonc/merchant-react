@@ -1,7 +1,13 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import {
-  List, Switch, Picker, WhiteSpace, Menu, Flex, Toast,
+  List,
+  Switch,
+  Picker,
+  WhiteSpace,
+  Menu,
+  Flex,
+  Toast,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import Tooltip from 'rc-tooltip'
@@ -14,7 +20,11 @@ import ModifyCoordinate from './modify/coordinate'
 import ModifyAddress from './modify/address'
 import NavBar from '@/common/NavBar'
 import {
-  CustomizeList, ListTitle, ListContent, PrimaryTag, MenuMask,
+  CustomizeList,
+  ListTitle,
+  ListContent,
+  PrimaryTag,
+  MenuMask,
 } from '@/styled'
 import 'rc-tooltip/assets/bootstrap.css'
 import Utils from '@/utils'
@@ -140,7 +150,10 @@ class BasicInformation extends React.Component {
             <Item
               extra={basicInfo.phone}
               arrow="horizontal"
-              onClick={() => history.push(`/setting/basicInformation/modifyPhone/${basicInfo.phone}`)
+              onClick={() =>
+                history.push(
+                  `/setting/basicInformation/modifyPhone/${basicInfo.phone}`,
+                )
               }
             >
               联系电话
@@ -148,7 +161,10 @@ class BasicInformation extends React.Component {
             <Item
               extra={basicInfo.email}
               arrow="horizontal"
-              onClick={() => history.push(`/setting/basicInformation/modifyEmail/${basicInfo.email}`)
+              onClick={() =>
+                history.push(
+                  `/setting/basicInformation/modifyEmail/${basicInfo.email}`,
+                )
               }
             >
               商家邮箱
@@ -178,7 +194,10 @@ class BasicInformation extends React.Component {
                     e.stopPropagation()
                   }}
                 >
-                  <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  <i
+                    className="iconfont"
+                    style={{ marginLeft: 10, color: '#bbb' }}
+                  >
                     &#xe628;
                   </i>
                 </Tooltip>
@@ -186,7 +205,10 @@ class BasicInformation extends React.Component {
             </Picker>
             <Item
               extra={
-                <Switch checked={basicInfo.is_offline === '1'} onChange={this.changePermission} />
+                <Switch
+                  checked={basicInfo.is_offline === '1'}
+                  onChange={this.changePermission}
+                />
               }
             >
               线下支付权限
@@ -194,9 +216,10 @@ class BasicInformation extends React.Component {
             <Item
               arrow="horizontal"
               extra={`${basicInfo.long || 0}, ${basicInfo.lat || 0}`}
-              onClick={() => history.push(
-                `/setting/basicInformation/modifyCoordinate/${basicInfo.long}/${basicInfo.lat}`,
-              )
+              onClick={() =>
+                history.push(
+                  `/setting/basicInformation/modifyCoordinate/${basicInfo.long}/${basicInfo.lat}`,
+                )
               }
             >
               商户经纬度
@@ -205,7 +228,10 @@ class BasicInformation extends React.Component {
               arrow="horizontal"
               wrap
               extra={basicInfo.adress}
-              onClick={() => history.push(`/setting/basicInformation/modifyAddress/${basicInfo.adress}`)
+              onClick={() =>
+                history.push(
+                  `/setting/basicInformation/modifyAddress/${basicInfo.adress}`,
+                )
               }
             >
               详细地址
@@ -225,14 +251,20 @@ class BasicInformation extends React.Component {
             <Item
               extra={basicInfo.txt_info}
               arrow="horizontal"
-              onClick={() => history.push(`/setting/basicInformation/modifyDescription/${basicInfo.txt_info}`)
+              onClick={() =>
+                history.push(
+                  `/setting/basicInformation/modifyDescription/${basicInfo.txt_info}`,
+                )
               }
             >
               商户描述
             </Item>
             <Item
               arrow="horizontal"
-              onClick={() => history.push('/setting/basicInformation/modifyPicture/modifyLogoUrl/1')
+              onClick={() =>
+                history.push(
+                  '/setting/basicInformation/modifyPicture/modifyLogoUrl/1',
+                )
               }
             >
               <CustomizeList>
@@ -244,7 +276,11 @@ class BasicInformation extends React.Component {
             </Item>
             <Item
               arrow="horizontal"
-              onClick={() => history.push('/setting/basicInformation/modifyPicture/modifyImgUrl/2')}
+              onClick={() =>
+                history.push(
+                  '/setting/basicInformation/modifyPicture/modifyImgUrl/2',
+                )
+              }
             >
               <CustomizeList>
                 <ListTitle>商户图片</ListTitle>
@@ -256,7 +292,9 @@ class BasicInformation extends React.Component {
             <Item
               extra="前往修改"
               arrow="horizontal"
-              onClick={() => history.push('/setting/basicInformation/modifyDetail')}
+              onClick={() =>
+                history.push('/setting/basicInformation/modifyDetail')
+              }
             >
               商户详情
             </Item>
@@ -288,9 +326,19 @@ class BasicInformation extends React.Component {
 
 export default () => (
   <React.Fragment>
-    <Route path="/setting/basicInformation" exact component={BasicInformation} />
-    <Route path="/setting/basicInformation/modifyPhone/:value?" component={ModifyPhone} />
-    <Route path="/setting/basicInformation/modifyEmail/:value?" component={ModifyEmail} />
+    <Route
+      path="/setting/basicInformation"
+      exact
+      component={BasicInformation}
+    />
+    <Route
+      path="/setting/basicInformation/modifyPhone/:value?"
+      component={ModifyPhone}
+    />
+    <Route
+      path="/setting/basicInformation/modifyEmail/:value?"
+      component={ModifyEmail}
+    />
     <Route
       path="/setting/basicInformation/modifyDescription/:value?"
       component={ModifyDescription}
@@ -299,8 +347,14 @@ export default () => (
       path="/setting/basicInformation/modifyPicture/:action/:aspectratio"
       component={ModifyPicture}
     />
-    <Route path="/setting/basicInformation/modifyDetail" component={ModifyDetail} />
-    <Route path="/setting/basicInformation/modifyAddress/:address?" component={ModifyAddress} />
+    <Route
+      path="/setting/basicInformation/modifyDetail"
+      component={ModifyDetail}
+    />
+    <Route
+      path="/setting/basicInformation/modifyAddress/:address?"
+      component={ModifyAddress}
+    />
     <Route
       path="/setting/basicInformation/modifyCoordinate/:lng/:lat"
       component={ModifyCoordinate}

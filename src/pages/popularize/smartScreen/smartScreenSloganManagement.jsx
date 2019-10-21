@@ -12,13 +12,13 @@ class SmartScreenSloganManagement extends React.Component {
   state = {
     cur: 0,
   }
+
   mapList = () => {
     const { cur } = this.state
     if (cur === 0) {
       return this.mapGlobal()
-    } else {
-      return this.mapSp()
     }
+    return this.mapSp()
   }
 
   mapGlobal = () => {
@@ -71,13 +71,12 @@ class SmartScreenSloganManagement extends React.Component {
               </Button>
             ) : null
           }
-        ></NavBar>
-        <WhiteSpace></WhiteSpace>
+        />
+        <WhiteSpace />
         <WingBlank>
           <SegmentedControl
             selectedIndex={cur}
             onChange={e => {
-              console.log(e.nativeEvent.selectedSegmentIndex)
               this.setState({
                 cur: e.nativeEvent.selectedSegmentIndex,
               })
@@ -85,7 +84,7 @@ class SmartScreenSloganManagement extends React.Component {
             values={['全局见面语', '员工特殊见面语']}
           />
         </WingBlank>
-        <WhiteSpace></WhiteSpace>
+        <WhiteSpace />
         <List>{this.mapList()}</List>
       </>
     )

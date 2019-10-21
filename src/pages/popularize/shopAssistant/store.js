@@ -35,7 +35,11 @@ class MastSotre {
 
   @action
   fetchStatisticsInfo = async (storeId, starttime, endtime) => {
-    const response = await services.fetchStatisticsInfo(storeId, starttime, endtime)
+    const response = await services.fetchStatisticsInfo(
+      storeId,
+      starttime,
+      endtime,
+    )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.statisticsInfo = response.data.result

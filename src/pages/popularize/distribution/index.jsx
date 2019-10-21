@@ -3,10 +3,12 @@ import NavBar from '@/common/NavBar'
 import { WhiteSpace, List } from 'antd-mobile'
 
 class Retail extends React.Component {
+  componentDidMount() {}
+
   render() {
     return (
       <>
-        <NavBar title="分销商品列表"></NavBar>
+        <NavBar title="分销商品列表" />
         <WhiteSpace />
         <List>
           <List.Item

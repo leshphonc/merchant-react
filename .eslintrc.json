@@ -5,7 +5,8 @@
     "es6": true
   },
   // 使用airbnb校验规则
-  "extends": "airbnb",
+  "extends": ["airbnb", "eslint:recommended", "plugin:prettier/recommended"],
+  "plugins": ["react", "prettier"],
   "rules": {
     // 结尾不允许使用分号
     "semi": [2, "never"],
@@ -31,6 +32,8 @@
     "linebreak-style": [0, "error", "windows"],
     // 允许使用全局变量
     "global-require": 0
+    // 剪头函数是否换行
+    // "implicit-arrow-linebreak": ["off"]
     //   // 箭头函数直接返回的时候不需要 大括号 {}
     //   "arrow-body-style": [2, "as-needed"],
     //   // 限制可使用jsx的文件扩展名

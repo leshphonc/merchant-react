@@ -27,7 +27,6 @@ class BasicInformationSotre {
 
   @observable changePicPwd = {}
 
-
   // 自提点列表
   @action
   fetchPickLists = async id => {
@@ -38,7 +37,11 @@ class BasicInformationSotre {
         this.pickListsPage += 1
       }
     }
-    const response = await services.fetchPickLists(this.pickListsPage, this.pickListsSize, id)
+    const response = await services.fetchPickLists(
+      this.pickListsPage,
+      this.pickListsSize,
+      id,
+    )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
@@ -172,41 +175,41 @@ class BasicInformationSotre {
     this.categoryOption = []
   }
 
-   // 省市区级联
-   @action
-   fetchCascadeOption = async (provinceId, cityId, areaId) => {
-     const asyncCascadeValue = [provinceId]
-     const province = await services.fetchProvince()
-     if (province.data.errorCode === ErrorCode.SUCCESS) {
-       const city = await services.fetchCity(provinceId)
-       if (city.data.errorCode === ErrorCode.SUCCESS) {
-         const area = await services.fetchArea(cityId)
-         if (area.data.errorCode === ErrorCode.SUCCESS) {
-           const provinceData = province.data.result
-           const cityData = city.data.result
-           const areaData = area.data.result
-           cityData.forEach(item => {
-             if (item.value === cityId) {
-               item.children = areaData
-             }
-           })
-           provinceData.forEach(item => {
-             if (item.value === provinceId) {
-               item.children = cityData
-             }
-           })
-           runInAction(() => {
-             if (cityData.length) {
-               asyncCascadeValue.push(cityId)
-               if (areaData.length) asyncCascadeValue.push(areaId)
-             }
-             this.cascadeOption = provinceData
-             this.asyncCascadeValue = asyncCascadeValue
-           })
-         }
-       }
-     }
-   }
+  // 省市区级联
+  @action
+  fetchCascadeOption = async (provinceId, cityId, areaId) => {
+    const asyncCascadeValue = [provinceId]
+    const province = await services.fetchProvince()
+    if (province.data.errorCode === ErrorCode.SUCCESS) {
+      const city = await services.fetchCity(provinceId)
+      if (city.data.errorCode === ErrorCode.SUCCESS) {
+        const area = await services.fetchArea(cityId)
+        if (area.data.errorCode === ErrorCode.SUCCESS) {
+          const provinceData = province.data.result
+          const cityData = city.data.result
+          const areaData = area.data.result
+          cityData.forEach(item => {
+            if (item.value === cityId) {
+              item.children = areaData
+            }
+          })
+          provinceData.forEach(item => {
+            if (item.value === provinceId) {
+              item.children = cityData
+            }
+          })
+          runInAction(() => {
+            if (cityData.length) {
+              asyncCascadeValue.push(cityId)
+              if (areaData.length) asyncCascadeValue.push(areaId)
+            }
+            this.cascadeOption = provinceData
+            this.asyncCascadeValue = asyncCascadeValue
+          })
+        }
+      }
+    }
+  }
 
   // 获取省下的市区并且合并到现有对象
   @action
@@ -265,7 +268,11 @@ class BasicInformationSotre {
         })
       })
       if (response.data.result.length) {
-        return Promise.resolve([provinceId, cityId, response.data.result[0].value])
+        return Promise.resolve([
+          provinceId,
+          cityId,
+          response.data.result[0].value,
+        ])
       }
     }
   }

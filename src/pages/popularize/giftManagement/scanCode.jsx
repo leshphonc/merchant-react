@@ -46,9 +46,11 @@ class ScanCode extends React.Component {
       needResult: 1,
       scanType: ['qrCode', 'barCode'],
       success(res) {
-        giftManagement.fecthGiftArrayVerify(orderId, res.resultStr).then(res2 => {
-          if (res2) Toast.success('验证成功', 1, () => history.goBack())
-        })
+        giftManagement
+          .fecthGiftArrayVerify(orderId, res.resultStr)
+          .then(res2 => {
+            if (res2) Toast.success('验证成功', 1, () => history.goBack())
+          })
       },
       fail() {
         login.wxConfigFun().then(res => {
@@ -60,32 +62,37 @@ class ScanCode extends React.Component {
     })
   }
 
-  giftPassList = passArr => passArr.map((item, index) => (
-    <Flex key={index}>
-      <Flex.Item style={{ flex: 'none', width: '60%', marginTop: '15px' }}>
-        <div>核销码:{item.gift_pass}</div>
-      </Flex.Item>
-      <Flex.Item style={{ flex: 'none', marginTop: '15px' }}>
-        <div style={{ marginTop: '-6px' }}>
-          {item.status === '1' ? (
-            <Button type="primary" size="small" style={{ width: '60%', margin: '0px 34px 0px' }}>
+  giftPassList = passArr =>
+    passArr.map((item, index) => (
+      <Flex key={index}>
+        <Flex.Item style={{ flex: 'none', width: '60%', marginTop: '15px' }}>
+          <div>核销码:{item.gift_pass}</div>
+        </Flex.Item>
+        <Flex.Item style={{ flex: 'none', marginTop: '15px' }}>
+          <div style={{ marginTop: '-6px' }}>
+            {item.status === '1' ? (
+              <Button
+                type="primary"
+                size="small"
+                style={{ width: '60%', margin: '0px 34px 0px' }}
+              >
                 已验证
-            </Button>
-          ) : (
-            // <Button
-            //   type="primary"
-            //   size="small"
-            //   style={{ width: '60%', margin: '0px 34px 0px' }}
-            //   onClick={() => this.verificBtn(this.state.detail.order_id)}
-            // >
-            //     验证
-            // </Button>
-            ''
-          )}
-        </div>
-      </Flex.Item>
-    </Flex>
-  ))
+              </Button>
+            ) : (
+              // <Button
+              //   type="primary"
+              //   size="small"
+              //   style={{ width: '60%', margin: '0px 34px 0px' }}
+              //   onClick={() => this.verificBtn(this.state.detail.order_id)}
+              // >
+              //     验证
+              // </Button>
+              ''
+            )}
+          </div>
+        </Flex.Item>
+      </Flex>
+    ))
 
   ver = id => {
     const { giftManagement, history, login } = this.props
@@ -120,7 +127,7 @@ class ScanCode extends React.Component {
                 type="primary"
                 // size="small"
                 // style={{ width: '60%', margin: '0px 34px 0px' }}
-                onClick={() => this.verificBtn(this.state.detail.order_id)}
+                onClick={() => this.verificBtn(detail.order_id)}
               >
                 验证
               </Button>
@@ -149,7 +156,10 @@ class ScanCode extends React.Component {
         )}
 
         <Card style={{ marginTop: '10px' }}>
-          <Card.Header style={{ fontSize: 15, color: '#999' }} title="核销信息"></Card.Header>
+          <Card.Header
+            style={{ fontSize: 15, color: '#999' }}
+            title="核销信息"
+          />
           <Card.Body style={{ color: '#666', fontSize: 15 }}>
             {detail.store_id !== '0' && giftPassArr.length < 1 && giftPass && (
               <Flex>

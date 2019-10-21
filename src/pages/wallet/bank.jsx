@@ -86,11 +86,28 @@ class Bank extends React.Component {
       <>
         <WingBlank>
           {cur === 1 ? (
-            <Paper style={{ textAlign: 'center', boxShadow: 'none', borderRadius: 10 }}>
-              <div style={{ fontSize: 14, color: '#ababab', marginTop: 15, marginBottom: 30 }}>
+            <Paper
+              style={{
+                textAlign: 'center',
+                boxShadow: 'none',
+                borderRadius: 10,
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 14,
+                  color: '#ababab',
+                  marginTop: 15,
+                  marginBottom: 30,
+                }}
+              >
                 您还没有绑定银行卡
               </div>
-              <Button type="primary" style={{ marginBottom: 10 }} onClick={this.bindBankCard}>
+              <Button
+                type="primary"
+                style={{ marginBottom: 10 }}
+                onClick={this.bindBankCard}
+              >
                 绑定银行卡
               </Button>
             </Paper>
@@ -119,7 +136,13 @@ class Bank extends React.Component {
                       borderRadius: 20,
                     }}
                   />
-                  <div style={{ display: 'inline-block', marginLeft: 10, maxWidth: '65%' }}>
+                  <div
+                    style={{
+                      display: 'inline-block',
+                      marginLeft: 10,
+                      maxWidth: '65%',
+                    }}
+                  >
                     <div
                       style={{
                         fontSize: 20,
@@ -161,11 +184,17 @@ class Bank extends React.Component {
                     marginRight: 7,
                   }}
                 >
-                  <span style={{ verticalAlign: 'sub', letterSpacing: 2 }}>****</span>
+                  <span style={{ verticalAlign: 'sub', letterSpacing: 2 }}>
+                    ****
+                  </span>
                   &nbsp;&nbsp;&nbsp;&nbsp;
-                  <span style={{ verticalAlign: 'sub', letterSpacing: 2 }}>****</span>
+                  <span style={{ verticalAlign: 'sub', letterSpacing: 2 }}>
+                    ****
+                  </span>
                   &nbsp;&nbsp;&nbsp;&nbsp;
-                  <span style={{ verticalAlign: 'sub', letterSpacing: 2 }}>****</span>
+                  <span style={{ verticalAlign: 'sub', letterSpacing: 2 }}>
+                    ****
+                  </span>
                   &nbsp;&nbsp;&nbsp;&nbsp;
                   <span style={{ verticalAlign: 'middle' }}>{foot}</span>
                 </div>

@@ -1,9 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  Button, Flex, List, DatePicker, Picker, WingBlank,
-} from 'antd-mobile'
+import { Button, Flex, List, DatePicker, Picker, WingBlank } from 'antd-mobile'
 import { Link, Route } from 'react-router-dom'
 import moment from 'moment'
 import { ColorBox } from './styled'
@@ -42,7 +40,11 @@ class ShopAssistant extends React.Component {
     const searchEndDate = moment(enddate).format('YYYY-MM-DD')
     // console.log(searchStartDate)
     // console.log(searchEndDate)
-    shopAssistant.fetchStatisticsInfo(selectValue[0], searchStartDate, searchEndDate)
+    shopAssistant.fetchStatisticsInfo(
+      selectValue[0],
+      searchStartDate,
+      searchEndDate,
+    )
     this.setState({ selectValue: '', startdate: '', enddate: '' })
   }
 
@@ -106,7 +108,11 @@ class ShopAssistant extends React.Component {
               </ColorBox>
             </Flex.Item>
             <Flex.Item>
-              <Button className={styles.btna} type="primary" onClick={this.search}>
+              <Button
+                className={styles.btna}
+                type="primary"
+                onClick={this.search}
+              >
                 查询
               </Button>
             </Flex.Item>
@@ -143,7 +149,10 @@ class ShopAssistant extends React.Component {
         </div>
         {selectValue ? (
           <div className={styles.foot}>
-            <Link to={`/popularize/shopAssistant/list/${selectValue[0]}`} style={{ color: '#fff' }}>
+            <Link
+              to={`/popularize/shopAssistant/list/${selectValue[0]}`}
+              style={{ color: '#fff' }}
+            >
               查看推广详情
             </Link>
           </div>
@@ -157,7 +166,10 @@ class ShopAssistant extends React.Component {
 export default () => (
   <React.Fragment>
     <Route path="/popularize/shopAssistant" exact component={ShopAssistant} />
-    <Route path="/popularize/shopAssistant/list/:id" component={ShopAssistantList} />
+    <Route
+      path="/popularize/shopAssistant/list/:id"
+      component={ShopAssistantList}
+    />
     <Route path="/popularize/shopAssistant/scanList/:id" component={ScanList} />
     <Route path="/popularize/shopAssistant/saleList/:id" component={SaleList} />
     <Route path="/popularize/shopAssistant/fansList/:id" component={FansList} />

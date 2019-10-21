@@ -3,7 +3,13 @@ import NavBar from '@/common/NavBar'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  Button, List, DatePicker, WingBlank, Flex, PullToRefresh, WhiteSpace,
+  Button,
+  List,
+  DatePicker,
+  WingBlank,
+  Flex,
+  PullToRefresh,
+  WhiteSpace,
 } from 'antd-mobile'
 // import CardList from './components/SaleList'
 // import { SaleList } from '@/config/list'
@@ -51,7 +57,10 @@ class ShopAssistant extends React.Component {
     const { saleList } = shopAssistant
     return saleList.map(item => (
       <div style={{ background: '#fff' }}>
-        <List className="list" style={{ borderBottom: '1px solid #aaa', padding: '4px 0' }}>
+        <List
+          className="list"
+          style={{ borderBottom: '1px solid #aaa', padding: '4px 0' }}
+        >
           <span className="pic" style={{ width: '16vw' }}>
             {item.avatar ? <img src={item.avatar} alt="无" /> : null}
           </span>
@@ -77,9 +86,7 @@ class ShopAssistant extends React.Component {
   render() {
     const { shopAssistant } = this.props
     const { saleListTotal } = shopAssistant
-    const {
-      startdate, enddate, refreshing, height,
-    } = this.state
+    const { startdate, enddate, refreshing, height } = this.state
     return (
       <React.Fragment>
         <NavBar title="销售记录" goBack />
@@ -129,7 +136,11 @@ class ShopAssistant extends React.Component {
               </ColorBox>
             </Flex.Item>
             <Flex.Item>
-              <Button className={styles.btna} type="primary" onClick={this.search}>
+              <Button
+                className={styles.btna}
+                type="primary"
+                onClick={this.search}
+              >
                 查询
               </Button>
             </Flex.Item>

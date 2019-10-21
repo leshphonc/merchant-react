@@ -39,12 +39,17 @@ class BankWithDrawRecord extends React.Component {
             <Flex>
               <Flex.Item>
                 <div>
-                  提现金额：<span style={{ color: 'green' }}>{item.money}</span> 元
+                  提现金额：<span style={{ color: 'green' }}>{item.money}</span>
+                  元
                 </div>
               </Flex.Item>
               <Flex.Item>
                 <div>
-                  手续费：<span style={{ color: 'red' }}>{item.takecashcommission}</span> 元
+                  手续费：
+                  <span style={{ color: 'red' }}>
+                    {item.takecashcommission}
+                  </span>
+                  元
                 </div>
               </Flex.Item>
             </Flex>
@@ -52,11 +57,14 @@ class BankWithDrawRecord extends React.Component {
           <Card.Footer
             extra={
               <div>
-                实际到账：<span style={{ color: '#ffb000', fontSize: 16 }}>{item.cashamt}</span> 元
+                实际到账：
+                <span style={{ color: '#ffb000', fontSize: 16 }}>
+                  {item.cashamt}
+                </span>
+                元
               </div>
             }
-          >
-          </Card.Footer>
+          />
           <WhiteSpace />
         </Card>
         <WhiteSpace />

@@ -166,14 +166,16 @@ class selfMention extends React.Component {
       }
       if (match.params.id) {
         const { pickAddressDetail } = selfManagement
-        selfManagement.addECommerce({ ...obj, id: pickAddressDetail.id }).then(res => {
-          if (res) {
-            Toast.success('编辑成功', 1, () => {
-              selfManagement.resetAndfetchPickLists()
-              history.goBack()
-            })
-          }
-        })
+        selfManagement
+          .addECommerce({ ...obj, id: pickAddressDetail.id })
+          .then(res => {
+            if (res) {
+              Toast.success('编辑成功', 1, () => {
+                selfManagement.resetAndfetchPickLists()
+                history.goBack()
+              })
+            }
+          })
       } else {
         selfManagement.modifyECommerce(obj).then(res => {
           if (res) {

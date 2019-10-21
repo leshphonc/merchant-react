@@ -83,9 +83,10 @@ class Wallet extends React.Component {
         {cur === '系统余额账户' ? (
           <List>
             <Item
-              onClick={() => history.push({
-                pathname: '/wallet/addCredit',
-              })
+              onClick={() =>
+                history.push({
+                  pathname: '/wallet/addCredit',
+                })
               }
               thumb={
                 <i className="iconfont" style={{ fontSize: 22 }}>
@@ -97,9 +98,10 @@ class Wallet extends React.Component {
               充值
             </Item>
             <Item
-              onClick={() => history.push({
-                pathname: '/wallet/withDraw',
-              })
+              onClick={() =>
+                history.push({
+                  pathname: '/wallet/withDraw',
+                })
               }
               thumb={
                 <i className="iconfont" style={{ fontSize: 22 }}>
@@ -111,9 +113,10 @@ class Wallet extends React.Component {
               提现
             </Item>
             <Item
-              onClick={() => history.push({
-                pathname: '/wallet/detail',
-              })
+              onClick={() =>
+                history.push({
+                  pathname: '/wallet/detail',
+                })
               }
               thumb={
                 <i className="iconfont" style={{ fontSize: 18, marginLeft: 2 }}>

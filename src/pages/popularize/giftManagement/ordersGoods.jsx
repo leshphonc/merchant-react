@@ -3,7 +3,12 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 import ReactDOM from 'react-dom'
 import {
-  Button, Flex, WingBlank, Card, WhiteSpace, PullToRefresh,
+  Button,
+  Flex,
+  WingBlank,
+  Card,
+  WhiteSpace,
+  PullToRefresh,
 } from 'antd-mobile'
 // import Utils from '@/utils'
 import moment from 'moment'
@@ -59,7 +64,8 @@ class OressGoods extends React.Component {
             </Flex>
             <Flex style={{ marginTop: '10px', marginBottom: '5px' }}>
               <Flex.Item style={{ flex: 'none', width: '58%' }}>
-                订单时间: {moment(item.order_time * 1000).format('YYYY-MM-DD HH:mm')}
+                订单时间:{' '}
+                {moment(item.order_time * 1000).format('YYYY-MM-DD HH:mm')}
               </Flex.Item>
               {item.is_pick_in_store === '1' ? (
                 <Flex.Item style={{ marginLeft: '2px' }}>
@@ -80,7 +86,10 @@ class OressGoods extends React.Component {
                   <Button
                     type="primary"
                     size="small"
-                    onClick={() => history.push(`/popularize/giftManagement/orderDetails/${item.order_id}`)
+                    onClick={() =>
+                      history.push(
+                        `/popularize/giftManagement/orderDetails/${item.order_id}`,
+                      )
                     }
                   >
                     详情
@@ -91,7 +100,10 @@ class OressGoods extends React.Component {
                     <Button
                       type="primary"
                       size="small"
-                      onClick={() => history.push(`/popularize/giftManagement/deliverGoods/${item.order_id}`)
+                      onClick={() =>
+                        history.push(
+                          `/popularize/giftManagement/deliverGoods/${item.order_id}`,
+                        )
                       }
                     >
                       发货
@@ -102,7 +114,10 @@ class OressGoods extends React.Component {
                     <Button
                       type="primary"
                       size="small"
-                      onClick={() => history.push(`/popularize/giftManagement/scanCode/${item.order_id}`)
+                      onClick={() =>
+                        history.push(
+                          `/popularize/giftManagement/scanCode/${item.order_id}`,
+                        )
                       }
                     >
                       扫码核销

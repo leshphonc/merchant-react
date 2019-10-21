@@ -18,7 +18,10 @@ class ModifyPicture extends React.Component {
     return (
       <React.Fragment>
         <NavBar title="裁剪上传" goBack />
-        <CropperImg callback={this.saveImg} aspectratio={match.params.aspectratio - 0} />
+        <CropperImg
+          callback={this.saveImg}
+          aspectratio={match.params.aspectratio - 0}
+        />
       </React.Fragment>
     )
   }

@@ -3,7 +3,13 @@ import NavBar from '@/common/NavBar'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  Button, List, DatePicker, WingBlank, Flex, PullToRefresh, WhiteSpace,
+  Button,
+  List,
+  DatePicker,
+  WingBlank,
+  Flex,
+  PullToRefresh,
+  WhiteSpace,
 } from 'antd-mobile'
 import { ColorBox, Info } from './styled'
 import styles from './index.module.css'
@@ -50,7 +56,10 @@ class ShopAssistant extends React.Component {
     const { scanList } = shopAssistant
     return scanList.map(item => (
       <div style={{ background: '#fff' }} key={item.spread_time}>
-        <MList className="list" style={{ borderBottom: '1px solid #aaa', padding: '4px 0' }}>
+        <MList
+          className="list"
+          style={{ borderBottom: '1px solid #aaa', padding: '4px 0' }}
+        >
           <span className="pic" style={{ width: '16vw' }}>
             {item.avatar ? <img src={item.avatar} alt="无" /> : null}
           </span>
@@ -76,9 +85,7 @@ class ShopAssistant extends React.Component {
   render() {
     const { shopAssistant } = this.props
     const { scanListTotal } = shopAssistant
-    const {
-      startdate, enddate, refreshing, height,
-    } = this.state
+    const { startdate, enddate, refreshing, height } = this.state
 
     return (
       <React.Fragment>
@@ -129,7 +136,11 @@ class ShopAssistant extends React.Component {
               </ColorBox>
             </Flex.Item>
             <Flex.Item>
-              <Button className={styles.btna} type="primary" onClick={this.search}>
+              <Button
+                className={styles.btna}
+                type="primary"
+                onClick={this.search}
+              >
                 查询
               </Button>
             </Flex.Item>

@@ -18,6 +18,7 @@ class SmartScreenCustomerSlogan extends React.Component {
       </List.Item>
     )
   }
+
   render() {
     const { history } = this.props
     return (
@@ -36,8 +37,8 @@ class SmartScreenCustomerSlogan extends React.Component {
               添加
             </Button>
           }
-        ></NavBar>
-        <WhiteSpace></WhiteSpace>
+        />
+        <WhiteSpace />
         {this.mapList()}
       </>
     )

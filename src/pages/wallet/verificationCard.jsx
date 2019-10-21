@@ -125,7 +125,11 @@ class VerificationCard extends React.Component {
             </div>,
             <div style={{ marginTop: 20 }}>
               可以提现啦！
-              <span style={{ marginTop: 5, color: '#367eef', marginBottom: 10 }}>立即提现</span>
+              <span
+                style={{ marginTop: 5, color: '#367eef', marginBottom: 10 }}
+              >
+                立即提现
+              </span>
             </div>,
             [{ text: '完成', onPress: () => history.push('/wallet') }],
           )

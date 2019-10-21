@@ -56,7 +56,8 @@ class SearchBankAps extends React.Component {
     common.fetchProvince()
     if (this.refresh.current) {
       /* eslint react/no-find-dom-node: 0 */
-      const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 50
+      const hei =
+        height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 50
       this.setState({
         height: hei,
       })
@@ -71,9 +72,16 @@ class SearchBankAps extends React.Component {
         return
       }
       const { provinceOption, cityOption } = common
-      const province = provinceOption.find(item => item.value === value.province[0])
+      const province = provinceOption.find(
+        item => item.value === value.province[0],
+      )
       const city = cityOption.find(item => item.value === value.city[0])
-      wallet.resetAndFetchBankAps(value.bank[0], province.label, city.label, value.key)
+      wallet.resetAndFetchBankAps(
+        value.bank[0],
+        province.label,
+        city.label,
+        value.key,
+      )
     })
   }
 
@@ -84,10 +92,11 @@ class SearchBankAps extends React.Component {
       <Radio.RadioItem
         key={item.bankCode}
         checked={checked === item.bankCode}
-        onChange={() => this.setState({
-          checked: item.bankCode,
-          checkedLabel: item.lName,
-        })
+        onChange={() =>
+          this.setState({
+            checked: item.bankCode,
+            checkedLabel: item.lName,
+          })
         }
       >
         {item.lName}
@@ -111,7 +120,9 @@ class SearchBankAps extends React.Component {
         return
       }
       const { provinceOption, cityOption } = common
-      const province = provinceOption.find(item => item.value === value.province[0])
+      const province = provinceOption.find(
+        item => item.value === value.province[0],
+      )
       const city = cityOption.find(item => item.value === value.city[0])
       wallet.fetchBankAps(value.bank[0], province.label, city.label, value.key)
     })

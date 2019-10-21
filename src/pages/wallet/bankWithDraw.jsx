@@ -54,7 +54,9 @@ class BankWithDraw extends React.Component {
   calcAccount = () => {
     const { real, servicePer } = this.state
     if (real) {
-      return ((real - 0) * 100 - (real - 0) * 100 * ((servicePer - 0) / 100)) / 100
+      return (
+        ((real - 0) * 100 - (real - 0) * 100 * ((servicePer - 0) / 100)) / 100
+      )
     }
     return '0.00'
   }
@@ -96,7 +98,12 @@ class BankWithDraw extends React.Component {
         <NavBar title="提现" goBack />
         <WhiteSpace />
         <Flex
-          style={{ background: '#fff', color: '#666', height: 50, lineHeight: '50px' }}
+          style={{
+            background: '#fff',
+            color: '#666',
+            height: 50,
+            lineHeight: '50px',
+          }}
           justify="center"
           align="center"
         >
@@ -107,7 +114,9 @@ class BankWithDraw extends React.Component {
               style={{ width: 40, height: 40, verticalAlign: 'middle' }}
               alt=""
             />
-            <span style={{ verticalAlign: 'middle', marginLeft: 20 }}>中国平安银行 (5987)</span>
+            <span style={{ verticalAlign: 'middle', marginLeft: 20 }}>
+              中国平安银行 (5987)
+            </span>
           </Flex.Item>
         </Flex>
         <WhiteSpace />
@@ -147,13 +156,19 @@ class BankWithDraw extends React.Component {
         <List style={{ marginTop: 10 }}>
           <InputItem
             value={code}
-            onChange={value => this.setState({
-              code: value,
-            })
+            onChange={value =>
+              this.setState({
+                code: value,
+              })
             }
             extra={
               time === 0 ? (
-                <Button size="small" type="primary" disabled={!real.length} onClick={this.getCode}>
+                <Button
+                  size="small"
+                  type="primary"
+                  disabled={!real.length}
+                  onClick={this.getCode}
+                >
                   获取验证码
                 </Button>
               ) : (

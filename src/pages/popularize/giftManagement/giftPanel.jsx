@@ -148,7 +148,11 @@ class GiftPanel extends React.Component {
         intro: getGiftDetail.intro,
         specification: getGiftDetail.specification,
         invoice_content: getGiftDetail.invoice_content,
-        cascade: [getGiftDetail.province_idss, getGiftDetail.city_idss, getGiftDetail.area_idss],
+        cascade: [
+          getGiftDetail.province_idss,
+          getGiftDetail.city_idss,
+          getGiftDetail.area_idss,
+        ],
         circle_idss: [getGiftDetail.circle_idss],
         market_idss: [getGiftDetail.market_idss],
       })
@@ -214,6 +218,7 @@ class GiftPanel extends React.Component {
 
   submit = () => {
     const { giftManagement, form, match, history } = this.props
+    const { store } = this.state
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请输入完整信息')
@@ -231,14 +236,16 @@ class GiftPanel extends React.Component {
         circle_idss: value.circle_idss[0],
         market_idss: value.market_idss ? value.market_idss[0] : '',
         gift_content: this.editor.current.state.editor.txt.html(),
-        store: this.state.store,
+        store,
       }
       // console.log(value)
       // console.log(obj)
       if (match.params.giftId) {
-        giftManagement.modifyGift({ ...obj, gift_id: match.params.giftId }).then(res => {
-          if (res) Toast.success('编辑成功', 1, () => history.goBack())
-        })
+        giftManagement
+          .modifyGift({ ...obj, gift_id: match.params.giftId })
+          .then(res => {
+            if (res) Toast.success('编辑成功', 1, () => history.goBack())
+          })
       } else {
         giftManagement.addGift({ ...obj }).then(res => {
           if (res) Toast.success('新增成功', 1, () => history.goBack())
@@ -392,8 +399,8 @@ class GiftPanel extends React.Component {
                           store: new_store,
                         })
                       }
-                    } catch (e) {
-                      console.log(e)
+                    } catch (err) {
+                      console.log(err)
                     }
                   }}
                 >
@@ -441,7 +448,11 @@ class GiftPanel extends React.Component {
           </List.Item>
           <List.Item>
             简述
-            <TextareaItem {...getFieldProps('intro')} rows={3} placeholder="请填写简短描述" />
+            <TextareaItem
+              {...getFieldProps('intro')}
+              rows={3}
+              placeholder="请填写简短描述"
+            />
           </List.Item>
           <List.Item>
             规格
@@ -457,7 +468,11 @@ class GiftPanel extends React.Component {
                 &#xe628;
               </i>
             </Tooltip>
-            <TextareaItem {...getFieldProps('specification')} rows={3} placeholder="请填写规格" />
+            <TextareaItem
+              {...getFieldProps('specification')}
+              rows={3}
+              placeholder="请填写规格"
+            />
           </List.Item>
           <List.Item>
             发货清单

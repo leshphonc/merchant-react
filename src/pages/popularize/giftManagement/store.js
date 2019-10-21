@@ -57,7 +57,11 @@ class MastSotre {
         this.giftOrderPage += 1
       }
     }
-    const response = await services.fetchGiftOrder(this.giftOrderPage, this.giftOrderSize, giftId)
+    const response = await services.fetchGiftOrder(
+      this.giftOrderPage,
+      this.giftOrderSize,
+      giftId,
+    )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
@@ -91,7 +95,11 @@ class MastSotre {
         this.getGiftPage += 1
       }
     }
-    const response = await services.fetchGetGift(this.getGiftPage, this.getGiftSize, keyword)
+    const response = await services.fetchGetGift(
+      this.getGiftPage,
+      this.getGiftSize,
+      keyword,
+    )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
@@ -280,7 +288,11 @@ class MastSotre {
         })
       })
       if (response.data.result.length) {
-        return Promise.resolve([provinceId, cityId, response.data.result[0].value])
+        return Promise.resolve([
+          provinceId,
+          cityId,
+          response.data.result[0].value,
+        ])
       }
     }
   }
@@ -404,7 +416,6 @@ class MastSotre {
       this.getGift = []
       this.getGiftPage = 1
       this.getGiftTotal = null
-      
     })
     await this.fetchGetGift(keyword)
   }

@@ -69,17 +69,6 @@ class SelfManagement extends React.Component {
               <div className="top-title" style={{ fontSize: '15px' }}>
                 自提点电话：{item.phone}
               </div>
-              {/* <WhiteSpace /> */}
-              {/* <Btns>
-                登陆密钥:
-                <Button
-                  type="button"
-                  onClick={() => history.push(`/setting/selfManagement/secretKey/查看/${item.pick_addr_id}`)
-                  }
-                >
-                  查看
-                </Button>
-              </Btns> */}
             </TopContent>
           </ItemTop>
           <div style={{ width: '20%', display: 'inline-block', float: 'right' }}>

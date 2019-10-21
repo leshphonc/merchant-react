@@ -69,7 +69,10 @@ class Detail extends React.Component {
       <React.Fragment>
         <NavBar title="用户详情" goBack />
         <WhiteSpace />
-        <div ref={this.editor} style={{ textAlign: 'left', background: '#fff' }} />
+        <div
+          ref={this.editor}
+          style={{ textAlign: 'left', background: '#fff' }}
+        />
         <Button
           type="primary"
           style={{

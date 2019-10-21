@@ -2,9 +2,7 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
-import {
-  WhiteSpace, PullToRefresh, WingBlank, Flex,
-} from 'antd-mobile'
+import { WhiteSpace, PullToRefresh, WingBlank, Flex } from 'antd-mobile'
 import moment from 'moment'
 import { List } from './styled'
 

@@ -37,8 +37,8 @@ class SmartScreenShopAssistantSlogan extends React.Component {
               添加
             </Button>
           }
-        ></NavBar>
-        <WhiteSpace></WhiteSpace>
+        />
+        <WhiteSpace />
         {this.mapList()}
       </>
     )

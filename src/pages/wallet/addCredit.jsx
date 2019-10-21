@@ -1,9 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  List, InputItem, Button, Checkbox, Toast,
-} from 'antd-mobile'
+import { List, InputItem, Button, Checkbox, Toast } from 'antd-mobile'
 import utils from '@/utils'
 
 @inject('wallet', 'login')
@@ -16,7 +14,6 @@ class AddCredit extends React.Component {
   componentDidMount() {
     const { wallet } = this.props
     const code = utils.getUrlParam('code')
-    console.log(code)
     if (!code) {
       // 获取微信code
       wallet.getWxCode()
@@ -68,7 +65,10 @@ class AddCredit extends React.Component {
       <React.Fragment>
         <NavBar title="充值" goBack="/wallet" />
         <List renderHeader="充值方式">
-          <List.Item thumb={require('@/assets/image/addCredit.jpeg')} extra={<Checkbox checked />}>
+          <List.Item
+            thumb={require('@/assets/image/addCredit.jpeg')}
+            extra={<Checkbox checked />}
+          >
             使用微信支付
           </List.Item>
         </List>
@@ -77,9 +77,10 @@ class AddCredit extends React.Component {
             placeholder="请输入充值的金额"
             value={money}
             labelNumber={2}
-            onChange={val => this.setState({
-              money: val,
-            })
+            onChange={val =>
+              this.setState({
+                money: val,
+              })
             }
           >
             ¥

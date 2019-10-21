@@ -1,9 +1,7 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import NavBar from '@/common/NavBar'
-import {
-  WhiteSpace, List, TextareaItem, Button,
-} from 'antd-mobile'
+import { WhiteSpace, List, TextareaItem, Button } from 'antd-mobile'
 
 @inject('basicInformation')
 @observer
