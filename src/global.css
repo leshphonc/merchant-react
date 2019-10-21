@@ -45,6 +45,14 @@ body {
   margin-top: 8px;
   margin-bottom: 8px;
 }
+/* button */
+.am-button-small {
+  padding: 0 10px;
+}
+
+.am-flexbox .am-flexbox-item {
+  margin-left: 6px;
+}
 
 /* antd-mobil Textarea样式覆盖 */
 .am-textarea-label {

@@ -321,11 +321,9 @@ class ShopManager extends React.Component {
         />
         <WhiteSpace />
         <WingBlank>
-          <SegmentedControl
-            values={['在岗', '离岗', '禁用']}
-          ></SegmentedControl>
+          <SegmentedControl values={['在岗', '离岗', '禁用']} />
         </WingBlank>
-        <WhiteSpace></WhiteSpace>
+        <WhiteSpace />
         <WingBlank>{this.mapList()}</WingBlank>
         <WhiteSpace />
         <WhiteSpace />
