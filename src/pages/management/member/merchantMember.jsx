@@ -15,7 +15,7 @@ import { FilterBox } from '@/styled'
 
 @inject('member')
 @observer
-class PublicMember extends React.Component {
+class MerchantMember extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -27,7 +27,7 @@ class PublicMember extends React.Component {
       ),
       // eslint-disable-next-line react/no-unused-state
       endTime: moment(new Date()).format('YYYY-MM-DD'),
-      publicListTotalNum: 0,
+      merFansListTotalNum: 0,
     }
     this.refresh = React.createRef()
   }
@@ -37,10 +37,10 @@ class PublicMember extends React.Component {
     const { publicList } = member
     const { height, beginTime, endTime } = this.state
     if (!publicList.length)
-      member.fetchPublicList(beginTime, endTime).then(() => {
-        const { publicListTotalNum } = member
+      member.fetchMerFansList(beginTime, endTime).then(() => {
+        const { merFansListTotalNum } = member
         this.setState({
-          publicListTotalNum,
+          merFansListTotalNum,
         })
       })
     /* eslint react/no-find-dom-node: 0 */
@@ -52,9 +52,9 @@ class PublicMember extends React.Component {
 
   mapList = () => {
     const { member } = this.props
-    const { publicList } = member
+    const { merFansList } = member
 
-    return publicList.map((item, index) => (
+    return merFansList.map((item, index) => (
       // eslint-disable-next-line react/no-array-index-key
       <React.Fragment key={index}>
         <ListItem>
@@ -64,6 +64,7 @@ class PublicMember extends React.Component {
               <div className="content-left" style={{ alignItems: 'start' }}>
                 <div>昵称：{item.nickname}</div>
                 <div>编号：{item.uid}</div>
+                <div>推广店员：{item.staff_name}</div>
               </div>
               <div className="content-right" style={{ alignItems: 'start' }}>
                 <div>性别：{item.sex === '1' ? '男' : '女'}</div>
@@ -72,14 +73,13 @@ class PublicMember extends React.Component {
             </div>
           </ItemTop>
           <ItemBottom>
-            {/* <div>
-              关注时间：{moment(item.dateline * 1000).format('YYYY-MM-DD H:mm:ss')}
-            </div> */}
             <WhiteSpace />
             <div>
-              最后访问：
-              {item.last_time
-                ? moment(item.last_time * 1000).format('YYYY-MM-DD    hh:mm:ss')
+              绑定时间：
+              {item.spread_time
+                ? moment(item.spread_time * 1000).format(
+                    'YYYY-MM-DD    H:mm:ss',
+                  )
                 : '暂无数据'}
             </div>
             <WhiteSpace />
@@ -107,53 +107,55 @@ class PublicMember extends React.Component {
     const { member } = this.props
     const { beginTime, endTime } = this.state
     this.setState({ refreshing: true })
-    await member.fetchPublicList(beginTime, endTime)
+    await member.fetchMerFansList(beginTime, endTime)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
   }
+
   setBeiginTime = data => {
-    const { member } = this.props
-    const { endTime } = this.state
     this.setState({
       beginTime: moment(data).format('YYYY-MM-DD'),
     })
+    const { member } = this.props
+    const { endTime } = this.state
     member
-      .resetFetchPublicList(moment(data).format('YYYY-MM-DD'), endTime)
+      .resetFetchMerFansList(moment(data).format('YYYY-MM-DD'), endTime)
       .then(() => {
-        const { publicListTotalNum } = member
+        const { merFansListTotalNum } = member
         this.setState({
-          publicListTotalNum,
+          merFansListTotalNum,
         })
       })
   }
 
   setEndTime = data => {
-    const { member } = this.props
-    const { beginTime } = this.state
     this.setState({
       endTime: moment(data).format('YYYY-MM-DD'),
     })
+    const { member } = this.props
+    const { beginTime } = this.state
     member
-      .resetFetchPublicList(beginTime, moment(data).format('YYYY-MM-DD'))
+      .resetFetchMerFansList(beginTime, moment(data).format('YYYY-MM-DD'))
       .then(() => {
-        const { publicListTotalNum } = member
+        const { merFansListTotalNum } = member
         this.setState({
-          publicListTotalNum,
+          merFansListTotalNum,
         })
       })
   }
+
   render() {
     const {
       height,
       refreshing,
       beginTime,
       endTime,
-      publicListTotalNum,
+      merFansListTotalNum,
     } = this.state
     return (
       <React.Fragment>
-        <NavBar title="在线访问用户" goBack />
+        <NavBar title="绑定粉丝" goBack />
         <WhiteSpace />
         <WingBlank>
           {/* <SegmentedControl values={['全部用户', '消费用户', '到店用户']} /> */}
@@ -186,7 +188,7 @@ class PublicMember extends React.Component {
           </FilterBox>
           <span>-&nbsp;</span>
           <FilterBox>
-            <span>共{publicListTotalNum}条记录</span>
+            <span>共{merFansListTotalNum}条记录</span>
           </FilterBox>
         </WingBlank>
         <WhiteSpace />
@@ -207,4 +209,4 @@ class PublicMember extends React.Component {
     )
   }
 }
-export default PublicMember
+export default MerchantMember

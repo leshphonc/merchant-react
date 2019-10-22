@@ -21,10 +21,20 @@ class MastSotre {
 
   @observable getSelStaffRule = []
 
+  @observable staffDutyList = []
+
+  @observable staffDutyPage = 1
+
+  @observable staffDutySize = 10
+
+  @observable staffDutyTotal = null
+
+  @observable storeList = null
+
   // 店员列表
   @action
-  fetchStaffList = async () => {
-    const response = await services.fetchStaffList()
+  fetchStaffList = async payload => {
+    const response = await services.fetchStaffList(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.staffList = response.data.result
@@ -34,8 +44,8 @@ class MastSotre {
 
   // 店员删除
   @action
-  fetchStaffDelete = async staffId => {
-    await services.fetchStaffDelete(staffId)
+  fetchStaffDelete = async (staffId, status) => {
+    await services.fetchStaffDelete(staffId, status)
   }
 
   @action
@@ -175,6 +185,60 @@ class MastSotre {
     const response = await services.setStaffRule(payload)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
+    }
+  }
+
+  // 重置店员岗位记录
+  @action
+  resetFetchGetStaffDuty = async (staffId, storeId, beginTime, endTime) => {
+    runInAction(() => {
+      this.staffDutyTotal = null
+      this.staffDutyPage = 1
+      this.staffDutyList = []
+    })
+    await this.fetchGetStaffDuty(staffId, storeId, beginTime, endTime)
+  }
+
+  // 店员到岗记录
+  @action
+  fetchGetStaffDuty = async (staffId, storeId, beginTime, endTime) => {
+    let hasMore = true
+    const response = await services.fetchGetStaffDuty(
+      staffId,
+      storeId,
+      beginTime,
+      endTime,
+      this.staffDutyPage,
+      this.staffDutySize,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      if (this.staffDutyTotal === null) {
+        runInAction(() => {
+          this.staffDutyTotal = Math.ceil(
+            response.data.result.total / this.staffDutySize,
+          )
+        })
+      }
+      if (this.staffDutyPage > this.staffDutyTotal) hasMore = false
+      if (hasMore) {
+        runInAction(() => {
+          this.staffDutyPage += 1
+          const arr = this.staffDutyList
+          arr.push(...response.data.result.list)
+          this.staffDutyList = arr
+        })
+      }
+    }
+  }
+
+  // 商铺列表
+  @action
+  fetchStoreList = async () => {
+    const response = await services.fetchStoreList()
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.storeList = response.data.result
+      })
     }
   }
 }
