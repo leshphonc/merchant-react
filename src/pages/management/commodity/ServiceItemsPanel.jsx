@@ -36,14 +36,15 @@ class ServiceItemsPanel extends React.Component {
     // 先判断是否有缓存值
     const cacheData = Utils.getCacheData()
     if (cacheData) {
-      if (match.params.type === '单项目') {
+      if (match.params.type === '服务项目') {
         if (cacheData.cat_fid !== '0') {
           commodity.fetchCategoryChild(cacheData.cat_fid)
         }
         setTimeout(() => {
           form.setFieldsValue({
             ...cacheData,
-            start_time: cacheData.start_time && new Date(cacheData.start_time * 1000),
+            start_time:
+              cacheData.start_time && new Date(cacheData.start_time * 1000),
             end_time: cacheData.end_time && new Date(cacheData.end_time * 1000),
           })
           if (cacheData.payment_status) {
@@ -72,16 +73,16 @@ class ServiceItemsPanel extends React.Component {
 
     if (match.params.str === '新增') {
       // 新增
-      if (match.params.type === '单项目') {
-        // 新增单项目
+      if (match.params.type === '服务项目') {
+        // 新增服务项目
       } else {
         // 新增套餐项目
       }
     } else {
       // 获取默认数据
       // eslint-disable-next-line no-lonely-if
-      if (match.params.type === '单项目') {
-        // 编辑单项目
+      if (match.params.type === '服务项目') {
+        // 编辑服务项目
         commodity.fetchSingleServiceDetail(match.params.id).then(() => {
           const { singleServiceDetail } = commodity
           if (singleServiceDetail.cat_fid !== '0') {
@@ -108,7 +109,9 @@ class ServiceItemsPanel extends React.Component {
               payment_money: singleServiceDetail.payment_money,
               cat_id: [singleServiceDetail.cat_id],
             })
-            this.editor.current.state.editor.txt.html(singleServiceDetail.appoint_pic_content)
+            this.editor.current.state.editor.txt.html(
+              singleServiceDetail.appoint_pic_content,
+            )
           }, 500)
         })
       } else {
@@ -166,16 +169,20 @@ class ServiceItemsPanel extends React.Component {
         {item.name}
         {item.start_time && item.end_time ? (
           <List.Item.Brief>
-            {`${moment(item.start_time).format('YYYY-MM-DD')} - ${moment(item.end_time).format(
-              'YYYY-MM-DD',
-            )}`}
+            {`${moment(item.start_time).format('YYYY-MM-DD')} - ${moment(
+              item.end_time,
+            ).format('YYYY-MM-DD')}`}
           </List.Item.Brief>
         ) : null}
         {item.start_time && !item.end_time ? (
-          <List.Item.Brief>{`${moment(item.start_time).format('YYYY-MM-DD')} - ∞`}</List.Item.Brief>
+          <List.Item.Brief>{`${moment(item.start_time).format(
+            'YYYY-MM-DD',
+          )} - ∞`}</List.Item.Brief>
         ) : null}
         {!item.start_time && item.end_time ? (
-          <List.Item.Brief>{`∞ - ${moment(item.end_time).format('YYYY-MM-DD')}`}</List.Item.Brief>
+          <List.Item.Brief>{`∞ - ${moment(item.end_time).format(
+            'YYYY-MM-DD',
+          )}`}</List.Item.Brief>
         ) : null}
       </List.Item>
     ))
@@ -189,7 +196,7 @@ class ServiceItemsPanel extends React.Component {
         Toast.info('请填写完整信息')
         return false
       }
-      if (match.params.type === '单项目') {
+      if (match.params.type === '服务项目') {
         commodity
           .addSingleService({
             ...value,
@@ -266,7 +273,10 @@ class ServiceItemsPanel extends React.Component {
     const { match, form, history, commodity } = this.props
     const { getFieldProps } = form
     const { serviceCategory, serviceCategoryChild } = commodity
-    const fidOption = serviceCategory.map(item => ({ label: item.cat_name, value: item.cat_id }))
+    const fidOption = serviceCategory.map(item => ({
+      label: item.cat_name,
+      value: item.cat_id,
+    }))
     const childOption = serviceCategoryChild.twoCate.map(item => ({
       label: item.cat_name,
       value: item.cat_id,
@@ -278,7 +288,7 @@ class ServiceItemsPanel extends React.Component {
     return (
       <>
         <NavBar title={`${match.params.str}${match.params.type}`} goBack />
-        {match.params.type === '单项目' ? (
+        {match.params.type === '服务项目' ? (
           <>
             <List>
               <InputItem
@@ -348,7 +358,10 @@ class ServiceItemsPanel extends React.Component {
                     e.stopPropagation()
                   }}
                 >
-                  <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  <i
+                    className="iconfont"
+                    style={{ marginLeft: 10, color: '#bbb' }}
+                  >
                     &#xe628;
                   </i>
                 </Tooltip>
@@ -370,7 +383,10 @@ class ServiceItemsPanel extends React.Component {
                     e.stopPropagation()
                   }}
                 >
-                  <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                  <i
+                    className="iconfont"
+                    style={{ marginLeft: 10, color: '#bbb' }}
+                  >
                     &#xe628;
                   </i>
                 </Tooltip>
@@ -428,7 +444,10 @@ class ServiceItemsPanel extends React.Component {
                   rules: [{ required: true }],
                 })}
                 cols={1}
-                data={[{ label: '到店', value: '0' }, { label: '上门', value: '1' }]}
+                data={[
+                  { label: '到店', value: '0' },
+                  { label: '上门', value: '1' },
+                ]}
               >
                 <List.Item arrow="horizontal">服务类别</List.Item>
               </Picker>
@@ -527,7 +546,10 @@ class ServiceItemsPanel extends React.Component {
               >
                 每人可购买
               </InputItem>
-              <List.Item extra={<i className="iconfont">&#xe634;</i>} onClick={this.goPackage}>
+              <List.Item
+                extra={<i className="iconfont">&#xe634;</i>}
+                onClick={this.goPackage}
+              >
                 套餐包含项目
               </List.Item>
               {this.mapPackageList()}

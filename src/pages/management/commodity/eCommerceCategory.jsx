@@ -22,12 +22,16 @@ class eCommerceCategory extends React.Component {
           onClick={() => this.goSecond(item.sort_id)}
         >
           <Flex justify="center" align="center">
-            <Flex.Item style={{ flex: 9, lineHeight: '25px' }}>{item.sort_name}</Flex.Item>
+            <Flex.Item style={{ flex: 9, lineHeight: '25px' }}>
+              {item.sort_name}
+            </Flex.Item>
             <Flex.Item
               style={{ lineHeight: '25px', color: '#666' }}
               onClick={e => {
                 e.stopPropagation()
-                history.push(`/management/commodity/eCommerceCategoryPanel/编辑/1/${item.sort_id}`)
+                history.push(
+                  `/management/commodity/eCommerceCategoryPanel/编辑/1/${item.sort_id}`,
+                )
               }}
             >
               <i
@@ -41,31 +45,36 @@ class eCommerceCategory extends React.Component {
               style={{ lineHeight: '25px', color: '#666' }}
               onClick={e => {
                 e.stopPropagation()
-                alert(
-                  '删除一级分类',
-                  '是否删除一级分类下的子分类，（子分类内的项目将会自动解绑）',
-                  [
-                    {
-                      text: '取消',
-                    },
-                    {
-                      text: '确定',
-                      style: { color: 'red' },
-                      onPress: () => {
-                        commodity.deleteShopFirstCategory(item.sort_id).then(res => {
+                alert('删除一级分类', '是否删除一级分类下的子分类', [
+                  {
+                    text: '取消',
+                  },
+                  {
+                    text: '确定',
+                    style: { color: 'red' },
+                    onPress: () => {
+                      commodity
+                        .deleteShopFirstCategory(item.sort_id)
+                        .then(res => {
                           if (res) {
-                            Toast.success('删除成功', 1, () => commodity.fetchShopCategory())
+                            Toast.success('删除成功', 1, () =>
+                              commodity.fetchShopCategory(),
+                            )
                           }
                         })
-                      },
                     },
-                  ],
-                )
+                  },
+                ])
               }}
             >
               <i
                 className="iconfont"
-                style={{ fontSize: 18, marginLeft: 5, verticalAlign: 'bottom', color: 'red' }}
+                style={{
+                  fontSize: 18,
+                  marginLeft: 5,
+                  verticalAlign: 'bottom',
+                  color: 'red',
+                }}
               >
                 &#xe621;
               </i>
@@ -73,7 +82,9 @@ class eCommerceCategory extends React.Component {
           </Flex>
           <WhiteSpace />
           <Flex style={{ color: '#666' }}>
-            <Flex.Item>开启周几显示：{item.is_weekshow === '1' ? '开启' : '关闭'}</Flex.Item>
+            <Flex.Item>
+              开启周几显示：{item.is_weekshow === '1' ? '开启' : '关闭'}
+            </Flex.Item>
           </Flex>
           <WhiteSpace />
           {item.is_weekshow === '1' ? (
@@ -103,7 +114,7 @@ class eCommerceCategory extends React.Component {
     const { commodity, history } = this.props
     commodity.fetchShopSecondCategory(id).then(() => {
       if (commodity.shopCategoryChild.project.length) {
-        history.push(`/management/commodity/shopCategoryProject/${id}`)
+        history.push(`/management/commodity/eCommerceCategoryProject/${id}`)
       } else if (commodity.shopCategoryChild.twoCate.length) {
         history.push(`/management/commodity/eCommerceSecondCategory/${id}`)
       } else {
@@ -124,10 +135,12 @@ class eCommerceCategory extends React.Component {
               size="small"
               type="ghost"
               style={{ color: '#fff', border: '1px solid #fff' }}
-              onClick={() => history.push({
-                pathname: '/management/commodity/eCommerceCategoryPanel/新增/1',
-                state: 1,
-              })
+              onClick={() =>
+                history.push({
+                  pathname:
+                    '/management/commodity/eCommerceCategoryPanel/新增/1',
+                  state: 1,
+                })
               }
             >
               添加

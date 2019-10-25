@@ -6,7 +6,6 @@ import {
   WingBlank,
   Button,
   Card,
-  SegmentedControl,
   Flex,
   PullToRefresh,
   Toast,
@@ -21,8 +20,7 @@ class ServiceItems extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      cur: '单项目',
-      curIndex: 0,
+      cur: '服务项目',
       refreshing: false,
       height: document.documentElement.clientHeight,
     }
@@ -33,7 +31,8 @@ class ServiceItems extends React.Component {
     const { height } = this.state
     if (this.refresh.current) {
       /* eslint react/no-find-dom-node: 0 */
-      const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 47
+      const hei =
+        height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 47
       this.setState({
         height: hei,
       })
@@ -54,7 +53,7 @@ class ServiceItems extends React.Component {
   mapList = () => {
     const { history, commodity } = this.props
     const { cur } = this.state
-    if (cur === '单项目') {
+    if (cur === '服务项目') {
       return commodity.singleServiceList.map(item => (
         <React.Fragment key={item.appoint_id}>
           <Card>
@@ -62,8 +61,7 @@ class ServiceItems extends React.Component {
               title={item.appoint_name}
               thumb={item.pic}
               extra={item.appoint_type === '1' ? '上门' : '到店'}
-            >
-            </Card.Header>
+            />
             <Card.Body>
               <div style={{ color: '#777' }}>{item.appoint_content}</div>
               <WhiteSpace />
@@ -72,7 +70,9 @@ class ServiceItems extends React.Component {
                   <span>原价：{item.old_price} 元</span>
                 </Flex.Item>
                 <Flex.Item>
-                  {item.payment_status === '1' ? <span>定金：{item.payment_money} 元</span> : null}
+                  {item.payment_status === '1' ? (
+                    <span>定金：{item.payment_money} 元</span>
+                  ) : null}
                 </Flex.Item>
               </Flex>
               <WhiteSpace />
@@ -88,7 +88,8 @@ class ServiceItems extends React.Component {
               <Flex>
                 <Flex.Item>
                   <span>
-                    预约开始时间：{moment(item.start_time * 1000).format('YYYY-MM-DD hh:mm')}
+                    预约开始时间：
+                    {moment(item.start_time * 1000).format('YYYY-MM-DD hh:mm')}
                   </span>
                 </Flex.Item>
               </Flex>
@@ -96,7 +97,8 @@ class ServiceItems extends React.Component {
               <Flex>
                 <Flex.Item>
                   <span>
-                    预约结束时间：{moment(item.end_time * 1000).format('YYYY-MM-DD hh:mm')}
+                    预约结束时间：
+                    {moment(item.end_time * 1000).format('YYYY-MM-DD hh:mm')}
                   </span>
                 </Flex.Item>
               </Flex>
@@ -110,9 +112,10 @@ class ServiceItems extends React.Component {
                       <Button
                         size="small"
                         type="primary"
-                        onClick={() => history.push(
-                          `/management/commodity/serviceItemsPanel/编辑/${cur}/${item.appoint_id}`,
-                        )
+                        onClick={() =>
+                          history.push(
+                            `/management/commodity/serviceItemsPanel/编辑/${cur}/${item.appoint_id}`,
+                          )
                         }
                       >
                         编辑
@@ -122,7 +125,9 @@ class ServiceItems extends React.Component {
                       <Button
                         size="small"
                         type="warning"
-                        onClick={() => this.deleteSingleService(item.appoint_id)}
+                        onClick={() =>
+                          this.deleteSingleService(item.appoint_id)
+                        }
                       >
                         删除
                       </Button>
@@ -134,7 +139,10 @@ class ServiceItems extends React.Component {
                       <Button
                         size="small"
                         type="primary"
-                        onClick={() => history.push(`/management/commodity/serviceSingleRecord/${item.appoint_id}`)
+                        onClick={() =>
+                          history.push(
+                            `/management/commodity/serviceSingleRecord/${item.appoint_id}`,
+                          )
                         }
                       >
                         销售记录
@@ -143,8 +151,7 @@ class ServiceItems extends React.Component {
                   </Flex>
                 </React.Fragment>
               }
-            >
-            </Card.Footer>
+            />
             <WhiteSpace />
           </Card>
           <WhiteSpace />
@@ -184,9 +191,10 @@ class ServiceItems extends React.Component {
                     <Button
                       size="small"
                       type="primary"
-                      onClick={() => history.push(
-                        `/management/commodity/serviceItemsPanel/编辑/${cur}/${item.meal_id}`,
-                      )
+                      onClick={() =>
+                        history.push(
+                          `/management/commodity/serviceItemsPanel/编辑/${cur}/${item.meal_id}`,
+                        )
                       }
                     >
                       编辑
@@ -208,7 +216,10 @@ class ServiceItems extends React.Component {
                     <Button
                       size="small"
                       type="primary"
-                      onClick={() => history.push(`/management/commodity/servicePackageRecord/${item.meal_id}`)
+                      onClick={() =>
+                        history.push(
+                          `/management/commodity/servicePackageRecord/${item.meal_id}`,
+                        )
                       }
                     >
                       销售记录
@@ -217,8 +228,7 @@ class ServiceItems extends React.Component {
                 </Flex>
               </React.Fragment>
             }
-          >
-          </Card.Footer>
+          />
           <WhiteSpace />
         </Card>
         <WhiteSpace />
@@ -233,11 +243,12 @@ class ServiceItems extends React.Component {
       {
         text: '确定',
         style: { color: 'red' },
-        onPress: () => commodity.deleteSingleService(id).then(res => {
-          if (res) {
-            Toast.success('删除成功', 1, () => this.fetchSingle())
-          }
-        }),
+        onPress: () =>
+          commodity.deleteSingleService(id).then(res => {
+            if (res) {
+              Toast.success('删除成功', 1, () => this.fetchSingle())
+            }
+          }),
       },
     ])
   }
@@ -249,18 +260,19 @@ class ServiceItems extends React.Component {
       {
         text: '确定',
         style: { color: 'red' },
-        onPress: () => commodity.deletePackage(id).then(res => {
-          if (res) {
-            Toast.success('删除成功', 1, () => this.fetchPackage())
-          }
-        }),
+        onPress: () =>
+          commodity.deletePackage(id).then(res => {
+            if (res) {
+              Toast.success('删除成功', 1, () => this.fetchPackage())
+            }
+          }),
       },
     ])
   }
 
   loadMore = () => {
     const { cur } = this.state
-    if (cur === '单项目') {
+    if (cur === '服务项目') {
       this.fetchSingle(true)
     } else {
       this.fetchPackage(true)
@@ -269,18 +281,18 @@ class ServiceItems extends React.Component {
 
   render() {
     const { history } = this.props
-    const { cur, height, refreshing, curIndex } = this.state
+    const { cur, height, refreshing } = this.state
     return (
       <>
         <NavBar title="服务项目" goBack />
         <WhiteSpace />
-        <WingBlank size="md">
+        {/* <WingBlank size="md">
           <SegmentedControl
             selectedIndex={curIndex}
-            values={['单项目', '套餐卡']}
+            values={['服务项目', '套餐卡']}
             onValueChange={value => {
               let num = 0
-              if (value === '单项目') {
+              if (value === '服务项目') {
                 this.fetchSingle()
                 num = 0
               } else {
@@ -294,7 +306,7 @@ class ServiceItems extends React.Component {
             }}
           />
         </WingBlank>
-        <WhiteSpace />
+        <WhiteSpace /> */}
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}
@@ -311,7 +323,9 @@ class ServiceItems extends React.Component {
 
         <Button
           type="primary"
-          onClick={() => history.push(`/management/commodity/serviceItemsPanel/新增/${cur}`)}
+          onClick={() =>
+            history.push(`/management/commodity/serviceItemsPanel/新增/${cur}`)
+          }
           style={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
         >
           {`新增${cur}`}

@@ -3,7 +3,13 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
 import {
-  List, InputItem, Button, Toast, Picker, DatePicker, Flex,
+  List,
+  InputItem,
+  Button,
+  Toast,
+  Picker,
+  DatePicker,
+  Flex,
 } from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -11,7 +17,10 @@ import moment from 'moment'
 import { createForm } from 'rc-form'
 
 const { Item } = List
-const seckill = [{ label: '固定时间段', value: '0' }, { label: '每天的时间段', value: '1' }]
+const seckill = [
+  { label: '固定时间段', value: '0' },
+  { label: '每天的时间段', value: '1' },
+]
 @createForm()
 @inject('commodity')
 @observer
@@ -26,26 +35,30 @@ class ECommerceDiscounts extends React.Component {
 
   componentDidMount() {
     const { commodity, match, form } = this.props
-    commodity.fetchCardGroupAll()
+    commodity.fetchCardGroupAllE()
     if (!match.params.goodid) return
-    commodity.fetchGiftVoucher()
-    commodity.fetchscoreAndDhb()
-    commodity.fetchECommerceDetail(match.params.id, match.params.goodid).then(() => {
-      const { eCommerceDetail } = commodity
-      form.setFieldsValue({
-        seckill_price: eCommerceDetail.seckill_price,
-        seckill_stock: eCommerceDetail.seckill_stock,
-        seckill_type: [eCommerceDetail.seckill_type],
-        seckill_open_time: new Date(eCommerceDetail.seckill_open_time * 1000),
-        seckill_close_time: new Date(eCommerceDetail.seckill_close_time * 1000),
-        dhb_get_num: eCommerceDetail.dhb_get_num,
-        score_get_num: eCommerceDetail.score_get_num,
-        in_group: [eCommerceDetail.in_group],
+    commodity.fetchGiftVoucherE()
+    commodity.fetchscoreAndDhbE()
+    commodity
+      .fetchECommerceDetail(match.params.id, match.params.goodid)
+      .then(() => {
+        const { eCommerceDetail } = commodity
+        form.setFieldsValue({
+          seckill_price: eCommerceDetail.seckill_price,
+          seckill_stock: eCommerceDetail.seckill_stock,
+          seckill_type: [eCommerceDetail.seckill_type],
+          seckill_open_time: new Date(eCommerceDetail.seckill_open_time * 1000),
+          seckill_close_time: new Date(
+            eCommerceDetail.seckill_close_time * 1000,
+          ),
+          dhb_get_num: eCommerceDetail.dhb_get_num,
+          score_get_num: eCommerceDetail.score_get_num,
+          in_group: [eCommerceDetail.in_group],
+        })
+        this.setState({
+          give: eCommerceDetail.give,
+        })
       })
-      this.setState({
-        give: eCommerceDetail.give,
-      })
-    })
   }
 
   changeGiveValue = (val, index) => {
@@ -71,7 +84,6 @@ class ECommerceDiscounts extends React.Component {
   mapGive = () => {
     const { commodity } = this.props
     const { give } = this.state
-    console.log(give)
     return give.map((item, index) => (
       <React.Fragment key={index}>
         <Picker
@@ -82,7 +94,10 @@ class ECommerceDiscounts extends React.Component {
         >
           <List.Item arrow="horizontal">商品</List.Item>
         </Picker>
-        <InputItem defaultValue={item.goods_num} onChange={val => this.changeGiveNum(val, index)}>
+        <InputItem
+          defaultValue={item.goods_num}
+          onChange={val => this.changeGiveNum(val, index)}
+        >
           商品张数
         </InputItem>
       </React.Fragment>
@@ -90,9 +105,7 @@ class ECommerceDiscounts extends React.Component {
   }
 
   submit = () => {
-    const {
-      commodity, form, match, history,
-    } = this.props
+    const { commodity, form, match, history } = this.props
     const { give } = this.state
     form.validateFields((error, value) => {
       if (error) {
@@ -103,8 +116,12 @@ class ECommerceDiscounts extends React.Component {
         ...value,
         in_group: value.in_group[0],
         seckill_type: value.seckill_type[0],
-        seckill_open_time: moment(value.seckill_open_time).format('YYYY-MM-DD hh:mm'),
-        seckill_close_time: moment(value.seckill_close_time).format('YYYY-MM-DD hh:mm'),
+        seckill_open_time: moment(value.seckill_open_time).format(
+          'YYYY-MM-DD hh:mm',
+        ),
+        seckill_close_time: moment(value.seckill_close_time).format(
+          'YYYY-MM-DD hh:mm',
+        ),
         give,
       }
       commodity
@@ -232,9 +249,10 @@ class ECommerceDiscounts extends React.Component {
                 <Button
                   size="small"
                   type="ghost"
-                  onClick={() => this.setState({
-                    give: give.concat({ goods: '', goods_num: '' }),
-                  })
+                  onClick={() =>
+                    this.setState({
+                      give: give.concat({ goods: '', goods_num: '' }),
+                    })
                   }
                 >
                   添加
@@ -242,9 +260,10 @@ class ECommerceDiscounts extends React.Component {
                 <Button
                   size="small"
                   type="warning"
-                  onClick={() => this.setState({
-                    give: give.slice(0, give.length - 1),
-                  })
+                  onClick={() =>
+                    this.setState({
+                      give: give.slice(0, give.length - 1),
+                    })
                   }
                 >
                   删除

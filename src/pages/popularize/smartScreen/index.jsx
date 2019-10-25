@@ -409,25 +409,25 @@ export default () => (
     />
     {/* 顾客见面语列表 */}
     <Route
-      path="/popularize/smartScreen/smartScreenCustomerSlogan"
+      path="/popularize/smartScreen/smartScreenCustomerSlogan/:id"
       exact
       component={SmartScreenCustomerSlogan}
     />
     {/* 员工见面语列表 */}
     <Route
-      path="/popularize/smartScreen/smartScreenShopAssistantSlogan"
+      path="/popularize/smartScreen/smartScreenShopAssistantSlogan/:imax/:id"
       exact
       component={SmartScreenShopAssistantSlogan}
     />
     {/* 编辑见面语 */}
     <Route
-      path="/popularize/smartScreen/smartScreenSloganCRU/:id?"
+      path="/popularize/smartScreen/smartScreenSloganCRU/:type/:imax/:show/:id?"
       exact
       component={SmartScreenSloganCRU}
     />
     {/* 员工见面语配置 */}
     <Route
-      path="/popularize/smartScreen/smartScreenSloganManagement"
+      path="/popularize/smartScreen/smartScreenSloganManagement/:id"
       exact
       component={SmartScreenSloganManagement}
     />

@@ -26,6 +26,14 @@ class SmartScreenStore {
 
   @observable imaxSlogan = {}
 
+  @observable sloganList = []
+
+  @observable sloganListPage = 1
+
+  @observable sloganListTotal = 0
+
+  @observable sloganDetail = {}
+
   @action
   fetchIMax = async () => {
     const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
@@ -194,6 +202,74 @@ class SmartScreenStore {
     const response = await services.upDateSlogan(id, txt)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
+    }
+  }
+
+  // 获取见面语
+  @action
+  getSlogan = async ({ flag, ...payload }) => {
+    if (flag) {
+      runInAction(() => {
+        this.sloganList = []
+        this.sloganListPage = 1
+        this.sloganListTotal = 0
+      })
+    } else {
+      if (this.sloganListPage * 10 < this.sloganListTotal) {
+        runInAction(() => {
+          this.sloganListPage += 1
+        })
+      } else {
+        return false
+      }
+    }
+    const response = await services.getSlogan({
+      page: this.sloganListPage,
+      ...payload,
+    })
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.sloganList = [...this.sloganList, ...response.data.result.data]
+        this.sloganListTotal = response.data.result.total
+      })
+    }
+  }
+
+  // 见面语详情
+  @action
+  getSloganDetail = async id => {
+    const response = await services.getSloganDetail(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.sloganDetail = response.data.result
+      })
+    }
+  }
+
+  // 新增见面语
+  @action
+  createSlogan = async payload => {
+    const response = await services.createSlogan(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 编辑见面语
+  @action
+  updateSlogan = async payload => {
+    const response = await services.updateSlogan(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 获取员工列表
+  @action
+  getWorker = async id => {
+    const response = await services.getWorker(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(response.data.result)
     }
   }
 }

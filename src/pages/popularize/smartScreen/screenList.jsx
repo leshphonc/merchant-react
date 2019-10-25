@@ -32,7 +32,7 @@ class ScreenList extends React.Component {
                   onClick={e => {
                     e.stopPropagation()
                     history.push(
-                      '/popularize/smartScreen/smartScreenCustomerSlogan',
+                      `/popularize/smartScreen/smartScreenCustomerSlogan/${item.imax_id}`,
                     )
                   }}
                 >
@@ -46,7 +46,7 @@ class ScreenList extends React.Component {
                   onClick={e => {
                     e.stopPropagation()
                     history.push(
-                      '/popularize/smartScreen/smartScreenSloganManagement',
+                      `/popularize/smartScreen/smartScreenSloganManagement/${item.imax_id}`,
                     )
                   }}
                 >

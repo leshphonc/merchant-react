@@ -7,10 +7,24 @@ import {
   List,
   Button,
 } from 'antd-mobile'
+import { observer, inject } from 'mobx-react'
 
+@inject('smartScreen')
+@observer
 class SmartScreenSloganManagement extends React.Component {
   state = {
     cur: 0,
+    spList: [],
+  }
+
+  componentDidMount() {
+    const { smartScreen, match } = this.props
+    smartScreen.getSlogan({
+      imax_id: match.params.id,
+      type: 2,
+      is_staff: 0,
+      flag: true,
+    })
   }
 
   mapList = () => {
@@ -22,38 +36,49 @@ class SmartScreenSloganManagement extends React.Component {
   }
 
   mapGlobal = () => {
-    const { history } = this.props
-    return (
-      <List.Item
-        arrow="horizontal"
-        extra="修改"
-        onClick={() => {
-          history.push(`/popularize/smartScreen/smartScreenSloganCRU/${1}`)
-        }}
-      >
-        见面语1
-        <List.Item.Brief>见面语播报详细内容</List.Item.Brief>
-      </List.Item>
-    )
+    const { history, smartScreen, match } = this.props
+    return smartScreen.sloganList.map(item => {
+      return (
+        <List.Item
+          arrow="horizontal"
+          extra="修改"
+          onClick={() => {
+            history.push(
+              `/popularize/smartScreen/smartScreenSloganCRU/2/${match.params.id}/0/${item.id}`,
+            )
+          }}
+          key={item.id}
+        >
+          {item.title}
+          <List.Item.Brief>{item.context}</List.Item.Brief>
+        </List.Item>
+      )
+    })
   }
 
   mapSp = () => {
-    const { history } = this.props
-    return (
-      <List.Item
-        thumb={require('@/assets/image/avatar.jpeg')}
-        arrow="horizontal"
-        extra="配置特殊见面语"
-        onClick={() => {
-          history.push('/popularize/smartScreen/smartScreenShopAssistantSlogan')
-        }}
-      >
-        员工1
-      </List.Item>
-    )
+    const { history, match } = this.props
+    const { spList } = this.state
+    return spList.map(item => {
+      return (
+        <List.Item
+          arrow="horizontal"
+          extra="配置见面语"
+          onClick={() => {
+            history.push(
+              `/popularize/smartScreen/smartScreenShopAssistantSlogan/${match.params.id}/${item.value}`,
+            )
+          }}
+          key={item.value}
+        >
+          {item.label}
+        </List.Item>
+      )
+    })
   }
 
   render() {
+    const { match, history } = this.props
     const { cur } = this.state
     return (
       <>
@@ -66,6 +91,11 @@ class SmartScreenSloganManagement extends React.Component {
                 type="ghost"
                 size="small"
                 style={{ color: '#fff', fontSize: 16 }}
+                onClick={() => {
+                  history.push(
+                    `/popularize/smartScreen/smartScreenSloganCRU/2/${match.params.id}/0`,
+                  )
+                }}
               >
                 添加
               </Button>
@@ -80,6 +110,14 @@ class SmartScreenSloganManagement extends React.Component {
               this.setState({
                 cur: e.nativeEvent.selectedSegmentIndex,
               })
+              if (e.nativeEvent.selectedSegmentIndex === 1) {
+                const { smartScreen, match } = this.props
+                smartScreen.getWorker(match.params.id).then(res => {
+                  this.setState({
+                    spList: res,
+                  })
+                })
+              }
             }}
             values={['全局见面语', '员工特殊见面语']}
           />

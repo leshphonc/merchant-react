@@ -63,6 +63,14 @@ class StoreFrontStore {
 
   @observable unBindstorePackageForSalePage = 1
 
+  @observable storeECommerceForSale = []
+
+  @observable storeECommerceForSalePage = 1
+
+  @observable unBindstoreECommerceForSale = []
+
+  @observable unBindstoreECommerceForSalePage = 1
+
   // 商铺列表
   @action
   fetchStoreList = async () => {
@@ -557,24 +565,31 @@ class StoreFrontStore {
     }
   }
 
-  // 店铺绑定在售商品
+  // 商铺在售电商产品
   @action
-  bindCommodityForSale = async () => {
-    const response = await services.bindCommodityForSale()
+  getStoreECommerceForSale = async (id, flag) => {
+    runInAction(() => {
+      if (flag) {
+        this.storeECommerceForSalePage += 1
+      }
+    })
+    const response = await services.getStoreECommerceForSale(
+      id,
+      this.storeECommerceForSalePage,
+    )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.storeCommodityForSale = response.data.result
-      })
-    }
-  }
-
-  // 店铺绑定在售套餐
-  @action
-  bindPackageForSale = async () => {
-    const response = await services.bindPackageForSale()
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        this.storeCommodityForSale = response.data.result
+        if (flag) {
+          this.storeECommerceForSale = [
+            ...this.storeECommerceForSale,
+            ...response.data.result,
+          ]
+          if (response.data.result.length === 0) {
+            this.storeECommerceForSalePage -= 1
+          }
+        } else {
+          this.storeECommerceForSale = response.data.result
+        }
       })
     }
   }
@@ -637,6 +652,35 @@ class StoreFrontStore {
     }
   }
 
+  // 获取店铺未绑定电商产品
+  @action
+  getUnBindStoreECommerceForSale = async (id, flag) => {
+    runInAction(() => {
+      if (flag) {
+        this.unBindstoreECommerceForSalePage += 1
+      }
+    })
+    const response = await services.getUnBindStoreECommerceForSale(
+      id,
+      this.unBindstoreECommerceForSalePage,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        if (flag) {
+          this.unBindstoreECommerceForSale = [
+            ...this.unBindstoreECommerceForSale,
+            ...response.data.result,
+          ]
+          if (response.data.result.length === 0) {
+            this.unBindstoreECommerceForSalePage -= 1
+          }
+        } else {
+          this.unBindstoreECommerceForSale = response.data.result
+        }
+      })
+    }
+  }
+
   // 商铺绑定服务
   @action
   bindStoreCommodity = async (id, ids) => {
@@ -655,6 +699,15 @@ class StoreFrontStore {
     }
   }
 
+  // 商铺绑定电商产品
+  @action
+  bindECommerce = async (id, ids) => {
+    const response = await services.bindECommerce(id, ids)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
   // 解绑店铺服务
   @action
   unBindCommodity = async (id, cid) => {
@@ -668,6 +721,14 @@ class StoreFrontStore {
   @action
   unBindPackage = async (id, cid) => {
     const response = await services.unBindPackage(id, cid)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 解绑店铺电商产品
+  unbindECommerce = async (id, cid) => {
+    const response = await services.unbindECommerce(id, cid)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }

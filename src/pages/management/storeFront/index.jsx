@@ -17,6 +17,7 @@ import DiningInformation from './diningInformation'
 import StoreFrontQualification from './storeFrontQualification'
 import StoreFrontCommodityList from './storeFrontCommodityList'
 import StoreFrontPackageList from './storeFrontPackageList'
+import StoreFrontECommerceList from './storeFrontECommerceList'
 import { StoreStatus } from '@/config/constant'
 import { PrimaryTag } from '@/styled'
 import Utils from '@/utils'
@@ -178,38 +179,55 @@ class StoreFront extends React.Component {
                   ) : null}
                 </Flex>
                 <WhiteSpace size="sm" />
-                <Flex>
-                  <Flex.Item>
-                    <Button
-                      type="primary"
-                      size="small"
-                      onClick={() =>
-                        history.push(
-                          `/management/storefront/storeFrontCommodityList/${item.store_id}`,
-                        )
-                      }
-                    >
-                      在售服务
-                    </Button>
-                  </Flex.Item>
-                  <Flex.Item>
-                    <Button
-                      type="primary"
-                      size="small"
-                      onClick={() =>
-                        history.push(
-                          `/management/storefront/storeFrontPackageList/${item.store_id}`,
-                        )
-                      }
-                    >
-                      在售套餐
-                    </Button>
-                  </Flex.Item>
-                </Flex>
+                {item.have_service === '1' ? (
+                  <React.Fragment>
+                    <Flex>
+                      <Flex.Item>
+                        <Button
+                          type="primary"
+                          size="small"
+                          onClick={() =>
+                            history.push(
+                              `/management/storefront/storeFrontECommerceList/${item.store_id}`,
+                            )
+                          }
+                        >
+                          电商产品
+                        </Button>
+                      </Flex.Item>
+                      <Flex.Item>
+                        <Button
+                          type="primary"
+                          size="small"
+                          onClick={() =>
+                            history.push(
+                              `/management/storefront/storeFrontCommodityList/${item.store_id}`,
+                            )
+                          }
+                        >
+                          服务
+                        </Button>
+                      </Flex.Item>
+                      <Flex.Item>
+                        <Button
+                          type="primary"
+                          size="small"
+                          onClick={() =>
+                            history.push(
+                              `/management/storefront/storeFrontPackageList/${item.store_id}`,
+                            )
+                          }
+                        >
+                          套餐
+                        </Button>
+                      </Flex.Item>
+                    </Flex>
+                    <WhiteSpace />
+                  </React.Fragment>
+                ) : null}
               </React.Fragment>
             }
           />
-          <WhiteSpace />
         </Card>
         <WhiteSpace size="sm" />
       </React.Fragment>
@@ -255,6 +273,11 @@ export default () => (
     <Route
       path="/management/storefront/storeFrontPackageList/:id"
       component={StoreFrontPackageList}
+    />
+    {/* 店铺电商产品列表 */}
+    <Route
+      path="/management/storefront/storeFrontECommerceList/:id"
+      component={StoreFrontECommerceList}
     />
     {/* 坐标拾取 */}
     <Route

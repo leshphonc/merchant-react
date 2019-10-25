@@ -1,7 +1,14 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { Link } from 'react-router-dom'
-import { WhiteSpace, WingBlank, Card, Flex, Button, SegmentedControl } from 'antd-mobile'
+import {
+  WhiteSpace,
+  WingBlank,
+  Card,
+  Flex,
+  Button,
+  SegmentedControl,
+} from 'antd-mobile'
 import { inject, observer } from 'mobx-react'
 
 const STATUS = {
@@ -47,13 +54,13 @@ class PromotionList extends React.Component {
             />
             <Card.Body>
               <Flex>
-                <Flex.Item>触达人数：111</Flex.Item>
-                <Flex.Item>播报次数：111</Flex.Item>
+                <Flex.Item>触达人数：{item.ai.reach}</Flex.Item>
+                <Flex.Item>播报次数：{item.ai.scan}</Flex.Item>
               </Flex>
               <WhiteSpace />
               <Flex>
-                <Flex.Item>浏览人数：111</Flex.Item>
-                <Flex.Item>下单人数：111</Flex.Item>
+                <Flex.Item>浏览人数：{item.ai.wait}</Flex.Item>
+                <Flex.Item>下单人数：{item.ai.buy}</Flex.Item>
               </Flex>
               <WhiteSpace />
               <div style={{ color: '#777' }}>命令词：{item.main_key}</div>
@@ -85,9 +92,10 @@ class PromotionList extends React.Component {
                           <Button
                             size="small"
                             type="primary"
-                            onClick={() => history.push(
-                              `/popularize/smartScreen/promotionList/PromotionPanel/编辑/${item.id}`,
-                            )
+                            onClick={() =>
+                              history.push(
+                                `/popularize/smartScreen/promotionList/PromotionPanel/编辑/${item.id}`,
+                              )
                             }
                           >
                             编辑
@@ -117,8 +125,7 @@ class PromotionList extends React.Component {
                   )}
                 </React.Fragment>
               }
-            >
-            </Card.Footer>
+            ></Card.Footer>
             <WhiteSpace />
           </Card>
           <WhiteSpace size="sm" />

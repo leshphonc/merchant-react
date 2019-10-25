@@ -52,7 +52,9 @@ class TakeAway extends React.Component {
     const { storeValue, keyword } = this.state
     commodity.fetchTakeAwayDelete(storeId, id).then(res => {
       if (res) {
-        Toast.success('删除成功', 1, () => commodity.resetAndFetchTakeAwayList(storeValue, keyword))
+        Toast.success('删除成功', 1, () =>
+          commodity.resetAndFetchTakeAwayList(storeValue, keyword),
+        )
       }
     })
   }
@@ -60,11 +62,15 @@ class TakeAway extends React.Component {
   stand = (id, status, storeId) => {
     const { commodity } = this.props
     const { storeValue, keyword } = this.state
-    commodity.takeAwayStandStatus(storeId, id, status === '0' ? 1 : 0).then(res => {
-      if (res) {
-        Toast.success('状态变更成功', 1, () => commodity.fetchTakeAwayList(storeValue, keyword))
-      }
-    })
+    commodity
+      .takeAwayStandStatus(storeId, id, status === '0' ? 1 : 0)
+      .then(res => {
+        if (res) {
+          Toast.success('状态变更成功', 1, () =>
+            commodity.fetchTakeAwayList(storeValue, keyword),
+          )
+        }
+      })
   }
 
   mapList = () => {
@@ -73,7 +79,11 @@ class TakeAway extends React.Component {
     return takeAwayList.map(item => (
       <React.Fragment key={item.goods_id}>
         <Card>
-          <Card.Header title={item.name} thumb={item.list_pic} extra={item.store_name} />
+          <Card.Header
+            title={item.name}
+            thumb={item.list_pic}
+            extra={item.store_name}
+          />
           <Card.Body>
             <Flex style={{ color: '#666' }}>
               <Flex.Item>售价: {item.price} 元</Flex.Item>
@@ -95,9 +105,10 @@ class TakeAway extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(
-                    `/management/commodity/takeAwayPanel/编辑/${item.store_id}/${item.goods_id}`,
-                  )
+                  onClick={() =>
+                    history.push(
+                      `/management/commodity/takeAwayPanel/编辑/${item.store_id}/${item.goods_id}`,
+                    )
                   }
                 >
                   编辑
@@ -107,7 +118,9 @@ class TakeAway extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => this.stand(item.goods_id, item.status, item.store_id)}
+                  onClick={() =>
+                    this.stand(item.goods_id, item.status, item.store_id)
+                  }
                 >
                   {item.statusoptstr}
                 </Button>
@@ -144,9 +157,7 @@ class TakeAway extends React.Component {
   }
 
   render() {
-    const {
-      refreshing, height, store, storeValue,
-    } = this.state
+    const { refreshing, height, store, storeValue } = this.state
     const { commodity } = this.props
     const { storeValues } = commodity
     return (
@@ -155,7 +166,10 @@ class TakeAway extends React.Component {
           title="外卖商品管理"
           goBack
           right={
-            <Link style={{ color: '#fff' }} to="/management/commodity/takeAwayPanel/添加">
+            <Link
+              style={{ color: '#fff' }}
+              to="/management/commodity/takeAwayPanel/添加"
+            >
               添加
             </Link>
           }
@@ -180,7 +194,10 @@ class TakeAway extends React.Component {
             >
               <div>
                 <span>{store}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>

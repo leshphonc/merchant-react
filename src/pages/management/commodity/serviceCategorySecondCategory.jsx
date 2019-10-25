@@ -25,7 +25,9 @@ class ServiceCategorySecondCategory extends React.Component {
           style={{ background: '#fff', borderRadius: 4, padding: 10 }}
           onClick={() => this.goService(item.cat_id)}
         >
-          <Flex.Item style={{ flex: 9, lineHeight: '25px' }}>{item.cat_name}</Flex.Item>
+          <Flex.Item style={{ flex: 9, lineHeight: '25px' }}>
+            {item.cat_name}
+          </Flex.Item>
           <Flex.Item
             style={{ lineHeight: '25px', color: '#666' }}
             onClick={e => {
@@ -76,7 +78,9 @@ class ServiceCategorySecondCategory extends React.Component {
                   onPress: () => {
                     commodity.deleteSecondCategory(item.cat_id).then(res => {
                       if (res) {
-                        Toast.success('删除成功', 1, () => commodity.fetchCategoryChild(match.params.id))
+                        Toast.success('删除成功', 1, () =>
+                          commodity.fetchCategoryChild(match.params.id),
+                        )
                       }
                     })
                   },
@@ -86,7 +90,12 @@ class ServiceCategorySecondCategory extends React.Component {
           >
             <i
               className="iconfont"
-              style={{ fontSize: 18, marginLeft: 5, verticalAlign: 'bottom', color: 'red' }}
+              style={{
+                fontSize: 18,
+                marginLeft: 5,
+                verticalAlign: 'bottom',
+                color: 'red',
+              }}
             >
               &#xe621;
             </i>

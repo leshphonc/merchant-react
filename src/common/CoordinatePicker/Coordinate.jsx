@@ -73,11 +73,11 @@ class CoordinatePicker extends React.Component {
               const addComp = rs.addressComponents
               this.setState({
                 address:
-                  addComp.province
-                  + addComp.city
-                  + addComp.district
-                  + addComp.street
-                  + addComp.streetNumber,
+                  addComp.province +
+                  addComp.city +
+                  addComp.district +
+                  addComp.street +
+                  addComp.streetNumber,
               })
             })
           } else {
@@ -96,11 +96,11 @@ class CoordinatePicker extends React.Component {
           const addComp = rs.addressComponents
           this.setState({
             address:
-              addComp.province
-              + addComp.city
-              + addComp.district
-              + addComp.street
-              + addComp.streetNumber,
+              addComp.province +
+              addComp.city +
+              addComp.district +
+              addComp.street +
+              addComp.streetNumber,
           })
         })
       })
@@ -117,9 +117,7 @@ class CoordinatePicker extends React.Component {
 
   render() {
     const { callback } = this.props
-    const {
-      mapHeight, lng, lat, address,
-    } = this.state
+    const { mapHeight, lng, lat, address } = this.state
     return (
       <React.Fragment>
         <SearchBar

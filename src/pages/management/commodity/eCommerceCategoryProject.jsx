@@ -11,92 +11,62 @@ import {
   Drawer,
   List,
   Radio,
+  Switch,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
-import moment from 'moment'
 
 const { alert } = Modal
 const { RadioItem } = Radio
 
 @inject('commodity')
 @observer
-class ServiceCategoryProject extends React.Component {
+class eCommerceCategoryProject extends React.Component {
   state = { open: false, checked: '' }
 
   componentDidMount() {
     const { commodity, match } = this.props
-    if (!commodity.serviceCategoryChild.project.length) {
-      commodity.fetchCategoryChild(match.params.id)
+    if (!commodity.shopCategoryChild.project.length) {
+      commodity.fetchShopSecondCategory(match.params.id)
     }
-    commodity.fetchNoBindProject()
+    commodity.fetchNoBindProjectE()
   }
 
   mapList = () => {
     const { commodity } = this.props
-    return commodity.serviceCategoryChild.project.map(item => (
-      <React.Fragment key={item.appoint_id}>
+    return commodity.shopCategoryChild.project.map(item => (
+      <React.Fragment key={item.goods_id}>
         <Card>
           <Card.Header
-            title={item.appoint_name}
-            thumb={item.pic}
-            extra={item.appoint_type === '1' ? '上门' : '到店'}
-          ></Card.Header>
+            title={item.s_name}
+            thumb={item.list_pic}
+            extra={item.store_name}
+          />
           <Card.Body>
-            <div style={{ color: '#777' }}>{item.appoint_content}</div>
-            <WhiteSpace />
-            <Flex>
+            <Flex style={{ color: '#666' }}>
+              <Flex.Item>售价: {item.price} 元</Flex.Item>
               <Flex.Item>
-                <span>原价：{item.old_price} 元</span>
+                库存:
+                {item.stock_num !== '-1'
+                  ? item.stock_num - item.sell_count
+                  : '不限'}
               </Flex.Item>
-              <Flex.Item>
-                {item.payment_status === '1' ? (
-                  <span>定金：{item.payment_money} 元</span>
-                ) : null}
-              </Flex.Item>
+              <Flex.Item>已售出: {item.sell_count}</Flex.Item>
             </Flex>
             <WhiteSpace />
-            <Flex>
-              <Flex.Item>
-                <span>可提前预约天数：{item.appoint_date_num} 天</span>
-              </Flex.Item>
-              <Flex.Item>
-                <span>耗时：{item.expend_time} 分钟</span>
-              </Flex.Item>
-            </Flex>
-            <WhiteSpace />
-            <Flex>
-              <Flex.Item>
-                <span>
-                  预约开始时间：
-                  {moment(item.start_time * 1000).format('YYYY-MM-DD hh:mm')}
-                </span>
-              </Flex.Item>
-            </Flex>
-            <WhiteSpace />
-            <Flex>
-              <Flex.Item>
-                <span>
-                  预约结束时间：
-                  {moment(item.end_time * 1000).format('YYYY-MM-DD hh:mm')}
-                </span>
-              </Flex.Item>
-            </Flex>
-            <WhiteSpace size="lg" />
             <Flex>
               <Flex.Item>
                 <Button
                   type="warning"
                   size="small"
-                  onClick={() => this.unbindCategory(item.appoint_id)}
+                  onClick={() => this.unbindCategory(item.goods_id)}
                 >
                   解绑 <i className="iconfont">&#xe64b;</i>
                 </Button>
               </Flex.Item>
             </Flex>
           </Card.Body>
-          <WhiteSpace />
         </Card>
-        <WhiteSpace size="lg" />
+        <WhiteSpace />
       </React.Fragment>
     ))
   }
@@ -108,11 +78,11 @@ class ServiceCategoryProject extends React.Component {
       {
         text: '解绑',
         onPress: () => {
-          commodity.unbindCategory(id).then(res => {
+          commodity.unbindCategoryE(id).then(res => {
             if (res) {
               Toast.success('解绑成功', 1, () => {
-                commodity.fetchCategoryChild(match.params.id)
-                commodity.fetchNoBindProject()
+                commodity.fetchShopSecondCategory(match.params.id)
+                commodity.fetchNoBindProjectE()
               })
             }
           })
@@ -124,11 +94,11 @@ class ServiceCategoryProject extends React.Component {
   bindProjectToCategory = () => {
     const { commodity, match } = this.props
     const { checked } = this.state
-    commodity.bindProjectToCategory(checked, match.params.id).then(res => {
+    commodity.bindProjectToCategoryE(checked, match.params.id).then(res => {
       if (res) {
         Toast.success('绑定成功', 1, () => {
-          commodity.fetchCategoryChild(match.params.id)
-          commodity.fetchNoBindProject()
+          commodity.fetchShopSecondCategory(match.params.id)
+          commodity.fetchNoBindProjectE()
           this.changeOpenStatus()
         })
       }
@@ -154,19 +124,19 @@ class ServiceCategoryProject extends React.Component {
           {commodity.noBindProject.map((i, index) => (
             <RadioItem
               key={index}
-              checked={checked === i.appoint_id}
+              checked={checked === i.goods_id}
               onChange={() =>
                 this.setState({
-                  checked: i.appoint_id,
+                  checked: i.goods_id,
                 })
               }
             >
               <img
-                src={i.pic}
+                src={i.image}
                 alt=""
                 style={{ width: 30, height: 30, marginRight: 20 }}
               />
-              {i.appoint_name}
+              {i.name}
             </RadioItem>
           ))}
         </List>
@@ -182,7 +152,7 @@ class ServiceCategoryProject extends React.Component {
     return (
       <>
         <NavBar
-          title="服务项目"
+          title="电商商品"
           goBack
           right={
             <Button
@@ -198,7 +168,7 @@ class ServiceCategoryProject extends React.Component {
         <Drawer
           className="my-drawer"
           style={{ minHeight: document.documentElement.clientHeight - 54 }}
-          contentStyle={{ color: '#A6A6A6' }}
+          contentStyle={{ color: '#A6A6A6', textAlign: 'center' }}
           sidebar={sidebar}
           position="right"
           open={open}
@@ -212,4 +182,4 @@ class ServiceCategoryProject extends React.Component {
   }
 }
 
-export default ServiceCategoryProject
+export default eCommerceCategoryProject

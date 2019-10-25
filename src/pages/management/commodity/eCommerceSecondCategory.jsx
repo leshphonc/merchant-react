@@ -17,14 +17,21 @@ class ECommerceSecondCategory extends React.Component {
     const { commodity, history, match } = this.props
     return commodity.shopCategoryChild.twoCate.map(item => (
       <React.Fragment key={item.sort_id}>
-        <div style={{ background: '#fff', borderRadius: 4, padding: 10 }}>
+        <div
+          style={{ background: '#fff', borderRadius: 4, padding: 10 }}
+          onClick={() => this.goEmerce(item.sort_id)}
+        >
           <Flex justify="center" align="center">
-            <Flex.Item style={{ flex: 9, lineHeight: '25px' }}>{item.sort_name}</Flex.Item>
+            <Flex.Item style={{ flex: 9, lineHeight: '25px' }}>
+              {item.sort_name}
+            </Flex.Item>
             <Flex.Item
               style={{ lineHeight: '25px', color: '#666' }}
               onClick={e => {
                 e.stopPropagation()
-                history.push(`/management/commodity/eCommerceCategoryPanel/编辑/2/${item.sort_id}`)
+                history.push(
+                  `/management/commodity/eCommerceCategoryPanel/编辑/2/${item.sort_id}`,
+                )
               }}
             >
               <i
@@ -38,7 +45,7 @@ class ECommerceSecondCategory extends React.Component {
               style={{ lineHeight: '25px', color: '#666' }}
               onClick={e => {
                 e.stopPropagation()
-                alert('删除二级分类', '二级分类内的项目将会自动解绑', [
+                alert('删除二级分类', '是否删除二级分类', [
                   {
                     text: '取消',
                   },
@@ -46,11 +53,17 @@ class ECommerceSecondCategory extends React.Component {
                     text: '确定',
                     style: { color: 'red' },
                     onPress: () => {
-                      commodity.deleteShopSecondCategory(item.sort_id).then(res => {
-                        if (res) {
-                          Toast.success('删除成功', 1, () => commodity.fetchShopSecondCategory(match.params.id))
-                        }
-                      })
+                      commodity
+                        .deleteShopSecondCategory(item.sort_id)
+                        .then(res => {
+                          if (res) {
+                            Toast.success('删除成功', 1, () =>
+                              commodity.fetchShopSecondCategory(
+                                match.params.id,
+                              ),
+                            )
+                          }
+                        })
                     },
                   },
                 ])
@@ -58,7 +71,12 @@ class ECommerceSecondCategory extends React.Component {
             >
               <i
                 className="iconfont"
-                style={{ fontSize: 18, marginLeft: 5, verticalAlign: 'bottom', color: 'red' }}
+                style={{
+                  fontSize: 18,
+                  marginLeft: 5,
+                  verticalAlign: 'bottom',
+                  color: 'red',
+                }}
               >
                 &#xe621;
               </i>
@@ -66,7 +84,9 @@ class ECommerceSecondCategory extends React.Component {
           </Flex>
           <WhiteSpace />
           <Flex style={{ color: '#666' }}>
-            <Flex.Item>开启周几显示：{item.is_weekshow === '1' ? '开启' : '关闭'}</Flex.Item>
+            <Flex.Item>
+              开启周几显示：{item.is_weekshow === '1' ? '开启' : '关闭'}
+            </Flex.Item>
           </Flex>
           <WhiteSpace />
           {item.is_weekshow === '1' ? (
@@ -80,7 +100,6 @@ class ECommerceSecondCategory extends React.Component {
               </Flex.Item>
             </Flex>
           ) : null}
-
           <WhiteSpace />
           <Flex style={{ color: '#666' }}>
             <Flex.Item>折扣率：{item.sort_discount}</Flex.Item>
@@ -90,6 +109,11 @@ class ECommerceSecondCategory extends React.Component {
         <WhiteSpace />
       </React.Fragment>
     ))
+  }
+
+  goEmerce = id => {
+    const { history } = this.props
+    history.push(`/management/commodity/eCommerceCategoryProject/${id}`)
   }
 
   render() {
@@ -104,10 +128,12 @@ class ECommerceSecondCategory extends React.Component {
               size="small"
               type="ghost"
               style={{ color: '#fff', border: '1px solid #fff' }}
-              onClick={() => history.push({
-                pathname: '/management/commodity/eCommerceCategoryPanel/新增/2',
-                state: match.params.id,
-              })
+              onClick={() =>
+                history.push({
+                  pathname:
+                    '/management/commodity/eCommerceCategoryPanel/新增/2',
+                  state: match.params.id,
+                })
               }
             >
               添加

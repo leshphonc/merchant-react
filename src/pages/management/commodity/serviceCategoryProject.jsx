@@ -40,8 +40,7 @@ class ServiceCategoryProject extends React.Component {
             title={item.appoint_name}
             thumb={item.pic}
             extra={item.appoint_type === '1' ? '上门' : '到店'}
-          >
-          </Card.Header>
+          ></Card.Header>
           <Card.Body>
             <div style={{ color: '#777' }}>{item.appoint_content}</div>
             <WhiteSpace />
@@ -50,7 +49,9 @@ class ServiceCategoryProject extends React.Component {
                 <span>原价：{item.old_price} 元</span>
               </Flex.Item>
               <Flex.Item>
-                {item.payment_status === '1' ? <span>定金：{item.payment_money} 元</span> : null}
+                {item.payment_status === '1' ? (
+                  <span>定金：{item.payment_money} 元</span>
+                ) : null}
               </Flex.Item>
             </Flex>
             <WhiteSpace />
@@ -66,14 +67,18 @@ class ServiceCategoryProject extends React.Component {
             <Flex>
               <Flex.Item>
                 <span>
-                  预约开始时间：{moment(item.start_time * 1000).format('YYYY-MM-DD hh:mm')}
+                  预约开始时间：
+                  {moment(item.start_time * 1000).format('YYYY-MM-DD hh:mm')}
                 </span>
               </Flex.Item>
             </Flex>
             <WhiteSpace />
             <Flex>
               <Flex.Item>
-                <span>预约结束时间：{moment(item.end_time * 1000).format('YYYY-MM-DD hh:mm')}</span>
+                <span>
+                  预约结束时间：
+                  {moment(item.end_time * 1000).format('YYYY-MM-DD hh:mm')}
+                </span>
               </Flex.Item>
             </Flex>
             <WhiteSpace size="lg" />
@@ -150,12 +155,17 @@ class ServiceCategoryProject extends React.Component {
             <RadioItem
               key={index}
               checked={checked === i.appoint_id}
-              onChange={() => this.setState({
-                checked: i.appoint_id,
-              })
+              onChange={() =>
+                this.setState({
+                  checked: i.appoint_id,
+                })
               }
             >
-              <img src={i.pic} alt="" style={{ width: 30, height: 30, marginRight: 20 }} />
+              <img
+                src={i.pic}
+                alt=""
+                style={{ width: 30, height: 30, marginRight: 20 }}
+              />
               {i.appoint_name}
             </RadioItem>
           ))}
@@ -188,7 +198,7 @@ class ServiceCategoryProject extends React.Component {
         <Drawer
           className="my-drawer"
           style={{ minHeight: document.documentElement.clientHeight - 54 }}
-          contentStyle={{ color: '#A6A6A6', textAlign: 'center' }}
+          contentStyle={{ color: '#A6A6A6' }}
           sidebar={sidebar}
           position="right"
           open={open}

@@ -20,8 +20,14 @@ import Utils from '@/utils'
 import Editor from '@/common/Editor'
 import { MenuMask, PrimaryTag } from '@/styled'
 
-const statusData = [{ label: '正常', value: '1' }, { label: '停售', value: '0' }]
-const freightType = [{ label: '按最大值算', value: '0' }, { label: '单独计算', value: '1' }]
+const statusData = [
+  { label: '正常', value: '1' },
+  { label: '停售', value: '0' },
+]
+const freightType = [
+  { label: '按最大值算', value: '0' },
+  { label: '单独计算', value: '1' },
+]
 const category = [
   { label: '实体商品', value: '0' },
   { label: '虚拟商品', value: '1' },
@@ -44,7 +50,7 @@ class ECommerceAdd extends React.Component {
 
   componentDidMount() {
     const { commodity, match, form } = this.props
-    commodity.fetchStoreValues('1', '2')
+    commodity.fetchStoreValuesE('1', '2')
     // 获取
     commodity.fetchGoodsCategory()
     commodity.fetchExpressLists()
@@ -76,48 +82,50 @@ class ECommerceAdd extends React.Component {
     }
 
     if (!match.params.goodid) return
-    commodity.fetchECommerceDetail(match.params.id, match.params.goodid).then(() => {
-      const { eCommerceDetail } = commodity
-      const picArr = eCommerceDetail.pic.map(item => ({
-        url: item.url,
-      }))
-      // commodity.fetchCategoryValues(eCommerceDetail.store_id).then(() => {
-      //   form.setFieldsValue({
-      //     sort_id: [eCommerceDetail.sort_id],
-      //   })
-      // })
-      setTimeout(() => {
-        this.editor.current.state.editor.txt.html(eCommerceDetail.des)
-      }, 500)
+    commodity
+      .fetchECommerceDetail(match.params.id, match.params.goodid)
+      .then(() => {
+        const { eCommerceDetail } = commodity
+        const picArr = eCommerceDetail.pic.map(item => ({
+          url: item.url,
+        }))
+        // commodity.fetchCategoryValues(eCommerceDetail.store_id).then(() => {
+        //   form.setFieldsValue({
+        //     sort_id: [eCommerceDetail.sort_id],
+        //   })
+        // })
+        setTimeout(() => {
+          this.editor.current.state.editor.txt.html(eCommerceDetail.des)
+        }, 500)
 
-      this.setState(
-        {
-          goods: [eCommerceDetail.cat_fid, eCommerceDetail.cat_id],
-        },
-        () => {
-          this.getMenuList()
-        },
-      )
-      form.setFieldsValue({
-        name: eCommerceDetail.name,
-        unit: eCommerceDetail.unit,
-        old_price: eCommerceDetail.old_price,
-        price: eCommerceDetail.price,
-        stock_num: eCommerceDetail.stock_num,
-        sort: eCommerceDetail.sort,
-        status: [eCommerceDetail.status],
-        store_id: [eCommerceDetail.store_id],
-        sort_id: [eCommerceDetail.sort_id],
-        goods_type: [eCommerceDetail.goods_type],
-        freight_type: [eCommerceDetail.freight_type],
-        freight_value: eCommerceDetail.freight_value,
-        freight_template: [eCommerceDetail.freight_template],
-        pic: picArr,
+        this.setState(
+          {
+            goods: [eCommerceDetail.cat_fid, eCommerceDetail.cat_id],
+          },
+          () => {
+            this.getMenuList()
+          },
+        )
+        form.setFieldsValue({
+          name: eCommerceDetail.name,
+          unit: eCommerceDetail.unit,
+          old_price: eCommerceDetail.old_price,
+          price: eCommerceDetail.price,
+          stock_num: eCommerceDetail.stock_num,
+          sort: eCommerceDetail.sort,
+          status: [eCommerceDetail.status],
+          // store_id: [eCommerceDetail.store_id],
+          sort_id: [eCommerceDetail.sort_id],
+          goods_type: [eCommerceDetail.goods_type],
+          freight_type: [eCommerceDetail.freight_type],
+          freight_value: eCommerceDetail.freight_value,
+          freight_template: [eCommerceDetail.freight_template],
+          pic: picArr,
+        })
+        // this.setState({
+        //   specification: eCommerceDetail.spec_list,
+        // })
       })
-      // this.setState({
-      //   specification: eCommerceDetail.spec_list,
-      // })
-    })
   }
 
   changeGiveValue = (val, index) => {
@@ -202,14 +210,14 @@ class ECommerceAdd extends React.Component {
         pic: value.pic.map(item => item.url),
         des: this.editor.current.state.editor.txt.html(),
         spec_list: specification,
-        store_id: value.store_id ? value.store_id[0] : '',
+        // store_id: value.store_id ? value.store_id[0] : '',
       }
       if (match.params.id) {
         commodity
-          .modifyECommerce({
+          .modifyECommerceE({
             ...obj,
             ...spec,
-            store_id: match.params.id,
+            // store_id: match.params.id,
             goods_id: match.params.goodid,
           })
           .then(res => {
@@ -223,7 +231,7 @@ class ECommerceAdd extends React.Component {
             }
           })
       } else {
-        commodity.addECommerce({ ...obj, ...spec, store_id: value.store_id[0] }).then(res => {
+        commodity.addECommerce({ ...obj, ...spec }).then(res => {
           if (res) {
             Toast.success('新增成功', 1, () => {
               sessionStorage.removeItem('spec')
@@ -278,7 +286,9 @@ class ECommerceAdd extends React.Component {
     formData.goods = goods
     const obj = {
       spec: match.params.id ? commodity.eCommerceDetail.spec_list || [] : [],
-      attr: match.params.id ? commodity.eCommerceDetail.properties_status_list || [] : [],
+      attr: match.params.id
+        ? commodity.eCommerceDetail.properties_status_list || []
+        : [],
       json: match.params.id ? commodity.eCommerceDetail.json || [] : [],
     }
     if (sessionStorage.getItem('spec')) {
@@ -345,7 +355,10 @@ class ECommerceAdd extends React.Component {
           >
             商品名称
           </InputItem>
-          <InputItem {...getFieldProps('number')} placeholder="请填写商品条形码">
+          <InputItem
+            {...getFieldProps('number')}
+            placeholder="请填写商品条形码"
+          >
             商品条形码
           </InputItem>
           <InputItem
@@ -454,7 +467,7 @@ class ECommerceAdd extends React.Component {
           >
             <List.Item arrow="horizontal">商品类型</List.Item>
           </Picker>
-          <Picker
+          {/* <Picker
             {...getFieldProps('store_id', {
               rules: [{ required: true }],
               // getValueFromEvent: item => {
@@ -467,8 +480,7 @@ class ECommerceAdd extends React.Component {
             extra="请选择"
           >
             <List.Item arrow="horizontal">选择添加到的店铺</List.Item>
-          </Picker>
-
+          </Picker> */}
           <Picker
             {...getFieldProps('sort_id', {
               rules: [{ required: true }],
@@ -493,7 +505,11 @@ class ECommerceAdd extends React.Component {
           >
             <List.Item arrow="horizontal">运费模板</List.Item>
           </Picker>
-          <List.Item arrow="horizontal" extra="编辑" onClick={() => this.goTemplate()}>
+          <List.Item
+            arrow="horizontal"
+            extra="编辑"
+            onClick={() => this.goTemplate()}
+          >
             运费模板
           </List.Item>
           <InputItem
@@ -559,7 +575,9 @@ class ECommerceAdd extends React.Component {
           确定
         </Button>
         {open ? menuEl : null}
-        {open ? <MenuMask onClick={() => this.setState({ open: false })} /> : null}
+        {open ? (
+          <MenuMask onClick={() => this.setState({ open: false })} />
+        ) : null}
       </React.Fragment>
     )
   }

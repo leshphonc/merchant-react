@@ -21,6 +21,7 @@ import ECommerceSpread from './eCommerceSpread'
 import ECommerceDiscounts from './eCommerceDiscounts'
 import ECommerceDeliveryTemplate from './eCommerceDeliveryTemplate'
 import ECommerceDeliveryTemplatePanel from './eCommerceDeliveryTemplatePanel'
+import ECommerceCategoryProject from './eCommerceCategoryProject'
 // import ECommerceSpecification from './eCommerceSpecification'
 import EditSpread from './editSpread'
 import GroupDiscounts from './groupDiscounts'
@@ -34,6 +35,7 @@ import ServiceItemsPanel from './serviceItemsPanel'
 import ServiceItemsSelectSingle from './serviceItemsSelectSingle'
 import serviceSingleRecord from './serviceSingleRecord'
 import ServicePackageRecord from './servicePackageRecord'
+import Package from './package'
 
 const { Item } = List
 @inject('commodity')
@@ -127,6 +129,15 @@ class Commodity extends React.Component {
           >
             服务
           </Item>
+          <Item
+            thumb={require('@/assets/image/fwgl.png')}
+            arrow="horizontal"
+            onClick={() => {
+              history.push('/management/commodity/package')
+            }}
+          >
+            套餐
+          </Item>
         </List>
       </div>
     )
@@ -137,12 +148,18 @@ export default () => (
     <Route path="/management/commodity" exact component={Commodity} />
     {/* 团购商品 */}
     <Route path="/management/commodity/group" component={Group} />
-    <Route path="/management/commodity/groupPanel/:str/:id?" component={GroupPanel} />
+    <Route
+      path="/management/commodity/groupPanel/:str/:id?"
+      component={GroupPanel}
+    />
     {/* <Route path="/management/commodity/groupEdit" component={GroupEdit} /> */}
     <Route path="/management/commodity/groupMealAdd" component={GroupMealAdd} />
     {/* 预定商品 */}
     <Route path="/management/commodity/reserve" component={Reserve} />
-    <Route path="/management/commodity/reservePanel/:str/:id?" component={reservePanel} />
+    <Route
+      path="/management/commodity/reservePanel/:str/:id?"
+      component={reservePanel}
+    />
     {/* <Route path="/management/commodity/reserveEdit" component={ReserveEdit} /> */}
     {/* 外卖商品 */}
     <Route path="/management/commodity/takeAway" component={TakeAway} />
@@ -151,8 +168,14 @@ export default () => (
       component={TakeAwayPanel}
     />
     {/* 电商商品 */}
-    <Route path="/management/commodity/eCommerceDashboard" component={ECommerceDashboard} />
-    <Route path="/management/commodity/eCommerceCategory" component={ECommerceCategory} />
+    <Route
+      path="/management/commodity/eCommerceDashboard"
+      component={ECommerceDashboard}
+    />
+    <Route
+      path="/management/commodity/eCommerceCategory"
+      component={ECommerceCategory}
+    />
     <Route
       path="/management/commodity/eCommerceSecondCategory/:id"
       component={ECommerceSecondCategory}
@@ -171,9 +194,22 @@ export default () => (
       path="/management/commodity/eCommerceSpread/:str/:id?/:goodid?"
       component={ECommerceSpread}
     />
-    <Route path="/management/commodity/editSpread/:str/:id?" component={EditSpread} />
-    <Route path="/management/commodity/groupDiscounts/:str/:id?" component={GroupDiscounts} />
-    <Route path="/management/commodity/AppointDiscounts/:str/:id?" component={AppointDiscounts} />
+    <Route
+      path="/management/commodity/eCommerceCategoryProject/:id"
+      component={ECommerceCategoryProject}
+    />
+    <Route
+      path="/management/commodity/editSpread/:str/:id?"
+      component={EditSpread}
+    />
+    <Route
+      path="/management/commodity/groupDiscounts/:str/:id?"
+      component={GroupDiscounts}
+    />
+    <Route
+      path="/management/commodity/AppointDiscounts/:str/:id?"
+      component={AppointDiscounts}
+    />
     <Route
       path="/management/commodity/eCommerceDiscounts/:str/:id?/:goodid?"
       component={ECommerceDiscounts}
@@ -187,8 +223,14 @@ export default () => (
       component={ECommerceDeliveryTemplatePanel}
     />
     {/* 服务项目 */}
-    <Route path="/management/commodity/serviceDashboard" component={ServiceDashboard} />
-    <Route path="/management/commodity/serviceCategory" component={ServiceCategory} />
+    <Route
+      path="/management/commodity/serviceDashboard"
+      component={ServiceDashboard}
+    />
+    <Route
+      path="/management/commodity/serviceCategory"
+      component={ServiceCategory}
+    />
     <Route
       path="/management/commodity/serviceCategoryProject/:id"
       component={ServiceCategoryProject}
@@ -206,7 +248,16 @@ export default () => (
       path="/management/commodity/serviceItemsSelectSingle"
       component={ServiceItemsSelectSingle}
     />
-    <Route path="/management/commodity/serviceSingleRecord/:id" component={serviceSingleRecord} />
-    <Route path="/management/commodity/servicePackageRecord/:id" component={ServicePackageRecord} />
+    <Route
+      path="/management/commodity/serviceSingleRecord/:id"
+      component={serviceSingleRecord}
+    />
+    <Route
+      path="/management/commodity/servicePackageRecord/:id"
+      component={ServicePackageRecord}
+    />
+
+    {/* 套餐商品 */}
+    <Route path="/management/commodity/package" component={Package} />
   </React.Fragment>
 )

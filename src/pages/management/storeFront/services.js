@@ -262,20 +262,12 @@ export const getStorePackageForSale = (id, page) =>
     ticket: localStorage.getItem('ticket'),
   })
 
-// 绑定在售服务
-export const bindCommodityForSale = () =>
-  axios.get('/appapi.php?c=Merchantapp&type=merchantstore&a=user_level', {
-    params: {
-      ticket: localStorage.getItem('ticket'),
-    },
-  })
-
-// 绑定在售套餐
-export const bindPackageForSale = () =>
-  axios.get('/appapi.php?c=Merchantapp&type=merchantstore&a=user_level', {
-    params: {
-      ticket: localStorage.getItem('ticket'),
-    },
+// 在售电商产品列表
+export const getStoreECommerceForSale = (id, page) =>
+  axios.post('/appapi.php?c=SpaceMerchant&a=selBindGoods', {
+    store_id: id,
+    page,
+    ticket: localStorage.getItem('ticket'),
   })
 
 // 获取商铺未绑定的服务
@@ -289,6 +281,14 @@ export const getUnBindStoreCommodityForSale = (id, page) =>
 // 店铺未绑定的套餐
 export const getUnBindStorePackageForSale = (id, page) =>
   axios.post('/appapi.php?c=SpaceMerchant&a=getNoBindMeal', {
+    store_id: id,
+    page,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+// 店铺未绑定的电商产品
+export const getUnBindStoreECommerceForSale = (id, page) =>
+  axios.post('/appapi.php?c=SpaceMerchant&a=selNoBindOnlineGoods', {
     store_id: id,
     page,
     ticket: localStorage.getItem('ticket'),
@@ -310,6 +310,14 @@ export const bindStorePackage = (id, ids) =>
     ticket: localStorage.getItem('ticket'),
   })
 
+// 绑定在售电商产品
+export const bindECommerce = (id, ids) =>
+  axios.post('/appapi.php?c=SpaceMerchant&a=onlineGoodsBindStore', {
+    store_id: id,
+    goods_ids: ids,
+    ticket: localStorage.getItem('ticket'),
+  })
+
 // 解绑店铺服务
 export const unBindCommodity = (id, cid) =>
   axios.post('/appapi.php?c=SpaceMerchant&a=delBindPro', {
@@ -323,5 +331,13 @@ export const unBindPackage = (id, cid) =>
   axios.post('/appapi.php?c=SpaceMerchant&a=delBindMeal', {
     store_id: id,
     id: cid,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+// 解绑店铺电商产品
+export const unbindECommerce = (id, cid) =>
+  axios.post('/appapi.php?c=SpaceMerchant&a=goodsDelBindStore', {
+    store_id: id,
+    goods_id: cid,
     ticket: localStorage.getItem('ticket'),
   })
