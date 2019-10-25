@@ -78,7 +78,7 @@ class SmartScreenSloganCRU extends React.Component {
       if (location.state) {
         value.staff_id = location.state.staff_id
       }
-      if (!Number(value.num)) {
+      if (match.params.show !== '0' && !Number(value.num)) {
         Toast.info('播放次数必须为整数')
         return false
       }
