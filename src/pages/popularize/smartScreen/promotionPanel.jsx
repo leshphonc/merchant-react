@@ -42,7 +42,7 @@ class PromotionPanel extends React.Component {
         // 整理默认数据放入表单
         form.setFieldsValue({
           title: promotionInfo.title,
-          main_key: promotionInfo.main_key,
+          // main_key: promotionInfo.main_key,
           keywords: arr[0],
           keywords2: arr[1],
           keywords3: arr[2],
@@ -82,7 +82,7 @@ class PromotionPanel extends React.Component {
       }
       const obj = {
         title: value.title,
-        main_key: value.main_key,
+        // main_key: value.main_key,
         keywords,
         sort: value.sort,
         site_name: value.site_name,
@@ -127,7 +127,7 @@ class PromotionPanel extends React.Component {
           >
             广告标题
           </InputItem>
-          <InputItem
+          {/* <InputItem
             {...getFieldProps('main_key', {
               rules: [{ required: true, min: 2, max: 4 }],
             })}
@@ -146,7 +146,7 @@ class PromotionPanel extends React.Component {
                 &#xe628;
               </i>
             </Tooltip>
-          </InputItem>
+          </InputItem> */}
           <InputItem
             {...getFieldProps('keywords', {
               rules: [{ required: true, min: 2, max: 6 }],

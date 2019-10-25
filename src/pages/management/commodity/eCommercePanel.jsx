@@ -329,7 +329,7 @@ class ECommerceAdd extends React.Component {
 
   render() {
     const { match, commodity, form, history } = this.props
-    const { storeValues, shopCategory, goodsCategory, expressLists } = commodity
+    const { shopCategory, goodsCategory, expressLists } = commodity
     const { getFieldProps } = form
     const { open, goods } = this.state
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []

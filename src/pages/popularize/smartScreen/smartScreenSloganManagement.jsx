@@ -119,7 +119,7 @@ class SmartScreenSloganManagement extends React.Component {
                 })
               }
             }}
-            values={['全局见面语', '员工特殊见面语']}
+            values={['统一见面语', '指定见面语']}
           />
         </WingBlank>
         <WhiteSpace />

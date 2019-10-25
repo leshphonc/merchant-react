@@ -45,7 +45,7 @@ class Home extends React.Component {
     cur: '1',
     searchType: 'all_money',
     seriesLabel: '收入',
-    seriesLabel2: '人数',
+    seriesLabel2: '进店人数',
   }
 
   componentDidMount() {
@@ -149,17 +149,18 @@ class Home extends React.Component {
   getOption2 = () => {
     let xData = []
     let custom = false
-    const { filterValue1, aiData, seriesLabel2 } = this.state
-    if (filterValue1 === '1') {
+    const { aifilterValue1, aiData, seriesLabel2 } = this.state
+    if (aifilterValue1 === '1') {
       xData = aiData.map((item, index) => `${(index + 1) * 2}点`)
       custom = true
-    } else if (filterValue1 === '2') {
+    } else if (aifilterValue1 === '2') {
       xData = aiData.map((item, index) => `${index + 1}号`)
       custom = false
-    } else if (filterValue1 === '3') {
+    } else if (aifilterValue1 === '3') {
       xData = aiData.map((item, index) => `${index + 1}月`)
       custom = false
     }
+    console.log(xData)
     let format = null
     if (custom) {
       format = params => {
@@ -187,7 +188,7 @@ class Home extends React.Component {
         formatter: format,
       },
       grid: {
-        top: 10,
+        top: 30,
         bottom: 30,
         right: 20,
         left: '13%',
@@ -204,7 +205,7 @@ class Home extends React.Component {
       yAxis: [
         {
           type: 'value',
-          name: '元',
+          name: '进店人数',
         },
       ],
       series: [
@@ -253,7 +254,7 @@ class Home extends React.Component {
           .getAllFaceVisit(aifilterValue1, aifilterLabel2, aifilterStoreValue)
           .then(() => {
             this.setState({
-              aiData: home.echartData,
+              aiData: home.aiData,
             })
           })
       },
@@ -411,10 +412,13 @@ class Home extends React.Component {
         label = '订单'
         break
       case '3':
-        label = '人数'
+        label = '新增粉丝'
         break
       case '4':
-        label = '人数'
+        label = '新增人数'
+        break
+      case '5':
+        label = '访问次数'
         break
       default:
         label = '收入'

@@ -127,7 +127,7 @@ class Commodity extends React.Component {
               history.push('/management/commodity/serviceDashboard')
             }}
           >
-            服务
+            服务项目
           </Item>
           <Item
             thumb={require('@/assets/image/fwgl.png')}

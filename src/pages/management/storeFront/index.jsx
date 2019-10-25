@@ -205,7 +205,7 @@ class StoreFront extends React.Component {
                             )
                           }
                         >
-                          服务
+                          服务项目
                         </Button>
                       </Flex.Item>
                       <Flex.Item>

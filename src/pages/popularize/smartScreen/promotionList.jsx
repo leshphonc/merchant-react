@@ -38,6 +38,7 @@ class PromotionList extends React.Component {
   mapList = () => {
     const { history, smartScreen } = this.props
     const { promotionList } = smartScreen
+    const { curIndex } = this.state
     if (promotionList[0]) {
       return promotionList[0].itemList.map((item, index) => (
         <React.Fragment key={index}>
@@ -62,8 +63,8 @@ class PromotionList extends React.Component {
                 <Flex.Item>浏览人数：{item.ai.wait}</Flex.Item>
                 <Flex.Item>下单人数：{item.ai.buy}</Flex.Item>
               </Flex>
-              <WhiteSpace />
-              <div style={{ color: '#777' }}>命令词：{item.main_key}</div>
+              {/* <WhiteSpace />
+              <div style={{ color: '#777' }}>命令词：{item.main_key}</div> */}
               <WhiteSpace />
               <div style={{ color: '#777' }}>对话关键词：{item.main_key}</div>
               <WhiteSpace />
@@ -101,15 +102,18 @@ class PromotionList extends React.Component {
                             编辑
                           </Button>
                         </Flex.Item>
-                        <Flex.Item>
-                          <Button
-                            size="small"
-                            type="primary"
-                            onClick={() => this.changeStatus(item.ai.id)}
-                          >
-                            全城发布
-                          </Button>
-                        </Flex.Item>
+                        {curIndex === 0 ? (
+                          <Flex.Item>
+                            <Button
+                              size="small"
+                              type="primary"
+                              onClick={() => this.changeStatus(item.ai.id)}
+                            >
+                              全城发布
+                            </Button>
+                          </Flex.Item>
+                        ) : null}
+
                         <Flex.Item>
                           <Button
                             size="small"
@@ -125,7 +129,7 @@ class PromotionList extends React.Component {
                   )}
                 </React.Fragment>
               }
-            ></Card.Footer>
+            />
             <WhiteSpace />
           </Card>
           <WhiteSpace size="sm" />

@@ -1,9 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  WhiteSpace, Card, Flex, Button,
-} from 'antd-mobile'
+import { WhiteSpace, Card, Flex, Button } from 'antd-mobile'
 import Utils from '@/utils'
 
 @inject('storeFront')
@@ -28,34 +26,36 @@ class StoreFrontBusiness extends React.Component {
                   <Button
                     size="small"
                     type="primary"
-                    onClick={() => history.push(
-                      `/management/storefront/storeFrontBusiness/ECommercePanel/${match.params.id}`,
-                    )
+                    onClick={() =>
+                      history.push(
+                        `/management/storefront/storeFrontBusiness/ECommercePanel/${match.params.id}`,
+                      )
                     }
                   >
                     配置编辑
                   </Button>
                 </Flex.Item>
-                <Flex.Item>
+                {/* <Flex.Item>
                   <Button
                     size="small"
                     type="primary"
-                    onClick={() => history.push(`/management/storefront/categoryManagement/${match.params.id}/1`)
+                    onClick={() =>
+                      history.push(
+                        `/management/storefront/categoryManagement/${match.params.id}/1`,
+                      )
                     }
                   >
                     分类管理
                   </Button>
-                </Flex.Item>
-              </Flex>
-              <WhiteSpace />
-              <Flex>
+                </Flex.Item> */}
                 <Flex.Item>
                   <Button
                     size="small"
                     type="primary"
-                    onClick={() => history.push(
-                      `/management/storefront/storeFrontBusiness/storeDiscount/${match.params.id}`,
-                    )
+                    onClick={() =>
+                      history.push(
+                        `/management/storefront/storeFrontBusiness/storeDiscount/${match.params.id}`,
+                      )
                     }
                   >
                     店铺优惠
@@ -65,9 +65,10 @@ class StoreFrontBusiness extends React.Component {
                   <Button
                     size="small"
                     type="primary"
-                    onClick={() => history.push(
-                      `/management/storefront/storeFrontBusiness/cloneCommodity/${match.params.id}`,
-                    )
+                    onClick={() =>
+                      history.push(
+                        `/management/storefront/storeFrontBusiness/cloneCommodity/${match.params.id}`,
+                      )
                     }
                   >
                     商品克隆
@@ -86,34 +87,36 @@ class StoreFrontBusiness extends React.Component {
                   <Button
                     size="small"
                     type="primary"
-                    onClick={() => history.push(
-                      `/management/storefront/storeFrontBusiness/TakeawayPanel/${match.params.id}`,
-                    )
+                    onClick={() =>
+                      history.push(
+                        `/management/storefront/storeFrontBusiness/TakeawayPanel/${match.params.id}`,
+                      )
                     }
                   >
                     配置编辑
                   </Button>
                 </Flex.Item>
-                <Flex.Item>
+                {/* <Flex.Item>
                   <Button
                     size="small"
                     type="primary"
-                    onClick={() => history.push(`/management/storefront/categoryManagement/${match.params.id}/2`)
+                    onClick={() =>
+                      history.push(
+                        `/management/storefront/categoryManagement/${match.params.id}/2`,
+                      )
                     }
                   >
                     分类管理
                   </Button>
-                </Flex.Item>
-              </Flex>
-              <WhiteSpace />
-              <Flex>
+                </Flex.Item> */}
                 <Flex.Item>
                   <Button
                     size="small"
                     type="primary"
-                    onClick={() => history.push(
-                      `/management/storefront/storeFrontBusiness/storeDiscount/${match.params.id}`,
-                    )
+                    onClick={() =>
+                      history.push(
+                        `/management/storefront/storeFrontBusiness/storeDiscount/${match.params.id}`,
+                      )
                     }
                   >
                     店铺优惠
@@ -123,9 +126,10 @@ class StoreFrontBusiness extends React.Component {
                   <Button
                     size="small"
                     type="primary"
-                    onClick={() => history.push(
-                      `/management/storefront/storeFrontBusiness/cloneCommodity/${match.params.id}`,
-                    )
+                    onClick={() =>
+                      history.push(
+                        `/management/storefront/storeFrontBusiness/cloneCommodity/${match.params.id}`,
+                      )
                     }
                   >
                     商品克隆

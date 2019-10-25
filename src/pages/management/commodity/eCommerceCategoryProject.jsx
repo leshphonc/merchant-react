@@ -11,7 +11,6 @@ import {
   Drawer,
   List,
   Radio,
-  Switch,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 
