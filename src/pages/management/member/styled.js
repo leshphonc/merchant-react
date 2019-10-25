@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const ColorCard = styled.div`
   border-radius: 8px;
-  height: 80px;
+  height: 70px;
   padding: 0 20px;
   display: flex;
   justify-content: space-between;
@@ -11,6 +11,7 @@ export const ColorCard = styled.div`
 
 export const CardLeft = styled.div`
   color: #fff;
+  font-size: 16px;
 `
 
 export const ListItem = styled.div`

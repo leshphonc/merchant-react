@@ -15,9 +15,21 @@ class MemberStore {
 
   @observable publicListPage = 1
 
+  @observable publicListTotalNum = null
+
   @observable publicListSize = 10
 
   @observable publicListTotal = null
+
+  @observable merFansList = []
+
+  @observable merFansListPage = 1
+
+  @observable merFansListTotalNum = null
+
+  @observable merFansListSize = 10
+
+  @observable merFansListTotal = null
 
   @observable cardGroupList = []
 
@@ -115,7 +127,19 @@ class MemberStore {
   }
 
   @action
-  fetchPublicList = async () => {
+  resetFetchPublicList = async (beginTime, endTime) => {
+    runInAction(() => {
+      this.publicList = []
+      this.publicListPage = 1
+      this.publicListTotalNum = null
+      this.publicListSize = 10
+      this.publicListTotal = null
+    })
+    await this.fetchPublicList(beginTime, endTime)
+  }
+
+  @action
+  fetchPublicList = async (beginTime, endTime) => {
     let hasMore = true
     if (this.publicListTotal !== null) {
       hasMore = this.publicListPage * this.publicListSize < this.publicListTotal
@@ -126,11 +150,14 @@ class MemberStore {
     const response = await services.fetchPublicList(
       this.publicListPage,
       this.publicListSize,
+      beginTime,
+      endTime,
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       if (hasMore) {
         runInAction(() => {
           const arr = this.publicList
+          this.publicListTotalNum = response.data.result.total
           arr.push(...response.data.result.lists)
           this.publicList = arr
           this.publicListTotal = response.data.result.total - 0
@@ -515,6 +542,47 @@ class MemberStore {
             mini: response.data.result.total,
             public: response2.data.result.total,
           }
+        })
+      }
+    }
+  }
+
+  @action
+  resetFetchMerFansList = async (beginTime, endTime) => {
+    runInAction(() => {
+      this.merFansList = []
+      this.merFansListPage = 1
+      this.merFansListTotalNum = null
+      this.merFansListSize = 10
+      this.merFansListTotal = null
+    })
+    await this.fetchMerFansList(beginTime, endTime)
+  }
+
+  @action
+  fetchMerFansList = async (beginTime, endTime) => {
+    let hasMore = true
+    if (this.merFansListTotal !== null) {
+      hasMore =
+        this.merFansListPage * this.merFansListSize < this.merFansListTotal
+      if (hasMore) {
+        this.merFansListPage += 1
+      }
+    }
+    const response = await services.fetchMerFansList(
+      this.merFansListPage,
+      this.merFansListSize,
+      beginTime,
+      endTime,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      if (hasMore) {
+        runInAction(() => {
+          const arr = this.merFansList
+          this.merFansListTotalNum = response.data.result.total
+          arr.push(...response.data.result.list)
+          this.merFansList = arr
+          this.merFansListTotal = response.data.result.total - 0
         })
       }
     }

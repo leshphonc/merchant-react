@@ -1,3 +1,4 @@
+/* eslint-disable no-const-assign */
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { Link, Route } from 'react-router-dom'
@@ -29,19 +30,23 @@ class ShopManager extends React.Component {
     super(props)
     this.state = {
       modal1: false,
+      statusArr: { is_work: 1, status: 1 },
+      selected: 0,
     }
   }
 
   componentDidMount() {
     const { shopManager } = this.props
+    const { statusArr } = this.state
     shopManager.fetchECommerceValues()
-    shopManager.fetchStaffList()
+    shopManager.fetchStaffList(statusArr)
   }
 
   detele = staffId => {
     const { shopManager } = this.props
+    const { statusArr, status } = this.state
     shopManager.fetchStaffDelete(staffId).then(() => {
-      shopManager.fetchStaffList()
+      shopManager.fetchStaffList(statusArr, status === 2 ? 2 : 1)
     })
   }
 
@@ -64,10 +69,48 @@ class ShopManager extends React.Component {
       [key]: false,
     })
   }
+  changeSe = e => {
+    const { shopManager } = this.props
+    if (e.nativeEvent.selectedSegmentIndex === 0) {
+      this.setState(
+        {
+          statusArr: { is_work: 1, status: 1 },
+          selected: 0,
+        },
+        () => {
+          const { statusArr } = this.state
+          shopManager.fetchStaffList(statusArr)
+        },
+      )
+    } else if (e.nativeEvent.selectedSegmentIndex === 1) {
+      this.setState(
+        {
+          statusArr: { is_work: 2, status: 1 },
+          selected: 1,
+        },
+        () => {
+          const { statusArr } = this.state
+          shopManager.fetchStaffList(statusArr)
+        },
+      )
+    } else {
+      this.setState(
+        {
+          statusArr: { status: 2 },
+          selected: 2,
+        },
+        () => {
+          const { statusArr } = this.state
+          shopManager.fetchStaffList(statusArr)
+        },
+      )
+    }
+  }
 
   mapList = () => {
     const { shopManager, history } = this.props
     const { staffList } = shopManager
+    const { selected } = this.state
     return staffList.map(item => (
       <React.Fragment key={item.staff_id}>
         <Card>
@@ -86,11 +129,11 @@ class ShopManager extends React.Component {
             <i
               style={{ position: 'absolute', top: 10, right: 20, fontSize: 20 }}
               className="iconfont"
-              onClick={() =>
+              onClick={e =>{
                 history.push(
                   `/management/shopManager/shopPanel/编辑/${item.store_id}/${item.staff_id}`,
                 )
-              }
+              }}
             >
               &#xe634;
             </i>
@@ -202,7 +245,7 @@ class ShopManager extends React.Component {
                     size="small"
                     onClick={() =>
                       history.push(
-                        '/management/shopManager/shopManagerWorkRecord',
+                        `/management/shopManager/shopManagerWorkRecord/${item.staff_id}`,
                       )
                     }
                   >
@@ -215,91 +258,24 @@ class ShopManager extends React.Component {
                     size="small"
                     onClick={() => this.detele(item.staff_id)}
                   >
-                    禁用
+                    {selected === 2 ? `启用` : `禁用`}
                   </Button>
                 </Flex.Item>
               </Flex>
             }
           ></Card.Footer>
-          <WhiteSpace></WhiteSpace>
+          <WhiteSpace />
         </Card>
-        <WhiteSpace></WhiteSpace>
+        <WhiteSpace />
       </React.Fragment>
     ))
   }
-
-  // <ListItem>
-  //         <ItemTop style={{ width: '70%', display: 'inline-block' }}>
-  //           <TopContent>
-  //             <div className="top-title" style={{ fontSize: '15px' }}>
-  //               电话：{item.tel}
-  //             </div>
-  //             <WhiteSpace />
-  //             <div>店员账号: {item.username}</div>
-  //             <WhiteSpace />
-  //             <div>店员姓名: {item.name}</div>
-  //             <WhiteSpace />
-  //             <div>所属店铺: {item.storename}</div>
-  //             <WhiteSpace />
-  //             <div>
-  //               添加时间: {moment(item.time * 1000).format('YYYY-MM-DD HH:mm')}
-  //             </div>
-  //           </TopContent>
-  //         </ItemTop>
-  //         <div
-  //           style={{ width: '20%', display: 'inline-block', float: 'right' }}
-  //         >
-  //           <Btn>
-  //             <Button
-  //               // style={{ marginTop: '20px' }}
-  //               type="button"
-  //               onClick={() =>
-  //                 history.push(
-  //                   `/management/shopManager/shopPanel/编辑/${item.store_id}/${item.staff_id}`,
-  //                 )
-  //               }
-  //             >
-  //               编辑
-  //             </Button>
-  //           </Btn>
-  //           <Btn>
-  //             <Button
-  //               style={{ marginTop: '10px' }}
-  //               onClick={() => this.detele(item.staff_id)}
-  //             >
-  //               删除
-  //             </Button>
-  //           </Btn>
-  //           <Btn>
-  //             <Button
-  //               style={{ marginTop: '10px' }}
-  //               type="button"
-  //               onClick={() =>
-  //                 history.push(
-  //                   `/management/shopManager/classifyPanel/修改/${item.store_id}/${item.staff_id}`,
-  //                 )
-  //               }
-  //             >
-  //               权限
-  //             </Button>
-  //           </Btn>
-  //           <Btn>
-  //             <Button
-  //               style={{ marginTop: '10px' }}
-  //               onClick={this.showModal('modal1', item.store_id, item.staff_id)}
-  //             >
-  //               调岗
-  //             </Button>
-  //           </Btn>
-  //         </div>
-  //       </ListItem>
-  //       <WhiteSpace size="sm" />
 
   render() {
     const { shopManager, form, history } = this.props
     const { eCommerceValues, staffDetail } = shopManager
     const { getFieldProps } = form
-    const { modal1 } = this.state
+    const { modal1, selected } = this.state
     // console.log(toJS(eCommerceValues))
     return (
       <React.Fragment>
@@ -321,7 +297,12 @@ class ShopManager extends React.Component {
         />
         <WhiteSpace />
         <WingBlank>
-          <SegmentedControl values={['在岗', '离岗', '禁用']} />
+          <SegmentedControl
+            selectedIndex={selected}
+            values={['在岗', '离岗', '禁用']}
+            onValueChange={this.onValueChange}
+            onChange={this.changeSe}
+          />
         </WingBlank>
         <WhiteSpace />
         <WingBlank>{this.mapList()}</WingBlank>
@@ -386,7 +367,8 @@ class ShopManager extends React.Component {
                   )
                   .then(() => {
                     Toast.success('调岗成功', 1, () => {
-                      shopManager.fetchStaffList()
+                      const { statusArr } = this.state
+                      shopManager.fetchStaffList(statusArr)
                     })
                   })
                 this.onClose('modal1')()
@@ -422,7 +404,7 @@ export default () => (
       component={ClassifyPanel}
     />
     <Route
-      path="/management/shopManager/shopManagerWorkRecord"
+      path="/management/shopManager/shopManagerWorkRecord/:staffId?"
       component={ShopManagerWorkRecord}
     />
   </React.Fragment>

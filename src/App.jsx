@@ -14,6 +14,7 @@ import MiniProgram from '@/pages/management/member/miniProgram'
 import PublicMember from '@/pages/management/member/publicMember'
 import CardGroup from '@/pages/management/member/cardGroup'
 import Coupon from '@/pages/management/member/coupon'
+import MerchantMember from '@/pages/management/member/merchantMember'
 import Commodity from '@/pages/management/commodity'
 import ShopManager from '@/pages/management/shopManager'
 import SmartScreen from '@/pages/popularize/smartScreen'
@@ -53,6 +54,10 @@ export default () => (
         <Route
           path="/management/member/publicMember"
           component={PublicMember}
+        />
+          <Route
+          path="/management/member/merchantMember"
+          component={MerchantMember}
         />
         <Route path="/management/member/cardGroup" component={CardGroup} />
         <Route path="/management/member/coupon" component={Coupon} />
