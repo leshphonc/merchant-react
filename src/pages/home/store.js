@@ -9,6 +9,8 @@ class HomeStore {
 
   @observable storeList = []
 
+  @observable aiData = []
+
   @action
   fetchEchartData = async (type, date, search, id) => {
     if (date === '二级筛选') {
@@ -38,6 +40,20 @@ class HomeStore {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.storeList = response.data.result.store_list
+      })
+    }
+  }
+
+  // 门店AI数据
+  @action
+  getAllFaceVisit = async (type, date, id) => {
+    if (date === '二级筛选') {
+      date = ''
+    }
+    const response = await services.getAllFaceVisit(type, date, id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.aiData = response.data.result
       })
     }
   }

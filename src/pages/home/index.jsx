@@ -35,10 +35,17 @@ class Home extends React.Component {
     filterValue1: '1',
     filterLabel1: '日',
     filterLabel2: '2019-08-07',
+    aifilterStoreLabel: '全部店铺',
+    aifilterStoreValue: '',
+    aifilterValue1: '1',
+    aifilterLabel1: '日',
+    aifilterLabel2: '2019-08-07',
     echartData: [],
+    aiData: [],
     cur: '1',
     searchType: 'all_money',
     seriesLabel: '收入',
+    seriesLabel2: '人数',
   }
 
   componentDidMount() {
@@ -53,13 +60,19 @@ class Home extends React.Component {
     if (!ticket) return
     home.fetchStoreList()
     home
+      .getAllFaceVisit(filterValue1, filterLabel2, filterStoreValue)
+      .then(() => {
+        this.setState({
+          aiData: home.aiData,
+        })
+      })
+    home
       .fetchEchartData(filterValue1, filterLabel2, searchType, filterStoreValue)
       .then(() => {
         this.setState({
           echartData: home.echartData,
         })
       })
-    console.log(process.env)
   }
 
   getOption = () => {
@@ -136,15 +149,15 @@ class Home extends React.Component {
   getOption2 = () => {
     let xData = []
     let custom = false
-    const { filterValue1, echartData, seriesLabel } = this.state
+    const { filterValue1, aiData, seriesLabel2 } = this.state
     if (filterValue1 === '1') {
-      xData = echartData.map((item, index) => `${(index + 1) * 2}点`)
+      xData = aiData.map((item, index) => `${(index + 1) * 2}点`)
       custom = true
     } else if (filterValue1 === '2') {
-      xData = echartData.map((item, index) => `${index + 1}号`)
+      xData = aiData.map((item, index) => `${index + 1}号`)
       custom = false
     } else if (filterValue1 === '3') {
-      xData = echartData.map((item, index) => `${index + 1}月`)
+      xData = aiData.map((item, index) => `${index + 1}月`)
       custom = false
     }
     let format = null
@@ -174,7 +187,7 @@ class Home extends React.Component {
         formatter: format,
       },
       grid: {
-        top: 40,
+        top: 10,
         bottom: 30,
         right: 20,
         left: '13%',
@@ -191,14 +204,14 @@ class Home extends React.Component {
       yAxis: [
         {
           type: 'value',
-          name: '进店人数',
+          name: '元',
         },
       ],
       series: [
         {
-          name: seriesLabel,
-          type: 'line',
-          data: echartData,
+          name: seriesLabel2,
+          type: 'bar',
+          data: aiData,
         },
       ],
     }
@@ -220,6 +233,33 @@ class Home extends React.Component {
     )
   }
 
+  aichangeFilter1 = val => {
+    const { home } = this.props
+    const result = FilterData1.find(item => item.value === val[0])
+    this.setState(
+      {
+        aifilterValue1: result.value,
+        aifilterLabel1: result.label,
+        aifilterLabel2: '二级筛选',
+        aiData: [],
+      },
+      () => {
+        const {
+          aifilterValue1,
+          aifilterLabel2,
+          aifilterStoreValue,
+        } = this.state
+        home
+          .getAllFaceVisit(aifilterValue1, aifilterLabel2, aifilterStoreValue)
+          .then(() => {
+            this.setState({
+              aiData: home.echartData,
+            })
+          })
+      },
+    )
+  }
+
   changeYear = val => {
     const { home } = this.props
     const { filterValue1, searchType, filterStoreValue } = this.state
@@ -234,6 +274,22 @@ class Home extends React.Component {
         this.setState({
           echartData: home.echartData,
           filterLabel2: `${moment(val).format('YYYY')}`,
+        })
+      })
+  }
+  aichangeYear = val => {
+    const { home } = this.props
+    const { aifilterValue1, aifilterStoreValue } = this.state
+    home
+      .getAllFaceVisit(
+        aifilterValue1,
+        moment(val).format('YYYY'),
+        aifilterStoreValue,
+      )
+      .then(() => {
+        this.setState({
+          aiData: home.aiData,
+          aifilterLabel2: `${moment(val).format('YYYY')}`,
         })
       })
   }
@@ -256,6 +312,23 @@ class Home extends React.Component {
       })
   }
 
+  aichangeMonth = val => {
+    const { home } = this.props
+    const { aifilterValue1, aifilterStoreValue } = this.state
+    home
+      .getAllFaceVisit(
+        aifilterValue1,
+        moment(val).format('YYYY-MM'),
+        aifilterStoreValue,
+      )
+      .then(() => {
+        this.setState({
+          aiData: home.aiData,
+          aifilterLabel2: moment(val).format('YYYY-MM'),
+        })
+      })
+  }
+
   changeDay = val => {
     const { home } = this.props
     const { filterValue1, searchType, filterStoreValue } = this.state
@@ -274,6 +347,23 @@ class Home extends React.Component {
       })
   }
 
+  aichangeDay = val => {
+    const { home } = this.props
+    const { aifilterValue1, aifilterStoreValue } = this.state
+    home
+      .getAllFaceVisit(
+        aifilterValue1,
+        moment(val).format('YYYY-MM-DD'),
+        aifilterStoreValue,
+      )
+      .then(() => {
+        this.setState({
+          aiData: home.aiData,
+          aifilterLabel2: moment(val).format('YYYY-MM-DD'),
+        })
+      })
+  }
+
   changeFilterStore = val => {
     const { home } = this.props
     const { filterValue1, filterLabel2, searchType } = this.state
@@ -287,6 +377,19 @@ class Home extends React.Component {
           filterStoreValue: val[0],
         })
       })
+  }
+
+  aichangeFilterStore = val => {
+    const { home } = this.props
+    const { aifilterValue1, aifilterLabel2 } = this.state
+    const result = home.storeList.find(item => item.value === val[0])
+    home.getAllFaceVisit(aifilterValue1, aifilterLabel2, val[0]).then(() => {
+      this.setState({
+        aiData: home.aiData,
+        aifilterStoreLabel: result.label,
+        aifilterStoreValue: val[0],
+      })
+    })
   }
 
   changeEchartType = (num, type) => {
@@ -359,6 +462,11 @@ class Home extends React.Component {
       cur,
       filterStoreLabel,
       filterStoreValue,
+      aifilterValue1,
+      aifilterLabel1,
+      aifilterLabel2,
+      aifilterStoreLabel,
+      aifilterStoreValue,
     } = this.state
     return (
       <div style={{ overflow: 'hidden' }}>
@@ -412,10 +520,10 @@ class Home extends React.Component {
               <Flex.Item>
                 <FlexBox
                   className={cur === '5' ? 'cur' : ''}
-                  // onClick={() => this.changeEchartType('6', 'all_visit')}
+                  onClick={() => this.changeEchartType('5', 'all_visit_num')}
                 >
                   <div>访问次数</div>
-                  <div>{home.indexData.total_visit || 0}</div>
+                  <div>{home.indexData.total_visit_num || 0}</div>
                 </FlexBox>
               </Flex.Item>
             </Flex>
@@ -518,12 +626,12 @@ class Home extends React.Component {
             <FilterBox style={{ marginRight: 5 }}>
               <Picker
                 data={storeList}
-                value={[filterStoreValue]}
+                value={[aifilterStoreValue]}
                 cols={1}
-                onChange={this.changeFilterStore}
+                onChange={this.aichangeFilterStore}
               >
                 <div>
-                  <span>{filterStoreLabel}</span>
+                  <span>{aifilterStoreLabel}</span>
                   <i
                     className="iconfont"
                     style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
@@ -536,12 +644,12 @@ class Home extends React.Component {
             <FilterBox style={{ marginRight: 5 }}>
               <Picker
                 data={FilterData1}
-                value={[filterValue1]}
+                value={[aifilterValue1]}
                 cols={1}
-                onChange={this.changeFilter1}
+                onChange={this.aichangeFilter1}
               >
                 <div>
-                  <span>{filterLabel1}</span>
+                  <span>{aifilterLabel1}</span>
                   <i
                     className="iconfont"
                     style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
@@ -551,11 +659,11 @@ class Home extends React.Component {
                 </div>
               </Picker>
             </FilterBox>
-            {filterValue1 === '3' ? (
+            {aifilterValue1 === '3' ? (
               <FilterBox style={{ marginRight: 5 }}>
-                <DatePicker mode="year" onChange={this.changeYear}>
+                <DatePicker mode="year" onChange={this.aichangeYear}>
                   <div>
-                    <span>{filterLabel2}</span>
+                    <span>{aifilterLabel2}</span>
                     <i
                       className="iconfont"
                       style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
@@ -566,11 +674,11 @@ class Home extends React.Component {
                 </DatePicker>
               </FilterBox>
             ) : null}
-            {filterValue1 === '2' ? (
+            {aifilterValue1 === '2' ? (
               <FilterBox style={{ marginRight: 5 }}>
-                <DatePicker mode="month" onChange={this.changeMonth}>
+                <DatePicker mode="month" onChange={this.aichangeMonth}>
                   <div>
-                    <span>{filterLabel2}</span>
+                    <span>{aifilterLabel2}</span>
                     <i
                       className="iconfont"
                       style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
@@ -581,11 +689,11 @@ class Home extends React.Component {
                 </DatePicker>
               </FilterBox>
             ) : null}
-            {filterValue1 === '1' ? (
+            {aifilterValue1 === '1' ? (
               <FilterBox style={{ marginRight: 5 }}>
-                <DatePicker mode="date" onChange={this.changeDay}>
+                <DatePicker mode="date" onChange={this.aichangeDay}>
                   <div>
-                    <span>{filterLabel2}</span>
+                    <span>{aifilterLabel2}</span>
                     <i
                       className="iconfont"
                       style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
@@ -596,6 +704,7 @@ class Home extends React.Component {
                 </DatePicker>
               </FilterBox>
             ) : null}
+            <WhiteSpace />
             <ReactEcharts
               option={this.getOption2()}
               style={{ height: 250, background: '#fff' }}

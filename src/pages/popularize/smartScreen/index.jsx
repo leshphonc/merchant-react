@@ -52,7 +52,7 @@ const seasones = [
     },
   ],
 ]
-@inject('smartScreen')
+@inject('smartScreen', 'home')
 @observer
 class SmartScreen extends React.Component {
   state = {
@@ -62,27 +62,20 @@ class SmartScreen extends React.Component {
     filterValue1: '1',
     filterLabel2: '2019-08-07',
     filterValue2: '',
-    echartData: [],
-    cur: '1',
-    searchType: 'all_money',
+    aiData: [],
   }
 
   componentDidMount() {
-    const { smartScreen } = this.props
-    const {
-      filterValue1,
-      filterLabel2,
-      searchType,
-      filterStoreValue,
-    } = this.state
+    const { smartScreen, home } = this.props
+    const { filterValue1, filterLabel2, filterStoreValue } = this.state
     smartScreen.fetchIMax()
     smartScreen.fetchUserCome()
     smartScreen.fetchStoreMer()
-    smartScreen
-      .fetchEchartData(filterValue1, filterLabel2, searchType, filterStoreValue)
+    home
+      .getAllFaceVisit(filterValue1, filterLabel2, filterStoreValue)
       .then(() => {
         this.setState({
-          echartData: smartScreen.echartData,
+          aiData: home.aiData,
         })
       })
   }
@@ -90,15 +83,15 @@ class SmartScreen extends React.Component {
   getOption = () => {
     let xData = []
     let custom = false
-    const { filterValue1, echartData, seriesLabel } = this.state
+    const { filterValue1, aiData, seriesLabel2 } = this.state
     if (filterValue1 === '1') {
-      xData = echartData.map((item, index) => `${(index + 1) * 2}点`)
+      xData = aiData.map((item, index) => `${(index + 1) * 2}点`)
       custom = true
     } else if (filterValue1 === '2') {
-      xData = echartData.map((item, index) => `${index + 1}号`)
+      xData = aiData.map((item, index) => `${index + 1}号`)
       custom = false
     } else if (filterValue1 === '3') {
-      xData = echartData.map((item, index) => `${index + 1}月`)
+      xData = aiData.map((item, index) => `${index + 1}月`)
       custom = false
     }
     let format = null
@@ -128,7 +121,7 @@ class SmartScreen extends React.Component {
         formatter: format,
       },
       grid: {
-        top: 40,
+        top: 10,
         bottom: 30,
         right: 20,
         left: '13%',
@@ -145,14 +138,14 @@ class SmartScreen extends React.Component {
       yAxis: [
         {
           type: 'value',
-          name: '进店人数',
+          name: '元',
         },
       ],
       series: [
         {
-          name: seriesLabel,
-          type: 'line',
-          data: echartData,
+          name: seriesLabel2,
+          type: 'bar',
+          data: aiData,
         },
       ],
     }
@@ -165,11 +158,11 @@ class SmartScreen extends React.Component {
         filterValue1: result.value,
         filterLabel1: result.label,
         filterLabel2: '二级筛选',
-        echartData: [],
+        aiData: [],
       },
       () => {
-        const { cur, searchType } = this.state
-        this.changeEchartType(cur, searchType)
+        // const { cur, searchType } = this.state
+        // this.changeEchartType(cur, searchType)
       },
     )
   }
@@ -179,82 +172,54 @@ class SmartScreen extends React.Component {
   }
 
   changeYear = val => {
-    const { smartScreen } = this.props
-    const { filterValue1, searchType, filterStoreValue } = this.state
-    smartScreen
-      .fetchEchartData(
+    const { home } = this.props
+    const { filterValue1, filterStoreValue } = this.state
+    home
+      .getAllFaceVisit(
         filterValue1,
         moment(val).format('YYYY'),
-        searchType,
         filterStoreValue,
       )
       .then(() => {
         this.setState({
-          echartData: smartScreen.echartData,
+          aiData: home.aiData,
           filterLabel2: `${moment(val).format('YYYY')}`,
         })
       })
   }
 
   changeMonth = val => {
-    const { smartScreen } = this.props
-    const { filterValue1, searchType, filterStoreValue } = this.state
-    smartScreen
-      .fetchEchartData(
+    const { home } = this.props
+    const { filterValue1, filterStoreValue } = this.state
+    home
+      .getAllFaceVisit(
         filterValue1,
         moment(val).format('YYYY-MM'),
-        searchType,
         filterStoreValue,
       )
       .then(() => {
         this.setState({
-          echartData: smartScreen.echartData,
+          aiData: home.aiData,
           filterLabel2: moment(val).format('YYYY-MM'),
         })
       })
   }
 
   changeDay = val => {
-    const { smartScreen } = this.props
-    const { filterValue1, searchType, filterStoreValue } = this.state
-    smartScreen
-      .fetchEchartData(
+    const { home } = this.props
+    const { filterValue1, filterStoreValue } = this.state
+    home
+      .getAllFaceVisit(
         filterValue1,
         moment(val).format('YYYY-MM-DD'),
-        searchType,
         filterStoreValue,
       )
       .then(() => {
         this.setState({
-          echartData: smartScreen.echartData,
+          aiData: home.aiData,
           filterLabel2: moment(val).format('YYYY-MM-DD'),
         })
       })
-  }
-
-  changeEchartType = (num, type) => {
-    const { smartScreen } = this.props
-    const { filterValue1, filterLabel2, filterStoreValue } = this.state
-    smartScreen
-      .fetchEchartData(filterValue1, filterLabel2, type, filterStoreValue)
-      .then(() => {
-        this.setState({
-          echartData: smartScreen.echartData,
-        })
-      })
-    let label = ''
-    switch (num) {
-      case '1':
-        label = '人数'
-        break
-      default:
-        label = '人数'
-    }
-    this.setState({
-      cur: num,
-      searchType: type,
-      seriesLabel: label,
-    })
   }
 
   render() {
