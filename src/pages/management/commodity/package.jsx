@@ -85,18 +85,6 @@ class Package extends React.Component {
                   <Flex.Item>
                     <Button
                       size="small"
-                      type="warning"
-                      onClick={() => this.deletePackage(item.meal_id)}
-                    >
-                      删除
-                    </Button>
-                  </Flex.Item>
-                </Flex>
-                <WhiteSpace />
-                <Flex>
-                  <Flex.Item>
-                    <Button
-                      size="small"
                       type="primary"
                       onClick={() =>
                         history.push(
@@ -105,6 +93,15 @@ class Package extends React.Component {
                       }
                     >
                       销售记录
+                    </Button>
+                  </Flex.Item>
+                  <Flex.Item>
+                    <Button
+                      size="small"
+                      type="warning"
+                      onClick={() => this.deletePackage(item.meal_id)}
+                    >
+                      删除
                     </Button>
                   </Flex.Item>
                 </Flex>

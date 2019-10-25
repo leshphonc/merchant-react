@@ -4,7 +4,13 @@ import { Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  SearchBar, List, WhiteSpace, WingBlank, PullToRefresh, Flex, Button,
+  SearchBar,
+  List,
+  WhiteSpace,
+  WingBlank,
+  PullToRefresh,
+  Flex,
+  Button,
 } from 'antd-mobile'
 import { ListItem, ItemTop, TopContent } from '@/styled'
 // import CardList from './components/Reserve'
@@ -29,7 +35,8 @@ class Reserve extends React.Component {
     const { reserveList } = commodity
     const { height } = this.state
     /* eslint react/no-find-dom-node: 0 */
-    const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
+    const hei =
+      height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
     this.setState({
       height: hei,
     })
@@ -49,13 +56,20 @@ class Reserve extends React.Component {
                 {item.appoint_name}
               </div>
               <WhiteSpace />
-              <div className="top-features" style={{ position: 'initial', fontSize: '14px' }}>
+              <div
+                className="top-features"
+                style={{ position: 'initial', fontSize: '14px' }}
+              >
                 定金状态: {item.payment_status === '1' ? '收定金' : '不收定金'}
               </div>
               {item.payment_status === '1' ? (
                 <div
                   className="top-features"
-                  style={{ position: 'initial', fontSize: '14px', color: '#fb6a41' }}
+                  style={{
+                    position: 'initial',
+                    fontSize: '14px',
+                    color: '#fb6a41',
+                  }}
                 >
                   定金: {item.payment_money}元
                 </div>
@@ -142,7 +156,10 @@ class Reserve extends React.Component {
               <Button
                 type="primary"
                 size="small"
-                onClick={() => history.push(`/management/commodity/reservePanel/编辑/${item.appoint_id}`)
+                onClick={() =>
+                  history.push(
+                    `/management/commodity/reservePanel/编辑/${item.appoint_id}`,
+                  )
                 }
               >
                 编辑
@@ -152,22 +169,28 @@ class Reserve extends React.Component {
               <Button
                 type="primary"
                 size="small"
-                onClick={() => history.push(`/management/commodity/AppointDiscounts/edit/${item.appoint_id}/`)
+                onClick={() =>
+                  history.push(
+                    `/management/commodity/AppointDiscounts/edit/${item.appoint_id}/`,
+                  )
                 }
               >
                 优惠
               </Button>
             </Flex.Item>
-            <Flex.Item>
+            {/* <Flex.Item>
               <Button
                 type="primary"
                 size="small"
-                onClick={() => history.push(`/management/commodity/editSpread/appoint_id/${item.appoint_id}/`)
+                onClick={() =>
+                  history.push(
+                    `/management/commodity/editSpread/appoint_id/${item.appoint_id}/`,
+                  )
                 }
               >
                 佣金
               </Button>
-            </Flex.Item>
+            </Flex.Item> */}
           </Flex>
         </ListItem>
         <WhiteSpace size="sm" />

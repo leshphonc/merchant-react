@@ -4,7 +4,13 @@ import NavBar from '@/common/NavBar'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  SearchBar, List, WhiteSpace, WingBlank, PullToRefresh, Flex, Button,
+  SearchBar,
+  List,
+  WhiteSpace,
+  WingBlank,
+  PullToRefresh,
+  Flex,
+  Button,
 } from 'antd-mobile'
 import { ListItem, ItemTop, TopContent } from '@/styled'
 // import { DeliverType } from '@/config/constant'
@@ -28,7 +34,8 @@ class Group extends React.Component {
     const { groupList } = commodity
     const { height } = this.state
     /* eslint react/no-find-dom-node: 0 */
-    const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
+    const hei =
+      height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
     this.setState({
       height: hei,
     })
@@ -61,7 +68,9 @@ class Group extends React.Component {
         <React.Fragment key={item.group_id}>
           <ListItem>
             <ItemTop>
-              {item.list_pic ? <img src={item.list_pic} alt="商品图片" /> : null}
+              {item.list_pic ? (
+                <img src={item.list_pic} alt="商品图片" />
+              ) : null}
               <TopContent>
                 <div className="top-title" style={{ fontSize: '15px' }}>
                   {item.s_name}
@@ -98,7 +107,9 @@ class Group extends React.Component {
                     width: '100%',
                   }}
                 >
-                  <span style={styleSpan.spaner}>库存：{item.count_num - item.sale_count}</span>
+                  <span style={styleSpan.spaner}>
+                    库存：{item.count_num - item.sale_count}
+                  </span>
                   <span style={styleSpan.spaner}>销量: {item.sale_count}</span>
                 </div>
                 <div
@@ -123,7 +134,10 @@ class Group extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(`/management/commodity/groupPanel/编辑/${item.group_id}`)
+                  onClick={() =>
+                    history.push(
+                      `/management/commodity/groupPanel/编辑/${item.group_id}`,
+                    )
                   }
                 >
                   编辑
@@ -133,13 +147,16 @@ class Group extends React.Component {
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(`/management/commodity/GroupDiscounts/团购/${item.group_id}`)
+                  onClick={() =>
+                    history.push(
+                      `/management/commodity/GroupDiscounts/团购/${item.group_id}`,
+                    )
                   }
                 >
                   优惠
                 </Button>
               </Flex.Item>
-              <Flex.Item>
+              {/* <Flex.Item>
                 <Button
                   type="primary"
                   size="small"
@@ -148,12 +165,14 @@ class Group extends React.Component {
                 >
                   佣金
                 </Button>
-              </Flex.Item>
+              </Flex.Item> */}
               <Flex.Item>
                 <Button
                   type="primary"
                   size="small"
-                  onClick={() => history.push(`/order/groupList/${item.group_id}`)}
+                  onClick={() =>
+                    history.push(`/order/groupList/${item.group_id}`)
+                  }
                 >
                   订单列表
                 </Button>

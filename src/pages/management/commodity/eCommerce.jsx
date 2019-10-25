@@ -93,15 +93,6 @@ class ECommerce extends React.Component {
             <Flex>
               <Flex.Item>
                 <Button
-                  type="warning"
-                  size="small"
-                  onClick={() => this.detele(item.goods_id, item.store_id)}
-                >
-                  删除
-                </Button>
-              </Flex.Item>
-              <Flex.Item>
-                <Button
                   type="primary"
                   size="small"
                   onClick={() =>
@@ -126,7 +117,7 @@ class ECommerce extends React.Component {
                   优惠
                 </Button>
               </Flex.Item>
-              <Flex.Item>
+              {/* <Flex.Item>
                 <Button
                   type="primary"
                   size="small"
@@ -137,6 +128,15 @@ class ECommerce extends React.Component {
                   }
                 >
                   佣金
+                </Button>
+              </Flex.Item> */}
+              <Flex.Item>
+                <Button
+                  type="warning"
+                  size="small"
+                  onClick={() => this.detele(item.goods_id, item.store_id)}
+                >
+                  删除
                 </Button>
               </Flex.Item>
             </Flex>

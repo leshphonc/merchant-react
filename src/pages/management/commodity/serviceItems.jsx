@@ -124,20 +124,6 @@ class ServiceItems extends React.Component {
                     <Flex.Item>
                       <Button
                         size="small"
-                        type="warning"
-                        onClick={() =>
-                          this.deleteSingleService(item.appoint_id)
-                        }
-                      >
-                        删除
-                      </Button>
-                    </Flex.Item>
-                  </Flex>
-                  <WhiteSpace />
-                  <Flex>
-                    <Flex.Item>
-                      <Button
-                        size="small"
                         type="primary"
                         onClick={() =>
                           history.push(
@@ -146,6 +132,17 @@ class ServiceItems extends React.Component {
                         }
                       >
                         销售记录
+                      </Button>
+                    </Flex.Item>
+                    <Flex.Item>
+                      <Button
+                        size="small"
+                        type="warning"
+                        onClick={() =>
+                          this.deleteSingleService(item.appoint_id)
+                        }
+                      >
+                        删除
                       </Button>
                     </Flex.Item>
                   </Flex>

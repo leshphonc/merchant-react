@@ -210,7 +210,7 @@ class StoreFrontCommodityList extends React.Component {
     return (
       <>
         <NavBar
-          title="服务列表"
+          title="服务项目列表"
           goBack
           right={
             <Button
