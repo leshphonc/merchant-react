@@ -10,7 +10,10 @@ class LoginSotre {
     const response = await services.login(account, password)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       localStorage.setItem('ticket', response.data.result.ticket)
-      localStorage.setItem('merchant_user', JSON.stringify(response.data.result.user))
+      localStorage.setItem(
+        'merchant_user',
+        JSON.stringify(response.data.result.user),
+      )
       sessionStorage.setItem('currentTab', 'home')
       await this.wxConfigFun()
       await this.fetchAliasList()
@@ -68,7 +71,10 @@ class LoginSotre {
     const response = await services.login(account, password)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       localStorage.removeItem('ticket', response.data.result.ticket)
-      localStorage.removeItem('merchant_user', JSON.stringify(response.data.result.user))
+      localStorage.removeItem(
+        'merchant_user',
+        JSON.stringify(response.data.result.user),
+      )
     }
   }
 

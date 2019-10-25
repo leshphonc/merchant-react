@@ -20,10 +20,10 @@ class ExpensesRecord extends React.Component {
   }
 
   componentDidMount() {
-    const { member, location } = this.props
+    const { member, match } = this.props
     const { expensesRecordList } = member
     const { height } = this.state
-    if (!expensesRecordList.length) member.fetchExpensesRecordList(location.state.id)
+    if (!expensesRecordList.length) member.fetchExpensesRecordList(match.params.id)
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
@@ -57,7 +57,9 @@ class ExpensesRecord extends React.Component {
             </Flex>
           </Card.Body>
           <WhiteSpace />
-          <Card.Footer extra={moment(item.time * 1000).format('YYYY-MM-DD HH:mm:ss')} />
+          <Card.Footer
+            extra={moment(item.time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+          />
         </Card>
         <WhiteSpace />
       </React.Fragment>
@@ -65,9 +67,9 @@ class ExpensesRecord extends React.Component {
   }
 
   loadMore = async () => {
-    const { member, location } = this.props
+    const { member, match } = this.props
     this.setState({ refreshing: true })
-    await member.fetchExpensesRecordList(location.state.id)
+    await member.fetchExpensesRecordList(match.params.id)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)

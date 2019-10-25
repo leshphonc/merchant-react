@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 import { WingBlank, WhiteSpace, Icon, Flex } from 'antd-mobile'
+import moment from 'moment'
 import { ColorCard, CardLeft } from './styled'
 
 @inject('member')
@@ -10,7 +11,12 @@ import { ColorCard, CardLeft } from './styled'
 class Member extends React.Component {
   componentDidMount() {
     const { member } = this.props
-    member.fetchFansTotal()
+    member.fetchFansTotal(
+      moment(new Date(new Date() - 1000 * 24 * 3600 * 1000)).format(
+        'YYYY-MM-DD',
+      ),
+      moment(new Date()).format('YYYY-MM-DD'),
+    )
   }
 
   render() {
@@ -38,19 +44,37 @@ class Member extends React.Component {
             </ColorCard>
           </Link>
           <WhiteSpace />
-          <Link to="/management/member/publicMember">
+          <Link to="/management/member/saleMember">
             <ColorCard style={{ background: 'rgb(204, 222, 124)' }}>
               <CardLeft>到店用户</CardLeft>
               <Flex>
+                <span
+                  style={{
+                    verticalAlign: 'super',
+                    color: '#fff',
+                    fontSize: '16px',
+                  }}
+                >
+                  {member.fansTotal.saleTotal}
+                </span>
                 <Icon type="right" color="#fff" />
               </Flex>
             </ColorCard>
           </Link>
           <WhiteSpace />
-          <Link to="/management/member/publicMember">
+          <Link to="/management/member/saleMember">
             <ColorCard style={{ background: 'rgb(222, 190, 124)' }}>
               <CardLeft>消费用户</CardLeft>
               <Flex>
+                <span
+                  style={{
+                    verticalAlign: 'super',
+                    color: '#fff',
+                    fontSize: '16px',
+                  }}
+                >
+                  {member.fansTotal.saleTotal}
+                </span>
                 <Icon type="right" color="#fff" />
               </Flex>
             </ColorCard>
@@ -59,7 +83,18 @@ class Member extends React.Component {
           <Link to="/management/member/merchantMember">
             <ColorCard style={{ background: 'rgb(255, 174, 108)' }}>
               <CardLeft>绑定粉丝</CardLeft>
-              <Icon type="right" color="#fff" />
+              <Flex>
+                <span
+                  style={{
+                    verticalAlign: 'super',
+                    color: '#fff',
+                    fontSize: '16px',
+                  }}
+                >
+                  {member.fansTotal.merTotal}
+                </span>
+                <Icon type="right" color="#fff" />
+              </Flex>
             </ColorCard>
           </Link>
           <WhiteSpace />

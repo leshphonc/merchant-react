@@ -64,7 +64,31 @@ class ShopManagerWorkRecord extends React.Component {
   curOnChange = e => {
     this.setState({
       cur: e.nativeEvent.selectedSegmentIndex,
+      storeId: 0,
+      beginTime: moment(new Date(new Date() - 30 * 24 * 3600 * 1000)).format(
+        'YYYY-MM-DD',
+      ),
+      // eslint-disable-next-line react/no-unused-state
+      endTime: moment(new Date()).format('YYYY-MM-DD'),
+      storeName: '全部店鋪',
     })
+    const { match, shopManager } = this.props
+    const { beginTime, endTime, storeId } = this.state
+    if (e.nativeEvent.selectedSegmentIndex === 0) {
+      shopManager.resetFetchGetStaffDuty(
+        match.params.staffId,
+        storeId,
+        beginTime,
+        endTime,
+      )
+    } else if (e.nativeEvent.selectedSegmentIndex === 2) {
+      shopManager.resetFetchGetStaffSale(
+        match.params.staffId,
+        storeId,
+        beginTime,
+        endTime,
+      )
+    }
   }
 
   mapList = () => {
@@ -119,9 +143,14 @@ class ShopManagerWorkRecord extends React.Component {
     const { match, shopManager } = this.props
     const { cur, beginTime, endTime, storeId } = this.state
     if (cur === 0) {
-      // console.log(match.params.staffI)
-      // debugger
       shopManager.fetchGetStaffDuty(
+        match.params.staffId,
+        storeId,
+        beginTime,
+        endTime,
+      )
+    } else if (cur === 2) {
+      shopManager.fetchGetStaffSale(
         match.params.staffId,
         storeId,
         beginTime,
@@ -133,48 +162,123 @@ class ShopManagerWorkRecord extends React.Component {
       this.setState({ refreshing: false })
     }, 100)
   }
+
   mapSales = () => {
-    return (
-      <Card>
-        <Card.Header
-          thumb={require('@/assets/image/avatar.jpeg')}
-          title={
-            <Flex direction="column">
-              <Flex.Item>名称</Flex.Item>
+    const { shopManager } = this.props
+    const { staffSaleList } = shopManager
+    return staffSaleList.map(item => (
+      <React.Fragment key={item.id}>
+        <div className="staffList">
+          <Card>
+            <Card.Header
+              thumb={item.pic}
+              title={
+                <Flex direction="column" style={{ marginLeft: '8px' }}>
+                  <Flex.Item style={{ display: 'block', width: '100%' }}>
+                    {item.goods_name}
+                  </Flex.Item>
+                  <WhiteSpace />
+                  <Flex.Item
+                    style={{ color: '#666', fontSize: 13, marginBottom: '4px' }}
+                  >
+                    订单编号：{item.order_id}
+                  </Flex.Item>
+                  <Flex.Item
+                    style={{ color: '#666', fontSize: 13, marginBottom: '4px' }}
+                  >
+                    下单时间：{' '}
+                    {moment(item.addtime * 1000).format('YYYY-MM-DD H:mm:ss')}
+                  </Flex.Item>
+                  <Flex.Item
+                    style={{ color: '#666', fontSize: 13, marginBottom: '4px' }}
+                  >
+                    所属店铺：{item.store_name}
+                  </Flex.Item>
+                </Flex>
+              }
+            />
+            <Card.Body>
+              <Flex>
+                <Flex.Item style={{ textAlign: 'left' }}>
+                  消费用户：{item.user_name}}
+                </Flex.Item>
+                <Flex.Item style={{ textAlign: 'center' }}>
+                  数量:{item.num}
+                </Flex.Item>
+                <Flex.Item style={{ textAlign: 'right' }}>
+                  金额：{item.order_money}
+                </Flex.Item>
+              </Flex>
               <WhiteSpace />
-              <Flex.Item style={{ color: '#666', fontSize: 14 }}>
-                订单编号：1202130045912
-              </Flex.Item>
-            </Flex>
-          }
-        />
-        <Card.Body>
-          <Flex>
-            <Flex.Item>消费用户：测试</Flex.Item>
-            <Flex.Item>消费时间：2019-02-01</Flex.Item>
-          </Flex>
+              <Flex>
+                <Flex.Item>销售报酬：{item.first_spread_by_take}</Flex.Item>
+                <Flex.Item>
+                  状态：
+                  {item.settlement_time === 0 ? (
+                    <span style={{ color: 'red' }}>结算中</span>
+                  ) : (
+                    <span style={{ color: 'blue' }}>已结算</span>
+                  )}
+                </Flex.Item>
+              </Flex>
+              <WhiteSpace />
+            </Card.Body>
+          </Card>
           <WhiteSpace />
-          <Flex>
-            <Flex.Item>数量：20</Flex.Item>
-            <Flex.Item>金额：2000</Flex.Item>
-          </Flex>
-          <WhiteSpace />
-          <Flex>
-            <Flex.Item>销售报酬：100</Flex.Item>
-            <Flex.Item>结算时间：2019-02-02</Flex.Item>
-          </Flex>
-          <WhiteSpace />
-          <Flex>
-            <Flex.Item>所在店铺：1号店铺</Flex.Item>
-          </Flex>
-        </Card.Body>
-      </Card>
-    )
+        </div>
+      </React.Fragment>
+    ))
   }
+  // mapSales = () => {
+  //   const { shopManager } = this.props
+  //   const { staffSaleList } = shopManager
+  //   console.log(staffSaleList)
+  //    staffSaleList.map((item,index) => {
+  //     console.log(index)
+  //   })
+  // retrun staffSaleList.map((item,index) => (
+  //   <React.Fragment key={index}>
+  //     <Card>
+  //     <Card.Header
+  //       thumb={require('@/assets/image/avatar.jpeg')}
+  //       title={
+  //         <Flex direction="column">
+  //           <Flex.Item>{item.goods_name}</Flex.Item>
+  //           <WhiteSpace />
+  //           <Flex.Item style={{ color: '#666', fontSize: 14 }}>
+  //             订单编号：1202130045912
+  //           </Flex.Item>
+  //         </Flex>
+  //       }
+  //     />
+  //     <Card.Body>
+  //       <Flex>
+  //         <Flex.Item>消费用户：测试</Flex.Item>
+  //         <Flex.Item>消费时间：2019-02-01</Flex.Item>
+  //       </Flex>
+  //       <WhiteSpace />
+  //       <Flex>
+  //         <Flex.Item>数量：20</Flex.Item>
+  //         <Flex.Item>金额：2000</Flex.Item>
+  //       </Flex>
+  //       <WhiteSpace />
+  //       <Flex>
+  //         <Flex.Item>销售报酬：100</Flex.Item>
+  //         <Flex.Item>结算时间：2019-02-02</Flex.Item>
+  //       </Flex>
+  //       <WhiteSpace />
+  //       <Flex>
+  //         <Flex.Item>所在店铺：1号店铺</Flex.Item>
+  //       </Flex>
+  //     </Card.Body>
+  //   </Card>
+  //   </React.Fragment>
+  // ))
+  // }
 
   changeFilterStore = val => {
     const { shopManager, match } = this.props
-    const { storeList, beginTime, endTime } = this.state
+    const { storeList, beginTime, endTime, cur } = this.state
     storeList.forEach(item => {
       if (item.value === val[0]) {
         this.setState({
@@ -185,12 +289,21 @@ class ShopManagerWorkRecord extends React.Component {
     this.setState({
       storeId: val[0],
     })
-    shopManager.resetFetchGetStaffDuty(
-      match.params.staffId,
-      val[0],
-      beginTime,
-      endTime,
-    )
+    if (cur === 0) {
+      shopManager.resetFetchGetStaffDuty(
+        match.params.staffId,
+        val[0],
+        beginTime,
+        endTime,
+      )
+    } else if (cur === 2) {
+      shopManager.resetFetchGetStaffSale(
+        match.params.staffId,
+        val[0],
+        beginTime,
+        endTime,
+      )
+    }
   }
 
   setEndTime = data => {
@@ -224,42 +337,43 @@ class ShopManagerWorkRecord extends React.Component {
   }
 
   mapServices = () => {
-    return (
-      <Card>
-        <Card.Header
-          thumb={require('@/assets/image/avatar.jpeg')}
-          title={
-            <Flex direction="column">
-              <Flex.Item>名称</Flex.Item>
-              <WhiteSpace />
-              <Flex.Item style={{ color: '#666', fontSize: 14 }}>
-                订单编号：1202130045912
-              </Flex.Item>
-            </Flex>
-          }
-        />
-        <Card.Body>
-          <Flex>
-            <Flex.Item>消费用户：测试</Flex.Item>
-            <Flex.Item>消费时间：2019-02-01</Flex.Item>
-          </Flex>
-          <WhiteSpace />
-          <Flex>
-            <Flex.Item>数量：20</Flex.Item>
-            <Flex.Item>金额：2000</Flex.Item>
-          </Flex>
-          <WhiteSpace />
-          <Flex>
-            <Flex.Item>服务报酬：100</Flex.Item>
-            <Flex.Item>结算时间：2019-02-02</Flex.Item>
-          </Flex>
-          <WhiteSpace />
-          <Flex>
-            <Flex.Item>所在店铺：1号店铺</Flex.Item>
-          </Flex>
-        </Card.Body>
-      </Card>
-    )
+    return <div style={{ textAlign: 'center' }}>暂无记录</div>
+    // return (
+    // <Card>
+    //   <Card.Header
+    //     thumb={require('@/assets/image/avatar.jpeg')}
+    //     title={
+    //       <Flex direction="column">
+    //         <Flex.Item>名称</Flex.Item>
+    //         <WhiteSpace />
+    //         <Flex.Item style={{ color: '#666', fontSize: 14 }}>
+    //           订单编号：1202130045912
+    //         </Flex.Item>
+    //       </Flex>
+    //     }
+    //   />
+    //   <Card.Body>
+    //     <Flex>
+    //       <Flex.Item>消费用户：测试</Flex.Item>
+    //       <Flex.Item>消费时间：2019-02-01</Flex.Item>
+    //     </Flex>
+    //     <WhiteSpace />
+    //     <Flex>
+    //       <Flex.Item>数量：20</Flex.Item>
+    //       <Flex.Item>消费金额：2000</Flex.Item>
+    //     </Flex>
+    //     <WhiteSpace />
+    //     <Flex>
+    //       <Flex.Item>服务报酬：100</Flex.Item>
+    //       <Flex.Item>结算时间：2019-02-02</Flex.Item>
+    //     </Flex>
+    //     <WhiteSpace />
+    //     <Flex>
+    //       <Flex.Item>所在店铺：1号店铺</Flex.Item>
+    //     </Flex>
+    //   </Card.Body>
+    // </Card>
+    // )
   }
 
   render() {

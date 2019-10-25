@@ -12,10 +12,12 @@ import StoreFront from '@/pages/management/storeFront'
 import Member from '@/pages/management/member'
 import MiniProgram from '@/pages/management/member/miniProgram'
 import PublicMember from '@/pages/management/member/publicMember'
+import SaleMember from '@/pages/management/member/saleMember'
 import CardGroup from '@/pages/management/member/cardGroup'
 import Coupon from '@/pages/management/member/coupon'
 import MerchantMember from '@/pages/management/member/merchantMember'
 import Commodity from '@/pages/management/commodity'
+import UserSaleList from '@/pages/management/member/userSaleList/index'
 import ShopManager from '@/pages/management/shopManager'
 import SmartScreen from '@/pages/popularize/smartScreen'
 import Distribution from '@/pages/popularize/distribution'
@@ -55,12 +57,18 @@ export default () => (
           path="/management/member/publicMember"
           component={PublicMember}
         />
-          <Route
+        <Route
           path="/management/member/merchantMember"
           component={MerchantMember}
         />
+        <Route path="/management/member/saleMember" component={SaleMember} />
         <Route path="/management/member/cardGroup" component={CardGroup} />
         <Route path="/management/member/coupon" component={Coupon} />
+        <Route
+      path="/management/member/userSaleList/:uid"
+      exact
+      component={UserSaleList}
+    />
         <Route path="/management/commodity" component={Commodity} />
         <Route path="/management/shopManager" component={ShopManager} />
         {/* 基本信息 -> setting */}

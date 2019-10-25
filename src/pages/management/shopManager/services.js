@@ -180,6 +180,25 @@ export const fetchGetStaffDuty = (
     },
   })
 
+// 店员销售记录
+export const fetchGetStaffSale = (
+  staffId,
+  storeId,
+  beginTime,
+  endTime,
+  page,
+  // size,
+) =>
+  axios.post('/appapi.php?c=Merchantapp&a=getStoreSellLog', {
+    staff_id: staffId,
+    store_id: storeId,
+    begin_time: beginTime,
+    end_time: endTime,
+    page,
+    // size,
+    ticket: localStorage.getItem('ticket'),
+  })
+
 // 商铺列表
 export const fetchStoreList = () =>
   axios.get('/appapi.php?c=Merchantapp&a=store_lists', {

@@ -1,7 +1,5 @@
 import React from 'react'
-import {
-  List, InputItem, Button, Picker,
-} from 'antd-mobile'
+import { List, InputItem, Button, Picker } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import NavBar from '@/common/NavBar'
 import moment from 'moment'
@@ -33,9 +31,9 @@ class ModifyGroup extends React.Component {
   }
 
   componentDidMount() {
-    const { member, location } = this.props
+    const { member, match } = this.props
     member.fetchCardGroupUserInfoSelect().then(() => {
-      member.fetchCardGroupUserInfo(location.state.id).then(() => {
+      member.fetchCardGroupUserInfo(match.params.id).then(() => {
         this.setState({
           cardNo: member.cardGroupUserInfo.physical_id,
           status: [member.cardGroupUserInfo.status],
@@ -46,12 +44,18 @@ class ModifyGroup extends React.Component {
   }
 
   submit = async () => {
-    const { location, history, member } = this.props
+    const { match, history, member } = this.props
     const {
-      cardNo, status, group, balance, balanceNum, integral, integralNum,
+      cardNo,
+      status,
+      group,
+      balance,
+      balanceNum,
+      integral,
+      integralNum,
     } = this.state
     await member.modifyCardGroupUserInfo({
-      id: location.state.id,
+      id: match.params.id,
       uid: member.cardGroupUserInfo.uid,
       cardNo,
       group: group[0],
@@ -65,10 +69,16 @@ class ModifyGroup extends React.Component {
   }
 
   render() {
-    const { location, history, member } = this.props
+    const { match, history, member } = this.props
     const { cardGroupUserInfo } = member
     const {
-      balance, balanceNum, integral, integralNum, cardNo, status, group,
+      balance,
+      balanceNum,
+      integral,
+      integralNum,
+      cardNo,
+      status,
+      group,
     } = this.state
     return (
       <React.Fragment>
@@ -90,9 +100,10 @@ class ModifyGroup extends React.Component {
             placeholder="请输入实体卡号"
             type="number"
             value={cardNo}
-            onChange={val => this.setState({
-              cardNo: val,
-            })
+            onChange={val =>
+              this.setState({
+                cardNo: val,
+              })
             }
           >
             实体卡号
@@ -101,13 +112,18 @@ class ModifyGroup extends React.Component {
             arrow="empty"
             extra={
               cardGroupUserInfo.add_time
-                ? moment(cardGroupUserInfo.add_time * 1000).format('YYYY-MM-DD HH:mm')
+                ? moment(cardGroupUserInfo.add_time * 1000).format(
+                    'YYYY-MM-DD HH:mm',
+                  )
                 : '无记录'
             }
           >
             领取时间
           </List.Item>
-          <List.Item arrow="empty" extra={`¥ ${cardGroupUserInfo.card_money_give}`}>
+          <List.Item
+            arrow="empty"
+            extra={`¥ ${cardGroupUserInfo.card_money_give}`}
+          >
             余额
           </List.Item>
           <Picker
@@ -129,9 +145,10 @@ class ModifyGroup extends React.Component {
             placeholder="请输入数值"
             type="number"
             value={balanceNum}
-            onChange={val => this.setState({
-              balanceNum: val,
-            })
+            onChange={val =>
+              this.setState({
+                balanceNum: val,
+              })
             }
           >
             余额修改
@@ -158,9 +175,10 @@ class ModifyGroup extends React.Component {
             placeholder="请输入数值"
             type="number"
             value={integralNum}
-            onChange={val => this.setState({
-              integralNum: val,
-            })
+            onChange={val =>
+              this.setState({
+                integralNum: val,
+              })
             }
           >
             积分修改
@@ -171,9 +189,10 @@ class ModifyGroup extends React.Component {
             title="用户分组"
             cascade={false}
             extra="请选择(可选)"
-            onChange={val => this.setState({
-              group: val,
-            })
+            onChange={val =>
+              this.setState({
+                group: val,
+              })
             }
           >
             <List.Item arrow="horizontal">用户分组</List.Item>
@@ -195,9 +214,10 @@ class ModifyGroup extends React.Component {
             title="状态"
             cascade={false}
             extra="请选择(可选)"
-            onChange={val => this.setState({
-              status: val,
-            })
+            onChange={val =>
+              this.setState({
+                status: val,
+              })
             }
           >
             <List.Item arrow="horizontal">状态</List.Item>
@@ -207,9 +227,9 @@ class ModifyGroup extends React.Component {
             extra="查看"
             onClick={() => {
               history.push({
-                pathname: '/management/member/cardGroup/expensesRecord',
+                pathname: `/management/member/cardGroup/expensesRecord/${match.params.id}`,
                 state: {
-                  id: location.state.id,
+                  id: match.params.id,
                 },
               })
             }}

@@ -66,7 +66,10 @@ class CardGroup extends React.Component {
                   type="primary"
                   size="small"
                   style={{ width: 120 }}
-                  onClick={() => history.push(`/management/member/cardGroup/cardGroupPanel/编辑/${item.id}`)
+                  onClick={() =>
+                    history.push(
+                      `/management/member/cardGroup/cardGroupPanel/编辑/${item.id}`,
+                    )
                   }
                 >
                   编辑
@@ -91,10 +94,7 @@ class CardGroup extends React.Component {
                       member.cardGroupUsersListTotal = null
                     })
                     history.push({
-                      pathname: '/management/member/cardGroup/cardGroupUsers',
-                      state: {
-                        id: item.id,
-                      },
+                      pathname: `/management/member/cardGroup/cardGroupUsers/${item.id}`,
                     })
                   }}
                 >
@@ -126,7 +126,10 @@ class CardGroup extends React.Component {
           title="会员卡分组"
           goBack
           right={
-            <Link style={{ color: '#fff' }} to="/management/member/cardGroup/cardGroupPanel/添加">
+            <Link
+              style={{ color: '#fff' }}
+              to="/management/member/cardGroup/cardGroupPanel/添加"
+            >
               添加分组
             </Link>
           }
@@ -157,11 +160,17 @@ export default () => (
       path="/management/member/cardGroup/cardGroupPanel/:str/:id?"
       component={CardGroupPanel}
     />
-    <Route path="/management/member/cardGroup/cardGroupUsers" component={CardGroupUsers} />
     <Route
-      path="/management/member/cardGroup/modifyCardGroupUsers"
+      path="/management/member/cardGroup/cardGroupUsers/:id"
+      component={CardGroupUsers}
+    />
+    <Route
+      path="/management/member/cardGroup/modifyCardGroupUsers/:id"
       component={ModifyCardGroupUsers}
     />
-    <Route path="/management/member/cardGroup/expensesRecord" component={ExpensesRecord} />
+    <Route
+      path="/management/member/cardGroup/expensesRecord/:id"
+      component={ExpensesRecord}
+    />
   </React.Fragment>
 )

@@ -21,6 +21,23 @@ export const fetchMerFansList = (page, size, beginTime, endTime) =>
     },
   )
 
+export const fetchBuyList = (page, beginTime, endTime) =>
+  axios.post(`/appapi.php?c=Merchantapp&a=getMerPayUsers`, {
+    page: page,
+    begin_time: beginTime,
+    end_time: endTime,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const fetchUserBuyList = (page, beginTime, endTime, uid) =>
+  axios.post(`/appapi.php?c=Merchantapp&a=getUserPayLog`, {
+    page: page,
+    begin_time: beginTime,
+    end_time: endTime,
+    uid: uid,
+    ticket: localStorage.getItem('ticket'),
+  })
+
 export const fetchCardGroupList = (page, size) =>
   axios.post(
     `/appapi.php?c=Merchantapp&a=card_group&page=${page}&size=${size}`,

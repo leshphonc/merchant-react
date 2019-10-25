@@ -31,6 +31,26 @@ class MemberStore {
 
   @observable merFansListTotal = null
 
+  @observable userBuyList = []
+
+  @observable userBuysListPage = 1
+
+  @observable userBuyListTotalNum = null
+
+  @observable userBuyListSize = 10
+
+  @observable userBuyListTotal = null
+
+  @observable buyFansList = []
+
+  @observable buyFansListPage = 1
+
+  @observable buyFansListTotalNum = null
+
+  @observable buyFansListSize = 10
+
+  @observable buyFansListTotal = null
+
   @observable cardGroupList = []
 
   @observable cardGroupListPage = 1
@@ -532,21 +552,38 @@ class MemberStore {
   }
 
   @action
-  fetchFansTotal = async () => {
+  fetchFansTotal = async (beginTime, endTime) => {
     const response = await services.fetchMiniProgramList(1, 10)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      const response2 = await services.fetchPublicList(1, 10)
+      const response2 = await services.fetchPublicList(
+        1,
+        10,
+        beginTime,
+        endTime,
+      )
       if (response2.data.errorCode === ErrorCode.SUCCESS) {
-        runInAction(() => {
-          this.fansTotal = {
-            mini: response.data.result.total,
-            public: response2.data.result.total,
+        const response3 = await services.fetchMerFansList(
+          1,
+          10,
+          beginTime,
+          endTime,
+        )
+        if (response3.data.errorCode === ErrorCode.SUCCESS) {
+          const response4 = await services.fetchBuyList(1, beginTime, endTime)
+          if (response4.data.errorCode === ErrorCode.SUCCESS) {
+            runInAction(() => {
+              this.fansTotal = {
+                mini: response.data.result.total,
+                public: response2.data.result.total,
+                merTotal: response3.data.result.total,
+                saleTotal: response4.data.result.total,
+              }
+            })
           }
-        })
+        }
       }
     }
   }
-
   @action
   resetFetchMerFansList = async (beginTime, endTime) => {
     runInAction(() => {
@@ -583,6 +620,93 @@ class MemberStore {
           arr.push(...response.data.result.list)
           this.merFansList = arr
           this.merFansListTotal = response.data.result.total - 0
+        })
+      }
+    }
+  }
+
+  // 重置消费用户列表
+  @action
+  resetFetchBuyList = async (beginTime, endTime) => {
+    runInAction(() => {
+      this.buyFansList = []
+      this.buyFansListPage = 1
+      this.buyFansListTotalNum = null
+      this.buyFansListSize = 10
+      this.buyFansListTotal = null
+    })
+    await this.fetchBuyList(beginTime, endTime)
+  }
+
+  // 消费用户列表
+  @action
+  fetchBuyList = async (beginTime, endTime) => {
+    let hasMore = true
+    if (this.buyFansListTotal !== null) {
+      hasMore =
+        this.buyFansListPage * this.buyFansListSize < this.buyFansListTotalNum
+      if (hasMore) {
+        this.buyFansListPage += 1
+      }
+    }
+    const response = await services.fetchBuyList(
+      this.buyFansListPage,
+      // this.buyFansListSize,
+      beginTime,
+      endTime,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      if (hasMore) {
+        runInAction(() => {
+          const arr = this.buyFansList
+          this.buyFansListTotalNum = response.data.result.total
+          arr.push(...response.data.result.lists)
+          this.buyFansList = arr
+          this.buyFansListTotal = response.data.result.total - 0
+        })
+      }
+    }
+  }
+
+  // 重置用户消费列表
+  @action
+  resetFetchUserBuyList = async (beginTime, endTime, uid) => {
+    runInAction(() => {
+      this.userBuyList = []
+      this.userBuysListPage = 1
+      this.userBuyListTotalNum = null
+      this.userBuyListSize = 10
+      this.userBuyListTotal = null
+    })
+    await this.fetchUserBuyList(beginTime, endTime, uid)
+  }
+
+  // 用户消费列表
+  @action
+  fetchUserBuyList = async (beginTime, endTime, uid) => {
+    let hasMore = true
+    if (this.userBuyListTotal !== null) {
+      hasMore =
+        this.userBuysListPage * this.userBuyListSize < this.userBuyListTotalNum
+      if (hasMore) {
+        this.userBuysListPage += 1
+      }
+    }
+    const response = await services.fetchUserBuyList(
+      this.userBuysListPage,
+      // this.buyFansListSize,
+      beginTime,
+      endTime,
+      uid,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      if (hasMore) {
+        runInAction(() => {
+          const arr = this.userBuyList
+          this.userBuyListTotalNum = response.data.result.total
+          arr.push(...response.data.result.lists)
+          this.userBuyList = arr
+          this.userBuyListTotal = response.data.result.total - 0
         })
       }
     }

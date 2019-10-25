@@ -12,6 +12,18 @@ class Login extends React.Component {
     password: '',
   }
 
+  invokeAndroid = json => {
+    if (
+      navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') !== -1
+    ) {
+      window.android.invokeMethods(JSON.stringify(json))
+    } else if (
+      navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') !== -1
+    ) {
+      window.location.href = 'ios:' + JSON.stringify(json)
+    }
+  }
+
   submit = () => {
     const { login, history } = this.props
     const { account, password } = this.state
@@ -19,6 +31,13 @@ class Login extends React.Component {
       .login(account, password)
       .then(res => {
         if (res) {
+          const json = {
+            action: 'SendJPushIdToServer',
+            type: 'merchant',
+            uid: JSON.parse(localStorage.getItem('merchant_user')).mer_id,
+            BaseUrl: window.location.origin.split('.')[1],
+          }
+          this.invokeAndroid(json)
           history.replace('/')
           Toast.success('欢迎回来', 2, null, false)
         }
@@ -58,7 +77,11 @@ class Login extends React.Component {
               <span style={{ color: '#ffb000', fontSize: 13 }}>找回密码？</span>
             </Flex>
           </WingBlank> */}
-          <Button onClick={this.submit} type="primary" style={{ marginTop: '15vh' }}>
+          <Button
+            onClick={this.submit}
+            type="primary"
+            style={{ marginTop: '15vh' }}
+          >
             登录
           </Button>
         </Box>

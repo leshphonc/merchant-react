@@ -29,6 +29,18 @@ class MastSotre {
 
   @observable staffDutyTotal = null
 
+  // 店员销售记录
+
+  @observable staffSaleList = []
+
+  @observable staffSalePage = 1
+
+  @observable staffSaleSize = 10
+
+  @observable staffSaleTotal = null
+
+  //店铺列表
+
   @observable storeList = null
 
   // 店员列表
@@ -226,6 +238,49 @@ class MastSotre {
           const arr = this.staffDutyList
           arr.push(...response.data.result.list)
           this.staffDutyList = arr
+        })
+      }
+    }
+  }
+
+  // 重置店员销售记录
+  @action
+  resetFetchGetStaffSale = async (staffId, storeId, beginTime, endTime) => {
+    runInAction(() => {
+      this.staffSaleTotal = null
+      this.staffSalePage = 1
+      this.staffSaleList = []
+    })
+    await this.fetchGetStaffSale(staffId, storeId, beginTime, endTime)
+  }
+
+  // 店员销售记录
+  @action
+  fetchGetStaffSale = async (staffId, storeId, beginTime, endTime) => {
+    let hasMore = true
+    const response = await services.fetchGetStaffSale(
+      staffId,
+      storeId,
+      beginTime,
+      endTime,
+      this.staffSalePage,
+      // this.staffDutySize,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      if (this.staffSaleTotal === null) {
+        runInAction(() => {
+          this.staffSaleTotal = Math.ceil(
+            response.data.result.total / this.staffSaleSize,
+          )
+        })
+      }
+      if (this.staffSalePage > this.staffSaleTotal) hasMore = false
+      if (hasMore) {
+        runInAction(() => {
+          this.staffSalePage += 1
+          const arr = this.staffSaleList
+          arr.push(...response.data.result.lists)
+          this.staffSaleList = arr
         })
       }
     }
