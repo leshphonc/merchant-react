@@ -1207,7 +1207,7 @@ class MastSotre {
         this.shopCategoryChild = response.data.result
         this.shopCategorySecond = response.data.result.twoCate.map(item => ({
           label: item.sort_name,
-          value: item.sort,
+          value: item.sort_id,
         }))
       })
     }

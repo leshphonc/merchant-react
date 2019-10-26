@@ -105,28 +105,26 @@ class ECommerceAdd extends React.Component {
           price: eCommerceDetail.price,
           stock_num: eCommerceDetail.stock_num,
           sort: eCommerceDetail.sort,
+          status: [eCommerceDetail.status],
           goods_type: [eCommerceDetail.goods_type],
           freight_type: [eCommerceDetail.freight_type],
           freight_value: eCommerceDetail.freight_value,
           freight_template: [eCommerceDetail.freight_template],
           pic: picArr,
         })
-        setTimeout(() => {
-          form.setFieldsValue({
-            sort_id: [eCommerceDetail.sort_id],
-            status: [eCommerceDetail.status],
-          })
-          const formData = form.getFieldsValue()
-          console.log(formData)
-        }, 1000)
-        if (eCommerceDetail.sort_id) {
+        if (eCommerceDetail.sort_fid) {
           commodity
-            .fetchShopSecondCategory(eCommerceDetail.sort_id)
+            .fetchShopSecondCategory(eCommerceDetail.sort_fid)
             .then(() => {
               form.setFieldsValue({
-                sort_id2: eCommerceDetail.sort_id2,
+                sort_id: [eCommerceDetail.sort_fid],
+                sort_id2: [eCommerceDetail.sort_id],
               })
             })
+        } else {
+          form.setFieldsValue({
+            sort_id: [eCommerceDetail.sort_id],
+          })
         }
         // this.setState({
         //   specification: eCommerceDetail.spec_list,
