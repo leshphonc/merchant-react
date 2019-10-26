@@ -43,9 +43,8 @@ class ServiceItemsPanel extends React.Component {
         setTimeout(() => {
           form.setFieldsValue({
             ...cacheData,
-            start_time:
-              cacheData.start_time && new Date(cacheData.start_time * 1000),
-            end_time: cacheData.end_time && new Date(cacheData.end_time * 1000),
+            start_time: cacheData.start_time && new Date(cacheData.start_time),
+            end_time: cacheData.end_time && new Date(cacheData.end_time),
           })
           if (cacheData.payment_status) {
             form.setFieldsValue({

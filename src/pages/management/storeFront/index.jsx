@@ -18,6 +18,8 @@ import StoreFrontQualification from './storeFrontQualification'
 import StoreFrontCommodityList from './storeFrontCommodityList'
 import StoreFrontPackageList from './storeFrontPackageList'
 import StoreFrontECommerceList from './storeFrontECommerceList'
+import StoreFrontBusinessService from './storeFrontBusinessService'
+import StoreFrontBusinessServiceList from './storeFrontBusinessServiceList'
 import { StoreStatus } from '@/config/constant'
 import { PrimaryTag } from '@/styled'
 import Utils from '@/utils'
@@ -155,7 +157,7 @@ class StoreFront extends React.Component {
                       size="small"
                       onClick={() =>
                         history.push(
-                          `/management/storefront/storeFrontBusiness/${item.store_id}/${item.have_mall}/${item.have_peisong}`,
+                          `/management/storefront/storeFrontBusiness/${item.store_id}/${item.have_mall}/${item.have_peisong}/${item.have_service}`,
                         )
                       }
                     >
@@ -286,8 +288,18 @@ export default () => (
     />
     {/* 店铺业务列表 */}
     <Route
-      path="/management/storefront/storeFrontBusiness/:id/:mall/:peisong"
+      path="/management/storefront/storeFrontBusiness/:id/:mall/:peisong/:service"
       component={StoreFrontBusiness}
+    />
+    {/* 店铺业务服务配置 */}
+    <Route
+      path="/management/storefront/storeFrontBusinessService/:id"
+      component={StoreFrontBusinessService}
+    />
+    {/* 店铺业务服务自定义标识配置 */}
+    <Route
+      path="/management/storefront/storeFrontBusinessServiceList/:id"
+      component={StoreFrontBusinessServiceList}
     />
     {/* 电商业务配置编辑 */}
     <Route

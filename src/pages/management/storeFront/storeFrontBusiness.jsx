@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import { WhiteSpace, Card, Flex, Button } from 'antd-mobile'
+import { WhiteSpace, Card, Flex, Button, List } from 'antd-mobile'
 import Utils from '@/utils'
 
 @inject('storeFront')
@@ -19,7 +19,7 @@ class StoreFrontBusiness extends React.Component {
         <WhiteSpace />
         {match.params.mall - 0 ? (
           <Card>
-            <Card.Header title="电商配置"></Card.Header>
+            <Card.Header title="零售配置"></Card.Header>
             <Card.Body>
               <Flex>
                 <Flex.Item>
@@ -138,6 +138,21 @@ class StoreFrontBusiness extends React.Component {
               </Flex>
             </Card.Body>
           </Card>
+        ) : null}
+        <WhiteSpace />
+        {match.params.mall - 0 ? (
+          <List>
+            <List.Item
+              arrow="horizontal"
+              onClick={() => {
+                history.push(
+                  `/management/storefront/storeFrontBusinessService/${match.params.id}`,
+                )
+              }}
+            >
+              服务配置
+            </List.Item>
+          </List>
         ) : null}
       </React.Fragment>
     )

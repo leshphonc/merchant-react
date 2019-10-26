@@ -286,7 +286,7 @@ class StorePanel extends React.Component {
   goQrPicker = () => {
     const { history } = this.props
     this.cacheData()
-    history.push('/uploadSingleImg/上传二维码背景图/qrcode')
+    history.push('/uploadSingleImg/上传二维码背景图/qrcode/0.666')
   }
 
   onPickerChange = val => {
