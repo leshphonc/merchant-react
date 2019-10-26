@@ -7,7 +7,6 @@ import {
   WingBlank,
   WhiteSpace,
   Button,
-  Modal,
   Picker,
   List,
   Toast,

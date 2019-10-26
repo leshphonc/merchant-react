@@ -57,11 +57,17 @@ class ECommerceAdd extends React.Component {
     commodity.fetchShopCategory()
     if (Utils.getCacheData()) {
       const cacheData = Utils.getCacheData()
-      commodity.fetchShopSecondCategory(cacheData.sort_id[0]).then(() => {
+      if (cacheData.sort_id) {
+        commodity.fetchShopSecondCategory(cacheData.sort_id[0]).then(() => {
+          form.setFieldsValue({
+            ...cacheData,
+          })
+        })
+      } else {
         form.setFieldsValue({
           ...cacheData,
         })
-      })
+      }
       this.setState({
         goods: cacheData.goods,
       })
