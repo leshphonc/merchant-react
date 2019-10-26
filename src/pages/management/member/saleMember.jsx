@@ -34,15 +34,14 @@ class SaleMember extends React.Component {
 
   componentDidMount() {
     const { member } = this.props
-    const { publicList } = member
+    // const { publicList } = member
     const { height, beginTime, endTime } = this.state
-    if (!publicList.length)
-      member.fetchBuyList(beginTime, endTime).then(() => {
-        const { buyFansListTotal } = member
-        this.setState({
-          buyFansListTotal,
-        })
+    member.fetchBuyList(beginTime, endTime).then(() => {
+      const { buyFansListTotal } = member
+      this.setState({
+        buyFansListTotal,
       })
+    })
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
@@ -90,7 +89,9 @@ class SaleMember extends React.Component {
               style={{ position: 'absolute', bottom: 10, right: 10 }}
               size="small"
               type="primary"
-              onClick={() => history.push(`/management/member/userSaleList/${item.uid}`)}
+              onClick={() =>
+                history.push(`/management/member/userSaleList/${item.uid}`)
+              }
             >
               消费记录
             </Button>
