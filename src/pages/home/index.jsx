@@ -1,7 +1,11 @@
 import React from 'react'
 import UserCard from '@/common/UserCard'
 import GridCard from '@/common/GridCard'
-import ReactEcharts from 'echarts-for-react'
+import ReactEchartsCore from 'echarts-for-react/lib/core'
+import echarts from 'echarts/lib/echarts'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/component/grid'
 import { withRouter } from 'react-router-dom'
 import { Paper, FilterBox } from '@/styled'
 import { observer, inject } from 'mobx-react'
@@ -621,7 +625,11 @@ class Home extends React.Component {
               </FilterBox>
             ) : null}
             <WhiteSpace />
-            <ReactEcharts option={this.getOption()} style={{ height: 200 }} />
+            <ReactEchartsCore
+              echarts={echarts}
+              option={this.getOption()}
+              style={{ height: 200 }}
+            />
           </Paper>
         </WingBlank>
         <WhiteSpace />
@@ -715,7 +723,8 @@ class Home extends React.Component {
               </FilterBox>
             ) : null}
             <WhiteSpace />
-            <ReactEcharts
+            <ReactEchartsCore
+              echarts={echarts}
               option={this.getOption2()}
               style={{ height: 250, background: '#fff' }}
             />
