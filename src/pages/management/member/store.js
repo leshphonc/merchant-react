@@ -41,6 +41,16 @@ class MemberStore {
 
   @observable userBuyListTotal = null
 
+  @observable userBehaviorList = []
+
+  @observable uuserBehaviorListPage = 1
+
+  @observable userBehaviorListTotalNum = null
+
+  @observable userBehaviorListSize = 10
+
+  @observable userBehaviorListTotal = null
+
   @observable buyFansList = []
 
   @observable buyFansListPage = 1
@@ -707,6 +717,49 @@ class MemberStore {
           arr.push(...response.data.result.lists)
           this.userBuyList = arr
           this.userBuyListTotal = response.data.result.total - 0
+        })
+      }
+    }
+  }
+
+  // 重置用户行为
+  @action
+  resetFetchUserBehavior = async uid => {
+    runInAction(() => {
+      this.userBehaviorList = []
+      this.uuserBehaviorListPage = 1
+      this.userBehaviorListTotalNum = null
+      this.userBehaviorListSize = 10
+      this.userBehaviorListTotal = null
+    })
+    await this.fetchUserBehavior(uid)
+  }
+
+  // 获取用户行为
+  @action
+  fetchUserBehavior = async uid => {
+    let hasMore = true
+    if (this.userBehaviorListTotal !== null) {
+      hasMore =
+        this.uuserBehaviorListPage * this.userBehaviorListSize <
+        this.userBehaviorListTotalNum
+      if (hasMore) {
+        this.uuserBehaviorListPage += 1
+      }
+    }
+    const response = await services.fetchUserBehavior(
+      uid,
+      this.uuserBehaviorListPage,
+      this.userBehaviorListSize,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      if (hasMore) {
+        runInAction(() => {
+          const arr = this.userBehaviorList
+          this.userBehaviorListTotalNum = response.data.result.total
+          arr.push(...response.data.result.behavior_list)
+          this.userBehaviorList = arr
+          this.userBehaviorListTotal = response.data.result.total - 0
         })
       }
     }

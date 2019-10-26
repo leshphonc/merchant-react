@@ -162,3 +162,13 @@ export const checkCouponCode = (id, code, splice) =>
     code: splice ? `${id}d${code}` : code,
     ticket: localStorage.getItem('ticket'),
   })
+
+export const fetchUserBehavior = (uid, page, size) =>
+  axios.get('/appapi.php?c=Merchantapp&a=Customer_detail', {
+    params: {
+      uid: uid,
+      page: page,
+      size: size,
+      ticket: localStorage.getItem('ticket'),
+    },
+  })

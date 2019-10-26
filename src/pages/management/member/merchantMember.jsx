@@ -51,7 +51,7 @@ class MerchantMember extends React.Component {
   }
 
   mapList = () => {
-    const { member } = this.props
+    const { member, history } = this.props
     const { merFansList } = member
 
     return merFansList.map((item, index) => (
@@ -93,6 +93,9 @@ class MerchantMember extends React.Component {
               style={{ position: 'absolute', bottom: 10, right: 10 }}
               size="small"
               type="primary"
+              onClick={() => {
+                history.push(`/management/member/userBehavior/${item.uid}`)
+              }}
             >
               用户行为
             </Button>

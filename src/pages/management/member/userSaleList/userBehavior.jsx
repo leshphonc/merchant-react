@@ -5,13 +5,13 @@ import {
   WhiteSpace,
   PullToRefresh,
   Button,
-  DatePicker,
+  // DatePicker,
   WingBlank,
 } from 'antd-mobile'
 import NavBar from '@/common/NavBar'
 import moment from 'moment'
 import { ListItem, ItemTop } from '../styled'
-import { FilterBox } from '@/styled'
+// import { FilterBox } from '@/styled'
 
 @inject('member')
 @observer
@@ -21,28 +21,16 @@ class UserBehavior extends React.Component {
     this.state = {
       refreshing: false,
       height: document.documentElement.clientHeight,
-      // eslint-disable-next-line react/no-unused-state
-      beginTime: moment(new Date(new Date() - 30 * 24 * 3600 * 1000)).format(
-        'YYYY-MM-DD',
-      ),
-      // eslint-disable-next-line react/no-unused-state
-      endTime: moment(new Date()).format('YYYY-MM-DD'),
-      publicListTotalNum: 0,
     }
     this.refresh = React.createRef()
   }
 
   componentDidMount() {
-    const { member } = this.props
-    const { publicList } = member
-    const { height, beginTime, endTime } = this.state
-    if (!publicList.length)
-      member.fetchPublicList(beginTime, endTime).then(() => {
-        const { publicListTotalNum } = member
-        this.setState({
-          publicListTotalNum,
-        })
-      })
+    const { member, match } = this.props
+    // const { userBehaviorList } = member
+    const { height } = this.state
+    // if (!userBehaviorList.length)
+    member.resetFetchUserBehavior(match.params.uid)
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
@@ -52,23 +40,24 @@ class UserBehavior extends React.Component {
 
   mapList = () => {
     const { member } = this.props
-    const { publicList } = member
+    const { userBehaviorList } = member
 
-    return publicList.map((item, index) => (
+    return userBehaviorList.map((item, index) => (
       // eslint-disable-next-line react/no-array-index-key
       <React.Fragment key={index}>
         <ListItem>
           <ItemTop>
             <div className="top-content">
               <div className="content-left" style={{ alignItems: 'start' }}>
-                <div style={{ marginBottom: '4' }}>行为编号:12313</div>
+                <div style={{ marginBottom: '4' }}>行为编号:{item.biz_id}</div>
                 <div style={{ lineHeight: '30px', marginTop: '5px' }}>
-                  事件名：{item.uid}
+                  事件名：{item.name}
                 </div>
               </div>
               <div className="content-right" style={{ alignItems: 'start' }}>
                 <div style={{ marginBottom: '4' }}>
-                  发生时间：{moment(new Date()).format('YYYY-MM-DD H:mm:ss')}
+                  发生时间：
+                  {moment(item.date * 1000).format('YYYY-MM-DD H:mm:ss')}
                 </div>
                 <div
                   style={{
@@ -77,13 +66,20 @@ class UserBehavior extends React.Component {
                     width: '100%',
                   }}
                 >
-                  <Button
-                    size="small"
-                    type="primary"
-                    style={{ float: 'right' }}
-                  >
-                    访问链接
-                  </Button>
+                  {item.url ? (
+                    <Button
+                      size="small"
+                      type="primary"
+                      style={{ float: 'right' }}
+                      onClick={() => { 
+                        window.location.href=item.url
+                      }}
+                    >
+                      访问链接
+                    </Button>
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
             </div>
@@ -95,52 +91,51 @@ class UserBehavior extends React.Component {
   }
 
   loadMore = async () => {
-    const { member } = this.props
-    const { beginTime, endTime } = this.state
+    const { member, match } = this.props
     this.setState({ refreshing: true })
-    await member.fetchPublicList(beginTime, endTime)
+    await member.fetchUserBehavior(match.params.uid)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
   }
-  setBeiginTime = data => {
-    const { member } = this.props
-    const { endTime } = this.state
-    this.setState({
-      beginTime: moment(data).format('YYYY-MM-DD'),
-    })
-    member
-      .resetFetchPublicList(moment(data).format('YYYY-MM-DD'), endTime)
-      .then(() => {
-        const { publicListTotalNum } = member
-        this.setState({
-          publicListTotalNum,
-        })
-      })
-  }
+  // setBeiginTime = data => {
+  //   const { member } = this.props
+  //   const { endTime } = this.state
+  //   this.setState({
+  //     beginTime: moment(data).format('YYYY-MM-DD'),
+  //   })
+  //   member
+  //     .resetFetchPublicList(moment(data).format('YYYY-MM-DD'), endTime)
+  //     .then(() => {
+  //       const { publicListTotalNum } = member
+  //       this.setState({
+  //         publicListTotalNum,
+  //       })
+  //     })
+  // }
 
-  setEndTime = data => {
-    const { member } = this.props
-    const { beginTime } = this.state
-    this.setState({
-      endTime: moment(data).format('YYYY-MM-DD'),
-    })
-    member
-      .resetFetchPublicList(beginTime, moment(data).format('YYYY-MM-DD'))
-      .then(() => {
-        const { publicListTotalNum } = member
-        this.setState({
-          publicListTotalNum,
-        })
-      })
-  }
+  // setEndTime = data => {
+  //   const { member } = this.props
+  //   const { beginTime } = this.state
+  //   this.setState({
+  //     endTime: moment(data).format('YYYY-MM-DD'),
+  //   })
+  //   member
+  //     .resetFetchPublicList(beginTime, moment(data).format('YYYY-MM-DD'))
+  //     .then(() => {
+  //       const { publicListTotalNum } = member
+  //       this.setState({
+  //         publicListTotalNum,
+  //       })
+  //     })
+  // }
   render() {
     const {
       height,
       refreshing,
-      beginTime,
-      endTime,
-      publicListTotalNum,
+      // beginTime,
+      // endTime,
+      // publicListTotalNum,
     } = this.state
     return (
       <React.Fragment>
@@ -148,7 +143,7 @@ class UserBehavior extends React.Component {
         <WhiteSpace />
         <WingBlank>
           {/* <SegmentedControl values={['全部用户', '消费用户', '到店用户']} /> */}
-          <FilterBox>
+          {/* <FilterBox>
             <DatePicker mode="date" onChange={this.setBeiginTime}>
               <div>
                 <span>{beginTime}</span>
@@ -174,11 +169,11 @@ class UserBehavior extends React.Component {
                 </i>
               </div>
             </DatePicker>
-          </FilterBox>
-          <span>-&nbsp;</span>
+          </FilterBox> */}
+          {/* <span>-&nbsp;</span>
           <FilterBox>
             <span>共{publicListTotalNum}条记录</span>
-          </FilterBox>
+          </FilterBox> */}
         </WingBlank>
         <WhiteSpace />
         <PullToRefresh
