@@ -495,6 +495,13 @@ class ECommerceAdd extends React.Component {
             规格设置
           </List.Item>
           {this.mapSpecification()}
+          <List.Item
+            arrow="horizontal"
+            extra="编辑"
+            onClick={() => this.goTemplate()}
+          >
+            运费模板
+          </List.Item>
           <Picker
             {...getFieldProps('freight_template', {
               rules: [{ required: true }],
@@ -505,13 +512,6 @@ class ECommerceAdd extends React.Component {
           >
             <List.Item arrow="horizontal">运费模板</List.Item>
           </Picker>
-          <List.Item
-            arrow="horizontal"
-            extra="编辑"
-            onClick={() => this.goTemplate()}
-          >
-            运费模板
-          </List.Item>
           <InputItem
             {...getFieldProps('freight_value', {
               rules: [{ required: true }],

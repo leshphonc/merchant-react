@@ -38,7 +38,7 @@ class ServiceItemsPanel extends React.Component {
     if (cacheData) {
       if (match.params.type === '服务项目') {
         if (cacheData.cat_fid !== '0') {
-          commodity.fetchCategoryChild(cacheData.cat_fid)
+          commodity.fetchCategoryChild(cacheData.cat_fid[0])
         }
         setTimeout(() => {
           form.setFieldsValue({
@@ -320,6 +320,7 @@ class ServiceItemsPanel extends React.Component {
                   <Switch
                     {...getFieldProps('payment_status', {
                       valuePropName: 'checked',
+                      initialValue: false,
                       rules: [{ required: true }],
                     })}
                   />
@@ -343,6 +344,7 @@ class ServiceItemsPanel extends React.Component {
                   <Switch
                     {...getFieldProps('appoint_date_type', {
                       valuePropName: 'checked',
+                      initialValue: false,
                       rules: [{ required: true }],
                     })}
                   />
@@ -405,6 +407,7 @@ class ServiceItemsPanel extends React.Component {
                   <Switch
                     {...getFieldProps('car_type', {
                       valuePropName: 'checked',
+                      initialValue: false,
                       rules: [{ required: true }],
                     })}
                   />
@@ -416,6 +419,7 @@ class ServiceItemsPanel extends React.Component {
                 extra={
                   <Switch
                     {...getFieldProps('car_no', {
+                      initialValue: false,
                       valuePropName: 'checked',
                       rules: [{ required: true }],
                     })}

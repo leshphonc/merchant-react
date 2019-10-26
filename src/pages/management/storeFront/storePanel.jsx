@@ -194,9 +194,9 @@ class StorePanel extends React.Component {
       if (storeDetail.have_service === '1') {
         business = ['have_service']
       }
-      if (storeDetail.have_mall === '1') {
-        business = ['have_mall']
-      }
+      // if (storeDetail.have_mall === '1') {
+      //   business = ['have_mall']
+      // }
       if (storeDetail.have_peisong === '1') {
         business = ['have_peisong']
       }
