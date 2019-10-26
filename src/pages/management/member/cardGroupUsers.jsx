@@ -43,7 +43,7 @@ class CardGroupUsers extends React.Component {
               style={{ borderRadius: '50%' }}
               alt=""
             />
-            <div className="top-content" style={{width: '80%'}}>
+            <div className="top-content" style={{ width: '80%' }}>
               <div
                 style={{
                   width: '65%',
@@ -58,7 +58,7 @@ class CardGroupUsers extends React.Component {
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                     textOverflow: 'ellipsis',
-                    width: '100%'
+                    width: '100%',
                   }}
                 >
                   会员昵称：{item.nickname || '暂无'}

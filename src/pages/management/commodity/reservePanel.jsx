@@ -207,9 +207,35 @@ class ReservePanel extends React.Component {
         })
       })
     } else {
-      form.setFieldsValue({
-        sort: 0,
-      })
+      if (sessionStorage.getItem('appointDetail')) {
+        const appointDetail = JSON.parse(sessionStorage.getItem('appointDetail'))
+        sessionStorage.removeItem('appointDetail')
+        appointDetail.office_start_time = appointDetail.office_start_time ? new Date(appointDetail.office_start_time) : new Date()
+        appointDetail.office_stop_time = appointDetail.office_stop_time ? new Date(appointDetail.office_stop_time) : new Date()
+        appointDetail.end_time = appointDetail.end_time ? new Date(appointDetail.end_time) : new Date()
+        appointDetail.start_time = appointDetail.start_time ? new Date(appointDetail.start_time) : new Date()
+        this.setState({
+          store: appointDetail.store,
+          workerSele: appointDetail.workerSele,
+          category: appointDetail.category
+        })
+        delete appointDetail.store
+        delete appointDetail.workerSele
+        form.setFieldsValue(appointDetail)
+        setTimeout(() => {
+          form.setFieldsValue({
+            payment_money: appointDetail.payment_money,
+            appoint_price: appointDetail.appoint_price,
+          })
+          setTimeout(() => {
+            this.editor.current.state.editor.txt.html(appointDetail.des)
+          }, 500)
+        }, 100)
+      } else {
+        form.setFieldsValue({
+          sort: 0,
+        })
+      }
       if (sessionStorage.getItem('cacheData')) {
         const arr_pic = JSON.parse(sessionStorage.getItem('cacheData')).pic
         form.setFieldsValue({
@@ -362,11 +388,11 @@ class ReservePanel extends React.Component {
     const cateArr = []
     if (!category.length) return false
     reserveCategoryOption.forEach(item => {
-      if (item.value === category[0]) { 
+      if (item.value === category[0]) {
         cateArr.push(item.label)
-        if (item.children.length) { 
+        if (item.children.length) {
           item.children.forEach(jItem => {
-            if (jItem.value === category[1]) { 
+            if (jItem.value === category[1]) {
               cateArr.push(jItem.label)
             }
           })
@@ -660,7 +686,14 @@ class ReservePanel extends React.Component {
               onAddImageClick={e => {
                 const formData = form.getFieldsValue()
                 formData.des = this.editor.current.state.editor.txt.html()
-                console.log(formData)
+                const { store, workerSele, category } = this.state
+                formData.category = category
+                formData.store = store
+                formData.workerSele = workerSele
+                sessionStorage.setItem(
+                  'appointDetail',
+                  JSON.stringify(formData),
+                )
                 Utils.cacheData(formData)
                 history.push('/uploadMultipleImg/裁剪/pic/1')
                 e.preventDefault()
@@ -981,7 +1014,9 @@ class ReservePanel extends React.Component {
           <WhiteSpace />
         </WingBlank>
         {menu ? menuEl : null}
-        {menu ? <MenuMask onClick={() => this.setState({ menu: false })} /> : null}
+        {menu ? (
+          <MenuMask onClick={() => this.setState({ menu: false })} />
+        ) : null}
         {/* <MultipleImg
           visible={mul}
           close={() => this.setState({

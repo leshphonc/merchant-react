@@ -116,7 +116,6 @@ class GroupPanel extends React.Component {
     if (match.params.id) {
       commodity.fetchGroupDetail(match.params.id).then(() => {
         const { groupDetail } = commodity
-        console.log(toJS(groupDetail).level_spread)
         this.setState({
           files: groupDetail.pic_arr,
           cat_fid: groupDetail.cat_fid,
@@ -139,8 +138,12 @@ class GroupPanel extends React.Component {
           intro: groupDetail.intro,
           old_price: groupDetail.old_price,
           price: groupDetail.price,
-          begin_time: groupDetail.begin_time ? new Date(groupDetail.begin_time * 1000) : '',
-          end_time: groupDetail.end_time ? new Date(groupDetail.end_time * 1000) : '',
+          begin_time: groupDetail.begin_time
+            ? new Date(groupDetail.begin_time * 1000)
+            : '',
+          end_time: groupDetail.end_time
+            ? new Date(groupDetail.end_time * 1000)
+            : '',
           count_num: groupDetail.count_num,
           pin_effective_time: groupDetail.pin_effective_time,
           group_refund_fee: groupDetail.group_refund_fee,
@@ -205,29 +208,57 @@ class GroupPanel extends React.Component {
           shopList,
         })
       })
-      form.setFieldsValue({
-        name: '',
-        intro: '',
-        old_price: '',
-        price: '',
-        begin_time: '',
-        end_time: '',
-        count_num: '',
-        pin_effective_time: '',
-        group_refund_fee: '',
-        start_discount: '',
-        pin_num: '',
-        once_min: '',
-        once_max: '',
-        deadline_time: '',
-        no_refund: false,
-        status: false,
-      })
+      if (sessionStorage.getItem('groupDetail')) {
+        // eslint-disable-next-line no-console
+        const groupDetail = JSON.parse(sessionStorage.getItem('groupDetail'))
+        sessionStorage.removeItem('groupDetail')
+        this.setState({
+          store: groupDetail.store,
+          cat_fid: groupDetail.cat_fid,
+          cat_id: groupDetail.cat_id,
+        })
+        delete groupDetail.store
+        delete groupDetail.cat_fid
+        delete groupDetail.cat_id
+        groupDetail.begin_time = groupDetail.begin_time
+          ? new Date(groupDetail.begin_time)
+          : new Date()
+        groupDetail.end_time = groupDetail.end_time
+          ? new Date(groupDetail.end_time)
+          : new Date()
+        groupDetail.deadline_time = groupDetail.deadline_time
+          ? new Date(groupDetail.deadline_time)
+          : new Date()
+        setTimeout(() => {
+          this.editor.current.state.editor.txt.html(groupDetail.des)
+        }, 500)
+        form.setFieldsValue(groupDetail)
+      } else {
+        form.setFieldsValue({
+          name: '',
+          intro: '',
+          old_price: '',
+          price: '',
+          begin_time: '',
+          end_time: '',
+          count_num: '',
+          pin_effective_time: '',
+          group_refund_fee: '',
+          start_discount: '',
+          pin_num: '',
+          once_min: '',
+          once_max: '',
+          deadline_time: '',
+          no_refund: false,
+          status: false,
+        })
+      }
       if (sessionStorage.getItem('cacheData')) {
         const arr_pic = JSON.parse(sessionStorage.getItem('cacheData')).pic
         form.setFieldsValue({
           pic: arr_pic,
         })
+        sessionStorage.removeItem('cacheData')
       }
     }
   }
@@ -242,7 +273,11 @@ class GroupPanel extends React.Component {
         return
       }
       // eslint-disable-next-line react/destructuring-assignment
-      if (!this.state.cat_id || !this.state.cat_fid || this.state.store.length <= 0) {
+      if (
+        !this.state.cat_id ||
+        !this.state.cat_fid ||
+        this.state.store.length <= 0
+      ) {
         Toast.info('请输入完整信息')
         return
       }
@@ -251,7 +286,9 @@ class GroupPanel extends React.Component {
         s_name: value.name,
         begin_time: moment(value.begin_time).format('YYYY-MM-DD HH:mm:ss'),
         count_num: value.count_num,
-        deadline_time: moment(value.deadline_time).format('YYYY-MM-DD HH:mm:ss'),
+        deadline_time: moment(value.deadline_time).format(
+          'YYYY-MM-DD HH:mm:ss',
+        ),
         end_time: moment(value.end_time).format('YYYY-MM-DD HH:mm:ss'),
         group_refund_fee: value.group_refund_fee,
         intro: value.intro,
@@ -405,7 +442,10 @@ class GroupPanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -426,7 +466,10 @@ class GroupPanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -454,7 +497,10 @@ class GroupPanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -596,8 +642,15 @@ class GroupPanel extends React.Component {
                 selectable={pic_arr.length < 5}
                 onAddImageClick={e => {
                   const formData = form.getFieldsValue()
+                  const { store, cat_fid, cat_id } = this.state
                   formData.des = this.editor.current.state.editor.txt.html()
-                  console.log(formData)
+                  formData.store = store
+                  formData.cat_id = cat_id
+                  formData.cat_fid = cat_fid
+                  sessionStorage.setItem(
+                    'groupDetail',
+                    JSON.stringify(formData),
+                  )
                   Utils.cacheData(formData)
                   history.push('/uploadMultipleImg/裁剪/pic/1')
                   e.preventDefault()
@@ -621,7 +674,10 @@ class GroupPanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -643,7 +699,10 @@ class GroupPanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -665,7 +724,10 @@ class GroupPanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -739,7 +801,10 @@ class GroupPanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>
@@ -761,7 +826,10 @@ class GroupPanel extends React.Component {
                   e.stopPropagation()
                 }}
               >
-                <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                <i
+                  className="iconfont"
+                  style={{ marginLeft: 10, color: '#bbb' }}
+                >
                   &#xe628;
                 </i>
               </Tooltip>

@@ -26,6 +26,7 @@ import SelfManagement from '@/pages/setting/selfManagement'
 import UploadSingleImg from '@/common/UploadImg/Single'
 import UploadMultipleImg from '@/common/UploadImg/Multiple'
 import CoordinatePicker from '@/common/CoordinatePicker'
+import UserBehavior from '@/pages/management/member/userSaleList/userBehavior'
 
 import ShopAssistant from '@/pages/popularize/shopAssistant'
 import RedEnvelope from '@/pages/popularize/redEnvelope'
@@ -65,10 +66,15 @@ export default () => (
         <Route path="/management/member/cardGroup" component={CardGroup} />
         <Route path="/management/member/coupon" component={Coupon} />
         <Route
-      path="/management/member/userSaleList/:uid"
-      exact
-      component={UserSaleList}
-    />
+          path="/management/member/userSaleList/:uid"
+          exact
+          component={UserSaleList}
+        />
+        <Route
+          path="/management/member/userBehavior/:uid"
+          exact
+          component={UserBehavior}
+        />
         <Route path="/management/commodity" component={Commodity} />
         <Route path="/management/shopManager" component={ShopManager} />
         {/* 基本信息 -> setting */}

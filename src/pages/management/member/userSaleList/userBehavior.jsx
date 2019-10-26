@@ -1,23 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
-import NavBar from '@/common/NavBar'
 import {
-  WingBlank,
   WhiteSpace,
-  Card,
   PullToRefresh,
-  Flex,
+  Button,
   DatePicker,
+  WingBlank,
 } from 'antd-mobile'
+import NavBar from '@/common/NavBar'
 import moment from 'moment'
-import UserBehavior from './userBehavior'
+import { ListItem, ItemTop } from '../styled'
 import { FilterBox } from '@/styled'
 
 @inject('member')
 @observer
-class UserSaleList extends React.Component {
+class UserBehavior extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -29,22 +27,20 @@ class UserSaleList extends React.Component {
       ),
       // eslint-disable-next-line react/no-unused-state
       endTime: moment(new Date()).format('YYYY-MM-DD'),
-      userBuyListTotalNum: 0,
+      publicListTotalNum: 0,
     }
     this.refresh = React.createRef()
   }
 
   componentDidMount() {
-    const { member, match } = this.props
-    // const { couponCheckList } = member
+    const { member } = this.props
+    const { publicList } = member
     const { height, beginTime, endTime } = this.state
-
-    member
-      .resetFetchUserBuyList(beginTime, endTime, match.params.uid)
-      .then(() => {
-        const { userBuyListTotalNum } = member
+    if (!publicList.length)
+      member.fetchPublicList(beginTime, endTime).then(() => {
+        const { publicListTotalNum } = member
         this.setState({
-          userBuyListTotalNum,
+          publicListTotalNum,
         })
       })
     /* eslint react/no-find-dom-node: 0 */
@@ -56,90 +52,85 @@ class UserSaleList extends React.Component {
 
   mapList = () => {
     const { member } = this.props
-    const { userBuyList } = member
-    return userBuyList.map((item, index) => (
+    const { publicList } = member
+
+    return publicList.map((item, index) => (
+      // eslint-disable-next-line react/no-array-index-key
       <React.Fragment key={index}>
-        <Card>
-          <Card.Header
-            thumb={item.avatar}
-            thumbStyle={{ width: 50, height: 50 }}
-            title={item.order_name ? item.order_name : '优惠买单'}
-          />
-          <Card.Body style={{ fontSize: 11 }}>
-            <Flex>
-              <Flex.Item>
-                <div>金额：{item.price || '暂无'}</div>
-                <WhiteSpace />
-                <div>
-                  购买时间：
-                  {moment(item.pay_time * 1000).format('YYYY-MM-DD H:mm:ss')}
+        <ListItem>
+          <ItemTop>
+            <div className="top-content">
+              <div className="content-left" style={{ alignItems: 'start' }}>
+                <div style={{ marginBottom: '4' }}>行为编号:12313</div>
+                <div style={{ lineHeight: '30px', marginTop: '5px' }}>
+                  事件名：{item.uid}
                 </div>
-              </Flex.Item>
-              <Flex.Item>
-                <div>数量：{item.num || '暂无'}</div>
-                <div style={{ visibility: 'hidden' }} />
-              </Flex.Item>
-            </Flex>
-          </Card.Body>
-        </Card>
+              </div>
+              <div className="content-right" style={{ alignItems: 'start' }}>
+                <div style={{ marginBottom: '4' }}>
+                  发生时间：{moment(new Date()).format('YYYY-MM-DD H:mm:ss')}
+                </div>
+                <div
+                  style={{
+                    lineHeight: '30px',
+                    marginTop: '5px',
+                    width: '100%',
+                  }}
+                >
+                  <Button
+                    size="small"
+                    type="primary"
+                    style={{ float: 'right' }}
+                  >
+                    访问链接
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </ItemTop>
+        </ListItem>
         <WhiteSpace />
       </React.Fragment>
     ))
   }
 
   loadMore = async () => {
-    const { member, match } = this.props
+    const { member } = this.props
     const { beginTime, endTime } = this.state
     this.setState({ refreshing: true })
-    await member
-      .fetchUserBuyList(beginTime, endTime, match.params.uid)
-      .then(() => {
-        const { userBuyListTotalNum } = member
-        this.setState({
-          userBuyListTotalNum,
-        })
-      })
+    await member.fetchPublicList(beginTime, endTime)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
   }
-
   setBeiginTime = data => {
+    const { member } = this.props
+    const { endTime } = this.state
     this.setState({
       beginTime: moment(data).format('YYYY-MM-DD'),
     })
-    const { member, match } = this.props
-    const { endTime } = this.state
     member
-      .resetFetchUserBuyList(
-        moment(data).format('YYYY-MM-DD'),
-        endTime,
-        match.params.uid,
-      )
+      .resetFetchPublicList(moment(data).format('YYYY-MM-DD'), endTime)
       .then(() => {
-        const { userBuyListTotalNum } = member
+        const { publicListTotalNum } = member
         this.setState({
-          userBuyListTotalNum,
+          publicListTotalNum,
         })
       })
   }
 
   setEndTime = data => {
+    const { member } = this.props
+    const { beginTime } = this.state
     this.setState({
       endTime: moment(data).format('YYYY-MM-DD'),
     })
-    const { member, match } = this.props
-    const { beginTime } = this.state
     member
-      .resetFetchUserBuyList(
-        beginTime,
-        moment(data).format('YYYY-MM-DD'),
-        match.params.uid,
-      )
+      .resetFetchPublicList(beginTime, moment(data).format('YYYY-MM-DD'))
       .then(() => {
-        const { userBuyListTotalNum } = member
+        const { publicListTotalNum } = member
         this.setState({
-          userBuyListTotalNum,
+          publicListTotalNum,
         })
       })
   }
@@ -149,11 +140,11 @@ class UserSaleList extends React.Component {
       refreshing,
       beginTime,
       endTime,
-      userBuyListTotalNum,
+      publicListTotalNum,
     } = this.state
     return (
       <React.Fragment>
-        <NavBar title="用户消费记录" goBack />
+        <NavBar title="用户行为" goBack />
         <WhiteSpace />
         <WingBlank>
           {/* <SegmentedControl values={['全部用户', '消费用户', '到店用户']} /> */}
@@ -186,9 +177,10 @@ class UserSaleList extends React.Component {
           </FilterBox>
           <span>-&nbsp;</span>
           <FilterBox>
-            <span>共{userBuyListTotalNum}条记录</span>
+            <span>共{publicListTotalNum}条记录</span>
           </FilterBox>
         </WingBlank>
+        <WhiteSpace />
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}
@@ -200,24 +192,10 @@ class UserSaleList extends React.Component {
           direction="up"
           onRefresh={this.loadMore}
         >
-          <WhiteSpace />
-          <WingBlank>{this.mapList()}</WingBlank>
+          {this.mapList()}
         </PullToRefresh>
       </React.Fragment>
     )
   }
 }
-export default () => (
-  <React.Fragment>
-    <Route
-      path="/management/member/userSaleList/:uid"
-      exact
-      component={UserSaleList}
-    />
-    <Route
-      path="/management/member/userBehavior/:uid"
-      exact
-      component={UserBehavior}
-    />
-  </React.Fragment>
-)
+export default UserBehavior

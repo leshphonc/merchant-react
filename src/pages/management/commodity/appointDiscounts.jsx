@@ -3,7 +3,13 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
 import {
-  List, InputItem, WingBlank, Button, Toast, Picker, ImagePicker,
+  List,
+  InputItem,
+  WingBlank,
+  Button,
+  Toast,
+  Picker,
+  ImagePicker,
 } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
@@ -30,7 +36,6 @@ class AppointDiscounts extends React.Component {
     }
     this.editor = React.createRef()
   }
- 
 
   componentDidMount() {
     const { commodity, match, form } = this.props
@@ -51,49 +56,69 @@ class AppointDiscounts extends React.Component {
     })
     if (!match.params.id) return
     commodity.fetchGiftVoucher()
-    commodity.fetchReserveDetail(match.params.id).then(() => {
-      const { appointDetail } = commodity
-      // eslint-disable-next-line camelcase
-      const envo_info_list = toJS(appointDetail.envo_info_list)
-      envo_info_list.forEach((item, index) => {
-        envo_info_list[index].envo_before_select_pic = envo_info_list[index].envo_before_select_pic
-          ? [{ url: envo_info_list[index].envo_before_select_pic }]
-          : []
-        envo_info_list[index].envo_after_select_pic = envo_info_list[index].envo_after_select_pic
-          ? [{ url: envo_info_list[index].envo_after_select_pic }]
-          : []
-        envo_info_list[index].envo_serving_pic = envo_info_list[index].envo_serving_pic
-          ? [{ url: envo_info_list[index].envo_serving_pic }]
-          : []
-      })
-      this.setState({
-        envoList: envo_info_list,
-      })
-      if (sessionStorage.getItem('cacheData')){ 
-        const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
-        const envoList = JSON.parse(sessionStorage.getItem('envoList'))
-        envoList[sessionStorage.getItem('index')][sessionStorage.getItem('type')].push({url:cacheData.pic[0].url})
-          this.setState({
-            envoList
+    if (!sessionStorage.getItem('appointDis')) {
+      commodity.fetchReserveDetail(match.params.id).then(() => {
+        const { appointDetail } = commodity
+        // eslint-disable-next-line camelcase
+        const envo_info_list = toJS(appointDetail.envo_info_list)
+        envo_info_list.forEach((item, index) => {
+          envo_info_list[index].envo_before_select_pic = envo_info_list[index]
+            .envo_before_select_pic
+            ? [{ url: envo_info_list[index].envo_before_select_pic }]
+            : []
+          envo_info_list[index].envo_after_select_pic = envo_info_list[index]
+            .envo_after_select_pic
+            ? [{ url: envo_info_list[index].envo_after_select_pic }]
+            : []
+          envo_info_list[index].envo_serving_pic = envo_info_list[index]
+            .envo_serving_pic
+            ? [{ url: envo_info_list[index].envo_serving_pic }]
+            : []
         })
-        sessionStorage.removeItem('cacheData')
-        sessionStorage.removeItem('envoList')
-        sessionStorage.removeItem('type')
-        sessionStorage.removeItem('index')
-      }
-      form.setFieldsValue({
-        is_select_car_model: [appointDetail.appoint_list.is_select_car_model],
-        is_select_car_license: [appointDetail.appoint_list.is_select_car_license],
-        is_select_workerstaff: [appointDetail.appoint_list.is_select_workerstaff],
-        dhb_get_num: appointDetail.appoint_list.dhb_get_num
-          ? appointDetail.appoint_list.dhb_get_num
-          : '0',
-        score_get_num: appointDetail.appoint_list.score_get_num
-          ? appointDetail.appoint_list.score_get_num
-          : '0',
-        envo_area_name: appointDetail.appoint_list.envo_area_name,
+        this.setState({
+          envoList: envo_info_list,
+        })
+        if (sessionStorage.getItem('cacheData')) {
+          const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
+          const envoList = JSON.parse(sessionStorage.getItem('envoList'))
+          const envoListArr = JSON.parse(sessionStorage.getItem('envoListArr'))
+          this.setState({
+            envoList: envoListArr,
+          })
+          envoList[sessionStorage.getItem('index')][
+            sessionStorage.getItem('type')
+          ].push({ url: cacheData.pic[0].url })
+          this.setState({
+            envoList,
+          })
+          delete cacheData.pic
+          setTimeout(() => {
+            form.setFieldsValue(cacheData)
+          }, 100)
+          sessionStorage.removeItem('envoListArr')
+          sessionStorage.removeItem('cacheData')
+          sessionStorage.removeItem('envoList')
+          sessionStorage.removeItem('type')
+          sessionStorage.removeItem('index')
+        }
+        form.setFieldsValue({
+          is_select_car_model: [appointDetail.appoint_list.is_select_car_model],
+          is_select_car_license: [
+            appointDetail.appoint_list.is_select_car_license,
+          ],
+          is_select_workerstaff: [
+            appointDetail.appoint_list.is_select_workerstaff,
+          ],
+          dhb_get_num: appointDetail.appoint_list.dhb_get_num
+            ? appointDetail.appoint_list.dhb_get_num
+            : '0',
+          score_get_num: appointDetail.appoint_list.score_get_num
+            ? appointDetail.appoint_list.score_get_num
+            : '0',
+          envo_area_name: appointDetail.appoint_list.envo_area_name,
+        })
       })
-    })
+    }
   }
 
   addEnv = () => {
@@ -125,7 +150,7 @@ class AppointDiscounts extends React.Component {
       return envoList.map((item, index) => (
         <React.Fragment key={index}>
           <InputItem
-            defaultValue={item.envo_name}
+            value={item.envo_name}
             onChange={e => {
               const now_envoList = toJS(envoList)
               now_envoList[index].envo_name = e
@@ -138,7 +163,7 @@ class AppointDiscounts extends React.Component {
           </InputItem>
           <InputItem
             placeholder=""
-            defaultValue={item.envo_screen_num}
+            value={item.envo_screen_num}
             onChange={e => {
               const now_envoList = toJS(envoList)
               now_envoList[index].envo_screen_num = e
@@ -154,11 +179,16 @@ class AppointDiscounts extends React.Component {
             <ImagePicker
               files={item.envo_before_select_pic}
               onAddImageClick={e => {
-                sessionStorage.setItem('envoList',JSON.stringify(envoList))
+                sessionStorage.setItem('envoList', JSON.stringify(envoList))
                 const formData = form.getFieldsValue()
-                sessionStorage.setItem('index',index)
-                 sessionStorage.setItem('type','envo_before_select_pic')
+                sessionStorage.setItem('index', index)
+                sessionStorage.setItem('type', 'envo_before_select_pic')
                 Utils.cacheData(formData)
+                sessionStorage.setItem(
+                  'envoListArr',
+                  // eslint-disable-next-line react/destructuring-assignment
+                  JSON.stringify(this.state.envoList),
+                )
                 history.push('/uploadMultipleImg/裁剪/pic/1')
                 e.preventDefault()
               }}
@@ -179,10 +209,15 @@ class AppointDiscounts extends React.Component {
             <ImagePicker
               files={item.envo_after_select_pic}
               onAddImageClick={e => {
-                sessionStorage.setItem('envoList',JSON.stringify(envoList))
+                sessionStorage.setItem('envoList', JSON.stringify(envoList))
                 const formData = form.getFieldsValue()
-                sessionStorage.setItem('index',index)
-                 sessionStorage.setItem('type','envo_after_select_pic')
+                sessionStorage.setItem('index', index)
+                sessionStorage.setItem('type', 'envo_after_select_pic')
+                sessionStorage.setItem(
+                  'envoListArr',
+                  // eslint-disable-next-line react/destructuring-assignment
+                  JSON.stringify(this.state.envoList),
+                )
                 Utils.cacheData(formData)
                 history.push('/uploadMultipleImg/裁剪/pic/1')
                 e.preventDefault()
@@ -205,10 +240,15 @@ class AppointDiscounts extends React.Component {
             <ImagePicker
               files={item.envo_serving_pic}
               onAddImageClick={e => {
-                sessionStorage.setItem('envoList',JSON.stringify(envoList))
+                sessionStorage.setItem('envoList', JSON.stringify(envoList))
                 const formData = form.getFieldsValue()
-                sessionStorage.setItem('index',index)
-                sessionStorage.setItem('type','envo_serving_pic')
+                sessionStorage.setItem('index', index)
+                sessionStorage.setItem('type', 'envo_serving_pic')
+                sessionStorage.setItem(
+                  'envoListArr',
+                  // eslint-disable-next-line react/destructuring-assignment
+                  JSON.stringify(this.state.envoList),
+                )
                 Utils.cacheData(formData)
                 history.push('/uploadMultipleImg/裁剪/pic/1')
                 e.preventDefault()
@@ -249,9 +289,7 @@ class AppointDiscounts extends React.Component {
   }
 
   submit = () => {
-    const {
-      commodity, form, match, history,
-    } = this.props
+    const { commodity, form, match, history } = this.props
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请输入完整信息')
@@ -286,9 +324,11 @@ class AppointDiscounts extends React.Component {
         envo_serving_pic,
       }
 
-      commodity.editAppointDis({ ...obj, appoint_id: match.params.id }).then(res => {
-        if (res) Toast.success('编辑成功', 1, () => history.goBack())
-      })
+      commodity
+        .editAppointDis({ ...obj, appoint_id: match.params.id })
+        .then(res => {
+          if (res) Toast.success('编辑成功', 1, () => history.goBack())
+        })
     })
   }
 

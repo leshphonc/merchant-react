@@ -91,7 +91,7 @@ class Member extends React.Component {
                     fontSize: '16px',
                   }}
                 >
-                  {member.fansTotal.merTotal}
+                  {member.fansTotal.merTotal ? member.fansTotal.merTotal : 0}
                 </span>
                 <Icon type="right" color="#fff" />
               </Flex>
