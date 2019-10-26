@@ -63,7 +63,7 @@ class ServiceCategory extends React.Component {
               e.stopPropagation()
               alert(
                 '删除一级分类',
-                '是否删除一级分类下的子分类，（子分类内的项目将会自动解绑）',
+                '是否删除一级分类下的子分类',
                 [
                   {
                     text: '取消',

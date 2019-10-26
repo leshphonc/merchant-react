@@ -68,7 +68,7 @@ class ServiceCategorySecondCategory extends React.Component {
             style={{ lineHeight: '25px', color: '#666' }}
             onClick={e => {
               e.stopPropagation()
-              alert('删除二级分类', '二级分类内的项目将会自动解绑', [
+              alert('删除二级分类', '', [
                 {
                   text: '取消',
                 },
