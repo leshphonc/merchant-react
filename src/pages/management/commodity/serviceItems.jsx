@@ -89,7 +89,7 @@ class ServiceItems extends React.Component {
                 <Flex.Item>
                   <span>
                     预约开始时间：
-                    {moment(item.start_time * 1000).format('YYYY-MM-DD hh:mm')}
+                    {moment(item.start_time * 1000).format('YYYY-MM-DD HH:mm')}
                   </span>
                 </Flex.Item>
               </Flex>
@@ -98,7 +98,7 @@ class ServiceItems extends React.Component {
                 <Flex.Item>
                   <span>
                     预约结束时间：
-                    {moment(item.end_time * 1000).format('YYYY-MM-DD hh:mm')}
+                    {moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')}
                   </span>
                 </Flex.Item>
               </Flex>

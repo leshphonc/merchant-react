@@ -69,11 +69,11 @@ class SmartScreenSloganCRU extends React.Component {
       }
       if (value.start_time) {
         value.start_time = moment(value.start_time).format(
-          'YYYY-MM-DD hh:mm:00',
+          'YYYY-MM-DD HH:mm:00',
         )
       }
       if (value.end_time) {
-        value.end_time = moment(value.end_time).format('YYYY-MM-DD hh:mm:00')
+        value.end_time = moment(value.end_time).format('YYYY-MM-DD HH:mm:00')
       }
       if (location.state) {
         value.staff_id = location.state.staff_id

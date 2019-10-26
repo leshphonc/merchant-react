@@ -79,7 +79,7 @@ class PublicMember extends React.Component {
             <div>
               最后访问：
               {item.last_time
-                ? moment(item.last_time * 1000).format('YYYY-MM-DD    hh:mm:ss')
+                ? moment(item.last_time * 1000).format('YYYY-MM-DD    HH:mm:ss')
                 : '暂无数据'}
             </div>
             <WhiteSpace />

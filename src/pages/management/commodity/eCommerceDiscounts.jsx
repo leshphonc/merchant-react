@@ -117,10 +117,10 @@ class ECommerceDiscounts extends React.Component {
         in_group: value.in_group[0],
         seckill_type: value.seckill_type[0],
         seckill_open_time: moment(value.seckill_open_time).format(
-          'YYYY-MM-DD hh:mm',
+          'YYYY-MM-DD HH:mm',
         ),
         seckill_close_time: moment(value.seckill_close_time).format(
-          'YYYY-MM-DD hh:mm',
+          'YYYY-MM-DD HH:mm',
         ),
         give,
       }

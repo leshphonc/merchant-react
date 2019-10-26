@@ -1,7 +1,11 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
-import ReactEcharts from 'echarts-for-react'
+import ReactEchartsCore from 'echarts-for-react/lib/core'
+import echarts from 'echarts/lib/echarts'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/component/grid'
 import NavBar from '@/common/NavBar'
 import { FilterBox } from '@/styled'
 import {
@@ -322,7 +326,8 @@ class SmartScreen extends React.Component {
           ) : null}
           <WhiteSpace />
         </WingBlank>
-        <ReactEcharts
+        <ReactEchartsCore
+          echarts={echarts}
           option={this.getOption()}
           style={{ height: 250, background: '#fff' }}
         />
