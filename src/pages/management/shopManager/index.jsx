@@ -108,8 +108,9 @@ class ShopManager extends React.Component {
   }
 
   mapList = () => {
-    const { shopManager, history } = this.props
-    const { staffList } = shopManager
+    const { shopManager, history, form } = this.props
+    const { staffList, eCommerceValues, staffDetail } = shopManager
+    const { getFieldProps } = form
     const { selected } = this.state
     return staffList.map(item => (
       <React.Fragment key={item.staff_id}>
@@ -129,7 +130,7 @@ class ShopManager extends React.Component {
             <i
               style={{ position: 'absolute', top: 10, right: 20, fontSize: 20 }}
               className="iconfont"
-              onClick={e =>{
+              onClick={e => {
                 history.push(
                   `/management/shopManager/shopPanel/编辑/${item.store_id}/${item.staff_id}`,
                 )
@@ -227,17 +228,39 @@ class ShopManager extends React.Component {
                   </Button>
                 </Flex.Item>
                 <Flex.Item>
-                  <Button
-                    type="primary"
-                    size="small"
-                    onClick={this.showModal(
-                      'modal1',
-                      item.store_id,
-                      item.staff_id,
-                    )}
+                  <Picker
+                    {...getFieldProps('store_id', {
+                      rules: [{ required: true }],
+                    })}
+                    data={eCommerceValues}
+                    cols={1}
+                    onOk={() => {
+                      shopManager
+                        .fetchRelocationPost(
+                          form.getFieldValue('store_id')[0],
+                          staffDetail.id,
+                        )
+                        .then(() => {
+                          Toast.success('调岗成功', 1, () => {
+                            const { statusArr } = this.state
+                            shopManager.fetchStaffList(statusArr)
+                          })
+                        })
+                    }}
+                    extra="请选择"
                   >
-                    调岗
-                  </Button>
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={this.showModal(
+                        'modal1',
+                        item.store_id,
+                        item.staff_id,
+                      )}
+                    >
+                      调岗
+                    </Button>
+                  </Picker>
                 </Flex.Item>
                 <Flex.Item>
                   <Button
@@ -263,7 +286,7 @@ class ShopManager extends React.Component {
                 </Flex.Item>
               </Flex>
             }
-          ></Card.Footer>
+          />
           <WhiteSpace />
         </Card>
         <WhiteSpace />
@@ -272,10 +295,9 @@ class ShopManager extends React.Component {
   }
 
   render() {
-    const { shopManager, form, history } = this.props
-    const { eCommerceValues, staffDetail } = shopManager
-    const { getFieldProps } = form
-    const { modal1, selected } = this.state
+    const { history } = this.props
+
+    const { selected } = this.state
     // console.log(toJS(eCommerceValues))
     return (
       <React.Fragment>
@@ -337,56 +359,14 @@ class ShopManager extends React.Component {
               to="/"
               onClick={() =>
                 (window.location.href =
-                  'http://www.czg365.cn/packapp/storestaff/login.html?back=index')
+                  window.location.origin +
+                  '/packapp/storestaff/login.html?back=index')
               }
             >
               店员登陆
             </Link>
           </div>
         </List>
-        <Modal
-          visible={modal1}
-          transparent
-          maskClosable
-          onClose={this.onClose('modal1')}
-          title="调岗"
-          footer={[
-            {
-              text: '取消',
-              onPress: () => {
-                this.onClose('modal1')()
-              },
-            },
-            {
-              text: '确定',
-              onPress: () => {
-                shopManager
-                  .fetchRelocationPost(
-                    form.getFieldValue('store_id')[0],
-                    staffDetail.id,
-                  )
-                  .then(() => {
-                    Toast.success('调岗成功', 1, () => {
-                      const { statusArr } = this.state
-                      shopManager.fetchStaffList(statusArr)
-                    })
-                  })
-                this.onClose('modal1')()
-              },
-            },
-          ]}
-        >
-          <Picker
-            {...getFieldProps('store_id', {
-              rules: [{ required: true }],
-            })}
-            data={eCommerceValues}
-            cols={1}
-            extra="请选择"
-          >
-            <List.Item arrow="horizontal">选择店铺</List.Item>
-          </Picker>
-        </Modal>
       </React.Fragment>
     )
   }

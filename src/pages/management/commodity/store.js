@@ -135,6 +135,8 @@ class MastSotre {
 
   @observable shopCategoryDetail = {}
 
+  @observable shopCategorySecond = []
+
   @action
   fetchGroupList = async keyword => {
     let hasMore = true
@@ -1169,11 +1171,11 @@ class MastSotre {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         const { result } = response.data
-        result.forEach(item => {
-          item.label = item.sort_name
-          item.value = item.sort_id
-        })
-        this.shopCategory = result
+        const arr = result.map(item => ({
+          label: item.sort_name,
+          value: item.sort_id,
+        }))
+        this.shopCategory = arr
       })
     }
   }
@@ -1203,6 +1205,10 @@ class MastSotre {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         this.shopCategoryChild = response.data.result
+        this.shopCategorySecond = response.data.result.twoCate.map(item => ({
+          label: item.sort_name,
+          value: item.sort,
+        }))
       })
     }
   }

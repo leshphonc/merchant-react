@@ -57,19 +57,14 @@ class ECommerceAdd extends React.Component {
     commodity.fetchShopCategory()
     if (Utils.getCacheData()) {
       const cacheData = Utils.getCacheData()
-      form.setFieldsValue({
-        ...cacheData,
+      commodity.fetchShopSecondCategory(cacheData.sort_id[0]).then(() => {
+        form.setFieldsValue({
+          ...cacheData,
+        })
       })
       this.setState({
         goods: cacheData.goods,
       })
-      // if (cacheData.store_id) {
-      //   commodity.fetchCategoryValues(cacheData.store_id[0]).then(() => {
-      //     form.setFieldsValue({
-      //       sort_id: cacheData.sort_id,
-      //     })
-      //   })
-      // }
       setTimeout(() => {
         this.editor.current.state.editor.txt.html(cacheData.des)
       }, 500)
@@ -89,11 +84,6 @@ class ECommerceAdd extends React.Component {
         const picArr = eCommerceDetail.pic.map(item => ({
           url: item.url,
         }))
-        // commodity.fetchCategoryValues(eCommerceDetail.store_id).then(() => {
-        //   form.setFieldsValue({
-        //     sort_id: [eCommerceDetail.sort_id],
-        //   })
-        // })
         setTimeout(() => {
           this.editor.current.state.editor.txt.html(eCommerceDetail.des)
         }, 500)
@@ -106,22 +96,38 @@ class ECommerceAdd extends React.Component {
             this.getMenuList()
           },
         )
+
         form.setFieldsValue({
           name: eCommerceDetail.name,
+          number: eCommerceDetail.number,
           unit: eCommerceDetail.unit,
           old_price: eCommerceDetail.old_price,
           price: eCommerceDetail.price,
           stock_num: eCommerceDetail.stock_num,
           sort: eCommerceDetail.sort,
-          status: [eCommerceDetail.status],
-          // store_id: [eCommerceDetail.store_id],
-          sort_id: [eCommerceDetail.sort_id],
           goods_type: [eCommerceDetail.goods_type],
           freight_type: [eCommerceDetail.freight_type],
           freight_value: eCommerceDetail.freight_value,
           freight_template: [eCommerceDetail.freight_template],
           pic: picArr,
         })
+        setTimeout(() => {
+          form.setFieldsValue({
+            sort_id: [eCommerceDetail.sort_id],
+            status: [eCommerceDetail.status],
+          })
+          const formData = form.getFieldsValue()
+          console.log(formData)
+        }, 1000)
+        if (eCommerceDetail.sort_id) {
+          commodity
+            .fetchShopSecondCategory(eCommerceDetail.sort_id)
+            .then(() => {
+              form.setFieldsValue({
+                sort_id2: eCommerceDetail.sort_id2,
+              })
+            })
+        }
         // this.setState({
         //   specification: eCommerceDetail.spec_list,
         // })
@@ -211,6 +217,9 @@ class ECommerceAdd extends React.Component {
         des: this.editor.current.state.editor.txt.html(),
         spec_list: specification,
         // store_id: value.store_id ? value.store_id[0] : '',
+      }
+      if (value.sort_id2) {
+        obj.sort_id = value.sort_id2[0]
       }
       if (match.params.id) {
         commodity
@@ -329,7 +338,12 @@ class ECommerceAdd extends React.Component {
 
   render() {
     const { match, commodity, form, history } = this.props
-    const { shopCategory, goodsCategory, expressLists } = commodity
+    const {
+      shopCategory,
+      goodsCategory,
+      expressLists,
+      shopCategorySecond,
+    } = commodity
     const { getFieldProps } = form
     const { open, goods } = this.state
     const pic = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
@@ -484,6 +498,10 @@ class ECommerceAdd extends React.Component {
           <Picker
             {...getFieldProps('sort_id', {
               rules: [{ required: true }],
+              getValueFromEvent: item => {
+                commodity.fetchShopSecondCategory(item[0])
+                return item
+              },
             })}
             data={shopCategory}
             cols={1}
@@ -491,6 +509,19 @@ class ECommerceAdd extends React.Component {
           >
             <List.Item arrow="horizontal">选择添加到的分类</List.Item>
           </Picker>
+          {shopCategorySecond.length ? (
+            <Picker
+              {...getFieldProps('sort_id2', {
+                rules: [{ required: true }],
+              })}
+              data={shopCategorySecond}
+              cols={1}
+              extra="请选择"
+            >
+              <List.Item arrow="horizontal">选择添加到的二级分类</List.Item>
+            </Picker>
+          ) : null}
+
           <List.Item arrow="horizontal" onClick={() => this.goSpec()}>
             规格设置
           </List.Item>
