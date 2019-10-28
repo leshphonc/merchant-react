@@ -41,8 +41,12 @@ class RetailDetail extends React.Component {
     })
     order.fetchExpressList(match.params.id).then(() => {
       const { order } = this.props
-      const { label } = order.expressList[0] ? order.expressList[0] : { label: '' }
-      const { value } = order.expressList[0] ? order.expressList[0] : { value: '' }
+      const { label } = order.expressList[0]
+        ? order.expressList[0]
+        : { label: '' }
+      const { value } = order.expressList[0]
+        ? order.expressList[0]
+        : { value: '' }
       this.setState({
         expressListLabel: label,
         expressListValue: value,
@@ -73,7 +77,9 @@ class RetailDetail extends React.Component {
             extra={
               <React.Fragment>
                 <span>x{item2.num}</span>
-                <span style={{ textDecoration: 'line-through', margin: '0 15px' }}>
+                <span
+                  style={{ textDecoration: 'line-through', margin: '0 15px' }}
+                >
                   ¥{item2.total}
                 </span>
                 <span>¥{item2.discount_price}</span>
@@ -135,8 +141,9 @@ class RetailDetail extends React.Component {
     const orderDetails = shopOrderDetail.order_details || {}
     if (orderDetails.status === '0' && orderDetails.paid === '1') {
       if (
-        (orderDetails.is_pick_in_store === '1' || orderDetails.is_pick_in_store === '2')
-        && orderDetails.is_open_pick === '1'
+        (orderDetails.is_pick_in_store === '1' ||
+          orderDetails.is_pick_in_store === '2') &&
+        orderDetails.is_open_pick === '1'
       ) {
         return (
           <Flex.Item>
@@ -168,19 +175,20 @@ class RetailDetail extends React.Component {
     const { shopOrderDetail } = order
     const orderDetails = shopOrderDetail.order_details || {}
     if (
-      orderDetails.is_pick_in_store === '3'
-      && orderDetails.status !== '4'
-      && orderDetails.status !== '5'
-      && orderDetails.paid === '1'
-      && orderDetails.user_confirm === '0'
+      orderDetails.is_pick_in_store === '3' &&
+      orderDetails.status !== '4' &&
+      orderDetails.status !== '5' &&
+      orderDetails.paid === '1' &&
+      orderDetails.user_confirm === '0'
     ) {
       return (
         <Flex.Item>
           <Button
             type="primary"
-            onClick={() => this.setState({
-              sendModal: true,
-            })
+            onClick={() =>
+              this.setState({
+                sendModal: true,
+              })
             }
           >
             发货
@@ -189,17 +197,21 @@ class RetailDetail extends React.Component {
       )
     }
     if (
-      (orderDetails.is_pick_in_store === '1' || orderDetails.is_pick_in_store === '2')
-      && orderDetails.status !== '2'
-      && orderDetails.status !== '3'
-      && orderDetails.status !== '4'
-      && orderDetails.status !== '5'
-      && orderDetails.paid === '1'
-      && orderDetails.sure
+      (orderDetails.is_pick_in_store === '1' ||
+        orderDetails.is_pick_in_store === '2') &&
+      orderDetails.status !== '2' &&
+      orderDetails.status !== '3' &&
+      orderDetails.status !== '4' &&
+      orderDetails.status !== '5' &&
+      orderDetails.paid === '1' &&
+      orderDetails.sure
     ) {
       return (
         <Flex.Item>
-          <Button type="primary" onClick={() => this.confirmConsumption(orderDetails.order_id)}>
+          <Button
+            type="primary"
+            onClick={() => this.confirmConsumption(orderDetails.order_id)}
+          >
             确认消费
           </Button>
         </Flex.Item>
@@ -242,13 +254,17 @@ class RetailDetail extends React.Component {
       this.scanQRCode()
       return false
     }
-    Modal.alert('重要提示', '确认消费后，订单将设为已消费且不能恢复，请确认用户收货后再操作！', [
-      { text: '取消', onPress: () => console.log('cancel') },
-      {
-        text: '确认',
-        onPress: () => order.confirmConsumption(id),
-      },
-    ])
+    Modal.alert(
+      '重要提示',
+      '确认消费后，订单将设为已消费且不能恢复，请确认用户收货后再操作！',
+      [
+        { text: '取消', onPress: () => console.log('cancel') },
+        {
+          text: '确认',
+          onPress: () => order.confirmConsumption(id),
+        },
+      ],
+    )
   }
 
   // 取消订单
@@ -281,7 +297,15 @@ class RetailDetail extends React.Component {
                 </span>
               }
             >
-              <span style={{ color: '#fff', background: '#0ec0a8', padding: '0 2px' }}>首</span>{' '}
+              <span
+                style={{
+                  color: '#fff',
+                  background: '#0ec0a8',
+                  padding: '0 2px',
+                }}
+              >
+                首
+              </span>{' '}
               系统首单满
               {shopOrderDetail.discount_detail[key].money}元减
               {shopOrderDetail.discount_detail[key].minus}元
@@ -299,7 +323,15 @@ class RetailDetail extends React.Component {
                 </span>
               }
             >
-              <span style={{ color: '#fff', background: '#5d26ea', padding: '0 2px' }}>减</span>{' '}
+              <span
+                style={{
+                  color: '#fff',
+                  background: '#5d26ea',
+                  padding: '0 2px',
+                }}
+              >
+                减
+              </span>{' '}
               系统优惠满
               {shopOrderDetail.discount_detail[key].money}元减
               {shopOrderDetail.discount_detail[key].minus}元
@@ -317,7 +349,15 @@ class RetailDetail extends React.Component {
                 </span>
               }
             >
-              <span style={{ color: '#fff', background: '#ffb000', padding: '0 2px' }}>首</span>{' '}
+              <span
+                style={{
+                  color: '#fff',
+                  background: '#ffb000',
+                  padding: '0 2px',
+                }}
+              >
+                首
+              </span>{' '}
               店铺首单满
               {shopOrderDetail.discount_detail[key].money}元减
               {shopOrderDetail.discount_detail[key].minus}元
@@ -335,7 +375,15 @@ class RetailDetail extends React.Component {
                 </span>
               }
             >
-              <span style={{ color: '#fff', background: '#ff6655', padding: '0 2px' }}>减</span>{' '}
+              <span
+                style={{
+                  color: '#fff',
+                  background: '#ff6655',
+                  padding: '0 2px',
+                }}
+              >
+                减
+              </span>{' '}
               店铺优惠满
               {shopOrderDetail.discount_detail[key].money}元减
               {shopOrderDetail.discount_detail[key].minus}元
@@ -353,7 +401,15 @@ class RetailDetail extends React.Component {
                 </span>
               }
             >
-              <span style={{ color: '#fff', background: '#ff0000', padding: '0 2px' }}>惠</span>{' '}
+              <span
+                style={{
+                  color: '#fff',
+                  background: '#ff0000',
+                  padding: '0 2px',
+                }}
+              >
+                惠
+              </span>{' '}
               商品满
               {shopOrderDetail.discount_detail[key].money}元配送费减
               {shopOrderDetail.discount_detail[key].minus}元
@@ -395,7 +451,14 @@ class RetailDetail extends React.Component {
   render() {
     const { order } = this.props
     const { shopOrderDetail, expressList } = order
-    const { modal, copyModal, sendModal, expressListLabel, expressListValue, no } = this.state
+    const {
+      modal,
+      copyModal,
+      sendModal,
+      expressListLabel,
+      expressListValue,
+      no,
+    } = this.state
     const orderDetails = shopOrderDetail.order_details || {}
     return (
       <React.Fragment>
@@ -414,13 +477,19 @@ class RetailDetail extends React.Component {
             流水号
           </List.Item>
           <List.Item extra={orderDetails.create_time}>下单时间</List.Item>
-          <List.Item extra={orderDetails.expect_use_time}>期望送达时间</List.Item>
+          <List.Item extra={orderDetails.expect_use_time}>
+            期望送达时间
+          </List.Item>
           <List.Item extra={orderDetails.order_from_txt}>订单来源</List.Item>
           <List.Item extra={orderDetails.username}>收货人名称</List.Item>
           <List.Item extra={orderDetails.userphone}>收货人电话</List.Item>
           <List.Item extra={orderDetails.register_phone}>注册电话</List.Item>
           <List.Item extra={orderDetails.note}>用户备注</List.Item>
-          <List.Item extra={orderDetails.goods_type === '0' ? '实体商品订单' : '虚拟商品订单'}>
+          <List.Item
+            extra={
+              orderDetails.goods_type === '0' ? '实体商品订单' : '虚拟商品订单'
+            }
+          >
             订单类型
           </List.Item>
         </List>
@@ -441,7 +510,9 @@ class RetailDetail extends React.Component {
           {this.mapDiscount()}
           <List.Item
             extra={
-              <span style={{ color: '#ff372d' }}>{`优惠  - ¥${orderDetails.minus_price}`}</span>
+              <span
+                style={{ color: '#ff372d' }}
+              >{`优惠  - ¥${orderDetails.minus_price}`}</span>
             }
           >
             {`订单 ¥${orderDetails.discount_price}`}
@@ -452,7 +523,9 @@ class RetailDetail extends React.Component {
           <List.Item extra={orderDetails.pay_type_str}>支付方式</List.Item>
           <List.Item
             extra={
-              orderDetails.change_price > 0 ? orderDetails.price : `¥${orderDetails.go_pay_price}`
+              orderDetails.change_price > 0
+                ? orderDetails.price
+                : `¥${orderDetails.go_pay_price}`
             }
           >
             应收总额
@@ -465,7 +538,9 @@ class RetailDetail extends React.Component {
             商家会员卡折扣
           </List.Item>
           <List.Item
-            extra={`${orderDetails.balance_pay > 0 ? '- ' : ''}¥${orderDetails.balance_pay}`}
+            extra={`${orderDetails.balance_pay > 0 ? '- ' : ''}¥${
+              orderDetails.balance_pay
+            }`}
           >
             系统余额支付
           </List.Item>
@@ -485,17 +560,20 @@ class RetailDetail extends React.Component {
               </Flex.Item>
             ) : null}
             {this.showConfirm()}
-            {orderDetails.status !== '2'
-            && orderDetails.status !== '3'
-            && orderDetails.status !== '4'
-            && orderDetails.status !== '5'
-            && orderDetails.sure ? (
+            {orderDetails.status !== '2' &&
+            orderDetails.status !== '3' &&
+            orderDetails.status !== '4' &&
+            orderDetails.status !== '5' &&
+            orderDetails.sure ? (
               <Flex.Item>
-                <Button type="warning" onClick={() => this.cancelOrder(orderDetails.order_id)}>
+                <Button
+                  type="warning"
+                  onClick={() => this.cancelOrder(orderDetails.order_id)}
+                >
                   取消订单
                 </Button>
               </Flex.Item>
-              ) : null}
+            ) : null}
           </Flex>
         </WingBlank>
         <WhiteSpace />
@@ -544,7 +622,9 @@ class RetailDetail extends React.Component {
           ]}
         >
           <div style={{ fontSize: 13 }}>{orderDetails.address}</div>
-          <div style={{ fontSize: 13 }}>配送距离：{orderDetails.distance}km</div>
+          <div style={{ fontSize: 13 }}>
+            配送距离：{orderDetails.distance}km
+          </div>
           <WhiteSpace />
           <FilterBox style={{ marginRight: 5 }}>
             <Picker
@@ -555,7 +635,10 @@ class RetailDetail extends React.Component {
             >
               <div>
                 <span>{expressListLabel}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>

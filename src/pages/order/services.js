@@ -79,7 +79,14 @@ export const fetchGroupOrderDetai = orderId =>
       ticket: localStorage.getItem('ticket'),
     },
   })
-
+// 到店详情
+export const fetchArrivalOrderDetail = id =>
+  axios.get('/appapi.php?c=Merchantapp&a=store_order_detail', {
+    params: {
+      order_id: id,
+      ticket: localStorage.getItem('ticket'),
+    },
+  })
 // 团购获取核销码
 export const fecthGroupPassArray = orderId =>
   axios.post('/appapi.php?c=Merchantapp&a=group_pass_array', {
@@ -265,26 +272,16 @@ export const fetchReservationOrderListCount = () =>
   })
 
 // 获取到店订单列表
-export const fetchArrivalList = (
-  page,
-  storeId,
-  staffId,
-  goodsName,
-  stime,
-  etime,
-  merId,
-  flag,
-) =>
-  axios.post('/appapi.php?c=Merchantapp&a=getMerchantPay', {
-    page,
-    store_id: storeId,
-    staff_id: staffId,
-    goods_name: goodsName,
-    start_time: stime,
-    end_time: etime,
-    mer_id: merId,
-    flag,
-    ticket: localStorage.getItem('ticket'),
+export const fetchArrivalList = (page, storeId, stime, etime) =>
+  axios.get('/appapi.php?c=Merchantapp&a=store_order_list', {
+    params: {
+      page,
+      size: 10,
+      store_id: storeId,
+      begin_time: stime,
+      end_time: etime,
+      ticket: localStorage.getItem('ticket'),
+    },
   })
 
 // 获取到店的商铺list

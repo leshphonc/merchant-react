@@ -73,10 +73,19 @@ class OrderStore {
 
   // 获取零售订单列表
   @action
-  fetchShopOrderList = async (status, paytype, searchtype, stime, etime, keyword) => {
+  fetchShopOrderList = async (
+    status,
+    paytype,
+    searchtype,
+    stime,
+    etime,
+    keyword,
+  ) => {
     let hasMore = true
     if (this.shopOrderListTotal !== null) {
-      hasMore = this.shopOrderListPage * this.shopOrderListSize < this.shopOrderListTotal
+      hasMore =
+        this.shopOrderListPage * this.shopOrderListSize <
+        this.shopOrderListTotal
       if (hasMore) {
         this.shopOrderListPage += 1
       }
@@ -103,7 +112,10 @@ class OrderStore {
         const remainder = this.shopOrderListTotal % this.shopOrderListSize
         if (remainder) {
           runInAction(() => {
-            this.shopOrderList.splice(this.shopOrderListTotal - remainder, remainder)
+            this.shopOrderList.splice(
+              this.shopOrderListTotal - remainder,
+              remainder,
+            )
             const arr = this.shopOrderList
             arr.push(...response.data.result.lists)
             this.shopOrderList = arr
@@ -127,13 +139,27 @@ class OrderStore {
 
   // 重置页数请求零售订单列表
   @action
-  resetAndFetchShopOrderList = async (status, paytype, searchtype, stime, etime, keyword) => {
+  resetAndFetchShopOrderList = async (
+    status,
+    paytype,
+    searchtype,
+    stime,
+    etime,
+    keyword,
+  ) => {
     runInAction(() => {
       this.shopOrderList = []
       this.shopOrderListPage = 1
       this.shopOrderListTotal = null
     })
-    await this.fetchShopOrderList(status, paytype, searchtype, stime, etime, keyword)
+    await this.fetchShopOrderList(
+      status,
+      paytype,
+      searchtype,
+      stime,
+      etime,
+      keyword,
+    )
   }
 
   // 获取团购订单列表
@@ -174,7 +200,10 @@ class OrderStore {
         if (remainder) {
           runInAction(() => {
             this.groupOrderTotal = response.data.result.count - 0
-            this.groupOrderList.splice(this.groupOrderTotal - remainder, remainder)
+            this.groupOrderList.splice(
+              this.groupOrderTotal - remainder,
+              remainder,
+            )
             const arr = this.groupOrderList
             arr.push(...response.data.result.order_list)
             this.groupOrderList = arr
@@ -220,7 +249,12 @@ class OrderStore {
   // 团购快递
   @action
   modifyGroupExpress = async (expressType, expressId, orderId, storeId) => {
-    const response = await services.modifyGroupExpress(expressType, expressId, orderId, storeId)
+    const response = await services.modifyGroupExpress(
+      expressType,
+      expressId,
+      orderId,
+      storeId,
+    )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }
@@ -352,10 +386,18 @@ class OrderStore {
 
   // 获取预定订单列表
   @action
-  fetchReservationOrderList = async (paytype, searchtype, startTime, endTime, keyword) => {
+  fetchReservationOrderList = async (
+    paytype,
+    searchtype,
+    startTime,
+    endTime,
+    keyword,
+  ) => {
     let hasMore = true
     if (this.reservationOrderListTotal !== null) {
-      hasMore = this.reservationOrderListPage * this.reservationOrderListSize < this.reservationOrderListTotal
+      hasMore =
+        this.reservationOrderListPage * this.reservationOrderListSize <
+        this.reservationOrderListTotal
       if (hasMore) {
         this.reservationOrderListPage += 1
       }
@@ -378,10 +420,14 @@ class OrderStore {
           this.reservationOrderListTotal = response.data.result.total - 0
         })
       } else {
-        const remainder = this.reservationOrderListTotal % this.reservationOrderListSize
+        const remainder =
+          this.reservationOrderListTotal % this.reservationOrderListSize
         if (remainder) {
           runInAction(() => {
-            this.reservationOrderList.splice(this.reservationOrderListTotal - remainder, remainder)
+            this.reservationOrderList.splice(
+              this.reservationOrderListTotal - remainder,
+              remainder,
+            )
             const arr = this.reservationOrderList
             arr.push(...response.data.result.lists)
             this.reservationOrderList = arr
@@ -394,13 +440,25 @@ class OrderStore {
 
   // 重置页数请求预定订单列表
   @action
-  resetAndFetchReservationOrderList = async (paytype, searchtype, startTime, endTime, keyword) => {
+  resetAndFetchReservationOrderList = async (
+    paytype,
+    searchtype,
+    startTime,
+    endTime,
+    keyword,
+  ) => {
     runInAction(() => {
       this.reservationOrderList = []
       this.reservationOrderListPage = 1
       this.reservationOrderListTotal = null
     })
-    await this.fetchReservationOrderList(paytype, searchtype, startTime, endTime, keyword)
+    await this.fetchReservationOrderList(
+      paytype,
+      searchtype,
+      startTime,
+      endTime,
+      keyword,
+    )
   }
 
   // 获取预定订单详情
@@ -427,7 +485,12 @@ class OrderStore {
   // 验证订单
   @action
   verifyHandle = async (orderId, workerId, payType, psw) => {
-    const response = await services.verifyHandle(orderId, workerId, payType, psw)
+    const response = await services.verifyHandle(
+      orderId,
+      workerId,
+      payType,
+      psw,
+    )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       await this.fetchReservationOrderDetail(orderId)
       return Promise.resolve(true)
@@ -445,9 +508,18 @@ class OrderStore {
     }
   }
 
+  // 到店详情
+  @action
+  fetchArrivalOrderDetail = async id => {
+    const response = await services.fetchArrivalOrderDetail(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(response.data.result)
+    }
+  }
+
   // 获取到店订单列表
   @action
-  fetchArrivalList = async (storeId, staffId, goodsName, stime, etime, merId, flag, push) => {
+  fetchArrivalList = async (storeId, stime, etime, push) => {
     let page = this.ArrivalListPage
     if (push) {
       page = this.ArrivalListPage + 1
@@ -455,34 +527,25 @@ class OrderStore {
     const response = await services.fetchArrivalList(
       page,
       storeId,
-      staffId,
-      goodsName,
       stime,
       etime,
-      merId,
-      flag,
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        const arr = this.ArrivalList
-        const keys = Object.keys(response.data.result)
-        keys.forEach(item => {
-          arr.push(response.data.result[item])
-        })
-        this.ArrivalList = arr
+        this.ArrivalList = response.data.result.lists
       })
     }
   }
 
   // 重置页数请求到店订单列表
   @action
-  resetAndFetchArrivalList = async (storeId, staffId, goodsName, stime, etime, merId, flag) => {
+  resetAndFetchArrivalList = async (storeId, stime, etime) => {
     runInAction(() => {
       this.ArrivalList = []
       this.ArrivalListPage = 1
       this.ArrivalListTotal = null
     })
-    await this.fetchArrivalList(storeId, staffId, goodsName, stime, etime, merId, flag)
+    await this.fetchArrivalList(storeId, stime, etime)
   }
 
   // 获取到店的商铺list

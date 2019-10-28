@@ -2,12 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import NavBar from '@/common/NavBar'
 import {
-  SearchBar,
   Picker,
   WingBlank,
   WhiteSpace,
   Card,
-  Flex,
   PullToRefresh,
   DatePicker,
 } from 'antd-mobile'
@@ -22,20 +20,14 @@ class Retail extends React.Component {
     super(props)
     this.state = {
       refreshing: false,
-      searchtypeLabel: '商品名称',
       height: document.documentElement.clientHeight,
       storeId: '',
       storeLabel: '全部店铺',
-      staffId: '',
-      staffLabel: '全部店员',
       stime: '',
       startTimeLabel: '开始时间',
       etime: '',
       endTimeLabel: '结束时间',
-      flag: '3',
-      goodsName: '',
       storeList: [],
-      staffList: [],
     }
     this.refresh = React.createRef()
   }
@@ -44,7 +36,7 @@ class Retail extends React.Component {
     const { order } = this.props
     const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
     const mer_id = userInfo ? userInfo.mer_id : ''
-    const { height, storeId, staffId, goodsName, stime, etime, flag } = this.state
+    const { height, storeId, stime, etime } = this.state
     order.fetchStoreList(mer_id).then(() => {
       const { needResStore } = order
       const keys = Object.keys(needResStore)
@@ -66,12 +58,9 @@ class Retail extends React.Component {
             label: item.staff_name,
           })
         })
-        this.setState({
-          staffList,
-        })
       }
     })
-    order.resetAndFetchArrivalList(storeId, staffId, goodsName, stime, etime, mer_id, flag)
+    order.resetAndFetchArrivalList(storeId, stime, etime)
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
@@ -83,25 +72,22 @@ class Retail extends React.Component {
     const { order, history } = this.props
     return order.ArrivalList.map((item, index) => (
       <React.Fragment key={index}>
-        <Card onClick={() => history.push(`/order/retail/detail/${item.order_id}`)}>
+        <Card
+          onClick={() => history.push(`/order/arrival/detail/${item.order_id}`)}
+        >
           <Card.Header
+            thumb={item.image}
             style={{ fontSize: 13, color: '#999' }}
-            title={`${item[0].order_no}`}
-            extra={<div dangerouslySetInnerHTML={{ __html: item.pay_status }} />}
+            title={item.name}
           />
           <Card.Body style={{ color: '#666', fontSize: 12 }}>
-            <div>订单内商品：</div>
-            {item.map((item2, index2) => (
-              <React.Fragment key={index2}>
-                <WhiteSpace />
-                <WhiteSpace />
-                <Flex>
-                  <Flex.Item style={{ flex: 2 }}>{item2.name}</Flex.Item>
-                  <Flex.Item>×{item2.goods_num}</Flex.Item>
-                  <Flex.Item style={{ color: '#e93e14' }}>¥{item2.price}</Flex.Item>
-                </Flex>
-              </React.Fragment>
-            ))}
+            <div style={{ marginBottom: 5 }}>订单号：{item.order_id}</div>
+            <div style={{ marginBottom: 5 }}>总价：{item.total_price}</div>
+            <div style={{ marginBottom: 5 }}>实付：{item.balance_pay}</div>
+            <div>
+              买单时间：
+              {moment(item.pay_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+            </div>
           </Card.Body>
           <WhiteSpace />
         </Card>
@@ -117,10 +103,18 @@ class Retail extends React.Component {
     if (item.status === '1') {
       return '可操作'
     }
-    if (item.is_pick_in_store === '3' && item.status === '2' && item.user_confirm === '0') {
+    if (
+      item.is_pick_in_store === '3' &&
+      item.status === '2' &&
+      item.user_confirm === '0'
+    ) {
       return '已发货'
     }
-    if (item.is_pick_in_store === '3' && item.status === '2' && item.user_confirm > '0') {
+    if (
+      item.is_pick_in_store === '3' &&
+      item.status === '2' &&
+      item.user_confirm > '0'
+    ) {
       return '已确认收货'
     }
     if (item.status === '2') {
@@ -161,113 +155,72 @@ class Retail extends React.Component {
 
   changeStartTime = val => {
     const { order } = this.props
-    const { storeId, staffId, goodsName, etime, flag } = this.state
+    const { storeId, etime } = this.state
     this.setState({
-      stime: moment(val).format(),
+      stime: moment(val).format('YYYY-MM-DD'),
       startTimeLabel: moment(val).format('YYYY-MM-DD'),
     })
-    const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
-    const mer_id = userInfo ? userInfo.mer_id : ''
     order.resetAndFetchArrivalList(
       storeId,
-      staffId,
-      goodsName,
-      moment(val).format(),
+      moment(val).format('YYYY-MM-DD'),
       etime,
-      mer_id,
-      flag,
     )
   }
 
   changeEndTime = val => {
     const { order } = this.props
-    const { storeId, staffId, goodsName, stime, flag } = this.state
+    const { storeId, stime } = this.state
     this.setState({
-      etime: moment(val).format(),
+      etime: moment(val).format('YYYY-MM-DD'),
       endTimeLabel: moment(val).format('YYYY-MM-DD'),
     })
-    const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
-    const mer_id = userInfo ? userInfo.mer_id : ''
     order.resetAndFetchArrivalList(
       storeId,
-      staffId,
-      goodsName,
       stime,
-      moment(val).format(),
-      mer_id,
-      flag,
+      moment(val).format('YYYY-MM-DD'),
     )
   }
 
   findStoreAndFetch = value => {
     const { order } = this.props
-    const { storeList, staffId, goodsName, stime, etime, flag } = this.state
+    const { storeList, stime, etime } = this.state
     const result = storeList.find(item => item.value === value[0])
     this.setState({
       storeId: result.value,
       storeLabel: result.label,
     })
-    const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
-    const mer_id = userInfo ? userInfo.mer_id : ''
-    order.resetAndFetchArrivalList(value[0], staffId, goodsName, stime, etime, mer_id, flag)
+    order.resetAndFetchArrivalList(value[0], stime, etime)
   }
 
-  findStaffAndFetch = value => {
+  findStaffAndFetch = () => {
     const { order } = this.props
-    const { staffList, storeId, goodsName, stime, etime, flag } = this.state
-    const result = staffList.find(item => item.value === value[0])
-    this.setState({
-      staffId: result.value,
-      staffLabel: result.label,
-    })
-    const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
-    const mer_id = userInfo ? userInfo.mer_id : ''
-    order.resetAndFetchArrivalList(storeId, value[0], goodsName, stime, etime, mer_id, flag)
+    const { storeId, stime, etime } = this.state
+    order.resetAndFetchArrivalList(storeId, stime, etime)
   }
 
   loadMore = async () => {
     const { order } = this.props
-    const { storeId, staffId, goodsName, stime, etime, flag } = this.state
-    const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
-    const mer_id = userInfo ? userInfo.mer_id : ''
+    const { storeId, stime, etime } = this.state
     this.setState({ refreshing: true })
-    await order.fetchArrivalList(storeId, staffId, goodsName, stime, etime, mer_id, flag, true)
+    await order.fetchArrivalList(storeId, stime, etime, true)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
   }
 
   render() {
-    const { order } = this.props
     const {
       startTimeLabel,
       endTimeLabel,
       storeId,
       storeLabel,
-      staffId,
-      staffLabel,
       refreshing,
       height,
-      searchtypeLabel,
-      goodsName,
       storeList,
-      staffList,
-      stime,
-      etime,
-      flag,
     } = this.state
-    const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
-    const mer_id = userInfo ? userInfo.mer_id : ''
     return (
       <React.Fragment>
         <NavBar title="到店消费订单" goBack />
-        <SearchBar
-          placeholder={searchtypeLabel}
-          value={goodsName}
-          onChange={val => this.setState({ goodsName: val })}
-          onSubmit={val => order.resetAndFetchArrivalList(storeId, staffId, val, stime, etime, mer_id, flag)
-          }
-        />
         <WhiteSpace />
         <WingBlank size="sm">
           <FilterBox style={{ marginRight: 5 }}>
@@ -279,13 +232,16 @@ class Retail extends React.Component {
             >
               <div>
                 <span>{storeLabel}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
             </Picker>
           </FilterBox>
-          <FilterBox style={{ marginRight: 5 }}>
+          {/* <FilterBox style={{ marginRight: 5 }}>
             <Picker
               data={staffList}
               cols={1}
@@ -294,20 +250,23 @@ class Retail extends React.Component {
             >
               <div>
                 <span>{staffLabel}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
             </Picker>
-          </FilterBox>
-        </WingBlank>
-        <WhiteSpace />
-        <WingBlank size="sm">
+          </FilterBox> */}
           <FilterBox style={{ marginRight: 5 }}>
             <DatePicker mode="date" onChange={this.changeStartTime}>
               <div>
                 <span>{startTimeLabel}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
@@ -317,7 +276,10 @@ class Retail extends React.Component {
             <DatePicker mode="date" onChange={this.changeEndTime}>
               <div>
                 <span>{endTimeLabel}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
