@@ -960,7 +960,9 @@ class MastSotre {
   // 添加服务项目
   @action
   addSingleService = async payload => {
+    console.log('action', payload)
     const response = await services.addSingleService(payload)
+    console.log(response)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
     }

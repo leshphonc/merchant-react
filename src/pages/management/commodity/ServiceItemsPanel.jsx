@@ -196,27 +196,29 @@ class ServiceItemsPanel extends React.Component {
         return false
       }
       if (match.params.type === '服务项目') {
-        commodity
-          .addSingleService({
-            ...value,
-            appoint_id: id,
-            payment_status: value.payment_status ? 1 : 0,
-            appoint_date_type: value.appoint_date_type ? 1 : 0,
-            appoint_type: value.appoint_type[0],
-            car_type: value.car_type ? 1 : 0,
-            car_no: value.car_no ? 1 : 0,
-            pic: value.pic.map(item => item.url)[0],
-            start_time: moment(value.start_time).valueOf() / 1000,
-            end_time: moment(value.end_time).valueOf() / 1000,
-            cat_fid: value.cat_fid[0],
-            cat_id: value.cat_id[0],
-            appoint_pic_content: this.editor.current.state.editor.txt.html(),
-          })
-          .then(res => {
-            if (res) {
-              Toast.success('成功', 1, () => history.goBack())
-            }
-          })
+        const obj = {
+          ...value,
+          appoint_id: id,
+          payment_status: value.payment_status ? 1 : 0,
+          appoint_date_type: value.appoint_date_type ? 1 : 0,
+          appoint_type: value.appoint_type[0],
+          car_type: value.car_type ? 1 : 0,
+          car_no: value.car_no ? 1 : 0,
+          pic: value.pic.map(item => item.url)[0],
+          start_time: moment(value.start_time).valueOf() / 1000,
+          end_time: moment(value.end_time).valueOf() / 1000,
+          cat_fid: value.cat_fid[0],
+          cat_id: value.cat_id ? value.cat_id[0] : undefined,
+          appoint_pic_content: this.editor.current.state.editor.txt.html(),
+        }
+        if (value.cat_id) {
+          obj.cat_id = value.cat_id[0]
+        }
+        commodity.addSingleService(obj).then(res => {
+          if (res) {
+            Toast.success('成功', 1, () => history.goBack())
+          }
+        })
       } else {
         const { projectData } = this.state
         let data = []

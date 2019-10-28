@@ -558,11 +558,13 @@ export const fetchSingle = page =>
   })
 
 // 添加服务项目
-export const addSingleService = payload =>
-  axios.post('/appapi.php?c=SpaceMerchant&a=editAndAddPro', {
+export const addSingleService = payload => {
+  console.log('action', payload)
+  return axios.post('/appapi.php?c=SpaceMerchant&a=editAndAddPro', {
     ...payload,
     ticket: localStorage.getItem('ticket'),
   })
+}
 
 // 查询服务项目详情
 export const fetchSingleServiceDetail = id =>
