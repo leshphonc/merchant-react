@@ -30,7 +30,7 @@ const FilterData1 = [
 ]
 
 @withRouter
-@inject('home')
+@inject('home', 'smartScreen')
 @observer
 class Home extends React.Component {
   state = {
@@ -50,10 +50,19 @@ class Home extends React.Component {
     searchType: 'all_money',
     seriesLabel: '收入',
     seriesLabel2: '进店人数',
+    showAI: false,
   }
 
   componentDidMount() {
-    const { home } = this.props
+    const { home, smartScreen } = this.props
+    smartScreen.fetchLocalSmartScreen().then(() => {
+      const { smartScreenList } = smartScreen
+      if (smartScreenList.length) {
+        this.setState({
+          showAI: true,
+        })
+      }
+    })
     const {
       filterValue1,
       filterLabel2,
@@ -498,6 +507,7 @@ class Home extends React.Component {
       aifilterLabel2,
       aifilterStoreLabel,
       aifilterStoreValue,
+      showAI,
     } = this.state
     return (
       <div style={{ overflow: 'hidden' }}>
@@ -650,7 +660,7 @@ class Home extends React.Component {
           </Paper>
         </WingBlank>
         <WhiteSpace />
-        <WingBlank size="md">
+        <WingBlank size="md" style={!showAI ? { display: 'none' } : {}}>
           <Paper>
             <div
               style={{ textAlign: 'center', fontWeight: 600, fontSize: '1rem' }}
@@ -766,8 +776,8 @@ class Home extends React.Component {
               </Flex.Item>
             </Flex>
           </Paper>
+          <WhiteSpace />
         </WingBlank>
-        <WhiteSpace />
         <WingBlank size="md">
           <Paper>
             <GridCard data={PopularizeGrid} col={4} />
