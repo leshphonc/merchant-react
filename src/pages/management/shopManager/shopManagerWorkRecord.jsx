@@ -91,7 +91,7 @@ class ShopManagerWorkRecord extends React.Component {
         beginTime,
         endTime,
       )
-    } else if (e.nativeEvent.selectedSegmentIndex === 2) {
+    } else if (e.nativeEvent.selectedSegmentIndex === 1) {
       shopManager.resetFetchOpenOrderList(
         storeId,
         match.params.staffId,
@@ -114,9 +114,9 @@ class ShopManagerWorkRecord extends React.Component {
       return this.mapStation()
     } else if (cur === 3) {
       return this.mapSales()
-    } else if (cur === 1) {
-      return this.mapServices()
     } else if (cur === 2) {
+      return this.mapServices()
+    } else if (cur === 1) {
       return this.mapOpenOrder()
     }
   }
@@ -173,6 +173,13 @@ class ShopManagerWorkRecord extends React.Component {
       shopManager.fetchGetStaffSale(
         match.params.staffId,
         storeId,
+        beginTime,
+        endTime,
+      )
+    } else if (cur === 1) {
+      shopManager.fetchOpenOrderList(
+        storeId,
+        match.params.staffId,
         beginTime,
         endTime,
       )
@@ -440,7 +447,7 @@ class ShopManagerWorkRecord extends React.Component {
         <WhiteSpace />
         <WingBlank>
           <SegmentedControl
-            values={['到岗记录', '服务记录', '开单记录', '销售记录']}
+            values={['到岗记录', '开单记录', '服务记录', '销售记录']}
             selectedIndex={cur}
             onChange={this.curOnChange}
           />
