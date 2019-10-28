@@ -81,9 +81,13 @@ class Retail extends React.Component {
             title={item.name}
           />
           <Card.Body style={{ color: '#666', fontSize: 12 }}>
-            <div style={{ marginBottom: 5 }}>订单号：{item.order_id}</div>
-            <div style={{ marginBottom: 5 }}>总价：{item.total_price}</div>
-            <div style={{ marginBottom: 5 }}>实付：{item.balance_pay}</div>
+            <div>订单号：{item.order_id}</div>
+            <WhiteSpace />
+            <div style={{ display: 'flex' }}>
+              <div style={{ flex: 1 }}>总价：{item.total_price}</div>
+              <div style={{ flex: 1 }}>实付：{item.balance_pay}</div>
+            </div>
+            <WhiteSpace />
             <div>
               买单时间：
               {moment(item.pay_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
