@@ -15,6 +15,7 @@ class eCommerceCategory extends React.Component {
 
   mapList = () => {
     const { commodity, history } = this.props
+    console.log(commodity.shopCategory)
     return commodity.shopCategory.map(item => (
       <React.Fragment key={item.sort_id}>
         <div

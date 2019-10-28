@@ -1,13 +1,53 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { List, Button, Switch } from 'antd-mobile'
+import { observer, inject } from 'mobx-react'
 
+@inject('storeFront')
+@observer
 class StoreFrontBusinessService extends React.Component {
   state = {
     custom: false,
     license: false,
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.getStationFlag()
+  }
+
+  getStationFlag = () => {
+    const { storeFront, match } = this.props
+    this.setState(
+      {
+        custom: false,
+        license: false,
+      },
+      () => {
+        storeFront.getStationFlag(match.params.id).then(res => {
+          if (res.type === '1') {
+            this.setState({
+              custom: res.type,
+            })
+          } else {
+            this.setState({
+              license: res.type,
+            })
+          }
+        })
+      },
+    )
+  }
+
+  changeOnOff = (type, field) => {
+    const { storeFront, match } = this.props
+    storeFront.changeOnOff(type, match.params.id).then(res => {
+      if (res) {
+        this.getStationFlag()
+        this.setState({
+          [field]: !this.state[field],
+        })
+      }
+    })
+  }
 
   render() {
     const { match, history } = this.props
@@ -19,29 +59,29 @@ class StoreFrontBusinessService extends React.Component {
           <List.Item
             extra={
               <React.Fragment>
-                <Button
-                  type="primary"
-                  size="small"
-                  style={{
-                    width: 60,
-                    display: 'inline-block',
-                    verticalAlign: 'middle',
-                    marginRight: 15,
-                  }}
-                  onClick={() => {
-                    history.push(
-                      `/management/storefront/storeFrontBusinessServiceList/${match.params.id}`,
-                    )
-                  }}
-                >
-                  编辑
-                </Button>
+                {custom ? (
+                  <Button
+                    type="primary"
+                    size="small"
+                    style={{
+                      width: 60,
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      marginRight: 15,
+                    }}
+                    onClick={() => {
+                      history.push(
+                        `/management/storefront/storeFrontBusinessServiceList/${match.params.id}`,
+                      )
+                    }}
+                  >
+                    编辑
+                  </Button>
+                ) : null}
                 <Switch
                   checked={custom}
                   onChange={() => {
-                    this.setState({
-                      custom: !custom,
-                    })
+                    this.changeOnOff(1, 'custom')
                   }}
                 />
               </React.Fragment>
@@ -54,9 +94,7 @@ class StoreFrontBusinessService extends React.Component {
               <Switch
                 checked={license}
                 onChange={() => {
-                  this.setState({
-                    license: !license,
-                  })
+                  this.changeOnOff(2, 'license')
                 }}
               />
             }

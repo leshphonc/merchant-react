@@ -1,42 +1,76 @@
 import React from 'react'
-import { List, Button, Modal, WhiteSpace } from 'antd-mobile'
+import { List, Button, Modal, WhiteSpace, Toast } from 'antd-mobile'
 import NavBar from '@/common/NavBar'
+import { observer, inject } from 'mobx-react'
 
+@inject('storeFront')
+@observer
 class StoreFrontBusinessServiceList extends React.Component {
+  state = {
+    list: [],
+  }
+  componentDidMount() {
+    this.getNowStation()
+  }
+
+  getNowStation = () => {
+    const { storeFront, match } = this.props
+    storeFront.getNowStation(match.params.id).then(res => {
+      this.setState({
+        list: res,
+      })
+    })
+  }
+
   mapList = () => {
-    return (
-      <List.Item
-        extra={
-          <Button
-            type="primary"
-            size="small"
-            style={{ width: 60, float: 'right', marginRight: 10 }}
-            onClick={() =>
-              Modal.prompt(
-                '修改标识名称',
-                '',
-                [
-                  { text: '取消' },
-                  {
-                    text: '确定',
-                    onPress: value => console.log(`输入的内容:${value}`),
-                  },
-                ],
-                'default',
-                '标识1',
-              )
-            }
-          >
-            编辑
-          </Button>
-        }
-      >
-        标识1
-      </List.Item>
-    )
+    const { match } = this.props
+    const { list } = this.state
+    return list.map(item => {
+      return (
+        <List.Item
+          key={item.id}
+          extra={
+            <Button
+              type="primary"
+              size="small"
+              style={{ width: 60, float: 'right', marginRight: 10 }}
+              onClick={() =>
+                Modal.prompt(
+                  '修改标识名称',
+                  '',
+                  [
+                    { text: '取消' },
+                    {
+                      text: '确定',
+                      onPress: value => {
+                        const { storeFront } = this.props
+                        storeFront
+                          .createStation(1, match.params.id, value, item.id)
+                          .then(() => {
+                            Toast.success('编辑成功', 1, () =>
+                              this.getNowStation(),
+                            )
+                          })
+                      },
+                    },
+                  ],
+                  'default',
+                  item.s_name,
+                )
+              }
+            >
+              编辑
+            </Button>
+          }
+        >
+          {item.s_name}
+        </List.Item>
+      )
+    })
   }
 
   render() {
+    const { match } = this.props
     return (
       <>
         <NavBar
@@ -55,7 +89,16 @@ class StoreFrontBusinessServiceList extends React.Component {
                     { text: '取消' },
                     {
                       text: '确定',
-                      onPress: value => console.log(`输入的内容:${value}`),
+                      onPress: value => {
+                        const { storeFront } = this.props
+                        storeFront
+                          .createStation(1, match.params.id, value)
+                          .then(() => {
+                            Toast.success('创建成功', 1, () =>
+                              this.getNowStation(),
+                            )
+                          })
+                      },
                     },
                   ],
                   'default',

@@ -341,3 +341,45 @@ export const unbindECommerce = (id, cid) =>
     goods_id: cid,
     ticket: localStorage.getItem('ticket'),
   })
+
+// 是否使用桌号标识
+export const getNoUseStation = (store_id, order_no) =>
+  axios.post('/appapi.php?c=SpaceMerchant&a=getNoUseStation', {
+    store_id,
+    order_no,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+// 标识开关
+export const changeOnOff = (type, store_id) =>
+  axios.post('/appapi.php?c=SpaceMerchant&a=onOffStore', {
+    type,
+    store_id,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+// 添加编辑开单工位标识
+export const createStation = (type, store_id, name, id) => {
+  return axios.post('/appapi.php?c=SpaceMerchant&a=addStation', {
+    type,
+    store_id,
+    name,
+    id,
+    ticket: localStorage.getItem('ticket'),
+  })
+}
+
+// 店铺标识的状态
+export const getStationFlag = store_id => {
+  return axios.post('/appapi.php?c=SpaceMerchant&a=getStationFlag', {
+    store_id,
+    ticket: localStorage.getItem('ticket'),
+  })
+}
+
+export const getNowStation = store_id => {
+  return axios.post('/appapi.php?c=SpaceMerchant&a=getNowStation', {
+    store_id,
+    ticket: localStorage.getItem('ticket'),
+  })
+}

@@ -727,10 +727,56 @@ class StoreFrontStore {
   }
 
   // 解绑店铺电商产品
+  @action
   unbindECommerce = async (id, cid) => {
     const response = await services.unbindECommerce(id, cid)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       return Promise.resolve(true)
+    }
+  }
+
+  // 是否使用桌号标识
+  @action
+  getNoUseStation = async (store_id, order_no) => {
+    const response = await services.getNoUseStation(store_id, order_no)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(response.data.result)
+    }
+  }
+
+  // 没有使用的标识
+  @action
+  changeOnOff = async (type, store_id) => {
+    const response = await services.changeOnOff(type, store_id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(response.data.result)
+    }
+  }
+
+  // 添加编辑开单工位标识
+  @action
+  createStation = async (type, store_id, name, id) => {
+    const response = await services.createStation(type, store_id, name, id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(response.data.result)
+    }
+  }
+
+  // 店铺标识的状态
+  @action
+  getStationFlag = async store_id => {
+    const response = await services.getStationFlag(store_id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(response.data.result)
+    }
+  }
+
+  // 获取标识列表
+  @action
+  getNowStation = async store_id => {
+    const response = await services.getNowStation(store_id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(response.data.result)
     }
   }
 }

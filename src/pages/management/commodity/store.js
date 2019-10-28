@@ -1171,11 +1171,11 @@ class MastSotre {
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         const { result } = response.data
-        const arr = result.map(item => ({
-          label: item.sort_name,
-          value: item.sort_id,
-        }))
-        this.shopCategory = arr
+        result.forEach(item => {
+          item.label = item.sort_name
+          item.value = item.sort_id
+        })
+        this.shopCategory = result
       })
     }
   }

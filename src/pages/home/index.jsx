@@ -167,7 +167,6 @@ class Home extends React.Component {
       xData = aiData.map((item, index) => `${index + 1}月`)
       custom = false
     }
-    console.log(xData)
     let format = null
     if (custom) {
       format = params => {
@@ -467,7 +466,6 @@ class Home extends React.Component {
 
   render() {
     const { home, history } = this.props
-    console.log(history)
     const { storeList } = home
     const {
       filterValue1,
