@@ -13,6 +13,7 @@ class Login extends React.Component {
   }
 
   invokeAndroid = json => {
+    console.log(json)
     if (
       navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') !== -1
     ) {
