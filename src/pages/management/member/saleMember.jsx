@@ -187,7 +187,7 @@ class SaleMember extends React.Component {
           </FilterBox>
           <span>-&nbsp;</span>
           <FilterBox>
-            <span>共{buyFansListTotal}条记录</span>
+            <span>共{buyFansListTotal ? buyFansListTotal : 0}条记录</span>
           </FilterBox>
         </WingBlank>
         <WhiteSpace />

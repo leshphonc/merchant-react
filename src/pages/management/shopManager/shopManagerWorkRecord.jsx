@@ -82,6 +82,8 @@ class ShopManagerWorkRecord extends React.Component {
         endTime,
       )
     } else if (e.nativeEvent.selectedSegmentIndex === 2) {
+      console.log('开单记录')
+    } else if (e.nativeEvent.selectedSegmentIndex === 3) {
       shopManager.resetFetchGetStaffSale(
         match.params.staffId,
         storeId,
@@ -95,10 +97,12 @@ class ShopManagerWorkRecord extends React.Component {
     const { cur } = this.state
     if (cur === 0) {
       return this.mapStation()
-    } else if (cur === 2) {
+    } else if (cur === 3) {
       return this.mapSales()
     } else if (cur === 1) {
       return this.mapServices()
+    } else if (cur === 2) {
+      return this.mapOpenOrder()
     }
   }
 
@@ -149,7 +153,7 @@ class ShopManagerWorkRecord extends React.Component {
         beginTime,
         endTime,
       )
-    } else if (cur === 2) {
+    } else if (cur === 3) {
       shopManager.fetchGetStaffSale(
         match.params.staffId,
         storeId,
@@ -200,19 +204,24 @@ class ShopManagerWorkRecord extends React.Component {
             <Card.Body>
               <Flex>
                 <Flex.Item style={{ textAlign: 'left' }}>
-                  消费用户：{item.user_name}}
+                  用户：{item.user_name}
                 </Flex.Item>
                 <Flex.Item style={{ textAlign: 'center' }}>
-                  数量:{item.num}
+                  用户id：123112
                 </Flex.Item>
                 <Flex.Item style={{ textAlign: 'right' }}>
-                  金额：{item.order_money}
+                  数量:{item.num}
                 </Flex.Item>
               </Flex>
               <WhiteSpace />
               <Flex>
-                <Flex.Item>销售报酬：{item.first_spread_by_take}</Flex.Item>
-                <Flex.Item>
+                <Flex.Item style={{ textAlign: 'left' }}>
+                  金额：{item.order_money}
+                </Flex.Item>
+                <Flex.Item style={{ textAlign: 'center' }}>
+                  销售报酬：{item.first_spread_by_take}
+                </Flex.Item>
+                <Flex.Item style={{ textAlign: 'right' }}>
                   状态：
                   {item.settlement_time === 0 ? (
                     <span style={{ color: 'red' }}>结算中</span>
@@ -228,6 +237,57 @@ class ShopManagerWorkRecord extends React.Component {
         </div>
       </React.Fragment>
     ))
+  }
+
+  mapOpenOrder = () => {
+    return (
+      <React.Fragment key={1}>
+        <div className="staffList">
+          <Card>
+            <Card.Header
+              thumb={require('@/assets/image/avatar.jpeg')}
+              title={
+                <Flex direction="column" style={{ marginLeft: '8px' }}>
+                  <Flex.Item style={{ display: 'block', width: '100%' }}>
+                    开单标识
+                  </Flex.Item>
+                  <WhiteSpace />
+                  <Flex.Item
+                    style={{ color: '#666', fontSize: 13, marginBottom: '4px' }}
+                  >
+                    订单编号：11221
+                  </Flex.Item>
+                  <Flex.Item
+                    style={{ color: '#666', fontSize: 13, marginBottom: '4px' }}
+                  >
+                    下单时间：2019-09-11 12:12:12
+                    {/* {moment(item.addtime * 1000).format('YYYY-MM-DD H:mm:ss')} */}
+                  </Flex.Item>
+                  <Flex.Item
+                    style={{ color: '#666', fontSize: 13, marginBottom: '4px' }}
+                  >
+                    所属店铺：111
+                  </Flex.Item>
+                </Flex>
+              }
+            />
+            <Card.Body>
+              <Flex>
+                <Flex.Item>消费用户：111</Flex.Item>
+                <Flex.Item>用户id：111</Flex.Item>
+              </Flex>
+              <WhiteSpace />
+              <Flex>
+                <Flex.Item> 数量:121</Flex.Item>
+                <Flex.Item>金额：1212</Flex.Item>
+              </Flex>
+              <WhiteSpace />
+            </Card.Body>
+          </Card>
+          <WhiteSpace />
+        </div>
+      </React.Fragment>
+    )
   }
   // mapSales = () => {
   //   const { shopManager } = this.props
@@ -296,7 +356,7 @@ class ShopManagerWorkRecord extends React.Component {
         beginTime,
         endTime,
       )
-    } else if (cur === 2) {
+    } else if (cur === 3) {
       shopManager.resetFetchGetStaffSale(
         match.params.staffId,
         val[0],
@@ -393,7 +453,7 @@ class ShopManagerWorkRecord extends React.Component {
         <WhiteSpace />
         <WingBlank>
           <SegmentedControl
-            values={['到岗记录', '服务记录', '销售记录']}
+            values={['到岗记录', '服务记录', '开单记录', '销售记录']}
             selectedIndex={cur}
             onChange={this.curOnChange}
           />

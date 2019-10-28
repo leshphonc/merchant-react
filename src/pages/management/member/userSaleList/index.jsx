@@ -186,7 +186,10 @@ class UserSaleList extends React.Component {
           </FilterBox>
           <span>-&nbsp;</span>
           <FilterBox>
-            <span>共{userBuyListTotalNum}条记录</span>
+            <span>
+              共{userBuyListTotalNum.length === 0 ? 0 : userBuyListTotalNum}
+              条记录
+            </span>
           </FilterBox>
         </WingBlank>
         <PullToRefresh

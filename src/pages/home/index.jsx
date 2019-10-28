@@ -77,6 +77,25 @@ class Home extends React.Component {
           echartData: home.echartData,
         })
       })
+    const json = {
+      action: 'SendJPushIdToServer',
+      type: 'merchant',
+      uid: JSON.parse(localStorage.getItem('merchant_user')).mer_id,
+      BaseUrl: window.location.origin.split('.')[1],
+    }
+    this.invokeAndroid(json)
+  }
+
+  invokeAndroid = json => {
+    if (
+      navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') !== -1
+    ) {
+      window.android.invokeMethods(JSON.stringify(json))
+    } else if (
+      navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') !== -1
+    ) {
+      window.location.href = 'ios:' + JSON.stringify(json)
+    }
   }
 
   getOption = () => {
