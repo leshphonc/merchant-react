@@ -148,6 +148,7 @@ class ShopManagerWorkRecord extends React.Component {
       </React.Fragment>
     ))
   }
+
   loadMore = () => {
     const { match, shopManager } = this.props
     const { cur, beginTime, endTime, storeId } = this.state
@@ -251,7 +252,12 @@ class ShopManagerWorkRecord extends React.Component {
     return openOrderList.map((item, index) => (
       // eslint-disable-next-line react/no-array-index-key
       <React.Fragment key={index}>
-        <div className="staffList">
+        <div
+          className="staffList"
+          onClick={() => {
+            console.log(item.order_id)
+          }}
+        >
           <Card>
             <Card.Header
               thumb={item.pic_info}
