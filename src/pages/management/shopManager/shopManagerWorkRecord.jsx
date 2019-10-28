@@ -51,7 +51,17 @@ class ShopManagerWorkRecord extends React.Component {
         storeList: arr,
       })
     })
-    if (cur === 0) {
+    if (sessionStorage.getItem('openOrderList')) {
+      this.setState({
+        cur: 2,
+      })
+      shopManager.resetFetchOpenOrderList(
+        storeId,
+        match.params.staffId,
+        beginTime,
+        endTime,
+      )
+    } else if (cur === 0) {
       shopManager.resetFetchGetStaffDuty(
         match.params.staffId,
         storeId,
@@ -245,6 +255,16 @@ class ShopManagerWorkRecord extends React.Component {
     ))
   }
 
+  goOrderDetail = order_id => {
+    const { shopManager, history } = this.props
+    const { openOrderList } = shopManager
+    const { openOrderPage, openOrderTotal } = shopManager
+    sessionStorage.setItem('openOrderPage', openOrderPage)
+    sessionStorage.setItem('openOrderTotal', openOrderTotal)
+    sessionStorage.setItem('openOrderList', JSON.stringify(openOrderList))
+    history.push(`/management/shopManager/openOrderDetail/${order_id}`)
+  }
+
   mapOpenOrder = () => {
     const { shopManager } = this.props
     const { openOrderList } = shopManager
@@ -254,9 +274,7 @@ class ShopManagerWorkRecord extends React.Component {
       <React.Fragment key={index}>
         <div
           className="staffList"
-          onClick={() => {
-            console.log(item.order_id)
-          }}
+          onClick={this.goOrderDetail.bind(this, item.order_id)}
         >
           <Card>
             <Card.Header

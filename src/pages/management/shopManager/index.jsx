@@ -20,6 +20,7 @@ import ShopPanel from './shopPanel'
 import Classify from './classify'
 import ClassifyPanel from './classifyPanel'
 import ShopManagerWorkRecord from './shopManagerWorkRecord'
+import OpenOrderDetail from './openOrderDetail'
 
 @createForm()
 @inject('shopManager')
@@ -385,6 +386,10 @@ export default () => (
     <Route
       path="/management/shopManager/shopManagerWorkRecord/:staffId?"
       component={ShopManagerWorkRecord}
+    />
+    <Route
+      path="/management/shopManager/openOrderDetail/:orderId?"
+      component={OpenOrderDetail}
     />
   </React.Fragment>
 )

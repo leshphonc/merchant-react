@@ -223,3 +223,10 @@ export const fetchOpenOrderList = (
     page,
     ticket: localStorage.getItem('ticket'),
   })
+
+// 开单详情
+export const fetchOpenOrderDetail = order_id =>
+  axios.post('/appapi.php?c=Merchantapp&a=getDoorOrderDesc', {
+    order_id,
+    ticket: localStorage.getItem('ticket'),
+  })

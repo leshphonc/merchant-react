@@ -49,6 +49,10 @@ class MastSotre {
 
   @observable openOrderTotal = null
 
+  // 开单详情
+
+  @observable openOrderDetail = []
+
   //店铺列表
 
   @observable storeList = null
@@ -340,13 +344,35 @@ class MastSotre {
       }
       if (this.openOrderPage > this.openOrderTotal) hasMore = false
       if (hasMore) {
-        runInAction(() => {
-          this.openOrderPage += 1
-          const arr = this.openOrderList
-          arr.push(...response.data.result.lists)
-          this.openOrderList = arr
-        })
+        if (sessionStorage.getItem('openOrderPage')) {
+          runInAction(() => {
+            this.openOrderTotal = sessionStorage.getItem('openOrderTotal')
+            this.openOrderPage = sessionStorage.getItem('openOrderPage')
+            this.openOrderList = JSON.parse(sessionStorage.getItem('openOrderList'))
+          })
+          sessionStorage.removeItem('openOrderTotal')
+          sessionStorage.removeItem('openOrderList')
+          sessionStorage.removeItem('openOrderPage')
+        } else {
+          runInAction(() => {
+            this.openOrderPage += 1
+            const arr = this.openOrderList
+            arr.push(...response.data.result.lists)
+            this.openOrderList = arr
+          })
+        }
       }
+    }
+  }
+
+  // 开单详情
+  @action
+  fetchOpenOrderDetail = async order_id => {
+    const response = await services.fetchOpenOrderDetail(order_id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      runInAction(() => {
+        this.openOrderDetail = response.data.result.lists
+      })
     }
   }
 }
