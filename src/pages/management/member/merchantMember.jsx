@@ -34,15 +34,15 @@ class MerchantMember extends React.Component {
 
   componentDidMount() {
     const { member } = this.props
-    const { publicList } = member
+    // const { publicList } = member
     const { height, beginTime, endTime } = this.state
-    if (!publicList.length)
-      member.fetchMerFansList(beginTime, endTime).then(() => {
-        const { merFansListTotalNum } = member
-        this.setState({
-          merFansListTotalNum,
-        })
+    // if (!publicList.length)
+    member.fetchMerFansList(beginTime, endTime).then(() => {
+      const { merFansListTotalNum } = member
+      this.setState({
+        merFansListTotalNum,
       })
+    })
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({

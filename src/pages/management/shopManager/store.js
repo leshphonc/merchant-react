@@ -39,6 +39,16 @@ class MastSotre {
 
   @observable staffSaleTotal = null
 
+  // 店员开单记录
+
+  @observable openOrderList = []
+
+  @observable openOrderPage = 1
+
+  @observable openOrderSize = 10
+
+  @observable openOrderTotal = null
+
   //店铺列表
 
   @observable storeList = null
@@ -294,6 +304,49 @@ class MastSotre {
       runInAction(() => {
         this.storeList = response.data.result
       })
+    }
+  }
+
+  //重置店员销售记录
+  @action
+  resetFetchOpenOrderList = async (storeId, staffId, beginTime, endTime) => {
+    runInAction(() => {
+      this.openOrderTotal = null
+      this.openOrderPage = 1
+      this.openOrderList = []
+    })
+    await this.fetchOpenOrderList(storeId, staffId, beginTime, endTime)
+  }
+
+  // 店员销售记录
+  @action
+  fetchOpenOrderList = async (storeId, staffId, beginTime, endTime) => {
+    let hasMore = true
+    const response = await services.fetchOpenOrderList(
+      storeId,
+      staffId,
+      beginTime,
+      endTime,
+      this.openOrderPage,
+      // this.staffDutySize,
+    )
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      if (this.openOrderTotal === null) {
+        runInAction(() => {
+          this.openOrderTotal = Math.ceil(
+            response.data.result.total / this.openOrderSize,
+          )
+        })
+      }
+      if (this.openOrderPage > this.openOrderTotal) hasMore = false
+      if (hasMore) {
+        runInAction(() => {
+          this.openOrderPage += 1
+          const arr = this.openOrderList
+          arr.push(...response.data.result.lists)
+          this.openOrderList = arr
+        })
+      }
     }
   }
 }

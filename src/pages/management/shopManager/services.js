@@ -206,3 +206,20 @@ export const fetchStoreList = () =>
       ticket: localStorage.getItem('ticket'),
     },
   })
+
+// 店员开单记录
+export const fetchOpenOrderList = (
+  store_id,
+  staff_id,
+  begin_time,
+  end_time,
+  page,
+) =>
+  axios.post('/appapi.php?c=Merchantapp&a=getStaffDoorPay', {
+    store_id,
+    staff_id,
+    begin_time,
+    end_time,
+    page,
+    ticket: localStorage.getItem('ticket'),
+  })

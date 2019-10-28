@@ -55,7 +55,7 @@ class Member extends React.Component {
                     fontSize: '16px',
                   }}
                 >
-                  {member.fansTotal.saleTotal}
+                  {member.fansTotal.saleTotal ? member.fansTotal.saleTotal : 0}
                 </span>
                 <Icon type="right" color="#fff" />
               </Flex>
@@ -73,7 +73,7 @@ class Member extends React.Component {
                     fontSize: '16px',
                   }}
                 >
-                  {member.fansTotal.saleTotal}
+                  {member.fansTotal.saleTotal ? member.fansTotal.saleTotal : 0}
                 </span>
                 <Icon type="right" color="#fff" />
               </Flex>
