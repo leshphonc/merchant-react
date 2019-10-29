@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
   WhiteSpace,
-  PullToRefresh,
   Button,
   DatePicker,
   WingBlank,
+  PullToRefresh,
 } from 'antd-mobile'
 import NavBar from '@/common/NavBar'
 import moment from 'moment'
@@ -90,7 +90,7 @@ class PublicMember extends React.Component {
                 : '暂无数据'}
             </div> */}
             <Button
-              style={{ position: 'absolute', bottom: 10, right: 10 }}
+              style={{ position: 'absolute', right: 10 }}
               size="small"
               type="primary"
               onClick={() => {
@@ -206,6 +206,16 @@ class PublicMember extends React.Component {
         >
           {this.mapList()}
         </PullToRefresh>
+        {/* <div style={{ position: 'relative', height: '86vh', width: '100%' }}>
+          <Luo
+            id="id"
+            onUp={() => this.onUp()}
+            noDown
+            style={{ width: '100%' }}
+          >
+            {this.mapList()}
+          </Luo>
+        </div> */}
       </React.Fragment>
     )
   }

@@ -20,12 +20,14 @@ export const ListItem = styled.div`
   background: #fff;
   border-bottom: 1px solid rgb(0, 0, 0, 0.12);
   color: #444;
+  width: 100%;
 `
 
 export const ItemTop = styled.div`
   display: flex;
   flex: 1;
   padding: 10px;
+  width: 100%;
   .avatar {
     width: 50px;
     height: 50px;
