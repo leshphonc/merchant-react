@@ -37,7 +37,7 @@ export const ItemTop = styled.div`
     display: flex;
     justify-content: start;
     flex: 1;
-    max-width: 100%;
+    max-width: 80%;
     font-size: 12px;
     .content-line {
       display: flex;
