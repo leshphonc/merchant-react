@@ -2,7 +2,7 @@
   "name": "merchant-center",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://www.9youke.com/newpage/",
+  "homepage": "https://www.czg365.cn/newpage/",
   "dependencies": {
     "antd-mobile": "^2.2.14",
     "axios": "^0.19.0",
