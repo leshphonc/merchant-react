@@ -28,11 +28,11 @@ axios.interceptors.response.use(
       ) {
         window.location.href = '/newpage/#/login'
       }
-      if (!config.data.errorCode) {
-        Toast.fail('未找到接口', 1.5)
+      if (config.data.error === ErrorCode.SUCCESS) {
         return config
       }
-      if (config.data.error === ErrorCode.SUCCESS) {
+      if (!config.data.errorCode) {
+        Toast.fail('未找到接口', 1.5)
         return config
       }
       Toast.fail(config.data.errorMsg, 2)
