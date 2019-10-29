@@ -55,14 +55,6 @@ class Home extends React.Component {
 
   componentDidMount() {
     const { home, smartScreen } = this.props
-    smartScreen.fetchLocalSmartScreen().then(() => {
-      const { smartScreenList } = smartScreen
-      if (smartScreenList.length) {
-        this.setState({
-          showAI: true,
-        })
-      }
-    })
     const {
       filterValue1,
       filterLabel2,
@@ -71,6 +63,14 @@ class Home extends React.Component {
     } = this.state
     const ticket = localStorage.getItem('ticket')
     if (!ticket) return
+    smartScreen.fetchLocalSmartScreen().then(() => {
+      const { smartScreenList } = smartScreen
+      if (smartScreenList.length) {
+        this.setState({
+          showAI: true,
+        })
+      }
+    })
     home.fetchStoreList()
     home
       .getAllFaceVisit(filterValue1, filterLabel2, filterStoreValue)

@@ -31,6 +31,10 @@ axios.interceptors.response.use(
       if (config.data.error === ErrorCode.SUCCESS) {
         return config
       }
+      if (!config.data.errorCode) {
+        Toast.fail('未找到接口', 1.5)
+        return config
+      }
       Toast.fail(config.data.errorMsg, 2)
     }
     return config
