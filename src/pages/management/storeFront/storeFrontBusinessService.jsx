@@ -16,25 +16,18 @@ class StoreFrontBusinessService extends React.Component {
 
   getStationFlag = () => {
     const { storeFront, match } = this.props
-    this.setState(
-      {
-        custom: false,
-        license: false,
-      },
-      () => {
-        storeFront.getStationFlag(match.params.id).then(res => {
-          if (res.type === '1') {
-            this.setState({
-              custom: res.type,
-            })
-          } else {
-            this.setState({
-              license: res.type,
-            })
-          }
+    storeFront.getStationFlag(match.params.id).then(res => {
+      if (res.defined === 1) {
+        this.setState({
+          custom: true,
         })
-      },
-    )
+      }
+      if (res.car === 1) {
+        this.setState({
+          license: true,
+        })
+      }
+    })
   }
 
   changeOnOff = (type, field) => {

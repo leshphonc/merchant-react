@@ -660,124 +660,130 @@ class Home extends React.Component {
           </Paper>
         </WingBlank>
         <WhiteSpace />
-        <WingBlank size="md" style={!showAI ? { display: 'none' } : {}}>
-          <Paper>
-            <div
-              style={{ textAlign: 'center', fontWeight: 600, fontSize: '1rem' }}
-            >
-              门店AI助手
-            </div>
-            <WhiteSpace />
-            <FilterBox style={{ marginRight: 5 }}>
-              <Picker
-                data={storeList}
-                value={[aifilterStoreValue]}
-                cols={1}
-                onChange={this.aichangeFilterStore}
+        {showAI ? (
+          <WingBlank size="md">
+            <Paper>
+              <div
+                style={{
+                  textAlign: 'center',
+                  fontWeight: 600,
+                  fontSize: '1rem',
+                }}
               >
-                <div>
-                  <span>{aifilterStoreLabel}</span>
-                  <i
-                    className="iconfont"
-                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                  >
-                    &#xe6f0;
-                  </i>
-                </div>
-              </Picker>
-            </FilterBox>
-            <FilterBox style={{ marginRight: 5 }}>
-              <Picker
-                data={FilterData1}
-                value={[aifilterValue1]}
-                cols={1}
-                onChange={this.aichangeFilter1}
-              >
-                <div>
-                  <span>{aifilterLabel1}</span>
-                  <i
-                    className="iconfont"
-                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                  >
-                    &#xe6f0;
-                  </i>
-                </div>
-              </Picker>
-            </FilterBox>
-            {aifilterValue1 === '3' ? (
+                门店AI助手
+              </div>
+              <WhiteSpace />
               <FilterBox style={{ marginRight: 5 }}>
-                <DatePicker mode="year" onChange={this.aichangeYear}>
-                  <div>
-                    <span>{aifilterLabel2}</span>
-                    <i
-                      className="iconfont"
-                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                    >
-                      &#xe6f0;
-                    </i>
-                  </div>
-                </DatePicker>
-              </FilterBox>
-            ) : null}
-            {aifilterValue1 === '2' ? (
-              <FilterBox style={{ marginRight: 5 }}>
-                <DatePicker mode="month" onChange={this.aichangeMonth}>
-                  <div>
-                    <span>{aifilterLabel2}</span>
-                    <i
-                      className="iconfont"
-                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                    >
-                      &#xe6f0;
-                    </i>
-                  </div>
-                </DatePicker>
-              </FilterBox>
-            ) : null}
-            {aifilterValue1 === '1' ? (
-              <FilterBox style={{ marginRight: 5 }}>
-                <DatePicker mode="date" onChange={this.aichangeDay}>
-                  <div>
-                    <span>{aifilterLabel2}</span>
-                    <i
-                      className="iconfont"
-                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                    >
-                      &#xe6f0;
-                    </i>
-                  </div>
-                </DatePicker>
-              </FilterBox>
-            ) : null}
-            <WhiteSpace />
-            <ReactEchartsCore
-              echarts={echarts}
-              option={this.getOption2()}
-              style={{ height: 250, background: '#fff' }}
-            />
-            <WhiteSpace />
-            <Flex>
-              <Flex.Item>
-                <FlexBox
-                  style={{ minHeight: 50, paddingTop: 4, fontWeight: 600 }}
+                <Picker
+                  data={storeList}
+                  value={[aifilterStoreValue]}
+                  cols={1}
+                  onChange={this.aichangeFilterStore}
                 >
-                  <div>广告订单</div>
-                </FlexBox>
-              </Flex.Item>
-              <Flex.Item>
-                <FlexBox
-                  style={{ minHeight: 50, paddingTop: 4, fontWeight: 600 }}
-                  onClick={() =>
-                    history.push('/popularize/smartScreen/screenList')
-                  }
+                  <div>
+                    <span>{aifilterStoreLabel}</span>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                    >
+                      &#xe6f0;
+                    </i>
+                  </div>
+                </Picker>
+              </FilterBox>
+              <FilterBox style={{ marginRight: 5 }}>
+                <Picker
+                  data={FilterData1}
+                  value={[aifilterValue1]}
+                  cols={1}
+                  onChange={this.aichangeFilter1}
                 >
-                  <div>推广内容</div>
-                </FlexBox>
-              </Flex.Item>
-            </Flex>
-          </Paper>
-          <WhiteSpace />
-        </WingBlank>
+                  <div>
+                    <span>{aifilterLabel1}</span>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                    >
+                      &#xe6f0;
+                    </i>
+                  </div>
+                </Picker>
+              </FilterBox>
+              {aifilterValue1 === '3' ? (
+                <FilterBox style={{ marginRight: 5 }}>
+                  <DatePicker mode="year" onChange={this.aichangeYear}>
+                    <div>
+                      <span>{aifilterLabel2}</span>
+                      <i
+                        className="iconfont"
+                        style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                      >
+                        &#xe6f0;
+                      </i>
+                    </div>
+                  </DatePicker>
+                </FilterBox>
+              ) : null}
+              {aifilterValue1 === '2' ? (
+                <FilterBox style={{ marginRight: 5 }}>
+                  <DatePicker mode="month" onChange={this.aichangeMonth}>
+                    <div>
+                      <span>{aifilterLabel2}</span>
+                      <i
+                        className="iconfont"
+                        style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                      >
+                        &#xe6f0;
+                      </i>
+                    </div>
+                  </DatePicker>
+                </FilterBox>
+              ) : null}
+              {aifilterValue1 === '1' ? (
+                <FilterBox style={{ marginRight: 5 }}>
+                  <DatePicker mode="date" onChange={this.aichangeDay}>
+                    <div>
+                      <span>{aifilterLabel2}</span>
+                      <i
+                        className="iconfont"
+                        style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                      >
+                        &#xe6f0;
+                      </i>
+                    </div>
+                  </DatePicker>
+                </FilterBox>
+              ) : null}
+              <WhiteSpace />
+              <ReactEchartsCore
+                echarts={echarts}
+                option={this.getOption2()}
+                style={{ height: 250, background: '#fff' }}
+              />
+              <WhiteSpace />
+              <Flex>
+                <Flex.Item>
+                  <FlexBox
+                    style={{ minHeight: 50, paddingTop: 4, fontWeight: 600 }}
+                  >
+                    <div>广告订单</div>
+                  </FlexBox>
+                </Flex.Item>
+                <Flex.Item>
+                  <FlexBox
+                    style={{ minHeight: 50, paddingTop: 4, fontWeight: 600 }}
+                    onClick={() =>
+                      history.push('/popularize/smartScreen/screenList')
+                    }
+                  >
+                    <div>推广内容</div>
+                  </FlexBox>
+                </Flex.Item>
+              </Flex>
+            </Paper>
+            <WhiteSpace />
+          </WingBlank>
+        ) : null}
         <WingBlank size="md">
           <Paper>
             <GridCard data={PopularizeGrid} col={4} />

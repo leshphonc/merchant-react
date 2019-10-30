@@ -40,7 +40,7 @@ class ServiceCategoryProject extends React.Component {
             title={item.appoint_name}
             thumb={item.pic}
             extra={item.appoint_type === '1' ? '上门' : '到店'}
-          ></Card.Header>
+          />
           <Card.Body>
             <div style={{ color: '#777' }}>{item.appoint_content}</div>
             <WhiteSpace />

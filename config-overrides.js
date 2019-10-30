@@ -12,7 +12,8 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const path = require('path')
 const { theme } = require('./package.json')
 
-const findWebpackPlugin = (plugins, pluginName) => plugins.find(plugin => plugin.constructor.name === pluginName)
+const findWebpackPlugin = (plugins, pluginName) =>
+  plugins.find(plugin => plugin.constructor.name === pluginName)
 
 const overrideProcessEnv = value => config => {
   const plugin = findWebpackPlugin(config.plugins, 'DefinePlugin')
@@ -31,7 +32,6 @@ const addCustomize = () => config => {
     config.devtool = false // 去掉map文件
     if (config.plugins) {
       config.plugins.push(
-        new BundleAnalyzerPlugin(),
         new BundleAnalyzerPlugin({
           analyzerMode: 'server',
           analyzerHost: '127.0.0.1',
