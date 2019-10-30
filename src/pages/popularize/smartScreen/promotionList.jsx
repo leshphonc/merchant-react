@@ -35,6 +35,24 @@ class PromotionList extends React.Component {
     smartScreen.fetchPromotionList(match.params.id, cur)
   }
 
+  currentStatus = item => {
+    if (item.ai.is_shelves === '2') {
+      if (item.ai.audit === '9') {
+        return '未上架'
+      } else if (item.ai.audit === '3') {
+        return '审核失败'
+      } else if (item.ai.audit === '2') {
+        return '待审核'
+      } else {
+        return '未上架'
+      }
+    } else if (item.ai.audit === '1') {
+      return '审核成功'
+    } else if (item.ai.audit === '2') {
+      return '审核中'
+    }
+  }
+
   mapList = () => {
     const { history, smartScreen } = this.props
     const { promotionList } = smartScreen
@@ -50,7 +68,7 @@ class PromotionList extends React.Component {
                 </span>
               }
               thumb={item.pic}
-              extra={STATUS[item.ai.audit]}
+              extra={this.currentStatus(item)}
               // thumb= {item.img}
             />
             <Card.Body>
@@ -69,8 +87,12 @@ class PromotionList extends React.Component {
               <div style={{ color: '#777' }}>对话关键词：{item.keywords}</div>
               <WhiteSpace />
               <div style={{ color: '#777' }}>播报语音：{item.site_name}</div>
-              <WhiteSpace />
-              <div style={{ color: '#777' }}>播报语音：{item.reason}</div>
+              {item.ai.audit === 3 ? (
+                <div>
+                  <WhiteSpace />
+                  <div style={{ color: '#777' }}>审核失败：{item.reason}</div>
+                </div>
+              ) : null}
             </Card.Body>
             <WhiteSpace />
             <Card.Footer
