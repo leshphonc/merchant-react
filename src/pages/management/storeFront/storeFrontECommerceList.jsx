@@ -1,5 +1,6 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
+import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
   Button,
@@ -33,6 +34,17 @@ class StoreFrontPackageList extends React.Component {
 
   componentDidMount() {
     const { storeFront, match } = this.props
+    const { bindHeight, unBindHeight } = this.state
+    const hei =
+      // eslint-disable-next-line react/no-find-dom-node
+      bindHeight - ReactDOM.findDOMNode(this.refresh.current).offsetTop
+    const hei2 =
+      // eslint-disable-next-line react/no-find-dom-node
+      unBindHeight - ReactDOM.findDOMNode(this.refresh.current).offsetTop
+    this.setState({
+      bindHeight: hei,
+      unBindHeight: hei2,
+    })
     storeFront.getStoreECommerceForSale(match.params.id)
   }
 
