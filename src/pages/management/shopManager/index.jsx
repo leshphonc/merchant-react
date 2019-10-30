@@ -127,17 +127,27 @@ class ShopManager extends React.Component {
             extra={item.tel}
           />
           <Card.Body>
-            <i
-              style={{ position: 'absolute', top: 10, right: 20, fontSize: 20 }}
-              className="iconfont"
-              onClick={e => {
-                history.push(
-                  `/management/shopManager/shopPanel/编辑/${item.store_id}/${item.staff_id}`,
-                )
-              }}
-            >
-              &#xe634;
-            </i>
+            {item.name !== '门店AI助手-小由' ? (
+              <i
+                style={{
+                  position: 'absolute',
+                  top: 10,
+                  right: 20,
+                  fontSize: 20,
+                }}
+                className="iconfont"
+                onClick={e => {
+                  history.push(
+                    `/management/shopManager/shopPanel/编辑/${item.store_id}/${item.staff_id}`,
+                  )
+                }}
+              >
+                &#xe634;
+              </i>
+            ) : (
+              ''
+            )}
+
             <Flex>
               <Flex.Item>
                 <div
@@ -211,82 +221,87 @@ class ShopManager extends React.Component {
               </Flex.Item>
             </Flex>
           </Card.Body>
-          <Card.Footer
-            content={
-              <Flex>
-                <Flex.Item>
-                  <Button
-                    type="primary"
-                    size="small"
-                    onClick={() =>
-                      history.push(
-                        `/management/shopManager/classifyPanel/修改/${item.store_id}/${item.staff_id}`,
-                      )
-                    }
-                  >
-                    权限
-                  </Button>
-                </Flex.Item>
-                <Flex.Item>
-                  <Picker
-                    {...getFieldProps('store_id', {
-                      rules: [{ required: true }],
-                    })}
-                    data={eCommerceValues}
-                    cols={1}
-                    onOk={() => {
-                      shopManager
-                        .fetchRelocationPost(
-                          form.getFieldValue('store_id')[0],
-                          staffDetail.id,
-                        )
-                        .then(() => {
-                          Toast.success('调岗成功', 1, () => {
-                            const { statusArr } = this.state
-                            shopManager.fetchStaffList(statusArr)
-                          })
-                        })
-                    }}
-                    extra="请选择"
-                  >
+          {item.name !== '门店AI助手-小由' ? (
+            <Card.Footer
+              content={
+                <Flex>
+                  <Flex.Item>
                     <Button
                       type="primary"
                       size="small"
-                      onClick={this.showModal(
-                        'modal1',
-                        item.store_id,
-                        item.staff_id,
-                      )}
+                      onClick={() =>
+                        history.push(
+                          `/management/shopManager/classifyPanel/修改/${item.store_id}/${item.staff_id}`,
+                        )
+                      }
                     >
-                      调岗
+                      权限
                     </Button>
-                  </Picker>
-                </Flex.Item>
-                <Flex.Item>
-                  <Button
-                    type="primary"
-                    size="small"
-                    onClick={() =>
-                      history.push(
-                        `/management/shopManager/shopManagerWorkRecord/${item.staff_id}`,
-                      )
-                    }
-                  >
-                    工作记录
-                  </Button>
-                </Flex.Item>
-                <Flex.Item>
-                  <Button
-                    type="warning"
-                    size="small"
-                    onClick={() => this.detele(item.staff_id)}
-                  >
-                    {selected === 2 ? `启用` : `禁用`}
-                  </Button>
-                </Flex.Item>
-              </Flex>
-            }
-          />
+                  </Flex.Item>
+                  <Flex.Item>
+                    <Picker
+                      {...getFieldProps('store_id', {
+                        rules: [{ required: true }],
+                      })}
+                      data={eCommerceValues}
+                      cols={1}
+                      onOk={() => {
+                        shopManager
+                          .fetchRelocationPost(
+                            form.getFieldValue('store_id')[0],
+                            staffDetail.id,
+                          )
+                          .then(() => {
+                            Toast.success('调岗成功', 1, () => {
+                              const { statusArr } = this.state
+                              shopManager.fetchStaffList(statusArr)
+                            })
+                          })
+                      }}
+                      extra="请选择"
+                    >
+                      <Button
+                        type="primary"
+                        size="small"
+                        onClick={this.showModal(
+                          'modal1',
+                          item.store_id,
+                          item.staff_id,
+                        )}
+                      >
+                        调岗
+                      </Button>
+                    </Picker>
+                  </Flex.Item>
+                  <Flex.Item>
+                    <Button
+                      type="primary"
+                      size="small"
+                      onClick={() =>
+                        history.push(
+                          `/management/shopManager/shopManagerWorkRecord/${item.staff_id}`,
+                        )
+                      }
+                    >
+                      工作记录
+                    </Button>
+                  </Flex.Item>
+                  <Flex.Item>
+                    <Button
+                      type="warning"
+                      size="small"
+                      onClick={() => this.detele(item.staff_id)}
+                    >
+                      {selected === 2 ? `启用` : `禁用`}
+                    </Button>
+                  </Flex.Item>
+                </Flex>
+              }
+            />
+          ) : (
+            ''
+          )}
+
           <WhiteSpace />
         </Card>
         <WhiteSpace />
