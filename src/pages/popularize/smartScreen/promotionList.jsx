@@ -42,7 +42,7 @@ class PromotionList extends React.Component {
       } else if (item.ai.audit === '3') {
         return '审核失败'
       } else if (item.ai.audit === '2') {
-        return '待审核'
+        return '未发布'
       } else {
         return '未上架'
       }
@@ -87,7 +87,7 @@ class PromotionList extends React.Component {
               <div style={{ color: '#777' }}>对话关键词：{item.keywords}</div>
               <WhiteSpace />
               <div style={{ color: '#777' }}>播报语音：{item.site_name}</div>
-              {item.ai.audit === 3 ? (
+              {item.ai.audit === '3' ? (
                 <div>
                   <WhiteSpace />
                   <div style={{ color: '#777' }}>审核失败：{item.reason}</div>
