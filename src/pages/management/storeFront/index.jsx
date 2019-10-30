@@ -20,6 +20,7 @@ import StoreFrontPackageList from './storeFrontPackageList'
 import StoreFrontECommerceList from './storeFrontECommerceList'
 import StoreFrontBusinessService from './storeFrontBusinessService'
 import StoreFrontBusinessServiceList from './storeFrontBusinessServiceList'
+import StoreEqImg from './storeEqImg'
 import { StoreStatus } from '@/config/constant'
 import { PrimaryTag } from '@/styled'
 import Utils from '@/utils'
@@ -345,6 +346,11 @@ export default () => (
     <Route
       path="/management/storefront/diningInformation"
       component={DiningInformation}
+    />
+    {/* 二维码 */}
+    <Route
+      path="/management/storefront/storeEqImg/:storeId/:sId?"
+      component={StoreEqImg}
     />
   </React.Fragment>
 )

@@ -2,6 +2,7 @@ import React from 'react'
 import { List, Button, Modal, WhiteSpace, Toast } from 'antd-mobile'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
+import { directive } from '@babel/types'
 
 @inject('storeFront')
 @observer
@@ -23,44 +24,58 @@ class StoreFrontBusinessServiceList extends React.Component {
   }
 
   mapList = () => {
-    const { match } = this.props
+    const { match, history } = this.props
     const { list } = this.state
     return list.map(item => {
       return (
         <List.Item
           key={item.id}
           extra={
-            <Button
-              type="primary"
-              size="small"
-              style={{ width: 60, float: 'right', marginRight: 10 }}
-              onClick={() =>
-                Modal.prompt(
-                  '修改标识名称',
-                  '',
-                  [
-                    { text: '取消' },
-                    {
-                      text: '确定',
-                      onPress: value => {
-                        const { storeFront } = this.props
-                        storeFront
-                          .createStation(1, match.params.id, value, item.id)
-                          .then(() => {
-                            Toast.success('编辑成功', 1, () =>
-                              this.getNowStation(),
-                            )
-                          })
+            <div>
+              <Button
+                type="primary"
+                size="small"
+                style={{ width: 90, float: 'right', marginRight: 10 }}
+                onClick={() => {
+                  history.push(
+                    `/management/storefront/storeEqImg/${item.store_id}/${item.id}`,
+                  )
+                }}
+              >
+                生成二维码
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                style={{ width: 60, float: 'right', marginRight: 10 }}
+                onClick={() =>
+                  Modal.prompt(
+                    '修改标识名称',
+                    '',
+                    [
+                      { text: '取消' },
+                      {
+                        text: '确定',
+                        onPress: value => {
+                          const { storeFront } = this.props
+                          storeFront
+                            .createStation(1, match.params.id, value, item.id)
+                            .then(() => {
+                              Toast.success('编辑成功', 1, () =>
+                                this.getNowStation(),
+                              )
+                            })
+                        },
                       },
-                    },
-                  ],
-                  'default',
-                  item.s_name,
-                )
-              }
-            >
-              编辑
-            </Button>
+                    ],
+                    'default',
+                    item.s_name,
+                  )
+                }
+              >
+                编辑
+              </Button>
+            </div>
           }
         >
           {item.s_name}
