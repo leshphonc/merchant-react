@@ -69,6 +69,8 @@ class PromotionList extends React.Component {
               <div style={{ color: '#777' }}>对话关键词：{item.keywords}</div>
               <WhiteSpace />
               <div style={{ color: '#777' }}>播报语音：{item.site_name}</div>
+              <WhiteSpace />
+              <div style={{ color: '#777' }}>播报语音：{item.reason}</div>
             </Card.Body>
             <WhiteSpace />
             <Card.Footer
