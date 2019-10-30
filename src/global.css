@@ -256,3 +256,13 @@ button {
 .staffList .am-card-header-content { 
   width: 100%;
 }
+
+/* 用户行为 */
+.userListDiv .sc-jWBwVP.lcLElj {
+  box-sizing: border-box;
+}
+
+.userListDiv .lcLElj .top-content { 
+  width: 100%;
+  max-width: 100%;
+}

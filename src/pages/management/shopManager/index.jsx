@@ -118,7 +118,11 @@ class ShopManager extends React.Component {
           <Card.Header
             thumb={
               <img
-                src={item.avatar ? item.avatar : require('@/assets/image/staffAvatar.png')}
+                src={
+                  item.avatar
+                    ? item.avatar
+                    : require('@/assets/image/staffAvatar.png')
+                }
                 alt=""
                 style={{ borderRadius: 50, marginRight: 10 }}
               />
