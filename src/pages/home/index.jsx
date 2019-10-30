@@ -66,19 +66,19 @@ class Home extends React.Component {
     smartScreen.fetchLocalSmartScreen().then(() => {
       const { smartScreenList } = smartScreen
       if (smartScreenList.length) {
+        home
+          .getAllFaceVisit(filterValue1, filterLabel2, filterStoreValue)
+          .then(() => {
+            this.setState({
+              aiData: home.aiData,
+            })
+          })
         this.setState({
           showAI: true,
         })
       }
     })
     home.fetchStoreList()
-    home
-      .getAllFaceVisit(filterValue1, filterLabel2, filterStoreValue)
-      .then(() => {
-        this.setState({
-          aiData: home.aiData,
-        })
-      })
     home
       .fetchEchartData(filterValue1, filterLabel2, searchType, filterStoreValue)
       .then(() => {
