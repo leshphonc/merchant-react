@@ -1,3 +1,4 @@
+/* eslint-disable react/no-find-dom-node */
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import ReactDOM from 'react-dom'
@@ -24,27 +25,26 @@ class StoreFrontPackageList extends React.Component {
       refreshing: false,
       refreshing1: false,
       bindHeight: document.documentElement.clientHeight,
-      unBindHeight: document.documentElement.clientHeight,
+      unBindHeight: document.documentElement.clientHeight - 47,
       show: false,
       ids: [],
     }
     this.refresh = React.createRef()
-    this.refresh1 = React.createRef()
   }
 
   componentDidMount() {
     const { storeFront, match } = this.props
-    const { bindHeight, unBindHeight } = this.state
-    const hei =
-      // eslint-disable-next-line react/no-find-dom-node
-      bindHeight - ReactDOM.findDOMNode(this.refresh.current).offsetTop
-    const hei2 =
-      // eslint-disable-next-line react/no-find-dom-node
-      unBindHeight - ReactDOM.findDOMNode(this.refresh.current).offsetTop
-    this.setState({
-      bindHeight: hei,
-      unBindHeight: hei2,
-    })
+    const { bindHeight } = this.state
+    setTimeout(() => {
+      if (this.refresh.current) {
+        const hei =
+          bindHeight - ReactDOM.findDOMNode(this.refresh.current).offsetTop
+        this.setState({
+          bindHeight: hei,
+        })
+      }
+    }, 500)
+
     storeFront.getStoreECommerceForSale(match.params.id)
   }
 
@@ -204,7 +204,7 @@ class StoreFrontPackageList extends React.Component {
           ref={this.refresh}
           refreshing={refreshing}
           style={{
-            bindHeight,
+            height: bindHeight,
             overflow: 'auto',
           }}
           indicator={{ deactivate: '上拉加载更多' }}
@@ -217,10 +217,9 @@ class StoreFrontPackageList extends React.Component {
           <Flex direction="column" style={{ height: '100vh' }}>
             <Flex.Item>
               <PullToRefresh
-                ref={this.refresh1}
                 refreshing={refreshing1}
                 style={{
-                  unBindHeight,
+                  height: unBindHeight,
                   overflow: 'auto',
                 }}
                 indicator={{ deactivate: '上拉加载更多' }}

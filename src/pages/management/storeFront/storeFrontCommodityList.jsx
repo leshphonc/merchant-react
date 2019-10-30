@@ -25,26 +25,21 @@ class StoreFrontCommodityList extends React.Component {
       refreshing: false,
       refreshing1: false,
       bindHeight: document.documentElement.clientHeight,
-      unBindHeight: document.documentElement.clientHeight,
+      unBindHeight: document.documentElement.clientHeight - 47,
       show: false,
       ids: [],
     }
     this.refresh = React.createRef()
-    this.refresh1 = React.createRef()
   }
 
   componentDidMount() {
     const { storeFront, match } = this.props
-    const { bindHeight, unBindHeight } = this.state
+    const { bindHeight } = this.state
     const hei =
       // eslint-disable-next-line react/no-find-dom-node
       bindHeight - ReactDOM.findDOMNode(this.refresh.current).offsetTop
-    const hei2 =
-      // eslint-disable-next-line react/no-find-dom-node
-      unBindHeight - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
       bindHeight: hei,
-      unBindHeight: hei2,
     })
     storeFront.getStoreCommodityForSale(match.params.id)
   }
@@ -239,7 +234,7 @@ class StoreFrontCommodityList extends React.Component {
           ref={this.refresh}
           refreshing={refreshing}
           style={{
-            bindHeight,
+            height: bindHeight,
             overflow: 'auto',
           }}
           indicator={{ deactivate: '上拉加载更多' }}
@@ -252,10 +247,9 @@ class StoreFrontCommodityList extends React.Component {
           <Flex direction="column" style={{ height: '100vh' }}>
             <Flex.Item>
               <PullToRefresh
-                ref={this.refresh1}
                 refreshing={refreshing1}
                 style={{
-                  unBindHeight,
+                  height: unBindHeight,
                   overflow: 'auto',
                 }}
                 indicator={{ deactivate: '上拉加载更多' }}
