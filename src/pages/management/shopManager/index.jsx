@@ -118,7 +118,7 @@ class ShopManager extends React.Component {
           <Card.Header
             thumb={
               <img
-                src={require('@/assets/image/avatar.jpeg')}
+                src={item.avatar ? item.avatar : require('@/assets/image/staffAvatar.png')}
                 alt=""
                 style={{ borderRadius: 50, marginRight: 10 }}
               />
@@ -173,7 +173,7 @@ class ShopManager extends React.Component {
                     minWidth: '100%',
                   }}
                 >
-                  销售报酬: 123
+                  销售报酬: {item.sale_money ? item.sale_money : 0}
                 </div>
               </Flex.Item>
               <Flex.Item>
