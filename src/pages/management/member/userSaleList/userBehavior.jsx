@@ -45,46 +45,54 @@ class UserBehavior extends React.Component {
     return userBehaviorList.map((item, index) => (
       // eslint-disable-next-line react/no-array-index-key
       <React.Fragment key={index}>
-        <ListItem>
-          <ItemTop>
-            <div className="top-content">
-              <div className="content-left" style={{ alignItems: 'start' }}>
-                <div style={{ marginBottom: '4' }}>行为编号:{item.biz_id}</div>
-                <div style={{ lineHeight: '30px', marginTop: '5px' }}>
-                  事件名：{item.name}
+        <div className="userListDiv">
+          <ListItem>
+            <ItemTop>
+              <div
+                className="top-content shop_user_list"
+                style={{ width: '100%' }}
+              >
+                <div className="content-left" style={{ alignItems: 'start' }}>
+                  <div style={{ marginBottom: '4' }}>
+                    行为编号:{item.biz_id}
+                  </div>
+                  <div style={{ lineHeight: '30px', marginTop: '5px' }}>
+                    事件名：{item.name}
+                  </div>
+                </div>
+                <div className="content-right" style={{ alignItems: 'start' }}>
+                  <div style={{ marginBottom: '4' }}>
+                    发生时间：
+                    {moment(item.date * 1000).format('YYYY-MM-DD H:mm:ss')}
+                  </div>
+                  <div
+                    style={{
+                      lineHeight: '30px',
+                      marginTop: '5px',
+                      width: '100%',
+                    }}
+                  >
+                    {item.url ? (
+                      <Button
+                        size="small"
+                        type="primary"
+                        style={{ float: 'right' }}
+                        onClick={() => {
+                          window.location.href = item.url
+                        }}
+                      >
+                        访问链接
+                      </Button>
+                    ) : (
+                      ''
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="content-right" style={{ alignItems: 'start' }}>
-                <div style={{ marginBottom: '4' }}>
-                  发生时间：
-                  {moment(item.date * 1000).format('YYYY-MM-DD H:mm:ss')}
-                </div>
-                <div
-                  style={{
-                    lineHeight: '30px',
-                    marginTop: '5px',
-                    width: '100%',
-                  }}
-                >
-                  {item.url ? (
-                    <Button
-                      size="small"
-                      type="primary"
-                      style={{ float: 'right' }}
-                      onClick={() => { 
-                        window.location.href=item.url
-                      }}
-                    >
-                      访问链接
-                    </Button>
-                  ) : (
-                    ''
-                  )}
-                </div>
-              </div>
-            </div>
-          </ItemTop>
-        </ListItem>
+            </ItemTop>
+          </ListItem>
+        </div>
+
         <WhiteSpace />
       </React.Fragment>
     ))
