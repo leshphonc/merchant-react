@@ -62,6 +62,7 @@ class Home extends React.Component {
       filterStoreValue,
     } = this.state
     const ticket = localStorage.getItem('ticket')
+    window.scrollTo(0, 0)
     if (!ticket) return
     smartScreen.fetchLocalSmartScreen().then(() => {
       const { smartScreenList } = smartScreen

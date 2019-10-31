@@ -90,7 +90,9 @@ class PromotionList extends React.Component {
               {item.ai.audit === '3' ? (
                 <div>
                   <WhiteSpace />
-                  <div style={{ color: '#777' }}>审核失败：{item.reason}</div>
+                  <div style={{ color: '#777' }}>
+                    审核失败原因：{item.ai.reason}
+                  </div>
                 </div>
               ) : null}
             </Card.Body>
