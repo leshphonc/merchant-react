@@ -11,12 +11,12 @@ import {
 } from 'antd-mobile'
 import { inject, observer } from 'mobx-react'
 
-const STATUS = {
-  1: '审核成功',
-  2: '待审核',
-  3: '审核失败',
-  9: '不需要审核',
-}
+// const STATUS = {
+//   1: '审核成功',
+//   2: '待审核',
+//   3: '审核失败',
+//   9: '不需要审核',
+// }
 
 @inject('smartScreen')
 @observer

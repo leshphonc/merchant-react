@@ -532,7 +532,18 @@ class OrderStore {
     )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.ArrivalList = response.data.result.lists
+        if (push) {
+          this.ArrivalList = [
+            ...this.ArrivalList,
+            ...response.data.result.lists,
+          ]
+          if (response.data.result.lists.length !== 0) {
+            this.ArrivalListPage += 1
+          }
+        } else {
+          this.ArrivalList = response.data.result.lists
+        }
+        this.ArrivalListTotal = response.data.result.total
       })
     }
   }

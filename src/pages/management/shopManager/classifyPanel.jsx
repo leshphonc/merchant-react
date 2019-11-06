@@ -45,7 +45,10 @@ class ECommerceAdd extends React.Component {
         }
       })
       shopManager
-        .setStaffRule({ staff_id: match.params.staffId, menu_id: JSON.stringify(json) })
+        .setStaffRule({
+          staff_id: match.params.staffId,
+          menu_id: JSON.stringify(json),
+        })
         .then(res => {
           if (res) Toast.success('修改成功', 1, () => history.goBack())
         })

@@ -7,10 +7,19 @@ import { WhiteSpace, List, Toast } from 'antd-mobile'
 @inject('order')
 @observer
 class Order extends React.Component {
+  state = {
+    total: 0,
+  }
   componentDidMount() {
     const { order } = this.props
     order.fetchOrderList()
     order.fetchReservationOrderListCount()
+    order.resetAndFetchArrivalList().then(() => {
+      const { ArrivalListTotal } = order
+      this.setState({
+        total: ArrivalListTotal,
+      })
+    })
   }
 
   mapList = () => {
@@ -48,6 +57,7 @@ class Order extends React.Component {
   }
 
   render() {
+    const { total } = this.state
     return (
       <div>
         <WhiteSpace />
@@ -55,7 +65,7 @@ class Order extends React.Component {
         <List>
           <List.Item
             arrow="horizontal"
-            extra={20}
+            extra={total}
             onClick={() => {
               const { history } = this.props
               history.push('/order/arrival')

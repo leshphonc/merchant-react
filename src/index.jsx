@@ -27,6 +27,7 @@ axios.interceptors.response.use(
         config.data.errorCode === ErrorCode.TIMEOUT
       ) {
         window.location.href = '/newpage/#/login'
+        return config
       }
       if (config.data.error === ErrorCode.SUCCESS) {
         return config

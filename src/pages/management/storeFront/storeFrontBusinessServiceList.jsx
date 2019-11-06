@@ -2,7 +2,6 @@ import React from 'react'
 import { List, Button, Modal, WhiteSpace, Toast } from 'antd-mobile'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import { directive } from '@babel/types'
 
 @inject('storeFront')
 @observer
