@@ -5,6 +5,81 @@ import { List, WingBlank, Button, Toast, Switch } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 
+const pageList = {
+  1: {
+    page: 'carShop.html',
+    name: '汽配订单',
+  },
+  2: {
+    page: 'appoint.html',
+    name: '预定订单',
+  },
+  3: {
+    page: 'eCommerce.html',
+    name: '电商订单',
+  },
+  4: {
+    page: 'cashier.html',
+    name: '店员收银',
+  },
+  5: {
+    page: 'clerkStatistics.html',
+    name: '推广统计',
+  },
+  6: {
+    page: 'write_off.html',
+    name: '优惠券核销',
+  },
+  7: {
+    page: 'activity.html',
+    name: '联盟活动核销',
+  },
+  8: {
+    page: 'store_qrcode.html',
+    name: '收款二维码',
+  },
+  9: {
+    page: 'billing.html',
+    name: '开单收银',
+  },
+  10: {
+    page: 'group_list.html',
+    name: '团购订单',
+  },
+  11: {
+    page: 'foodshop.html',
+    name: '餐饮订单',
+  },
+  12: {
+    page: 'hotel.html',
+    name: '酒店管理',
+  },
+  13: {
+    page: 'shop.html',
+    name: '外卖订单',
+  },
+  14: {
+    page: 'staff_qrcode.html',
+    name: '推广二维码',
+  },
+  15: {
+    page: 'service.html',
+    name: '服务工单',
+  },
+  16: {
+    page: 'gift.html',
+    name: '兑换订单',
+  },
+  17: {
+    page: 'meet.html',
+    name: '活动报名',
+  },
+  18: {
+    page: 'retail.html',
+    name: '卖场收银',
+  },
+}
+
 @createForm()
 @inject('shopManager')
 @observer
@@ -76,7 +151,7 @@ class ECommerceAdd extends React.Component {
                   />
                 }
               >
-                {i.name}
+                {pageList[i.id].name}
               </List.Item>
             </List>
           ))}

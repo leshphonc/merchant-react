@@ -168,7 +168,7 @@ class Home extends React.Component {
           type: 'value',
           name: '元',
           max: function(value) {
-            return value.max + 10
+            return parseInt(value.max + 10)
           },
         },
       ],
@@ -242,7 +242,7 @@ class Home extends React.Component {
           type: 'value',
           name: '进店人数',
           max: function(value) {
-            return value.max + 10
+            return parseInt(value.max + 10)
           },
         },
       ],

@@ -44,7 +44,10 @@ class Classify extends React.Component {
                 <Btn>
                   <Button
                     type="button"
-                    onClick={() => history.push(`/management/shopManager/classifyPanel/编辑/${item.id}`)
+                    onClick={() =>
+                      history.push(
+                        `/management/shopManager/classifyPanel/编辑/${item.id}`,
+                      )
                     }
                   >
                     编辑
@@ -80,7 +83,10 @@ class Classify extends React.Component {
           title="管理分类"
           goBack
           right={
-            <Link style={{ color: '#fff' }} to="/management/shopManager/classifyPanel/添加">
+            <Link
+              style={{ color: '#fff' }}
+              to="/management/shopManager/classifyPanel/添加"
+            >
               添加
             </Link>
           }
