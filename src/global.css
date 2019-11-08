@@ -266,3 +266,8 @@ button {
   width: 100%;
   max-width: 100%;
 }
+
+
+.am-list .am-list-item.am-checkbox-item .am-list-thumb .am-checkbox {
+  height: 100%;
+}

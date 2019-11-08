@@ -931,6 +931,15 @@ class MastSotre {
     }
   }
 
+  @action
+  resetAndFetchSingle = async () => {
+    runInAction(() => {
+      this.singleServiceList = []
+      this.singleServiceListPage = 1
+    })
+    await this.fetchSingle()
+  }
+
   // 查询服务项目
   @action
   fetchSingle = async flag => {

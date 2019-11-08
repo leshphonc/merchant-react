@@ -33,6 +33,7 @@ import serviceCategorySecondCategory from './serviceCategorySecondCategory'
 import ServiceItems from './serviceItems'
 import ServiceItemsPanel from './serviceItemsPanel'
 import ServiceItemsSelectSingle from './serviceItemsSelectSingle'
+import ServiceItemsSelectECommerce from './serviceItemsSelectECommerce'
 import serviceSingleRecord from './serviceSingleRecord'
 import ServicePackageRecord from './servicePackageRecord'
 import Package from './package'
@@ -248,6 +249,11 @@ export default () => (
       path="/management/commodity/serviceItemsSelectSingle"
       component={ServiceItemsSelectSingle}
     />
+    <Route
+      path="/management/commodity/serviceItemsSelectECommerce"
+      component={ServiceItemsSelectECommerce}
+    />
+
     <Route
       path="/management/commodity/serviceSingleRecord/:id"
       component={serviceSingleRecord}

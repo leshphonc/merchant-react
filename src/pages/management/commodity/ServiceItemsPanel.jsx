@@ -10,6 +10,7 @@ import {
   ImagePicker,
   Button,
   WingBlank,
+  Stepper,
   Toast,
 } from 'antd-mobile'
 import Editor from '@/common/Editor'
@@ -26,6 +27,8 @@ class ServiceItemsPanel extends React.Component {
     super(props)
     this.state = {
       projectData: [],
+      eCommerce_data: [],
+      pic: [],
     }
     this.editor = React.createRef()
   }
@@ -57,14 +60,19 @@ class ServiceItemsPanel extends React.Component {
         Utils.clearCacheData()
         return false
       }
+      console.log(cacheData)
       form.setFieldsValue({
         name: cacheData.name,
         price: cacheData.price,
         total_num: cacheData.total_num,
         person_num: cacheData.person_num,
+        day_num: cacheData.day_num,
+        pic: cacheData.pic || [],
       })
       this.setState({
         projectData: cacheData.project_data,
+        eCommerce_data: cacheData.eCommerce_data,
+        pic: cacheData.pic || [],
       })
       Utils.clearCacheData()
       return false
@@ -118,28 +126,28 @@ class ServiceItemsPanel extends React.Component {
         commodity.fetchPackageDetail(match.params.id).then(() => {
           commodity.fetchServiceOfPackage(match.params.id).then(() => {
             const { packageDetail, serviceOfPackage } = commodity
+            const projectData = []
+            const eCommerce_data = []
+            serviceOfPackage.forEach(item => {
+              if (item.type === '0') {
+                projectData.push(item)
+              } else if (item.type === '1') {
+                eCommerce_data.push(item)
+              }
+            })
             const cur = packageDetail[0]
             form.setFieldsValue({
               name: cur.meal_name,
               price: cur.price,
               total_num: cur.total_num,
+              pic: [{ url: cur.pic }],
+              day_num: cur.day_num,
               person_num: cur.person_num,
             })
-            const data = JSON.parse(JSON.stringify(serviceOfPackage))
-            data.forEach(item => {
-              if (item.start_time === '0') {
-                item.start_time = ''
-              } else {
-                item.start_time *= 1000
-              }
-              if (item.end_time === '0') {
-                item.end_time = ''
-              } else {
-                item.end_time *= 1000
-              }
-            })
             this.setState({
-              projectData: JSON.stringify(data),
+              projectData: projectData,
+              eCommerce_data: eCommerce_data,
+              pic: [{ url: cur.pic }],
             })
           })
         })
@@ -149,41 +157,91 @@ class ServiceItemsPanel extends React.Component {
 
   goPackage = () => {
     const { history, form } = this.props
-    const { projectData } = this.state
+    const { projectData, eCommerce_data } = this.state
     const formData = form.getFieldsValue()
-    console.log(projectData)
     formData.project_data = projectData
+    formData.eCommerce_data = eCommerce_data
     Utils.cacheData(formData)
     history.push('/management/commodity/serviceItemsSelectSingle')
   }
 
+  goECommerce = () => {
+    const { history, form } = this.props
+    const { projectData, eCommerce_data } = this.state
+    const formData = form.getFieldsValue()
+    formData.project_data = projectData
+    formData.eCommerce_data = eCommerce_data
+    Utils.cacheData(formData)
+    history.push('/management/commodity/serviceItemsSelectECommerce')
+  }
+
   mapPackageList = () => {
     const { projectData } = this.state
-    let data = []
-    if (typeof projectData === 'string') {
-      data = JSON.parse(projectData)
-    }
-    return data.map(item => (
-      <List.Item key={item.appoint_id} extra={`×${item.meal_num}`}>
-        {item.name}
-        {item.start_time && item.end_time ? (
-          <List.Item.Brief>
-            {`${moment(item.start_time).format('YYYY-MM-DD')} - ${moment(
-              item.end_time,
-            ).format('YYYY-MM-DD')}`}
-          </List.Item.Brief>
-        ) : null}
-        {item.start_time && !item.end_time ? (
-          <List.Item.Brief>{`${moment(item.start_time).format(
-            'YYYY-MM-DD',
-          )} - ∞`}</List.Item.Brief>
-        ) : null}
-        {!item.start_time && item.end_time ? (
-          <List.Item.Brief>{`∞ - ${moment(item.end_time).format(
-            'YYYY-MM-DD',
-          )}`}</List.Item.Brief>
-        ) : null}
-      </List.Item>
+    return projectData.map((item, index) => (
+      <div key={index}>
+        <List.Item
+          thumb={item.img}
+          extra={
+            <Stepper
+              style={{ width: '70%' }}
+              showNumber
+              min={1}
+              onChange={val => {
+                const data = JSON.parse(JSON.stringify(projectData))
+                data[index].meal_num = val
+                this.setState({
+                  projectData: [...data],
+                })
+              }}
+              defaultValue={item.meal_num}
+            />
+          }
+        >
+          {item.name}
+        </List.Item>
+        <InputItem
+          placeholder="开卡后，可使用天数"
+          value={item.day_num}
+          extra="天"
+          onChange={val => {
+            const data = JSON.parse(JSON.stringify(projectData))
+            data[index].day_num = val
+            this.setState({
+              projectData: [...data],
+            })
+          }}
+        >
+          有效天数
+        </InputItem>
+      </div>
+    ))
+  }
+
+  mapECommerceList = () => {
+    const { eCommerce_data } = this.state
+    return eCommerce_data.map((item, index) => (
+      <div key={index}>
+        <List.Item
+          thumb={item.img}
+          extra={
+            <Stepper
+              style={{ width: '70%' }}
+              showNumber
+              min={1}
+              onChange={val => {
+                const data = JSON.parse(JSON.stringify(eCommerce_data))
+                data[index].meal_num = val
+                this.setState({
+                  eCommerce_data: [...data],
+                })
+              }}
+              defaultValue={item.meal_num}
+            />
+          }
+        >
+          {item.name}
+        </List.Item>
+      </div>
     ))
   }
 
@@ -220,27 +278,17 @@ class ServiceItemsPanel extends React.Component {
           }
         })
       } else {
-        const { projectData } = this.state
-        let data = []
-        if (typeof projectData === 'string') {
-          data = JSON.parse(projectData)
-        }
-        if (!data.length) {
+        const { projectData, eCommerce_data } = this.state
+        if (!projectData.length && !eCommerce_data.length) {
           Toast.info('请选择套餐内包含商品')
           return false
         }
-        data.forEach(item => {
-          if (item.start_time) {
-            item.start_time = moment(item.start_time).valueOf() / 1000
-          }
-          if (item.end_time) {
-            item.end_time = moment(item.end_time).valueOf() / 1000
-          }
-        })
+        const data = [...projectData, ...eCommerce_data]
         if (id) {
           commodity
             .modifyPackage({
               ...value,
+              pic: value.pic.map(item => item.url)[0],
               meal_id: id,
               project_data: JSON.stringify(data),
             })
@@ -253,6 +301,7 @@ class ServiceItemsPanel extends React.Component {
           commodity
             .addPackage({
               ...value,
+              pic: value.pic.map(item => item.url)[0],
               project_data: JSON.stringify(data),
             })
             .then(res => {
@@ -272,6 +321,7 @@ class ServiceItemsPanel extends React.Component {
 
   render() {
     const { match, form, history, commodity } = this.props
+    const { pic } = this.state
     const { getFieldProps } = form
     const { serviceCategory, serviceCategoryChild } = commodity
     const fidOption = serviceCategory.map(item => ({
@@ -533,7 +583,7 @@ class ServiceItemsPanel extends React.Component {
               >
                 套餐价格
               </InputItem>
-              <InputItem
+              {/* <InputItem
                 {...getFieldProps('total_num', {
                   rules: [{ required: true }],
                 })}
@@ -550,7 +600,35 @@ class ServiceItemsPanel extends React.Component {
                 placeholder="每人可购买数量"
               >
                 每人可购买
+              </InputItem> */}
+              <InputItem
+                {...getFieldProps('day_num', {
+                  rules: [{ required: true }],
+                })}
+                type="number"
+                placeholder="开卡后，可使用天数"
+              >
+                有效天数
               </InputItem>
+              <List.Item arrow="empty">
+                套餐图片
+                <ImagePicker
+                  {...getFieldProps('pic', {
+                    valuePropName: 'files',
+                    rules: [{ required: true }],
+                  })}
+                  selectable={pic.length < 1}
+                  onAddImageClick={e => {
+                    const { eCommerce_data, projectData } = this.state
+                    const formData = form.getFieldsValue()
+                    formData.project_data = projectData
+                    formData.eCommerce_data = eCommerce_data
+                    Utils.cacheData(formData)
+                    history.push('/uploadMultipleImg/裁剪/pic/1')
+                    e.preventDefault()
+                  }}
+                />
+              </List.Item>
               <List.Item
                 extra={<i className="iconfont">&#xe634;</i>}
                 onClick={this.goPackage}
@@ -558,6 +636,13 @@ class ServiceItemsPanel extends React.Component {
                 套餐包含项目
               </List.Item>
               {this.mapPackageList()}
+              <List.Item
+                extra={<i className="iconfont">&#xe634;</i>}
+                onClick={this.goECommerce}
+              >
+                套餐包含商品
+              </List.Item>
+              {this.mapECommerceList()}
             </List>
             <WingBlank>
               <Button

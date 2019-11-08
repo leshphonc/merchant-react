@@ -13,13 +13,14 @@ class ServiceItemsSelectSingle extends React.Component {
     refreshing: false,
     selected: [],
   }
+
   componentDidMount() {
     const { commodity } = this.props
-    commodity.resetAndFetchSingle()
+    commodity.fetchECommerceList()
     const cacheData = Utils.getCacheData()
     if (cacheData) {
       const arr = []
-      cacheData.project_data.forEach(item => {
+      cacheData.eCommerce_data.forEach(item => {
         arr.push(item.appoint_id)
       })
       this.setState({
@@ -31,18 +32,17 @@ class ServiceItemsSelectSingle extends React.Component {
   mapList = () => {
     const { commodity } = this.props
     const { selected } = this.state
-    return commodity.singleServiceList.map(i => {
+    return commodity.eCommerceList.map(i => {
       const item = selected.find(item => {
-        return item === i.appoint_id
+        return item === i.goods_id
       })
       return (
         <CheckboxItem
-          key={i.appoint_id}
+          key={i.goods_id}
           checked={!!item}
-          multipleLine
-          onChange={() => this.onChange(i.appoint_id)}
+          onChange={() => this.onChange(i.goods_id)}
         >
-          {i.appoint_name}
+          {i.s_name}
           <List.Item.Brief>¥ {i.old_price}</List.Item.Brief>
         </CheckboxItem>
       )
@@ -69,26 +69,26 @@ class ServiceItemsSelectSingle extends React.Component {
     const { commodity, history } = this.props
     const { selected } = this.state
     const arr = []
-    commodity.singleServiceList.forEach(item => {
-      if (selected.indexOf(item.appoint_id) > -1) {
+    commodity.eCommerceList.forEach(item => {
+      if (selected.indexOf(item.goods_id) > -1) {
         arr.push({
-          appoint_id: item.appoint_id,
-          name: item.appoint_name,
-          day_num: 30,
+          appoint_id: item.goods_id,
+          name: item.name,
+          day_num: 0,
           meal_num: 1,
-          type: 0,
+          type: 1,
           img: item.pic || '',
         })
       }
     })
-    Utils.cacheItemToData('project_data', arr)
+    Utils.cacheItemToData('eCommerce_data', arr)
     history.goBack()
   }
 
   loadMore = async () => {
     const { commodity } = this.props
     this.setState({ refreshing: true })
-    await commodity.fetchSingle(true)
+    await commodity.fetchECommerceList(true)
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
@@ -99,7 +99,7 @@ class ServiceItemsSelectSingle extends React.Component {
     return (
       <div>
         <NavBar
-          title="选择服务项目"
+          title="选择商品"
           goBack
           right={
             <Button

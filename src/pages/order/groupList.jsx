@@ -2,7 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import NavBar from '@/common/NavBar'
 import {
-  SearchBar, Picker, WingBlank, WhiteSpace, Card, Flex, PullToRefresh,
+  SearchBar,
+  Picker,
+  WingBlank,
+  WhiteSpace,
+  Card,
+  Flex,
+  PullToRefresh,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import { FilterBox } from '@/styled'
@@ -97,10 +103,13 @@ class GroupList extends React.Component {
 
   componentDidMount() {
     const { match, order } = this.props
-    const {
-      height, statusValus, typeValue, keyword,
-    } = this.state
-    order.resetAndFetchGroupOrderList(match.params.groupId, statusValus, typeValue, keyword)
+    const { height, statusValus, typeValue, keyword } = this.state
+    order.resetAndFetchGroupOrderList(
+      match.params.groupId,
+      statusValus,
+      typeValue,
+      keyword,
+    )
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
       height: hei,
@@ -151,13 +160,22 @@ class GroupList extends React.Component {
             }}
             style={{ marginBottom: '10px' }}
           >
-            <Card.Header style={{ fontSize: 13, color: '#999' }} title={item.s_name}></Card.Header>
+            <Card.Header
+              style={{ fontSize: 13, color: '#999' }}
+              title={item.s_name}
+            ></Card.Header>
             <Card.Body style={{ color: '#666', fontSize: 12 }}>
               <Flex>
-                <img src={item.pic} style={{ width: '20%', height: '20vw' }} alt="产品图片" />
+                <img
+                  src={item.pic}
+                  style={{ width: '20%', height: '20vw' }}
+                  alt="产品图片"
+                />
                 <div style={{ width: '75%', marginLeft: '5%' }}>
                   <p>
-                    <span style={styleSpan.spanLeft}>总价:{item.total_money}</span>
+                    <span style={styleSpan.spanLeft}>
+                      总价:{item.total_money}
+                    </span>
                     <span style={styleSpan.spanRight}>数量:{item.num}</span>
                   </p>
                   <p>
@@ -184,7 +202,12 @@ class GroupList extends React.Component {
     const { statusValus, typeValue, keyword } = this.state
 
     this.setState({ refreshing: true })
-    await order.fetchGroupOrderList(match.params.groupId, statusValus, typeValue, keyword)
+    await order.fetchGroupOrderList(
+      match.params.groupId,
+      statusValus,
+      typeValue,
+      keyword,
+    )
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
@@ -212,7 +235,12 @@ class GroupList extends React.Component {
             })
           }}
           onSubmit={() => {
-            order.resetAndFetchGroupOrderList(match.params.groupId, statusValus, typeValue, keyword)
+            order.resetAndFetchGroupOrderList(
+              match.params.groupId,
+              statusValus,
+              typeValue,
+              keyword,
+            )
           }}
         />
         <WhiteSpace />
@@ -245,7 +273,10 @@ class GroupList extends React.Component {
             >
               <div>
                 <span>{orderName}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
@@ -269,7 +300,10 @@ class GroupList extends React.Component {
             >
               <div>
                 <span>{searchName}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>

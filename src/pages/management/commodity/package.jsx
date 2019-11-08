@@ -69,19 +69,21 @@ class Package extends React.Component {
             content={
               <React.Fragment>
                 <Flex>
-                  <Flex.Item>
-                    <Button
-                      size="small"
-                      type="primary"
-                      onClick={() =>
-                        history.push(
-                          `/management/commodity/serviceItemsPanel/编辑/1/${item.meal_id}`,
-                        )
-                      }
-                    >
-                      编辑
-                    </Button>
-                  </Flex.Item>
+                  {item.flag === 0 ? (
+                    <Flex.Item>
+                      <Button
+                        size="small"
+                        type="primary"
+                        onClick={() =>
+                          history.push(
+                            `/management/commodity/serviceItemsPanel/编辑/1/${item.meal_id}`,
+                          )
+                        }
+                      >
+                        编辑
+                      </Button>
+                    </Flex.Item>
+                  ) : null}
                   <Flex.Item>
                     <Button
                       size="small"

@@ -396,6 +396,7 @@ class StorePanel extends React.Component {
       }
       if (businessCache.have_service === '1') {
         have_mall = '1'
+        have_shop = '1'
       }
       const obj = {
         ...businessCache,
