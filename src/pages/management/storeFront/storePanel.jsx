@@ -489,7 +489,10 @@ class StorePanel extends React.Component {
         className="menu-position"
         data={allCategory}
         value={goods}
-        onChange={arr => this.setState({ goods: arr })}
+        onChange={arr => {
+          document.body.style.position = 'static'
+          this.setState({ goods: arr, open: false })
+        }}
         height={document.documentElement.clientHeight * 0.6}
       />
     )
@@ -727,7 +730,10 @@ class StorePanel extends React.Component {
           <List.Item
             arrow="horizontal"
             extra={this.getMenuList()}
-            onClick={() => this.setState({ open: true })}
+            onClick={() => {
+              document.body.style.position = 'fixed'
+              this.setState({ open: true })
+            }}
             className="primaryTag-show"
           >
             店铺分类
@@ -822,7 +828,12 @@ class StorePanel extends React.Component {
         </Button>
         {open ? menuEl : null}
         {open ? (
-          <MenuMask onClick={() => this.setState({ open: false })} />
+          <MenuMask
+            onClick={() => {
+              document.body.style.position = 'static'
+              this.setState({ open: false })
+            }}
+          />
         ) : null}
       </React.Fragment>
     )

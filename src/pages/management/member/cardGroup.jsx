@@ -1,17 +1,23 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { runInAction } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { Route, Link } from 'react-router-dom'
 import NavBar from '@/common/NavBar'
-import { WhiteSpace, Button, PullToRefresh } from 'antd-mobile'
+import {
+  WhiteSpace,
+  Button,
+  PullToRefresh,
+  SegmentedControl,
+  WingBlank,
+  Card,
+} from 'antd-mobile'
 import { ListItem, ItemTop } from './styled'
 import CardGroupPanel from './cardGroupPanel'
 import CardGroupUsers from './cardGroupUsers'
 import ModifyCardGroupUsers from './modify/cardGroupUsers'
 import ExpensesRecord from './expensesRecord'
+import moment from 'moment'
 
-let defaultScrollTop = 0
 @inject('member')
 @observer
 class CardGroup extends React.Component {
@@ -19,7 +25,10 @@ class CardGroup extends React.Component {
     super(props)
     this.state = {
       refreshing: false,
-      height: document.documentElement.clientHeight,
+      cur: 1,
+      list: [],
+      page: 1,
+      height: document.documentElement.clientHeight - 90,
     }
     this.refresh = React.createRef()
   }
@@ -27,24 +36,24 @@ class CardGroup extends React.Component {
   componentDidMount() {
     const { member } = this.props
     const { cardGroupList } = member
-    const { height } = this.state
     if (!cardGroupList.length) member.fetchCardGroupList()
+    member.getMemberCardList(1).then(res => {
+      console.log(res.lists)
+      this.setState({ list: res.lists })
+    })
     /* eslint react/no-find-dom-node: 0 */
-    const dom = ReactDOM.findDOMNode(this.refresh.current)
-    const hei = height - dom.offsetTop
-    this.setState(
-      {
-        height: hei,
-      },
-      () => {
-        dom.scrollTop = defaultScrollTop
-      },
-    )
   }
 
-  componentWillUnmount() {
-    const dom = ReactDOM.findDOMNode(this.refresh.current)
-    defaultScrollTop = dom.scrollTop
+  onValueChange = value => {
+    if (value === '领卡会员') {
+      this.setState({
+        cur: 1,
+      })
+    } else {
+      this.setState({
+        cur: 2,
+      })
+    }
   }
 
   mapList = () => {
@@ -118,8 +127,67 @@ class CardGroup extends React.Component {
     }, 100)
   }
 
+  loadMore2 = async () => {
+    const { member } = this.props
+    const { page, list } = this.state
+    this.setState({ refreshing: true })
+    await member.getMemberCardList(page + 1).then(res => {
+      if (res.lists.length !== 0) {
+        this.setState({
+          page: page + 1,
+        })
+      }
+      this.setState({
+        list: [...list, ...res.lists],
+      })
+    })
+    setTimeout(() => {
+      this.setState({ refreshing: false })
+    }, 100)
+  }
+
+  mapList2 = () => {
+    const { list } = this.state
+    console.log(list)
+    return list.map(item => {
+      return (
+        <React.Fragment key={item.id}>
+          <Card>
+            <Card.Header
+              thumb={item.avatar}
+              title={item.nickname}
+              extra={item.phone}
+            />
+            <Card.Body>
+              <div>
+                会员卡余额：
+                {item.card_money}
+              </div>
+              <WhiteSpace />
+              <div>
+                赠送金额：
+                {item.card_money_give}
+              </div>
+              <WhiteSpace />
+              <div>
+                会员卡积分数量：
+                {item.card_score}
+              </div>
+              <WhiteSpace />
+              <div>
+                领卡时间：
+                {moment(item.add_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              </div>
+            </Card.Body>
+          </Card>
+          <WhiteSpace />
+        </React.Fragment>
+      )
+    })
+  }
+
   render() {
-    const { height, refreshing } = this.state
+    const { height, refreshing, cur } = this.state
     return (
       <React.Fragment>
         <NavBar
@@ -134,20 +202,46 @@ class CardGroup extends React.Component {
             </Link>
           }
         />
-        <PullToRefresh
-          ref={this.refresh}
-          refreshing={refreshing}
-          style={{
-            height,
-            overflow: 'auto',
-          }}
-          indicator={{ deactivate: '上拉可以刷新' }}
-          direction="up"
-          onRefresh={this.loadMore}
-        >
-          <WhiteSpace />
-          {this.mapList()}
-        </PullToRefresh>
+        <WhiteSpace />
+        <WingBlank>
+          <SegmentedControl
+            onValueChange={this.onValueChange}
+            values={['领卡会员', '会员卡分组']}
+          />
+        </WingBlank>
+        {cur === 2 ? (
+          <PullToRefresh
+            ref={this.refresh}
+            refreshing={refreshing}
+            style={{
+              height,
+              overflow: 'auto',
+            }}
+            indicator={{ deactivate: '上拉可以刷新' }}
+            direction="up"
+            onRefresh={this.loadMore}
+          >
+            <WhiteSpace />
+            {this.mapList()}
+          </PullToRefresh>
+        ) : null}
+
+        {cur === 1 ? (
+          <PullToRefresh
+            ref={this.refresh}
+            refreshing={refreshing}
+            style={{
+              height,
+              overflow: 'auto',
+            }}
+            indicator={{ deactivate: '上拉可以刷新' }}
+            direction="up"
+            onRefresh={this.loadMore2}
+          >
+            <WhiteSpace />
+            {this.mapList2()}
+          </PullToRefresh>
+        ) : null}
       </React.Fragment>
     )
   }

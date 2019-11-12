@@ -764,6 +764,17 @@ class MemberStore {
       }
     }
   }
+
+  // 领卡会员列表
+  @action
+  getMemberCardList = async page => {
+    return new Promise(async resolve => {
+      const response = await services.getMemberCardList(page)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
 }
 
 export default new MemberStore()

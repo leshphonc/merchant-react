@@ -4,16 +4,12 @@ import {
   List,
   Button,
   Flex,
-  WingBlank,
   WhiteSpace,
   Modal,
   Radio,
   Toast,
-  Picker,
-  InputItem,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
-import { FilterBox } from '@/styled'
 import ClipboardJS from 'clipboard'
 
 const { RadioItem } = Radio
@@ -435,15 +431,7 @@ class RetailDetail extends React.Component {
   }
 
   render() {
-    const {
-      modal,
-      copyModal,
-      sendModal,
-      expressListLabel,
-      expressListValue,
-      no,
-      detail,
-    } = this.state
+    const { modal, copyModal, detail } = this.state
     const orderDetails = detail.order_details || {}
     return (
       <React.Fragment>

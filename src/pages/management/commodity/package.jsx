@@ -58,11 +58,11 @@ class Package extends React.Component {
               </Flex.Item>
             </Flex>
             <WhiteSpace />
-            <Flex>
+            {/* <Flex>
               <Flex.Item>
                 <span>每人可购买数量：{item.person_num} 个</span>
               </Flex.Item>
-            </Flex>
+            </Flex> */}
           </Card.Body>
           <WhiteSpace />
           <Card.Footer

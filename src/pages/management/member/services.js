@@ -172,3 +172,12 @@ export const fetchUserBehavior = (uid, page, size) =>
       ticket: localStorage.getItem('ticket'),
     },
   })
+
+export const getMemberCardList = page =>
+  axios.get('/appapi.php?c=Merchantapp&a=card_user_list', {
+    params: {
+      page: page,
+      size: 10,
+      ticket: localStorage.getItem('ticket'),
+    },
+  })

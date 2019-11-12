@@ -27,7 +27,6 @@ class Index extends React.Component {
   }
 
   render() {
-    const { history } = this.props
     const { cur } = this.state
     return (
       <TabBarContainer>
@@ -94,13 +93,30 @@ class Index extends React.Component {
             icon={
               <AddBtnBox
                 onClick={() => {
-                  const BUTTONS = ['进入自定义首页', '进入商家首页', '取消']
-                  ActionSheet.showActionSheetWithOptions({
-                    options: BUTTONS,
-                    cancelButtonIndex: BUTTONS.length - 1,
-                    // title: 'title',
-                    maskClosable: true,
-                  })
+                  const BUTTONS = ['标准首页', '自定义首页', '取消']
+                  ActionSheet.showActionSheetWithOptions(
+                    {
+                      options: BUTTONS,
+                      cancelButtonIndex: BUTTONS.length - 1,
+                      // title: 'title',
+                      maskClosable: true,
+                    },
+                    buttonIndex => {
+                      const info = JSON.parse(
+                        localStorage.getItem('merchant_user'),
+                      )
+                      if (buttonIndex === 0) {
+                        window.location.href =
+                          window.location.origin +
+                          `/wap.php?g=Wap&c=merchant&a=map&mer_id=${info.mer_id}`
+                      }
+                      if (buttonIndex === 1) {
+                        window.location.href =
+                          window.location.origin +
+                          `/wap.php?g=Wap&c=Web_xcx&a=index&mer_id=${info.mer_id}`
+                      }
+                    },
+                  )
                 }}
               >
                 <AddBtn>

@@ -60,9 +60,6 @@ class Login extends React.Component {
               fontSize: 20,
               color: '#666',
               textAlign: 'center',
-              position: 'absolute',
-              top: '57vw',
-              left: '40vw',
             }}
           >
             管理中心
@@ -72,6 +69,7 @@ class Login extends React.Component {
             <InputItem
               value={account}
               placeholder="请输入您的账号"
+              style={{ background: 'transparent !important' }}
               onChange={val => this.setState({ account: val })}
             />
           </InputBox>
@@ -80,6 +78,7 @@ class Login extends React.Component {
             <InputItem
               type="password"
               placeholder="请输入您的密码"
+              style={{ background: 'transparent !important' }}
               value={password}
               onChange={val => this.setState({ password: val })}
             />

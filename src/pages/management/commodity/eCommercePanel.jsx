@@ -286,8 +286,10 @@ class ECommerceAdd extends React.Component {
   }
 
   onChange = arr => {
+    document.body.style.position = 'static'
     this.setState({
       goods: arr,
+      open: false,
     })
   }
 
@@ -569,7 +571,10 @@ class ECommerceAdd extends React.Component {
           <List.Item
             arrow="horizontal"
             extra={this.getMenuList()}
-            onClick={() => this.setState({ open: true })}
+            onClick={() => {
+              document.body.style.position = 'fixed'
+              this.setState({ open: true })
+            }}
             className="primaryTag-show"
           >
             商城商品分类
@@ -611,7 +616,12 @@ class ECommerceAdd extends React.Component {
         </Button>
         {open ? menuEl : null}
         {open ? (
-          <MenuMask onClick={() => this.setState({ open: false })} />
+          <MenuMask
+            onClick={() => {
+              document.body.style.position = 'static'
+              this.setState({ open: false })
+            }}
+          />
         ) : null}
       </React.Fragment>
     )

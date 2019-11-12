@@ -1071,30 +1071,13 @@ class MastSotre {
 
   // 获取套餐销售记录
   @action
-  fetchPackageRecord = async (id, flag) => {
-    if (flag) {
-      runInAction(() => {
-        this.packageRecordList += 1
-      })
-    }
-    const response = await services.fetchPackageRecord(
-      this.packageRecordListPage,
-    )
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        if (flag) {
-          this.packageRecordList = [
-            ...this.packageRecordList,
-            ...response.data.result,
-          ]
-          if (response.data.result.length === 0) {
-            this.packageRecordListPage -= 1
-          }
-        } else {
-          this.packageRecordList = response.data.result
-        }
-      })
-    }
+  fetchPackageRecord = async (id, page) => {
+    return new Promise(async resolve => {
+      const response = await services.fetchPackageRecord(id, page)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
   }
 
   // 获取项目销售记录

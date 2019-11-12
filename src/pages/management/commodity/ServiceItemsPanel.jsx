@@ -582,7 +582,7 @@ class ServiceItemsPanel extends React.Component {
               >
                 套餐价格
               </InputItem>
-              {/* <InputItem
+              <InputItem
                 {...getFieldProps('total_num', {
                   rules: [{ required: true }],
                 })}
@@ -591,7 +591,7 @@ class ServiceItemsPanel extends React.Component {
               >
                 套餐总数
               </InputItem>
-              <InputItem
+              {/* <InputItem
                 {...getFieldProps('person_num', {
                   rules: [{ required: true }],
                 })}
