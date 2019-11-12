@@ -634,10 +634,12 @@ export const fetchPackageRecord = (id, page) =>
 
 // 获取项目销售记录
 export const fetchSingleRecord = (id, page) =>
-  axios.post('/appapi.php?c=SpaceMerchant&a=getUserBuyMeal', {
-    meal_id: id,
-    page,
-    ticket: localStorage.getItem('ticket'),
+  axios.get('/appapi.php?c=Merchantapp&a=service_order', {
+    params: {
+      appoint_id: id,
+      page,
+      ticket: localStorage.getItem('ticket'),
+    },
   })
 
 // 获取未绑定分类的项目

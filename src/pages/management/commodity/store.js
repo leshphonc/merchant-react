@@ -1082,28 +1082,13 @@ class MastSotre {
 
   // 获取项目销售记录
   @action
-  fetchSingleRecord = async (id, flag) => {
-    if (flag) {
-      runInAction(() => {
-        this.singleRecordList += 1
-      })
-    }
-    const response = await services.fetchSingleRecord(this.singleRecordListPage)
-    if (response.data.errorCode === ErrorCode.SUCCESS) {
-      runInAction(() => {
-        if (flag) {
-          this.singleRecordList = [
-            ...this.singleRecordList,
-            ...response.data.result,
-          ]
-          if (response.data.result.length === 0) {
-            this.singleRecordListPage -= 1
-          }
-        } else {
-          this.singleRecordList = response.data.result
-        }
-      })
-    }
+  fetchSingleRecord = async (id, page) => {
+    return new Promise(async resolve => {
+      const response = await services.fetchSingleRecord(id, page)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
   }
 
   // 获取未被绑定的项目

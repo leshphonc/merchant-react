@@ -318,6 +318,16 @@ class ServiceItemsPanel extends React.Component {
     commodity.fetchCategoryChild(id)
   }
 
+  onchangeFile = files => {
+    const { form } = this.props
+    form.setFieldsValue({
+      pic: files,
+    })
+    this.setState({
+      pic: files,
+    })
+  }
+
   render() {
     const { match, form, history, commodity } = this.props
     const { pic } = this.state
@@ -366,7 +376,7 @@ class ServiceItemsPanel extends React.Component {
               >
                 原价
               </InputItem>
-              <List.Item
+              {/* <List.Item
                 extra={
                   <Switch
                     {...getFieldProps('payment_status', {
@@ -389,7 +399,7 @@ class ServiceItemsPanel extends React.Component {
                 >
                   定金
                 </InputItem>
-              ) : null}
+              ) : null} */}
               <List.Item
                 extra={
                   <Switch
@@ -617,6 +627,7 @@ class ServiceItemsPanel extends React.Component {
                     rules: [{ required: true }],
                   })}
                   selectable={pic.length < 1}
+                  onChange={this.onchangeFile}
                   onAddImageClick={e => {
                     const { eCommerce_data, projectData } = this.state
                     const formData = form.getFieldsValue()

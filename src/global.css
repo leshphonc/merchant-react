@@ -130,7 +130,11 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 99;
+  z-index: 9999999;
+}
+
+.am-action-sheet-wrap {
+  z-index: 9999999;
 }
 
 /* antd-mobil Menu左侧滚动 */
