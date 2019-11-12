@@ -84,7 +84,7 @@ class ServiceSingleRecord extends React.Component {
     const { refreshing, height } = this.state
     return (
       <>
-        <NavBar title="项目销售记录" />
+        <NavBar title="项目销售记录" goBack />
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}
