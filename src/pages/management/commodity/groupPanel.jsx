@@ -104,7 +104,7 @@ class GroupPanel extends React.Component {
       store: [],
       content: '',
       // editor: null,
-      stock_reduce_method: '1',
+      stock_reduce_method: '0',
       start_discount: '',
       is_edit: '',
     }
@@ -250,8 +250,8 @@ class GroupPanel extends React.Component {
           once_max: '',
           deadline_time: '',
           no_refund: false,
-          status: false,
-          stock_reduce_method: 1,
+          status: true,
+          stock_reduce_method: 0,
         })
       }
       if (sessionStorage.getItem('cacheData')) {
