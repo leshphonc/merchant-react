@@ -53,8 +53,8 @@ class CardGroup extends React.Component {
     return cardGroupList.map(item => (
       <React.Fragment key={item.id}>
         <ListItem>
-          <ItemTop>
-            <div className="top-content">
+          <ItemTop style={{ boxSizing: 'border-box' }}>
+            <div className="top-content" style={{ maxWidth: '100%' }}>
               <div className="content-left">
                 <div>分组ID：{item.id}</div>
                 <WhiteSpace />

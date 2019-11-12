@@ -131,7 +131,7 @@ class Commodity extends React.Component {
             服务项目
           </Item>
           <Item
-            thumb={require('@/assets/image/fwgl.png')}
+            thumb={require('@/assets/image/tcgl.png')}
             arrow="horizontal"
             onClick={() => {
               history.push('/management/commodity/package')

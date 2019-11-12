@@ -161,7 +161,7 @@ export const AddBtnBox = styled.div`
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -9px;
+    bottom: -13px;
     font-size: 12px;
     z-index: 2;
   }
@@ -185,10 +185,10 @@ export const AddBtn = styled.div`
   align-items: center;
   box-shadow: 0 0 5px 2px #ccc;
   div {
-    width: 40px;
-    height: 40px;
-    border-radius: 40px;
-    line-height: 40px;
+    width: 46px;
+    height: 46px;
+    border-radius: 46px;
+    line-height: 46px;
     color: #fff;
     background: #ffb000;
     z-index: 2;

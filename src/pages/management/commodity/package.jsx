@@ -43,7 +43,7 @@ class Package extends React.Component {
     return commodity.packageList.map(item => (
       <React.Fragment key={item.meal_id}>
         <Card>
-          <Card.Header title={item.meal_name}></Card.Header>
+          <Card.Header thumb={item.pic} title={item.meal_name}></Card.Header>
           <Card.Body>
             <WhiteSpace />
             <Flex>

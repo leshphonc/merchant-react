@@ -55,11 +55,23 @@ class Login extends React.Component {
           <Avatar>
             <img src={env.logo} alt="" />
           </Avatar>
-          <InputBox>
+          <div
+            style={{
+              fontSize: 20,
+              color: '#666',
+              textAlign: 'center',
+              position: 'absolute',
+              top: '57vw',
+              left: '40vw',
+            }}
+          >
+            管理中心
+          </div>
+          <InputBox style={{ marginTop: 120 }}>
             <i className="iconfont">&#xe640;</i>
             <InputItem
               value={account}
-              placeholder="用户名/手机号/邮箱"
+              placeholder="请输入您的账号"
               onChange={val => this.setState({ account: val })}
             />
           </InputBox>
@@ -67,7 +79,7 @@ class Login extends React.Component {
             <i className="iconfont">&#xe62a;</i>
             <InputItem
               type="password"
-              placeholder="密码"
+              placeholder="请输入您的密码"
               value={password}
               onChange={val => this.setState({ password: val })}
             />

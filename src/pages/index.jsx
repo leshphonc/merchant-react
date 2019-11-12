@@ -1,5 +1,5 @@
 import React from 'react'
-import { TabBar } from 'antd-mobile'
+import { TabBar, ActionSheet } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import { TabBarContainer, AddBtnBox, AddBtn } from '@/styled'
 import Home from '@/pages/home'
@@ -92,13 +92,28 @@ class Index extends React.Component {
           </TabBar.Item>
           <TabBar.Item
             icon={
-              <AddBtnBox onClick={() => history.push('/management/commodity')}>
+              <AddBtnBox
+                onClick={() => {
+                  const BUTTONS = ['进入自定义首页', '进入商家首页', '取消']
+                  ActionSheet.showActionSheetWithOptions({
+                    options: BUTTONS,
+                    cancelButtonIndex: BUTTONS.length - 1,
+                    // title: 'title',
+                    maskClosable: true,
+                  })
+                }}
+              >
                 <AddBtn>
                   <div>
-                    <i className="iconfont">&#xe61e;</i>
+                    <i
+                      className="iconfont"
+                      style={{ fontSize: 26, display: 'block' }}
+                    >
+                      &#xe605;
+                    </i>
                   </div>
                 </AddBtn>
-                <div className="text">发布商品</div>
+                <div className="text">进入店铺</div>
                 <div className="mask" />
               </AddBtnBox>
             }
