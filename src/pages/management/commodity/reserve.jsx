@@ -50,7 +50,7 @@ class Reserve extends React.Component {
       <React.Fragment key={item.appoint_id}>
         <ListItem>
           <ItemTop>
-            {item.list_pic ? <img src={item.list_pic} alt="商品图片" /> : null}
+            {item.list_pic ? <img src={item.pic} alt="商品图片" /> : null}
             <TopContent>
               <div className="top-title" style={{ fontSize: '15px' }}>
                 {item.appoint_name}
