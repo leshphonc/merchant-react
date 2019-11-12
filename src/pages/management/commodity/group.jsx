@@ -39,7 +39,7 @@ class Group extends React.Component {
     this.setState({
       height: hei,
     })
-    if (!groupList.length) commodity.fetchGroupList()
+    commodity.resetAndFetchGroupList()
   }
 
   mapList = () => {

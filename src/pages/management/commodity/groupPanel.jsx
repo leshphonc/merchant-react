@@ -104,7 +104,7 @@ class GroupPanel extends React.Component {
       store: [],
       content: '',
       // editor: null,
-      stock_reduce_method: '1',
+      stock_reduce_method: '0',
       start_discount: '',
       is_edit: '',
     }
@@ -112,7 +112,7 @@ class GroupPanel extends React.Component {
   }
 
   componentDidMount() {
-    const { commodity, match, form } = this.propsgit 
+    const { commodity, match, form } = this.props
     if (match.params.id) {
       commodity.fetchGroupDetail(match.params.id).then(() => {
         const { groupDetail } = commodity
@@ -216,6 +216,7 @@ class GroupPanel extends React.Component {
           store: groupDetail.store,
           cat_fid: groupDetail.cat_fid,
           cat_id: groupDetail.cat_id,
+          tuan_type: groupDetail.tuan_type,
         })
         delete groupDetail.store
         delete groupDetail.cat_fid
@@ -250,8 +251,8 @@ class GroupPanel extends React.Component {
           once_max: '',
           deadline_time: '',
           no_refund: false,
-          status: false,
-          stock_reduce_method: 1,
+          status: true,
+          stock_reduce_method: 0,
         })
       }
       if (sessionStorage.getItem('cacheData')) {
@@ -372,6 +373,7 @@ class GroupPanel extends React.Component {
       stock_reduce_method,
       shopList,
     } = this.state
+    console.log(tuan_type)
     // eslint-disable-next-line camelcase
     const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
 
@@ -648,6 +650,7 @@ class GroupPanel extends React.Component {
                   formData.store = store
                   formData.cat_id = cat_id
                   formData.cat_fid = cat_fid
+                  formData.tuan_type = this.state.tuan_type
                   sessionStorage.setItem(
                     'groupDetail',
                     JSON.stringify(formData),
