@@ -68,7 +68,8 @@ class GroupOrderDetail extends React.Component {
   }
 
   componentDidMount() {
-    const { match, order } = this.props
+    const { match, order, login } = this.props
+    login.wxConfigFun()
     order.fetchGroupOrderDetai(match.params.orderId).then(() => {
       const { groupOrderDetail } = order
       const expressList = []

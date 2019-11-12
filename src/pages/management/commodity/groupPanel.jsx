@@ -251,6 +251,7 @@ class GroupPanel extends React.Component {
           deadline_time: '',
           no_refund: false,
           status: false,
+          stock_reduce_method: 1,
         })
       }
       if (sessionStorage.getItem('cacheData')) {
