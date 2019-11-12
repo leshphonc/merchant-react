@@ -195,7 +195,11 @@ class CommonStore {
         })
       })
       if (response.data.result.length) {
-        return Promise.resolve([provinceId, cityId, response.data.result[0].value])
+        return Promise.resolve([
+          provinceId,
+          cityId,
+          response.data.result[0].value,
+        ])
       }
     }
   }

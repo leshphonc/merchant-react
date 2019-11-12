@@ -19,8 +19,8 @@ const pageList = {
     name: '电商订单',
   },
   4: {
-    page: 'cashier.html',
-    name: '店员收银',
+    page: 'package.html',
+    name: '套餐管理',
   },
   5: {
     page: 'clerkStatistics.html',
@@ -59,8 +59,8 @@ const pageList = {
     name: '外卖订单',
   },
   14: {
-    page: 'staff_qrcode.html',
-    name: '推广二维码',
+    page: 'appoint_work_order.html',
+    name: '预定工单',
   },
   15: {
     page: 'service.html',

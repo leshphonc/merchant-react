@@ -578,6 +578,84 @@ class OrderStore {
       this.fetchShopOrderDetail(id)
     }
   }
+
+  // 电商订单列表
+  @action
+  getECommerceOrderList = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.getECommerceOrderList(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        runInAction(() => {
+          resolve(response.data.result)
+        })
+      }
+    })
+  }
+
+  // 电商订单详情
+  @action
+  readECommerceOrderDetail = async id => {
+    return new Promise(async resolve => {
+      const response = await services.readECommerceOrderDetail(id)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        runInAction(() => {
+          resolve(response.data.result)
+        })
+      }
+    })
+  }
+
+  // 服务订单列表
+  @action
+  getServiceOrderList = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.getServiceOrderList(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        runInAction(() => {
+          resolve(response.data.result)
+        })
+      }
+    })
+  }
+
+  // 服务订单详情
+  @action
+  readServiceOrderDetail = async id => {
+    return new Promise(async resolve => {
+      const response = await services.readServiceOrderDetail(id)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        runInAction(() => {
+          resolve(response.data.result)
+        })
+      }
+    })
+  }
+
+  // 套餐订单列表
+  @action
+  getPackageOrderList = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.getPackageOrderList(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        runInAction(() => {
+          resolve(response.data.result)
+        })
+      }
+    })
+  }
+
+  // 套餐订单详情
+  @action
+  readPackageOrderDetail = async id => {
+    return new Promise(async resolve => {
+      const response = await services.readPackageOrderDetail(id)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        runInAction(() => {
+          resolve(response.data.result)
+        })
+      }
+    })
+  }
 }
 
 export default new OrderStore()

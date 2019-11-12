@@ -45,6 +45,18 @@ class Order extends React.Component {
                 history.push('/order/reservation')
                 return false
               }
+              if (item.name === '电商订单') {
+                history.push('/order/eCommerce')
+                return false
+              }
+              if (item.name === '服务订单') {
+                history.push('/order/service')
+                return false
+              }
+              if (item.name === '套餐订单') {
+                history.push('/order/package')
+                return false
+              }
               Toast.info('手机端暂未开放此功能，请登录电脑端后台进行操作')
             }}
           >

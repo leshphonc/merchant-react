@@ -11,7 +11,7 @@ import ErrorCode from '@/config/ErrorCode'
 // 请求拦截器
 axios.interceptors.request.use(
   config => {
-    Toast.loading('Loading...', 0)
+    // Toast.loading('Loading...', 0)
     config.data = qs.stringify(config.data) // 转为formdata数据格式
     return config
   },
@@ -20,7 +20,7 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   config => {
-    Toast.hide()
+    // Toast.hide()
     if (config.data.errorCode !== ErrorCode.SUCCESS) {
       if (
         config.data.errorCode === ErrorCode.NOTICKET ||

@@ -78,9 +78,21 @@ class Reservation extends React.Component {
     const { order } = this.props
     const { reservationOrderList } = order
     const {
-      height, payTypeValue, searchtype, startTime, endTime, keyword,
+      height,
+      payTypeValue,
+      searchtype,
+      startTime,
+      endTime,
+      keyword,
     } = this.state
-    if (!reservationOrderList.length) order.fetchReservationOrderList(payTypeValue, searchtype, startTime, endTime, keyword)
+    if (!reservationOrderList.length)
+      order.fetchReservationOrderList(
+        payTypeValue,
+        searchtype,
+        startTime,
+        endTime,
+        keyword,
+      )
     /* eslint react/no-find-dom-node: 0 */
     const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
     this.setState({
@@ -92,7 +104,11 @@ class Reservation extends React.Component {
     const { order, history } = this.props
     return order.reservationOrderList.map(item => (
       <React.Fragment key={item.order_id}>
-        <Card onClick={() => history.push(`/order/reservation/detail/${item.order_id}`)}>
+        <Card
+          onClick={() =>
+            history.push(`/order/reservation/detail/${item.order_id}`)
+          }
+        >
           <Card.Header
             style={{ fontSize: 13, color: '#999' }}
             title={`预定时间：${item.appoint_date}`}
@@ -119,8 +135,8 @@ class Reservation extends React.Component {
             <Flex align="start">
               <div style={{ minWidth: 75 }}>订单总价:</div>
               <div>
-                {item.product_id > 0 ? item.product_price : item.appoint_price} (
-                {item.service_status > 0 ? '已支付' : '未支付'})
+                {item.product_id > 0 ? item.product_price : item.appoint_price}{' '}
+                ({item.service_status > 0 ? '已支付' : '未支付'})
               </div>
             </Flex>
             <WhiteSpace />
@@ -175,35 +191,41 @@ class Reservation extends React.Component {
 
   findSearchTypeLabelAndFetch = value => {
     const { order } = this.props
-    const {
-      payTypeValue, startTime, endTime, keyword,
-    } = this.state
+    const { payTypeValue, startTime, endTime, keyword } = this.state
     const result = SearchType.find(item => item.value === value[0])
     this.setState({
       searchtypeLabel: result.label,
       searchtype: result.value,
     })
-    order.resetAndFetchReservationOrderList(payTypeValue, result.value, startTime, endTime, keyword)
+    order.resetAndFetchReservationOrderList(
+      payTypeValue,
+      result.value,
+      startTime,
+      endTime,
+      keyword,
+    )
   }
 
   findPayLabelAndFetch = value => {
     const { order } = this.props
-    const {
-      startTime, endTime, searchtype, keyword,
-    } = this.state
+    const { startTime, endTime, searchtype, keyword } = this.state
     const result = PayType.find(item => item.value === value[0])
     this.setState({
       payType: result.label,
       payTypeValue: result.value,
     })
-    order.resetAndFetchReservationOrderList(result.value, searchtype, startTime, endTime, keyword)
+    order.resetAndFetchReservationOrderList(
+      result.value,
+      searchtype,
+      startTime,
+      endTime,
+      keyword,
+    )
   }
 
   changeStartTime = val => {
     const { order } = this.props
-    const {
-      payTypeValue, searchtype, endTime, keyword,
-    } = this.state
+    const { payTypeValue, searchtype, endTime, keyword } = this.state
     this.setState({
       startTime: moment(val).format('YYYY-MM-DD'),
       startTimeLabel: moment(val).format('YYYY-MM-DD'),
@@ -219,9 +241,7 @@ class Reservation extends React.Component {
 
   changeEndTime = val => {
     const { order } = this.props
-    const {
-      payTypeValue, searchtype, startTime, keyword,
-    } = this.state
+    const { payTypeValue, searchtype, startTime, keyword } = this.state
     this.setState({
       endTime: moment(val).format('YYYY-MM-DD'),
       endTimeLabel: moment(val).format('YYYY-MM-DD'),
@@ -237,11 +257,15 @@ class Reservation extends React.Component {
 
   loadMore = async () => {
     const { order } = this.props
-    const {
-      payTypeValue, searchtype, startTime, endTime, keyword,
-    } = this.state
+    const { payTypeValue, searchtype, startTime, endTime, keyword } = this.state
     this.setState({ refreshing: true })
-    await order.fetchReservationOrderList(payTypeValue, searchtype, startTime, endTime, keyword)
+    await order.fetchReservationOrderList(
+      payTypeValue,
+      searchtype,
+      startTime,
+      endTime,
+      keyword,
+    )
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
@@ -269,13 +293,14 @@ class Reservation extends React.Component {
           placeholder={searchtypeLabel}
           value={keyword}
           onChange={val => this.setState({ keyword: val })}
-          onSubmit={val => order.resetAndFetchReservationOrderList(
-            payTypeValue,
-            searchtype,
-            startTime,
-            endTime,
-            val,
-          )
+          onSubmit={val =>
+            order.resetAndFetchReservationOrderList(
+              payTypeValue,
+              searchtype,
+              startTime,
+              endTime,
+              val,
+            )
           }
         />
         <WhiteSpace />
@@ -289,7 +314,10 @@ class Reservation extends React.Component {
             >
               <div>
                 <span>搜索条件：{searchtypeLabel}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
@@ -304,7 +332,10 @@ class Reservation extends React.Component {
             >
               <div>
                 <span>{payType}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
@@ -317,7 +348,10 @@ class Reservation extends React.Component {
             <DatePicker mode="date" onChange={this.changeStartTime}>
               <div>
                 <span>{startTimeLabel}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
@@ -327,7 +361,10 @@ class Reservation extends React.Component {
             <DatePicker mode="date" onChange={this.changeEndTime}>
               <div>
                 <span>{endTimeLabel}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>

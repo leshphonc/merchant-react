@@ -290,3 +290,60 @@ export const fetchStoreList = id =>
     mer_id: id,
     ticket: localStorage.getItem('ticket'),
   })
+
+// 电商订单列表
+export const getECommerceOrderList = payload =>
+  axios.get('/appapi.php?c=Merchantapp&a=new_shop_order', {
+    params: {
+      ...payload,
+      size: 10,
+      ticket: localStorage.getItem('ticket'),
+    },
+  })
+
+// 电商订单详情
+export const readECommerceOrderDetail = id =>
+  axios.get('/appapi.php?c=Merchantapp&a=new_shop_order_detail', {
+    params: {
+      order_id: id,
+      ticket: localStorage.getItem('ticket'),
+    },
+  })
+
+// 服务订单列表
+export const getServiceOrderList = payload =>
+  axios.get('/appapi.php?c=Merchantapp&a=service_order', {
+    params: {
+      ...payload,
+      size: 10,
+      ticket: localStorage.getItem('ticket'),
+    },
+  })
+
+// 服务订单详情
+export const readServiceOrderDetail = id =>
+  axios.get('/appapi.php?c=Merchantapp&a=service_order_detail', {
+    params: {
+      order_id: id,
+      ticket: localStorage.getItem('ticket'),
+    },
+  })
+
+// 套餐订单列表
+export const getPackageOrderList = payload =>
+  axios.get('/appapi.php?c=Merchantapp&a=service_card_lists', {
+    params: {
+      ...payload,
+      size: 10,
+      ticket: localStorage.getItem('ticket'),
+    },
+  })
+
+// 套餐订单详情
+export const readPackageOrderDetail = id =>
+  axios.get('/appapi.php?c=Merchantapp&a=card_meal_info', {
+    params: {
+      order_id: id,
+      ticket: localStorage.getItem('ticket'),
+    },
+  })

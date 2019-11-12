@@ -60,7 +60,6 @@ class ServiceItemsPanel extends React.Component {
         Utils.clearCacheData()
         return false
       }
-      console.log(cacheData)
       form.setFieldsValue({
         name: cacheData.name,
         price: cacheData.price,

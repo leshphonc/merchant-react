@@ -100,11 +100,17 @@ class Retail extends React.Component {
     const { order, history } = this.props
     return order.shopOrderList.map(item => (
       <React.Fragment key={item.order_id}>
-        <Card onClick={() => history.push(`/order/retail/detail/${item.order_id}`)}>
+        <Card
+          onClick={() => history.push(`/order/retail/detail/${item.order_id}`)}
+        >
           <Card.Header
             style={{ fontSize: 13, color: '#999' }}
-            title={`下单时间：${moment(item.create_time * 1000).format('YYYY-MM-DD HH:mm')}`}
-            extra={<div dangerouslySetInnerHTML={{ __html: item.pay_status }} />}
+            title={`下单时间：${moment(item.create_time * 1000).format(
+              'YYYY-MM-DD HH:mm',
+            )}`}
+            extra={
+              <div dangerouslySetInnerHTML={{ __html: item.pay_status }} />
+            }
           />
           <Card.Body style={{ color: '#666', fontSize: 12 }}>
             <Flex>
@@ -150,8 +156,7 @@ class Retail extends React.Component {
           <Card.Footer
             content={`订单来源：${item.order_from_name}`}
             extra={this.curStatus(item)}
-          >
-          </Card.Footer>
+          />
           <WhiteSpace />
         </Card>
         <WhiteSpace />
@@ -166,10 +171,18 @@ class Retail extends React.Component {
     if (item.status === '1') {
       return '可操作'
     }
-    if (item.is_pick_in_store === '3' && item.status === '2' && item.user_confirm === '0') {
+    if (
+      item.is_pick_in_store === '3' &&
+      item.status === '2' &&
+      item.user_confirm === '0'
+    ) {
       return '已发货'
     }
-    if (item.is_pick_in_store === '3' && item.status === '2' && item.user_confirm > '0') {
+    if (
+      item.is_pick_in_store === '3' &&
+      item.status === '2' &&
+      item.user_confirm > '0'
+    ) {
       return '已确认收货'
     }
     if (item.status === '2') {
@@ -211,7 +224,11 @@ class Retail extends React.Component {
   changeStartTime = val => {
     const { order } = this.props
     const {
-      orderStatusValue, payTypeValue, searchtype, endTime, keyword,
+      orderStatusValue,
+      payTypeValue,
+      searchtype,
+      endTime,
+      keyword,
     } = this.state
     this.setState({
       startTime: moment(val).format('YYYY-MM-DD'),
@@ -230,7 +247,11 @@ class Retail extends React.Component {
   changeEndTime = val => {
     const { order } = this.props
     const {
-      orderStatusValue, payTypeValue, searchtype, startTime, keyword,
+      orderStatusValue,
+      payTypeValue,
+      searchtype,
+      startTime,
+      keyword,
     } = this.state
     this.setState({
       endTime: moment(val).format('YYYY-MM-DD'),
@@ -249,7 +270,11 @@ class Retail extends React.Component {
   findSearchTypeLabelAndFetch = value => {
     const { order } = this.props
     const {
-      orderStatusValue, payTypeValue, startTime, endTime, keyword,
+      orderStatusValue,
+      payTypeValue,
+      startTime,
+      endTime,
+      keyword,
     } = this.state
     const result = SearchType.find(item => item.value === value[0])
     this.setState({
@@ -268,9 +293,7 @@ class Retail extends React.Component {
 
   findStatusLabelAndFetch = value => {
     const { order } = this.props
-    const {
-      payTypeValue, searchtype, startTime, endTime, keyword,
-    } = this.state
+    const { payTypeValue, searchtype, startTime, endTime, keyword } = this.state
     const { shopOrderStatus } = order
     const result = shopOrderStatus.find(item => item.value === value[0])
     this.setState({
@@ -290,7 +313,11 @@ class Retail extends React.Component {
   findPayLabelAndFetch = value => {
     const { order } = this.props
     const {
-      orderStatusValue, searchtype, startTime, endTime, keyword,
+      orderStatusValue,
+      searchtype,
+      startTime,
+      endTime,
+      keyword,
     } = this.state
     const result = PayType.find(item => item.value === value[0])
     this.setState({
@@ -310,7 +337,12 @@ class Retail extends React.Component {
   loadMore = async () => {
     const { order } = this.props
     const {
-      orderStatusValue, payTypeValue, searchtype, startTime, endTime, keyword,
+      orderStatusValue,
+      payTypeValue,
+      searchtype,
+      startTime,
+      endTime,
+      keyword,
     } = this.state
     this.setState({ refreshing: true })
     await order.fetchShopOrderList(
@@ -350,14 +382,15 @@ class Retail extends React.Component {
           placeholder={searchtypeLabel}
           value={keyword}
           onChange={val => this.setState({ keyword: val })}
-          onSubmit={val => order.resetAndFetchShopOrderList(
-            orderStatusValue,
-            payTypeValue,
-            searchtype,
-            startTime,
-            endTime,
-            val,
-          )
+          onSubmit={val =>
+            order.resetAndFetchShopOrderList(
+              orderStatusValue,
+              payTypeValue,
+              searchtype,
+              startTime,
+              endTime,
+              val,
+            )
           }
         />
         <WhiteSpace />
@@ -371,7 +404,10 @@ class Retail extends React.Component {
             >
               <div>
                 <span>搜索条件：{searchtypeLabel}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
@@ -386,7 +422,10 @@ class Retail extends React.Component {
             >
               <div>
                 <span>{orderStatus}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
@@ -401,7 +440,10 @@ class Retail extends React.Component {
             >
               <div>
                 <span>{payType}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
@@ -414,7 +456,10 @@ class Retail extends React.Component {
             <DatePicker mode="date" onChange={this.changeStartTime}>
               <div>
                 <span>{startTimeLabel}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
@@ -424,7 +469,10 @@ class Retail extends React.Component {
             <DatePicker mode="date" onChange={this.changeEndTime}>
               <div>
                 <span>{endTimeLabel}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>

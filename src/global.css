@@ -61,11 +61,11 @@ body {
   width: 80%;
 }
 
-.staffList .am-flexbox.am-flexbox-dir-column .am-flexbox-item { 
+.staffList .am-flexbox.am-flexbox-dir-column .am-flexbox-item {
   margin-left: 6px;
-  overflow: hidden;/*超出部分隐藏*/
-  white-space: nowrap;/*不换行*/
-  text-overflow:ellipsis;/*超出部分文字以...显示*/
+  overflow: hidden; /*超出部分隐藏*/
+  white-space: nowrap; /*不换行*/
+  text-overflow: ellipsis; /*超出部分文字以...显示*/
 }
 
 /* antd-mobil Textarea样式覆盖 */
@@ -253,7 +253,7 @@ button {
   z-index: 99999;
 }
 
-.staffList .am-card-header-content { 
+.staffList .am-card-header-content {
   width: 100%;
 }
 
@@ -262,12 +262,21 @@ button {
   box-sizing: border-box;
 }
 
-.userListDiv .lcLElj .top-content { 
+.userListDiv .lcLElj .top-content {
   width: 100%;
   max-width: 100%;
 }
 
-
 .am-list .am-list-item.am-checkbox-item .am-list-thumb .am-checkbox {
   height: 100%;
+}
+
+.font-label {
+  font-size: 14px;
+  color: #444;
+}
+
+.font-value {
+  font-size: 13px;
+  color: #888;
 }

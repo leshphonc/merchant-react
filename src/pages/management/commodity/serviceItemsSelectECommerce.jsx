@@ -68,14 +68,19 @@ class ServiceItemsSelectSingle extends React.Component {
   save = () => {
     const { commodity, history } = this.props
     const { selected } = this.state
+    const cacheData = Utils.getCacheData()
     const arr = []
     commodity.eCommerceList.forEach(item => {
       if (selected.indexOf(item.goods_id) > -1) {
+        let before = cacheData.eCommerce_data.find(
+          obj => obj.appoint_id === item.goods_id,
+        )
+        before = before || {}
         arr.push({
           appoint_id: item.goods_id,
           name: item.name,
-          day_num: 0,
-          meal_num: 1,
+          day_num: before.day_num || 0,
+          meal_num: before.meal_num || 1,
           type: 1,
           img: item.pic || '',
         })
