@@ -44,7 +44,7 @@ class Member extends React.Component {
             </ColorCard>
           </Link>
           <WhiteSpace />
-          <Link to="/management/member/saleMember">
+          {/* <Link to="/management/member/saleMember">
             <ColorCard style={{ background: 'rgb(204, 222, 124)' }}>
               <CardLeft>到店用户</CardLeft>
               <Flex>
@@ -63,7 +63,7 @@ class Member extends React.Component {
               </Flex>
             </ColorCard>
           </Link>
-          <WhiteSpace />
+          <WhiteSpace /> */}
           <Link to="/management/member/saleMember">
             <ColorCard style={{ background: 'rgb(222, 190, 124)' }}>
               <CardLeft>消费用户</CardLeft>
