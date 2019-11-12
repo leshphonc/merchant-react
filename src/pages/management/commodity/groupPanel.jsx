@@ -104,7 +104,7 @@ class GroupPanel extends React.Component {
       store: [],
       content: '',
       // editor: null,
-      stock_reduce_method: '0',
+      stock_reduce_method: '1',
       start_discount: '',
       is_edit: '',
     }
@@ -112,7 +112,7 @@ class GroupPanel extends React.Component {
   }
 
   componentDidMount() {
-    const { commodity, match, form } = this.props
+    const { commodity, match, form } = this.propsgit 
     if (match.params.id) {
       commodity.fetchGroupDetail(match.params.id).then(() => {
         const { groupDetail } = commodity
