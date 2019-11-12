@@ -112,7 +112,7 @@ class GroupPanel extends React.Component {
   }
 
   componentDidMount() {
-    const { commodity, match, form } = this.propsgit 
+    const { commodity, match, form } = this.props
     if (match.params.id) {
       commodity.fetchGroupDetail(match.params.id).then(() => {
         const { groupDetail } = commodity
