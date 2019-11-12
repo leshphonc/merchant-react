@@ -14,8 +14,8 @@ export const Box = styled.div`
   margin: 0 auto;
 `
 export const Avatar = styled.div`
-  width: 25vw;
-  height: 25vw;
+  width: 30vw;
+  height: 30vw;
   border-radius: 40vw;
   overflow: hidden;
   margin: 10vh auto 10vh;

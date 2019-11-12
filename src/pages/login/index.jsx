@@ -80,7 +80,7 @@ class Login extends React.Component {
           <Button
             onClick={this.submit}
             type="primary"
-            style={{ marginTop: '15vh' }}
+            style={{ marginTop: '15vh', borderRadius: 30, fontWeight: 600 }}
           >
             登录
           </Button>
