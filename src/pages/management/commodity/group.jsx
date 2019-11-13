@@ -31,7 +31,7 @@ class Group extends React.Component {
 
   componentDidMount() {
     const { commodity } = this.props
-    const { groupList } = commodity
+    // const { groupList } = commodity
     const { height } = this.state
     /* eslint react/no-find-dom-node: 0 */
     const hei =

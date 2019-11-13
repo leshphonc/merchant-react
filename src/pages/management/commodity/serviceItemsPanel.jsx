@@ -342,9 +342,9 @@ class ServiceItemsPanel extends React.Component {
       value: item.cat_id,
     }))
     const picArr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
-    const paymentStatus = form.getFieldValue('payment_status')
-      ? form.getFieldValue('payment_status')
-      : false
+    // const paymentStatus = form.getFieldValue('payment_status')
+    //   ? form.getFieldValue('payment_status')
+    //   : false
     return (
       <>
         <NavBar title={`${match.params.str}${match.params.type}`} goBack />

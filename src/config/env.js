@@ -5,7 +5,7 @@ const result = {
     logo: require('@/assets/image/logo.jpg'),
   },
   czg: {
-    logo: require('@/assets/image/czg_logo.jpg'),
+    logo: require('@/assets/image/xyzg_logo.png'),
   },
 }
 
