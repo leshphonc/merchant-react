@@ -23,6 +23,7 @@ export const Avatar = styled.div`
     height: 90%;
     margin-top: 5%;
     margin-left: 5%;
+    border-radius: 90%;
   }
 `
 
