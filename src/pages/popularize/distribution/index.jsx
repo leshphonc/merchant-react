@@ -13,7 +13,7 @@ class Index extends React.Component {
     const { history } = this.props
     return (
       <>
-        <NavBar title="分销商品列表" goBack />
+        <NavBar title="推广佣金设置" goBack />
         <WhiteSpace />
         <List>
           <List.Item
