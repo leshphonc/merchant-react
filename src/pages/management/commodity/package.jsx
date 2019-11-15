@@ -84,7 +84,7 @@ class Package extends React.Component {
                       </Button>
                     </Flex.Item>
                   ) : null}
-                  <Flex.Item>
+                  {/* <Flex.Item>
                     <Button
                       size="small"
                       type="primary"
@@ -96,7 +96,7 @@ class Package extends React.Component {
                     >
                       优惠
                     </Button>
-                  </Flex.Item>
+                  </Flex.Item> */}
                   <Flex.Item>
                     <Button
                       size="small"
