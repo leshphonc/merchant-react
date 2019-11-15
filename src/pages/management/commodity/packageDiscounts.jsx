@@ -36,27 +36,24 @@ class PackageDiscounts extends React.Component {
     commodity.fetchCardGroupAllE()
     commodity.fetchGiftVoucherE()
     commodity.fetchscoreAndDhbE()
-    if (!match.params.goodid) return
-    commodity
-      .fetchECommerceDetail(match.params.id, match.params.goodid)
-      .then(() => {
-        const { eCommerceDetail } = commodity
-        form.setFieldsValue({
-          seckill_price: eCommerceDetail.seckill_price,
-          seckill_stock: eCommerceDetail.seckill_stock,
-          seckill_type: [eCommerceDetail.seckill_type],
-          seckill_open_time: new Date(eCommerceDetail.seckill_open_time * 1000),
-          seckill_close_time: new Date(
-            eCommerceDetail.seckill_close_time * 1000,
-          ),
-          dhb_get_num: eCommerceDetail.dhb_get_num,
-          score_get_num: eCommerceDetail.score_get_num,
-          in_group: [eCommerceDetail.in_group],
-        })
-        this.setState({
-          give: eCommerceDetail.give,
-        })
+    if (!match.params.id) return
+    commodity.fetchPackageDetail(match.params.id).then(() => {
+      const { packageDetail } = commodity
+      const cache = JSON.parse(JSON.stringify(packageDetail[0]))
+      form.setFieldsValue({
+        seckill_price: cache.seckill_price,
+        seckill_stock: cache.seckill_stock,
+        seckill_type: [cache.seckill_type],
+        seckill_open_time: new Date(cache.seckill_open_time * 1000),
+        seckill_close_time: new Date(cache.seckill_close_time * 1000),
+        dhb_get_num: cache.dhb_get_num,
+        score_get_num: cache.score_get_num,
+        in_group: [cache.in_group],
       })
+      this.setState({
+        give: cache.give,
+      })
+    })
   }
 
   changeGiveValue = (val, index) => {
@@ -123,10 +120,9 @@ class PackageDiscounts extends React.Component {
         give,
       }
       commodity
-        .goodsDiscounts({
+        .packageDiscount({
           ...obj,
-          store_id: match.params.id,
-          goods_id: match.params.goodid,
+          meal_id: match.params.id,
         })
         .then(res => {
           if (res) Toast.success('编辑成功', 1, () => history.goBack())

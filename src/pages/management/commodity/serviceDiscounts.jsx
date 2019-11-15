@@ -36,33 +36,34 @@ class ServiceDiscounts extends React.Component {
     commodity.fetchCardGroupAllE()
     commodity.fetchGiftVoucherE()
     commodity.fetchscoreAndDhbE()
-    if (!match.params.goodid) return
-    commodity
-      .fetchECommerceDetail(match.params.id, match.params.goodid)
-      .then(() => {
-        const { eCommerceDetail } = commodity
-        form.setFieldsValue({
-          seckill_price: eCommerceDetail.seckill_price,
-          seckill_stock: eCommerceDetail.seckill_stock,
-          seckill_type: [eCommerceDetail.seckill_type],
-          seckill_open_time: new Date(eCommerceDetail.seckill_open_time * 1000),
-          seckill_close_time: new Date(
-            eCommerceDetail.seckill_close_time * 1000,
-          ),
-          dhb_get_num: eCommerceDetail.dhb_get_num,
-          score_get_num: eCommerceDetail.score_get_num,
-          in_group: [eCommerceDetail.in_group],
-        })
-        this.setState({
-          give: eCommerceDetail.give,
-        })
+    if (!match.params.id) return
+    commodity.fetchSingleServiceDetail(match.params.id).then(() => {
+      const { singleServiceDetail } = commodity
+      form.setFieldsValue({
+        seckill_price: singleServiceDetail.seckill_price,
+        seckill_stock: singleServiceDetail.seckill_stock,
+        seckill_type: [singleServiceDetail.seckill_type],
+        seckill_open_time: new Date(
+          singleServiceDetail.seckill_open_time * 1000,
+        ),
+        seckill_close_time: new Date(
+          singleServiceDetail.seckill_close_time * 1000,
+        ),
+        dhb_get_num: singleServiceDetail.dhb_get_num,
+        score_get_num: singleServiceDetail.score_get_num,
+        in_group: [singleServiceDetail.in_group],
       })
+      this.setState({
+        give: JSON.parse(JSON.stringify(singleServiceDetail.give)),
+      })
+    })
   }
 
   changeGiveValue = (val, index) => {
     const { give } = this.state
     const cache = Object.assign([], give)
     // eslint-disable-next-line prefer-destructuring
+    console.log(give)
     cache[index].goods = val[0]
     this.setState({
       give: cache,
@@ -123,10 +124,9 @@ class ServiceDiscounts extends React.Component {
         give,
       }
       commodity
-        .goodsDiscounts({
+        .serviceDiscount({
           ...obj,
-          store_id: match.params.id,
-          goods_id: match.params.goodid,
+          app_id: match.params.id,
         })
         .then(res => {
           if (res) Toast.success('编辑成功', 1, () => history.goBack())

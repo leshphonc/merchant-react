@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import { InputItem, List, Picker, WingBlank, Toast } from 'antd-mobile'
+import { InputItem, List, Picker, WingBlank, Toast, Button } from 'antd-mobile'
 import { createForm } from 'rc-form'
 
 const levelSet = [{ label: '开启', value: '1' }, { label: '关闭', value: '0' }]
@@ -19,7 +19,7 @@ class PackageSpread extends React.Component {
   }
 
   componentDidMount() {
-    const { commodity, form } = this.props
+    const { commodity, match, form } = this.props
     // 获取分佣等级
     commodity.getLevelList().then(() => {
       // 是否开启积分兑换币
@@ -28,38 +28,44 @@ class PackageSpread extends React.Component {
         commodity.fetchShowCommission().then(() => {
           const { levelList, showThree, openUserSpread } = commodity
           const { userLevels } = this.state
-          // levelList.forEach((item, index) => {
-          //   if (groupDetail.spread[index]) {
-          //     if (showThree === '1' && openUserSpread === '1') {
-          //       userLevels.push({
-          //         spread_sale: groupDetail.spread[index].spread_sale,
-          //         spread_rate: groupDetail.spread[index].spread_rate,
-          //         sub_spread_rate: groupDetail.spread[index].sub_spread_rate,
-          //         third_spread_rate:
-          //           groupDetail.spread[index].third_spread_rate,
-          //         level: item.id,
-          //         name: item.name,
-          //       })
-          //     } else {
-          //       userLevels.push({
-          //         spread_sale: groupDetail.spread[index].spread_sale,
-          //         spread_rate: groupDetail.spread[index].spread_rate,
-          //         level: item.id,
-          //         name: item.name,
-          //       })
-          //     }
-          //   } else {
-          //     userLevels.push({
-          //       spread_sale: '',
-          //       spread_rate: '',
-          //       name: item.name,
-          //       level: item.id,
-          //     })
-          //   }
-          // })
-          // this.setState({
-          //   userLevels,
-          // })
+          commodity.fetchPackageDetail(match.params.id).then(() => {
+            const { packageDetail } = commodity
+            const cache = JSON.parse(JSON.stringify(packageDetail[0]))
+            form.setFieldsValue({
+              level_set: [cache.level_set],
+            })
+            levelList.forEach((item, index) => {
+              if (cache.spread[index]) {
+                if (showThree === '1' && openUserSpread === '1') {
+                  userLevels.push({
+                    spread_sale: cache.spread[index].spread_sale,
+                    spread_rate: cache.spread[index].spread_rate,
+                    sub_spread_rate: cache.spread[index].sub_spread_rate,
+                    third_spread_rate: cache.spread[index].third_spread_rate,
+                    level: item.id,
+                    name: item.name,
+                  })
+                } else {
+                  userLevels.push({
+                    spread_sale: cache.spread[index].spread_sale,
+                    spread_rate: cache.spread[index].spread_rate,
+                    level: item.id,
+                    name: item.name,
+                  })
+                }
+              } else {
+                userLevels.push({
+                  spread_sale: '',
+                  spread_rate: '',
+                  name: item.name,
+                  level: item.id,
+                })
+              }
+            })
+            this.setState({
+              userLevels,
+            })
+          })
         })
       })
     })
@@ -149,7 +155,7 @@ class PackageSpread extends React.Component {
         spread: userLevels,
       }
       commodity
-        .appointSpreadEdit({ ...obj, appoint_id: match.params.id })
+        .packageSpreadEdit({ ...obj, meal_id: match.params.id })
         .then(res => {
           if (res) Toast.success('编辑成功', 1, () => history.goBack())
         })
@@ -182,6 +188,18 @@ class PackageSpread extends React.Component {
             </WingBlank>
           )}
         </List>
+        <Button
+          type="primary"
+          style={{
+            width: '90%',
+            marginLeft: '5%',
+            marginTop: 20,
+            marginBottom: 20,
+          }}
+          onClick={this.submit}
+        >
+          确定
+        </Button>
       </>
     )
   }

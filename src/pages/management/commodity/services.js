@@ -181,23 +181,15 @@ export const modifyECommerceE = payload => {
 }
 
 export const goodsSpread = payload => {
-  const body = {}
-  Object.keys(payload).forEach(item => {
-    body[item] = payload[item]
-  })
   return axios.post('/appapi.php?c=SpaceMerchant&a=goods_spread', {
-    ...body,
+    ...payload,
     ticket: localStorage.getItem('ticket'),
   })
 }
 
 export const goodsDiscounts = payload => {
-  const body = {}
-  Object.keys(payload).forEach(item => {
-    body[item] = payload[item]
-  })
   return axios.post('/appapi.php?c=SpaceMerchant&a=goods_discount', {
-    ...body,
+    ...payload,
     ticket: localStorage.getItem('ticket'),
   })
 }
@@ -718,5 +710,33 @@ export const fetchShopCategoryDetail = id =>
 export const deleteShopSecondCategory = id =>
   axios.post('/appapi.php?c=SpaceMerchant&a=delShopTwo', {
     sort_id: id,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+// 服务项目优惠设置
+export const serviceDiscount = payload =>
+  axios.post('/appapi.php?c=SpaceMerchant&a=service_discount', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+// 服务分佣
+export const serviceSpreadEdit = payload =>
+  axios.post('/appapi.php?c=SpaceMerchant&a=service_spread', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+// 套餐优惠设置
+export const packageDiscount = payload =>
+  axios.post('/appapi.php?c=SpaceMerchant&a=meal_discount', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+// 套餐分佣
+export const packageSpreadEdit = payload =>
+  axios.post('/appapi.php?c=SpaceMerchant&a=meal_spread', {
+    ...payload,
     ticket: localStorage.getItem('ticket'),
   })

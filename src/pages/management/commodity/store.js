@@ -1241,6 +1241,38 @@ class MastSotre {
       return Promise.resolve(true)
     }
   }
+
+  // 服务项目优惠设置
+  @action
+  serviceDiscount = async payload => {
+    const response = await services.serviceDiscount(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+  @action
+  serviceSpreadEdit = async payload => {
+    const response = await services.serviceSpreadEdit(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
+  // 套餐优惠设置
+  @action
+  packageDiscount = async payload => {
+    const response = await services.packageDiscount(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+  @action
+  packageSpreadEdit = async payload => {
+    const response = await services.packageSpreadEdit(payload)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
 }
 
 export default new MastSotre()
