@@ -90,6 +90,19 @@ class Package extends React.Component {
                       type="primary"
                       onClick={() =>
                         history.push(
+                          `/management/commodity/packageDiscounts/${item.meal_id}`,
+                        )
+                      }
+                    >
+                      优惠
+                    </Button>
+                  </Flex.Item>
+                  <Flex.Item>
+                    <Button
+                      size="small"
+                      type="primary"
+                      onClick={() =>
+                        history.push(
                           `/management/commodity/servicePackageRecord/${item.meal_id}`,
                         )
                       }

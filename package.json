@@ -67,9 +67,9 @@
     "webpack-bundle-analyzer": "^3.5.1"
   },
   "theme": {
-    "brand-primary": "#ffb000",
-    "brand-primary-tap": "#ff8811",
+    "brand-primary": "#00A29A",
+    "brand-primary-tap": "#007B81",
     "switch-fill": "rgba(255, 176, 0, 0.5)"
   },
-  "proxy": "https://www.czg365.cn"
+  "proxy": "http://cs.7youke.com"
 }

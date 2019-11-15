@@ -7,12 +7,17 @@ export default props => {
   const { data, col, imgSize, style } = props
   const { title } = data
   const result = JSON.parse(JSON.stringify(data.list))
-  const index = result.findIndex(item => item.name === '红包推广' && process.env.REACT_APP_CUR !== 'cs')
+  const index = result.findIndex(
+    item => item.name === '红包推广' && process.env.REACT_APP_CUR !== 'cs',
+  )
   if (index !== -1) {
     result.splice(index, 1)
   }
   const mapGrid = item => {
-    if (item.path === 'http://cs.7youke.com/wap.php?g=Wap&c=Wapactivity&a=activity_list') {
+    if (
+      item.path ===
+      'http://cs.7youke.com/wap.php?g=Wap&c=Wapactivity&a=activity_list'
+    ) {
       return (
         <LinkBox style={style}>
           <a href={item.path} style={{ display: 'block' }}>
@@ -47,7 +52,13 @@ export default props => {
   return (
     <React.Fragment>
       {title ? <Title>{title}</Title> : ''}
-      <Grid data={result} columnNum={col} renderItem={mapGrid} hasLine={false} square={false} />
+      <Grid
+        data={result}
+        columnNum={col}
+        renderItem={mapGrid}
+        hasLine={false}
+        square={false}
+      />
     </React.Fragment>
   )
 }

@@ -31,12 +31,14 @@ import ServiceCategory from './serviceCategory'
 import ServiceCategoryProject from './serviceCategoryProject'
 import serviceCategorySecondCategory from './serviceCategorySecondCategory'
 import ServiceItems from './serviceItems'
+import ServiceDiscounts from './serviceDiscounts'
 import ServiceItemsPanel from './serviceItemsPanel'
 import ServiceItemsSelectSingle from './serviceItemsSelectSingle'
 import ServiceItemsSelectECommerce from './serviceItemsSelectECommerce'
 import serviceSingleRecord from './serviceSingleRecord'
 import ServicePackageRecord from './servicePackageRecord'
 import Package from './package'
+import PackageDiscounts from './packageDiscounts'
 
 const { Item } = List
 @inject('commodity')
@@ -242,6 +244,10 @@ export default () => (
     />
     <Route path="/management/commodity/serviceItems" component={ServiceItems} />
     <Route
+      path="/management/commodity/serviceDiscounts/:id"
+      component={ServiceDiscounts}
+    />
+    <Route
       path="/management/commodity/serviceItemsPanel/:str/:type/:id?"
       component={ServiceItemsPanel}
     />
@@ -265,5 +271,9 @@ export default () => (
 
     {/* 套餐商品 */}
     <Route path="/management/commodity/package" component={Package} />
+    <Route
+      path="/management/commodity/packageDiscounts/:id"
+      component={PackageDiscounts}
+    />
   </React.Fragment>
 )

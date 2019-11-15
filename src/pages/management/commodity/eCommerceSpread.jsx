@@ -152,7 +152,7 @@ class ECommerceSpread extends React.Component {
     // const { spread } = this.state
     const levelSetValue = form.getFieldValue('level_set')
       ? form.getFieldValue('level_set')[0]
-      : ''
+      : '0'
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}推广分佣`} goBack />

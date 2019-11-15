@@ -368,7 +368,7 @@ class ShopManager extends React.Component {
             <Link
               style={{
                 color: '#fff',
-                background: '#ffb000',
+                background: '#00A29A',
                 width: '240px',
                 height: '32px',
                 lineHeight: '32px',

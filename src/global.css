@@ -1,5 +1,7 @@
 body {
   -webkit-overflow-scrolling: touch;
+  font-family: PingFang SC, Helvetica Neue, Arial, sans-serif;
+  background-color: #fafafa;
 }
 
 /* antd-mobil List样式覆盖 */
@@ -283,4 +285,8 @@ button {
 .font-value {
   font-size: 13px;
   color: #888;
+}
+
+.am-picker-popup-wrap {
+  z-index: 9999999;
 }

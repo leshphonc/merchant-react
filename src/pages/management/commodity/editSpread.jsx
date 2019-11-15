@@ -2,9 +2,7 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
-import {
-  List, InputItem, WingBlank, Button, Toast, Picker,
-} from 'antd-mobile'
+import { List, InputItem, WingBlank, Button, Toast, Picker } from 'antd-mobile'
 // import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
@@ -52,7 +50,8 @@ class EditSpread extends React.Component {
                     spread_sale: groupDetail.spread[index].spread_sale,
                     spread_rate: groupDetail.spread[index].spread_rate,
                     sub_spread_rate: groupDetail.spread[index].sub_spread_rate,
-                    third_spread_rate: groupDetail.spread[index].third_spread_rate,
+                    third_spread_rate:
+                      groupDetail.spread[index].third_spread_rate,
                     level: item.id,
                     name: item.name,
                   })
@@ -91,10 +90,14 @@ class EditSpread extends React.Component {
             levelList.forEach((item, index) => {
               if (appointDetail.appoint_list.spread[index]) {
                 userLevels.push({
-                  spread_sale: appointDetail.appoint_list.spread[index].spread_sale,
-                  spread_rate: appointDetail.appoint_list.spread[index].spread_sale,
-                  sub_spread_rate: appointDetail.appoint_list.spread[index].sub_spread_rate,
-                  third_spread_rate: appointDetail.appoint_list.spread[index].third_spread_rate,
+                  spread_sale:
+                    appointDetail.appoint_list.spread[index].spread_sale,
+                  spread_rate:
+                    appointDetail.appoint_list.spread[index].spread_sale,
+                  sub_spread_rate:
+                    appointDetail.appoint_list.spread[index].sub_spread_rate,
+                  third_spread_rate:
+                    appointDetail.appoint_list.spread[index].third_spread_rate,
                   level: item.id,
                   name: item.name,
                 })
@@ -117,9 +120,7 @@ class EditSpread extends React.Component {
   }
 
   submit = () => {
-    const {
-      commodity, form, match, history,
-    } = this.props
+    const { commodity, form, match, history } = this.props
     const { userLevels } = this.state
     form.validateFields((error, value) => {
       if (error) {
@@ -132,13 +133,17 @@ class EditSpread extends React.Component {
         spread: userLevels,
       }
       if (match.params.str === 'group_id') {
-        commodity.groupSpreadEdit({ ...obj, group_id: match.params.id }).then(res => {
-          if (res) Toast.success('编辑成功', 1, () => history.goBack())
-        })
+        commodity
+          .groupSpreadEdit({ ...obj, group_id: match.params.id })
+          .then(res => {
+            if (res) Toast.success('编辑成功', 1, () => history.goBack())
+          })
       } else {
-        commodity.appointSpreadEdit({ ...obj, appoint_id: match.params.id }).then(res => {
-          if (res) Toast.success('编辑成功', 1, () => history.goBack())
-        })
+        commodity
+          .appointSpreadEdit({ ...obj, appoint_id: match.params.id })
+          .then(res => {
+            if (res) Toast.success('编辑成功', 1, () => history.goBack())
+          })
       }
     })
   }
@@ -174,7 +179,9 @@ class EditSpread extends React.Component {
           <InputItem
             extra="%"
             value={item.spread_rate}
-            onChange={val => this.changeUserLevelsItem(val, index, 'spread_rate')}
+            onChange={val =>
+              this.changeUserLevelsItem(val, index, 'spread_rate')
+            }
             labelNumber={7}
             placeholder=" 推广佣金比例1"
           >
@@ -185,7 +192,9 @@ class EditSpread extends React.Component {
               <InputItem
                 extra="%"
                 value={item.sub_spread_rate}
-                onChange={val => this.changeUserLevelsItem(val, index, 'sub_spread_rate')}
+                onChange={val =>
+                  this.changeUserLevelsItem(val, index, 'sub_spread_rate')
+                }
                 labelNumber={7}
                 placeholder=" 推广佣金比例2"
               >
@@ -194,7 +203,9 @@ class EditSpread extends React.Component {
               <InputItem
                 extra="%"
                 value={item.third_spread_rate}
-                onChange={val => this.changeUserLevelsItem(val, index, 'third_spread_rate')}
+                onChange={val =>
+                  this.changeUserLevelsItem(val, index, 'third_spread_rate')
+                }
                 labelNumber={7}
                 placeholder=" 推广佣金比例3"
               >
@@ -213,7 +224,7 @@ class EditSpread extends React.Component {
     // const { spread } = this.state
     const levelSetValue = form.getFieldValue('level_set')
       ? `${form.getFieldValue('level_set')[0]}`
-      : ''
+      : '0'
     return (
       <React.Fragment>
         <NavBar title="编辑推广分佣" goBack />

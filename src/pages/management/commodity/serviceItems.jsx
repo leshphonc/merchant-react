@@ -127,6 +127,19 @@ class ServiceItems extends React.Component {
                         type="primary"
                         onClick={() =>
                           history.push(
+                            `/management/commodity/serviceDiscounts/${item.appoint_id}`,
+                          )
+                        }
+                      >
+                        优惠
+                      </Button>
+                    </Flex.Item>
+                    <Flex.Item>
+                      <Button
+                        size="small"
+                        type="primary"
+                        onClick={() =>
+                          history.push(
                             `/management/commodity/serviceSingleRecord/${item.appoint_id}`,
                           )
                         }

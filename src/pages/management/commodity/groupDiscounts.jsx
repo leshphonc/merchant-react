@@ -3,7 +3,13 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
 import {
-  List, InputItem, WingBlank, Button, Toast, Picker, Flex,
+  List,
+  InputItem,
+  WingBlank,
+  Button,
+  Toast,
+  Picker,
+  Flex,
 } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
@@ -76,7 +82,9 @@ class GroupDiscounts extends React.Component {
           toJS(groupDetail.leveloff).forEach((item, index) => {
             userLevels[index][`leveloff[${item.level}][lid]`] = item.lid
             userLevels[index][`leveloff[${item.level}][lname]`] = item.lname
-            userLevels[index][`leveloff[${item.level}][type]`] = item.type ? `${item.type}` : '0'
+            userLevels[index][`leveloff[${item.level}][type]`] = item.type
+              ? `${item.type}`
+              : '0'
             userLevels[index][`leveloff[${item.level}][vv]`] = item.vv
             levelType.push(item.type ? item.type : '0')
           })
@@ -164,17 +172,18 @@ class GroupDiscounts extends React.Component {
         >
           <List.Item arrow="horizontal">商品</List.Item>
         </Picker>
-        <InputItem defaultValue={item.goods_num} onChange={val => this.changeGiveNum(val, index)}>
-          商品张数
+        <InputItem
+          defaultValue={item.goods_num}
+          onChange={val => this.changeGiveNum(val, index)}
+        >
+          赠送数量
         </InputItem>
       </React.Fragment>
     ))
   }
 
   submit = () => {
-    const {
-      commodity, form, match, history,
-    } = this.props
+    const { commodity, form, match, history } = this.props
     const { give, userLevels, levelType } = this.state
     // eslint-disable-next-line camelcase
     const goods_num = []
@@ -210,28 +219,35 @@ class GroupDiscounts extends React.Component {
         score_get_num: value.score_get_num,
         tagname: value.tagname,
       }
-      commodity.editGroupDis({ ...obj, group_id: match.params.id }).then(res => {
-        if (res) Toast.success('编辑成功', 1, () => history.goBack())
-      })
+      commodity
+        .editGroupDis({ ...obj, group_id: match.params.id })
+        .then(res => {
+          if (res) Toast.success('编辑成功', 1, () => history.goBack())
+        })
     })
   }
 
   render() {
     const { commodity, form } = this.props
     const { getFieldProps } = form
-    const {
-      cardGroupAll, groupPackage, dhbOpen, scoreOpen,
-    } = commodity
+    const { cardGroupAll, groupPackage, dhbOpen, scoreOpen } = commodity
     const {
       // eslint-disable-next-line camelcase
-      give, userLevels, score_name, dhb_name,
+      give,
+      userLevels,
+      score_name,
+      dhb_name,
     } = this.state
     return (
       <React.Fragment>
         <NavBar title="团购优惠设置" goBack />
         <List>
           <Item>
-            <div style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>套餐设置</div>
+            <div
+              style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}
+            >
+              套餐设置
+            </div>
           </Item>
           <InputItem
             {...getFieldProps('tagname', {
@@ -253,42 +269,51 @@ class GroupDiscounts extends React.Component {
           {(dhbOpen === '1' || scoreOpen === '1') && (
             <div>
               <Item>
-                <div style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
-                {dhb_name}{score_name}设置
+                <div
+                  style={{
+                    color: '#333',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                  }}
+                >
+                  {dhb_name}
+                  {score_name}设置
                 </div>
               </Item>
               <Item>
-              用户消费赠送比例
+                用户消费赠送比例
                 {dhbOpen === '1' && (
-                <InputItem
-                  {...getFieldProps('dhb_get_num', {
-                    rules: [{ required: false }],
-                  })}
-                  labelNumber={7}
-                  extra={dhb_name}
-                  placeholder={`请填写${dhb_name}数量`}
-                >
-                  每消费1元赠送
-                </InputItem>
+                  <InputItem
+                    {...getFieldProps('dhb_get_num', {
+                      rules: [{ required: false }],
+                    })}
+                    labelNumber={7}
+                    extra={dhb_name}
+                    placeholder={`请填写${dhb_name}数量`}
+                  >
+                    每消费1元赠送
+                  </InputItem>
                 )}
                 {scoreOpen === '1' && (
-                <InputItem
-                  {...getFieldProps('score_get_num', {
-                    rules: [{ required: false }],
-                  })}
-                  extra={score_name}
-                  labelNumber={7}
-                  placeholder={`请填写${score_name}数量`}
-                >
-                  每消费1元赠送
-                </InputItem>
+                  <InputItem
+                    {...getFieldProps('score_get_num', {
+                      rules: [{ required: false }],
+                    })}
+                    extra={score_name}
+                    labelNumber={7}
+                    placeholder={`请填写${score_name}数量`}
+                  >
+                    每消费1元赠送
+                  </InputItem>
                 )}
               </Item>
             </div>
           )}
 
           <Item>
-            <div style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
+            <div
+              style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}
+            >
               赠送商家优惠券
             </div>
           </Item>
@@ -298,9 +323,10 @@ class GroupDiscounts extends React.Component {
                 <Button
                   size="small"
                   type="ghost"
-                  onClick={() => this.setState({
-                    give: give.concat({ goods: '', goods_num: '' }),
-                  })
+                  onClick={() =>
+                    this.setState({
+                      give: give.concat({ goods: '', goods_num: '' }),
+                    })
                   }
                 >
                   添加
@@ -308,9 +334,10 @@ class GroupDiscounts extends React.Component {
                 <Button
                   size="small"
                   type="warning"
-                  onClick={() => this.setState({
-                    give: give.slice(0, give.length - 1),
-                  })
+                  onClick={() =>
+                    this.setState({
+                      give: give.slice(0, give.length - 1),
+                    })
                   }
                 >
                   删除
@@ -322,7 +349,9 @@ class GroupDiscounts extends React.Component {
           </List.Item>
           {this.mapGive()}
           <Item>
-            <div style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
+            <div
+              style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}
+            >
               商家会员福利
             </div>
           </Item>
@@ -338,7 +367,13 @@ class GroupDiscounts extends React.Component {
           </Picker>
           {userLevels && (
             <Item>
-              <div style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
+              <div
+                style={{
+                  color: '#333',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}
+              >
                 会员优惠设置
               </div>
             </Item>

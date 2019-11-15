@@ -1,27 +1,30 @@
 import styled from 'styled-components'
 
 export default styled.div`
-  background: #eee;
+  background: #f7f7f7;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 10px 4px 5px 4px;
+  padding: 12px 4px 12px 4px;
+  border: 2px solid #f7f7f7;
+  border-radius: 4px;
   div:nth-child(1) {
-    font-size: 12px;
+    font-size: 20px;
   }
   div:nth-child(2) {
-    font-size: 15px;
+    font-size: 12px;
     font-weight: bold;
     margin-top: 6px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
+    color: #888;
     text-align: center;
-    // word-wrap:break-word;
   }
   &.cur {
-    background: #ccc;
+    border: 2px solid #0d969c;
+    box-sizing: border-box;
   }
 `

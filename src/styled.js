@@ -7,8 +7,8 @@ export const TabBarContainer = styled.div``
 export const Paper = styled.div`
   padding: 15px;
   background: #fff;
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-    0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
   border-radius: 4px;
 `
 
@@ -190,7 +190,7 @@ export const AddBtn = styled.div`
     border-radius: 46px;
     line-height: 46px;
     color: #fff;
-    background: #ffb000;
+    background: #00a29a;
     z-index: 2;
   }
 `
@@ -200,10 +200,12 @@ export const FilterBox = styled.div`
   background: #fff;
   display: inline-block;
   font-size: 12px;
-  color: #666;
+  color: #9e9e9e;
   border: 1px solid #eee;
-  border-radius: 15px;
+  border-radius: 18px;
+  text-align: center;
   padding: 5px 10px;
+  box-shadow: 0 2px 4px 0 rgba(236, 236, 236, 0.5);
   span {
     display: inline-block;
     vertical-align: middle;

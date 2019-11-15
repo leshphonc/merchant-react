@@ -31,7 +31,7 @@ class Index extends React.Component {
     return (
       <TabBarContainer>
         <TabBar
-          tintColor="#ffb000"
+          tintColor="#00A29A"
           tabBarPosition="bottom"
           prerenderingSiblingsNumber={0}
         >

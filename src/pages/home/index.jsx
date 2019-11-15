@@ -7,7 +7,7 @@ import 'echarts/lib/component/tooltip'
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/grid'
 import { withRouter } from 'react-router-dom'
-import { Paper, FilterBox } from '@/styled'
+import { FilterBox } from '@/styled'
 import { observer, inject } from 'mobx-react'
 import { ManagementGrid, PopularizeGrid, AllianceGrid } from '@/config/grid'
 import {
@@ -130,21 +130,18 @@ class Home extends React.Component {
           params[0].axisValue.length - 1,
         )
         const result = `${str - 2}点 - ${str}点<br />
-        <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#ffb000;"></span>${
+        <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#00A29A;"></span>${
           params[0].seriesName
         }: ${params[0].data}`
         return result
       }
     }
     return {
-      color: ['#ffb000'],
+      color: ['#86CACD'],
       tooltip: {
         trigger: 'axis',
         axisPointer: {
-          type: 'shadow',
-          crossStyle: {
-            color: '#999',
-          },
+          type: 'none',
         },
         formatter: format,
       },
@@ -158,8 +155,13 @@ class Home extends React.Component {
         {
           type: 'category',
           data: xData,
-          axisPointer: {
-            type: 'shadow',
+          axisLabel: {
+            color: '#9E9E9E',
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#DFDFDF',
+            },
           },
         },
       ],
@@ -167,6 +169,19 @@ class Home extends React.Component {
         {
           type: 'value',
           name: '元',
+          axisLabel: {
+            color: '#9E9E9E',
+          },
+          splitLine: {
+            lineStyle: {
+              color: ['#DFDFDF'],
+            },
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#DFDFDF',
+            },
+          },
           max: function(value) {
             return parseInt(value.max + 10)
           },
@@ -177,6 +192,14 @@ class Home extends React.Component {
           name: seriesLabel,
           type: 'bar',
           data: echartData,
+          itemStyle: {
+            barBorderRadius: [500, 500, 0, 0],
+          },
+          emphasis: {
+            itemStyle: {
+              color: '#00A29A',
+            },
+          },
         },
       ],
     }
@@ -204,21 +227,18 @@ class Home extends React.Component {
           params[0].axisValue.length - 1,
         )
         const result = `${str - 2}点 - ${str}点<br />
-        <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#ffb000;"></span>${
+        <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#00A29A;"></span>${
           params[0].seriesName
         }: ${params[0].data}`
         return result
       }
     }
     return {
-      color: ['#ffb000'],
+      color: ['#00A29A'],
       tooltip: {
         trigger: 'axis',
         axisPointer: {
-          type: 'shadow',
-          crossStyle: {
-            color: '#999',
-          },
+          type: 'none',
         },
         formatter: format,
       },
@@ -232,15 +252,29 @@ class Home extends React.Component {
         {
           type: 'category',
           data: xData,
-          axisPointer: {
-            type: 'shadow',
+          axisLabel: {
+            color: '#9E9E9E',
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#DFDFDF',
+            },
           },
         },
       ],
       yAxis: [
         {
           type: 'value',
-          name: '进店人数',
+          splitLine: {
+            lineStyle: {
+              color: ['#DFDFDF'],
+            },
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#DFDFDF',
+            },
+          },
           max: function(value) {
             return parseInt(value.max + 10)
           },
@@ -251,6 +285,14 @@ class Home extends React.Component {
           name: seriesLabel2,
           type: 'bar',
           data: aiData,
+          itemStyle: {
+            barBorderRadius: [500, 500, 0, 0],
+          },
+          emphasis: {
+            itemStyle: {
+              color: '#00A29A',
+            },
+          },
         },
       ],
     }
@@ -478,12 +520,14 @@ class Home extends React.Component {
       return false
     }
 
+    const width = window.screen.width
     const ratio = indexData.wap_MerchantAd[0].cat_width_height_ratio
     const widthRatio = ratio.split(':')[0] - 0
     const heightRatio = ratio.split(':')[1] - 0
     const height = (ScreenWidth * heightRatio) / widthRatio
+    const height2 = width / 4
     return (
-      <Carousel autoplay infinite style={{ height }}>
+      <Carousel autoplay infinite style={{ height: height2 }}>
         {indexData.wap_MerchantAd.map(item => (
           <a href={item.url} key={item.id}>
             <img src={item.pic} alt="" />
@@ -512,106 +556,81 @@ class Home extends React.Component {
     } = this.state
     return (
       <div style={{ overflow: 'hidden' }}>
-        {this.mapAd()}
         <UserCard />
+        <GridCard data={ManagementGrid} col={4} imgSize={45} />
+        {this.mapAd()}
         <WhiteSpace />
-        <WingBlank size="md">
-          <Paper>
-            <GridCard data={ManagementGrid} col={4} imgSize={45} />
-            <WhiteSpace />
-            <Flex>
-              <Flex.Item>
-                <FlexBox
-                  className={cur === '1' ? 'cur' : ''}
-                  onClick={() => this.changeEchartType('1', 'all_money')}
-                >
-                  <div>收入总数</div>
-                  <div>{home.indexData.total_earn || 0}</div>
-                </FlexBox>
-              </Flex.Item>
-              <Flex.Item>
-                <FlexBox
-                  className={cur === '2' ? 'cur' : ''}
-                  onClick={() => this.changeEchartType('2', 'all_order')}
-                >
-                  <div>订单总数</div>
-                  <div>{home.indexData.total_order || 0}</div>
-                </FlexBox>
-              </Flex.Item>
-            </Flex>
-            <WhiteSpace />
-            <Flex>
-              <Flex.Item>
-                <FlexBox
-                  className={cur === '3' ? 'cur' : ''}
-                  onClick={() => this.changeEchartType('3', 'all_fans')}
-                >
-                  <div>粉丝人数</div>
-                  <div>{home.indexData.total_fans || 0}</div>
-                </FlexBox>
-              </Flex.Item>
-              <Flex.Item>
-                <FlexBox
-                  className={cur === '4' ? 'cur' : ''}
-                  onClick={() => this.changeEchartType('4', 'all_visit')}
-                >
-                  <div>访问人数</div>
-                  <div>{home.indexData.total_visit || 0}</div>
-                </FlexBox>
-              </Flex.Item>
-              <Flex.Item>
-                <FlexBox
-                  className={cur === '5' ? 'cur' : ''}
-                  onClick={() => this.changeEchartType('5', 'all_visit_num')}
-                >
-                  <div>访问次数</div>
-                  <div>{home.indexData.total_visit_num || 0}</div>
-                </FlexBox>
-              </Flex.Item>
-            </Flex>
-            <WhiteSpace />
-            <FilterBox style={{ marginRight: 5 }}>
-              <Picker
-                data={storeList}
-                value={[filterStoreValue]}
-                cols={1}
-                onChange={this.changeFilterStore}
+        <WingBlank size="md" style={{ background: '#fff' }}>
+          <WhiteSpace />
+          <WhiteSpace />
+          <div style={{ fontSize: 18, color: '#000', paddingLeft: 10 }}>
+            数据统计
+          </div>
+          <WhiteSpace />
+          <WhiteSpace />
+          <Flex>
+            <Flex.Item>
+              <FlexBox
+                className={cur === '1' ? 'cur' : ''}
+                onClick={() => this.changeEchartType('1', 'all_money')}
               >
-                <div>
-                  <span>{filterStoreLabel}</span>
-                  <i
-                    className="iconfont"
-                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                  >
-                    &#xe6f0;
-                  </i>
-                </div>
-              </Picker>
-            </FilterBox>
-            <FilterBox style={{ marginRight: 5 }}>
-              <Picker
-                data={FilterData1}
-                value={[filterValue1]}
-                cols={1}
-                onChange={this.changeFilter1}
+                <div>{home.indexData.total_earn || 0}</div>
+                <div>收入总数</div>
+              </FlexBox>
+            </Flex.Item>
+            <Flex.Item>
+              <FlexBox
+                className={cur === '2' ? 'cur' : ''}
+                onClick={() => this.changeEchartType('2', 'all_order')}
               >
-                <div>
-                  <span>{filterLabel1}</span>
-                  <i
-                    className="iconfont"
-                    style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                  >
-                    &#xe6f0;
-                  </i>
-                </div>
-              </Picker>
-            </FilterBox>
-            {/* 筛选一选年份 */}
-            {filterValue1 === '3' ? (
-              <FilterBox style={{ marginRight: 5 }}>
-                <DatePicker mode="year" onChange={this.changeYear}>
+                <div>{home.indexData.total_order || 0}</div>
+                <div>订单总数</div>
+              </FlexBox>
+            </Flex.Item>
+          </Flex>
+          <WhiteSpace />
+          <Flex>
+            <Flex.Item>
+              <FlexBox
+                className={cur === '3' ? 'cur' : ''}
+                onClick={() => this.changeEchartType('3', 'all_fans')}
+              >
+                <div>{home.indexData.total_fans || 0}</div>
+                <div>粉丝人数</div>
+              </FlexBox>
+            </Flex.Item>
+            <Flex.Item>
+              <FlexBox
+                className={cur === '4' ? 'cur' : ''}
+                onClick={() => this.changeEchartType('4', 'all_visit')}
+              >
+                <div>{home.indexData.total_visit || 0}</div>
+                <div>访问人数</div>
+              </FlexBox>
+            </Flex.Item>
+            <Flex.Item>
+              <FlexBox
+                className={cur === '5' ? 'cur' : ''}
+                onClick={() => this.changeEchartType('5', 'all_visit_num')}
+              >
+                <div>{home.indexData.total_visit_num || 0}</div>
+                <div>访问次数</div>
+              </FlexBox>
+            </Flex.Item>
+          </Flex>
+          <WhiteSpace />
+          <WhiteSpace />
+          <Flex>
+            <Flex.Item style={{ paddingBottom: 5 }}>
+              <FilterBox style={{ width: '100%', padding: 10 }}>
+                <Picker
+                  data={storeList}
+                  value={[filterStoreValue]}
+                  cols={1}
+                  onChange={this.changeFilterStore}
+                >
                   <div>
-                    <span>{filterLabel2}</span>
+                    <span>{filterStoreLabel}</span>
                     <i
                       className="iconfont"
                       style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
@@ -619,14 +638,19 @@ class Home extends React.Component {
                       &#xe6f0;
                     </i>
                   </div>
-                </DatePicker>
+                </Picker>
               </FilterBox>
-            ) : null}
-            {filterValue1 === '2' ? (
-              <FilterBox style={{ marginRight: 5 }}>
-                <DatePicker mode="month" onChange={this.changeMonth}>
+            </Flex.Item>
+            <Flex.Item style={{ paddingBottom: 5 }}>
+              <FilterBox style={{ width: '100%', padding: 10 }}>
+                <Picker
+                  data={FilterData1}
+                  value={[filterValue1]}
+                  cols={1}
+                  onChange={this.changeFilter1}
+                >
                   <div>
-                    <span>{filterLabel2}</span>
+                    <span>{filterLabel1}</span>
                     <i
                       className="iconfont"
                       style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
@@ -634,139 +658,189 @@ class Home extends React.Component {
                       &#xe6f0;
                     </i>
                   </div>
-                </DatePicker>
+                </Picker>
               </FilterBox>
-            ) : null}
-            {filterValue1 === '1' ? (
-              <FilterBox style={{ marginRight: 5 }}>
-                <DatePicker mode="date" onChange={this.changeDay}>
-                  <div>
-                    <span>{filterLabel2}</span>
-                    <i
-                      className="iconfont"
-                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                    >
-                      &#xe6f0;
-                    </i>
-                  </div>
-                </DatePicker>
-              </FilterBox>
-            ) : null}
-            <WhiteSpace />
-            <ReactEchartsCore
-              echarts={echarts}
-              option={this.getOption()}
-              style={{ height: 200 }}
-            />
-          </Paper>
+            </Flex.Item>
+            <Flex.Item style={{ paddingBottom: 5 }}>
+              {/* 筛选一选年份 */}
+              {filterValue1 === '3' ? (
+                <FilterBox style={{ width: '100%', padding: 10 }}>
+                  <DatePicker mode="year" onChange={this.changeYear}>
+                    <div>
+                      <span>{filterLabel2}</span>
+                      <i
+                        className="iconfont"
+                        style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                      >
+                        &#xe6f0;
+                      </i>
+                    </div>
+                  </DatePicker>
+                </FilterBox>
+              ) : null}
+              {filterValue1 === '2' ? (
+                <FilterBox style={{ width: '100%', padding: 10 }}>
+                  <DatePicker mode="month" onChange={this.changeMonth}>
+                    <div>
+                      <span>{filterLabel2}</span>
+                      <i
+                        className="iconfont"
+                        style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                      >
+                        &#xe6f0;
+                      </i>
+                    </div>
+                  </DatePicker>
+                </FilterBox>
+              ) : null}
+              {filterValue1 === '1' ? (
+                <FilterBox style={{ width: '100%', padding: 10 }}>
+                  <DatePicker mode="date" onChange={this.changeDay}>
+                    <div>
+                      <span>{filterLabel2}</span>
+                      <i
+                        className="iconfont"
+                        style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                      >
+                        &#xe6f0;
+                      </i>
+                    </div>
+                  </DatePicker>
+                </FilterBox>
+              ) : null}
+            </Flex.Item>
+          </Flex>
+          <WhiteSpace />
+          <WhiteSpace />
+          <ReactEchartsCore
+            echarts={echarts}
+            option={this.getOption()}
+            style={{ height: 200 }}
+          />
         </WingBlank>
         <WhiteSpace />
-        {showAI ? (
-          <WingBlank size="md">
-            <Paper>
-              <div
-                style={{
-                  textAlign: 'center',
-                  fontWeight: 600,
-                  fontSize: '1rem',
-                }}
-              >
+        <WingBlank size="md" style={{ background: '#fff' }}>
+          {showAI ? (
+            <>
+              <WhiteSpace />
+              <WhiteSpace />
+              <div style={{ fontSize: 18, color: '#000', paddingLeft: 10 }}>
                 门店AI助手
               </div>
               <WhiteSpace />
-              <FilterBox style={{ marginRight: 5 }}>
-                <Picker
-                  data={storeList}
-                  value={[aifilterStoreValue]}
-                  cols={1}
-                  onChange={this.aichangeFilterStore}
-                >
-                  <div>
-                    <span>{aifilterStoreLabel}</span>
-                    <i
-                      className="iconfont"
-                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                    >
-                      &#xe6f0;
-                    </i>
-                  </div>
-                </Picker>
-              </FilterBox>
-              <FilterBox style={{ marginRight: 5 }}>
-                <Picker
-                  data={FilterData1}
-                  value={[aifilterValue1]}
-                  cols={1}
-                  onChange={this.aichangeFilter1}
-                >
-                  <div>
-                    <span>{aifilterLabel1}</span>
-                    <i
-                      className="iconfont"
-                      style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                    >
-                      &#xe6f0;
-                    </i>
-                  </div>
-                </Picker>
-              </FilterBox>
-              {aifilterValue1 === '3' ? (
-                <FilterBox style={{ marginRight: 5 }}>
-                  <DatePicker mode="year" onChange={this.aichangeYear}>
-                    <div>
-                      <span>{aifilterLabel2}</span>
-                      <i
-                        className="iconfont"
-                        style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                      >
-                        &#xe6f0;
-                      </i>
-                    </div>
-                  </DatePicker>
-                </FilterBox>
-              ) : null}
-              {aifilterValue1 === '2' ? (
-                <FilterBox style={{ marginRight: 5 }}>
-                  <DatePicker mode="month" onChange={this.aichangeMonth}>
-                    <div>
-                      <span>{aifilterLabel2}</span>
-                      <i
-                        className="iconfont"
-                        style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                      >
-                        &#xe6f0;
-                      </i>
-                    </div>
-                  </DatePicker>
-                </FilterBox>
-              ) : null}
-              {aifilterValue1 === '1' ? (
-                <FilterBox style={{ marginRight: 5 }}>
-                  <DatePicker mode="date" onChange={this.aichangeDay}>
-                    <div>
-                      <span>{aifilterLabel2}</span>
-                      <i
-                        className="iconfont"
-                        style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
-                      >
-                        &#xe6f0;
-                      </i>
-                    </div>
-                  </DatePicker>
-                </FilterBox>
-              ) : null}
               <WhiteSpace />
+              <Flex>
+                <Flex.Item style={{ paddingBottom: 5 }}>
+                  <FilterBox style={{ width: '100%', padding: 10 }}>
+                    <Picker
+                      data={storeList}
+                      value={[aifilterStoreValue]}
+                      cols={1}
+                      onChange={this.aichangeFilterStore}
+                    >
+                      <div>
+                        <span>{aifilterStoreLabel}</span>
+                        <i
+                          className="iconfont"
+                          style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                        >
+                          &#xe6f0;
+                        </i>
+                      </div>
+                    </Picker>
+                  </FilterBox>
+                </Flex.Item>
+                <Flex.Item style={{ paddingBottom: 5 }}>
+                  <FilterBox style={{ width: '100%', padding: 10 }}>
+                    <Picker
+                      data={FilterData1}
+                      value={[aifilterValue1]}
+                      cols={1}
+                      onChange={this.aichangeFilter1}
+                    >
+                      <div>
+                        <span>{aifilterLabel1}</span>
+                        <i
+                          className="iconfont"
+                          style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                        >
+                          &#xe6f0;
+                        </i>
+                      </div>
+                    </Picker>
+                  </FilterBox>
+                </Flex.Item>
+                <Flex.Item style={{ paddingBottom: 5 }}>
+                  {aifilterValue1 === '3' ? (
+                    <FilterBox style={{ width: '100%', padding: 10 }}>
+                      <DatePicker mode="year" onChange={this.aichangeYear}>
+                        <div>
+                          <span>{aifilterLabel2}</span>
+                          <i
+                            className="iconfont"
+                            style={{
+                              fontSize: 10,
+                              marginLeft: 5,
+                              color: '#999',
+                            }}
+                          >
+                            &#xe6f0;
+                          </i>
+                        </div>
+                      </DatePicker>
+                    </FilterBox>
+                  ) : null}
+                  {aifilterValue1 === '2' ? (
+                    <FilterBox style={{ width: '100%', padding: 10 }}>
+                      <DatePicker mode="month" onChange={this.aichangeMonth}>
+                        <div>
+                          <span>{aifilterLabel2}</span>
+                          <i
+                            className="iconfont"
+                            style={{
+                              fontSize: 10,
+                              marginLeft: 5,
+                              color: '#999',
+                            }}
+                          >
+                            &#xe6f0;
+                          </i>
+                        </div>
+                      </DatePicker>
+                    </FilterBox>
+                  ) : null}
+                  {aifilterValue1 === '1' ? (
+                    <FilterBox style={{ width: '100%', padding: 10 }}>
+                      <DatePicker mode="date" onChange={this.aichangeDay}>
+                        <div>
+                          <span>{aifilterLabel2}</span>
+                          <i
+                            className="iconfont"
+                            style={{
+                              fontSize: 10,
+                              marginLeft: 5,
+                              color: '#999',
+                            }}
+                          >
+                            &#xe6f0;
+                          </i>
+                        </div>
+                      </DatePicker>
+                    </FilterBox>
+                  ) : null}
+                </Flex.Item>
+              </Flex>
               <ReactEchartsCore
                 echarts={echarts}
                 option={this.getOption2()}
                 style={{ height: 250, background: '#fff' }}
               />
-              <WhiteSpace />
               <Flex>
                 <Flex.Item>
                   <FlexBox
                     style={{ minHeight: 50, paddingTop: 4, fontWeight: 600 }}
                   >
+                    <div />
                     <div>广告订单</div>
                   </FlexBox>
                 </Flex.Item>
@@ -777,26 +851,24 @@ class Home extends React.Component {
                       history.push('/popularize/smartScreen/screenList')
                     }
                   >
+                    <div />
                     <div>推广内容</div>
                   </FlexBox>
                 </Flex.Item>
               </Flex>
-            </Paper>
-            <WhiteSpace />
-          </WingBlank>
-        ) : null}
-        <WingBlank size="md">
-          <Paper>
-            <GridCard data={PopularizeGrid} col={4} />
-          </Paper>
+              <WhiteSpace />
+            </>
+          ) : null}
+        </WingBlank>
+        <WhiteSpace />
+        <WingBlank size="md" style={{ background: '#fff' }}>
+          <GridCard data={PopularizeGrid} col={4} />
         </WingBlank>
         <WhiteSpace />
         {process.env.REACT_APP_CUR === 'cs' ? (
           <React.Fragment>
-            <WingBlank size="md">
-              <Paper>
-                <GridCard data={AllianceGrid} col={4} />
-              </Paper>
+            <WingBlank size="md" style={{ background: '#fff' }}>
+              <GridCard data={AllianceGrid} col={4} />
             </WingBlank>
             <WhiteSpace />
           </React.Fragment>

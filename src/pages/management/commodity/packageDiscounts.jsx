@@ -1,7 +1,6 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-// import { Route } from 'react-router-dom'
 import {
   List,
   InputItem,
@@ -24,11 +23,10 @@ const seckill = [
 @createForm()
 @inject('commodity')
 @observer
-class ECommerceDiscounts extends React.Component {
+class PackageDiscounts extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      // userLevels: [],
       give: [],
     }
   }
@@ -36,9 +34,9 @@ class ECommerceDiscounts extends React.Component {
   componentDidMount() {
     const { commodity, match, form } = this.props
     commodity.fetchCardGroupAllE()
-    if (!match.params.goodid) return
     commodity.fetchGiftVoucherE()
     commodity.fetchscoreAndDhbE()
+    if (!match.params.goodid) return
     commodity
       .fetchECommerceDetail(match.params.id, match.params.goodid)
       .then(() => {
@@ -137,13 +135,13 @@ class ECommerceDiscounts extends React.Component {
   }
 
   render() {
-    const { match, commodity, form } = this.props
+    const { commodity, form } = this.props
     const { getFieldProps } = form
     const { cardGroupAll, scoreOpen, dhbOpen } = commodity
     const { give } = this.state
     return (
       <React.Fragment>
-        <NavBar title={`${match.params.str}优惠设置`} goBack />
+        <NavBar title="优惠设置" goBack />
         <List>
           <InputItem
             {...getFieldProps('seckill_price', {
@@ -301,4 +299,4 @@ class ECommerceDiscounts extends React.Component {
     )
   }
 }
-export default ECommerceDiscounts
+export default PackageDiscounts

@@ -966,6 +966,17 @@ class MastSotre {
     }
   }
 
+  // 服务项目列表
+  @action
+  fetchSingleServiceList = (page = 1) => {
+    return new Promise(async resolve => {
+      const response = await services.fetchSingle(page)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
+
   // 添加服务项目
   @action
   addSingleService = async payload => {
@@ -1018,6 +1029,16 @@ class MastSotre {
         }
       })
     }
+  }
+
+  @action
+  fetchPackageList = async (page = 1) => {
+    return new Promise(async resolve => {
+      const response = await services.fetchPackage(page)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
   }
 
   // 添加套餐

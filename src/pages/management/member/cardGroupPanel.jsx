@@ -1,6 +1,12 @@
 import React from 'react'
 import {
-  WhiteSpace, List, InputItem, Button, Picker, Flex, Toast,
+  WhiteSpace,
+  List,
+  InputItem,
+  Button,
+  Picker,
+  Flex,
+  Toast,
 } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import NavBar from '@/common/NavBar'
@@ -64,8 +70,11 @@ class ModifyGroup extends React.Component {
         >
           <List.Item arrow="horizontal">商品</List.Item>
         </Picker>
-        <InputItem defaultValue={item.goods_num} onChange={val => this.changeGiveNum(val, index)}>
-          商品个数
+        <InputItem
+          defaultValue={item.goods_num}
+          onChange={val => this.changeGiveNum(val, index)}
+        >
+          赠送数量
         </InputItem>
       </React.Fragment>
     ))
@@ -73,12 +82,17 @@ class ModifyGroup extends React.Component {
 
   submit = async () => {
     const { match, history, member } = this.props
-    const {
-      groupname, comment, discount, effdays, give,
-    } = this.state
+    const { groupname, comment, discount, effdays, give } = this.state
     if (match.params.id) {
       await member
-        .operatingCardGroup(groupname, comment, discount, effdays, give, match.params.id)
+        .operatingCardGroup(
+          groupname,
+          comment,
+          discount,
+          effdays,
+          give,
+          match.params.id,
+        )
         .then(res => {
           if (res) {
             Toast.success('编辑成功', 1, () => {
@@ -88,22 +102,22 @@ class ModifyGroup extends React.Component {
           }
         })
     } else {
-      await member.operatingCardGroup(groupname, comment, discount, effdays, give).then(res => {
-        if (res) {
-          Toast.success('新增成功', 1, () => {
-            member.resetCardGroupList()
-            history.goBack()
-          })
-        }
-      })
+      await member
+        .operatingCardGroup(groupname, comment, discount, effdays, give)
+        .then(res => {
+          if (res) {
+            Toast.success('新增成功', 1, () => {
+              member.resetCardGroupList()
+              history.goBack()
+            })
+          }
+        })
     }
   }
 
   render() {
     const { match } = this.props
-    const {
-      groupname, comment, discount, effdays, give,
-    } = this.state
+    const { groupname, comment, discount, effdays, give } = this.state
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}分组`} goBack />
@@ -139,9 +153,10 @@ class ModifyGroup extends React.Component {
                 <Button
                   size="small"
                   type="ghost"
-                  onClick={() => this.setState({
-                    give: give.concat({ goods: '', goods_num: '' }),
-                  })
+                  onClick={() =>
+                    this.setState({
+                      give: give.concat({ goods: '', goods_num: '' }),
+                    })
                   }
                 >
                   添加
@@ -149,9 +164,10 @@ class ModifyGroup extends React.Component {
                 <Button
                   size="small"
                   type="warning"
-                  onClick={() => this.setState({
-                    give: give.slice(0, give.length - 1),
-                  })
+                  onClick={() =>
+                    this.setState({
+                      give: give.slice(0, give.length - 1),
+                    })
                   }
                 >
                   删除

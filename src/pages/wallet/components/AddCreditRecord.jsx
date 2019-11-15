@@ -1,9 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
-import {
-  WhiteSpace, WingBlank, PullToRefresh, Card,
-} from 'antd-mobile'
+import { WhiteSpace, WingBlank, PullToRefresh, Card } from 'antd-mobile'
 import moment from 'moment'
 import { IncomeStatus } from '@/config/constant'
 
@@ -25,7 +23,8 @@ class AddCreditRecord extends React.Component {
     const { height } = this.state
     if (!addCreditList.length) wallet.fetchAddCreditRecord()
     /* eslint react/no-find-dom-node: 0 */
-    const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 106.5
+    const hei =
+      height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 106.5
     this.setState({
       height: hei,
     })
@@ -53,7 +52,9 @@ class AddCreditRecord extends React.Component {
             <div>余额：{item.now_mer_money}</div>
           </Card.Body>
           <WhiteSpace />
-          <Card.Footer content={moment(item.use_time * 1000).format('YYYY-MM-DD HH:mm:ss')} />
+          <Card.Footer
+            content={moment(item.use_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+          />
         </Card>
         <WhiteSpace />
       </React.Fragment>
