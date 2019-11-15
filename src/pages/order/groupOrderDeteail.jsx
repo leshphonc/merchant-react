@@ -5,6 +5,8 @@ import { Flex, Card, Picker, Button, Toast, InputItem } from 'antd-mobile'
 // import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 
+// window.sysqrcode = GroupOrderDetail.sysqrcode
+
 const styleSpan = {
   spaner: {
     display: 'inline-block',
@@ -63,6 +65,7 @@ class GroupOrderDetail extends React.Component {
       groupPass: '',
       groupPassArr: [],
       expressIndex: 0,
+      orderId: '',
     }
     this.refresh = React.createRef()
   }
@@ -120,35 +123,76 @@ class GroupOrderDetail extends React.Component {
         groupPass: groupOrderDetail.now_order.group_pass,
       })
     })
+
+    window['sysqrcode'] = code => {
+      const { order } = this.props
+      const { groupOrderDetail } = order
+      const { orderId } = this.state
+      if (groupOrderDetail.now_order.num > 1) {
+        order.verificGroup(orderId, code).then(res2 => {
+          if (res2) Toast.success('验证成功', 1, () => window.location.reload())
+        })
+      } else {
+        order.verificOneGroup(orderId, code).then(res2 => {
+          if (res2) Toast.success('验证成功', 1, () => window.location.reload())
+        })
+      }
+    }
+  }
+
+  //app方法
+  invokeAndroid = json => {
+    if (
+      navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') != -1
+    ) {
+      window.android.invokeMethods(JSON.stringify(json))
+    } else if (
+      navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') != -1
+    ) {
+      window.location.href = 'ios:' + JSON.stringify(json)
+    }
   }
 
   verificBtn = orderId => {
     const { order, login } = this.props
     const { groupOrderDetail } = order
-    window.wx.scanQRCode({
-      needResult: 1,
-      scanType: ['qrCode', 'barCode'],
-      success(res) {
-        if (groupOrderDetail.now_order.num > 1) {
-          order.verificGroup(orderId, res.resultStr).then(res2 => {
-            if (res2)
-              Toast.success('验证成功', 1, () => window.location.reload())
-          })
-        } else {
-          order.verificOneGroup(orderId, res.resultStr).then(res2 => {
-            if (res2)
-              Toast.success('验证成功', 1, () => window.location.reload())
-          })
-        }
-      },
-      fail() {
-        login.wxConfigFun().then(res => {
-          if (res) {
-            this.verificBtn(orderId)
-          }
-        })
-      },
+    this.setState({
+      // eslint-disable-next-line react/no-unused-state
+      orderId: orderId,
     })
+    if (
+      navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') !=
+        -1 ||
+      navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') != -1
+    ) {
+      const json = { callback: 'sysqrcode', action: 'ScanQRCode' }
+      this.invokeAndroid(json)
+    } else {
+      window.wx.scanQRCode({
+        needResult: 1,
+        scanType: ['qrCode', 'barCode'],
+        success(res) {
+          if (groupOrderDetail.now_order.num > 1) {
+            order.verificGroup(orderId, res.resultStr).then(res2 => {
+              if (res2)
+                Toast.success('验证成功', 1, () => window.location.reload())
+            })
+          } else {
+            order.verificOneGroup(orderId, res.resultStr).then(res2 => {
+              if (res2)
+                Toast.success('验证成功', 1, () => window.location.reload())
+            })
+          }
+        },
+        fail() {
+          login.wxConfigFun().then(res => {
+            if (res) {
+              this.verificBtn(orderId)
+            }
+          })
+        },
+      })
+    }
   }
 
   groupPassList = passArr =>
