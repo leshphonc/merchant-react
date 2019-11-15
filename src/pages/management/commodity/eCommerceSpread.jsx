@@ -24,6 +24,7 @@ class ECommerceSpread extends React.Component {
     const { commodity, match, form } = this.props
     commodity.fetchUserLevel(match.params.id, match.params.goodid).then(() => {
       const { userLevels } = commodity
+      console.log(userLevels)
       userLevels.forEach(item => {
         item.level = item.id
       })

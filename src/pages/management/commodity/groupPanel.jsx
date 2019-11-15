@@ -373,6 +373,7 @@ class GroupPanel extends React.Component {
       stock_reduce_method,
       shopList,
     } = this.state
+    // eslint-disable-next-line no-console
     console.log(tuan_type)
     // eslint-disable-next-line camelcase
     const pic_arr = form.getFieldValue('pic') ? form.getFieldValue('pic') : []
