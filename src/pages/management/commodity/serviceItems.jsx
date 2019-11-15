@@ -121,7 +121,7 @@ class ServiceItems extends React.Component {
                         编辑
                       </Button>
                     </Flex.Item>
-                    {/* <Flex.Item>
+                    <Flex.Item>
                       <Button
                         size="small"
                         type="primary"
@@ -133,7 +133,7 @@ class ServiceItems extends React.Component {
                       >
                         优惠
                       </Button>
-                    </Flex.Item> */}
+                    </Flex.Item>
                     <Flex.Item>
                       <Button
                         size="small"

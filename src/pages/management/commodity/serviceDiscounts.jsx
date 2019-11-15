@@ -40,15 +40,15 @@ class ServiceDiscounts extends React.Component {
     commodity.fetchSingleServiceDetail(match.params.id).then(() => {
       const { singleServiceDetail } = commodity
       form.setFieldsValue({
-        seckill_price: singleServiceDetail.seckill_price,
-        seckill_stock: singleServiceDetail.seckill_stock,
-        seckill_type: [singleServiceDetail.seckill_type],
-        seckill_open_time: new Date(
-          singleServiceDetail.seckill_open_time * 1000,
-        ),
-        seckill_close_time: new Date(
-          singleServiceDetail.seckill_close_time * 1000,
-        ),
+        // seckill_price: singleServiceDetail.seckill_price,
+        // seckill_stock: singleServiceDetail.seckill_stock,
+        // seckill_type: [singleServiceDetail.seckill_type],
+        // seckill_open_time: new Date(
+        //   singleServiceDetail.seckill_open_time * 1000,
+        // ),
+        // seckill_close_time: new Date(
+        //   singleServiceDetail.seckill_close_time * 1000,
+        // ),
         dhb_get_num: singleServiceDetail.dhb_get_num,
         score_get_num: singleServiceDetail.score_get_num,
         in_group: [singleServiceDetail.in_group],
@@ -114,13 +114,13 @@ class ServiceDiscounts extends React.Component {
       const obj = {
         ...value,
         in_group: value.in_group[0],
-        seckill_type: value.seckill_type[0],
-        seckill_open_time: moment(value.seckill_open_time).format(
-          'YYYY-MM-DD HH:mm',
-        ),
-        seckill_close_time: moment(value.seckill_close_time).format(
-          'YYYY-MM-DD HH:mm',
-        ),
+        // seckill_type: value.seckill_type[0],
+        // seckill_open_time: moment(value.seckill_open_time).format(
+        //   'YYYY-MM-DD HH:mm',
+        // ),
+        // seckill_close_time: moment(value.seckill_close_time).format(
+        //   'YYYY-MM-DD HH:mm',
+        // ),
         give,
       }
       commodity
@@ -143,7 +143,7 @@ class ServiceDiscounts extends React.Component {
       <React.Fragment>
         <NavBar title="优惠设置" goBack />
         <List>
-          <InputItem
+          {/* <InputItem
             {...getFieldProps('seckill_price', {
               rules: [{ required: false }],
             })}
@@ -211,7 +211,7 @@ class ServiceDiscounts extends React.Component {
             mode="datetime"
           >
             <List.Item arrow="horizontal">结束时间</List.Item>
-          </DatePicker>
+          </DatePicker> */}
           {dhbOpen !== '0' || scoreOpen !== '0' ? (
             <Item>
               用户消费赠送比例

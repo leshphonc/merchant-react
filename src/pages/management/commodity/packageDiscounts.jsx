@@ -41,11 +41,11 @@ class PackageDiscounts extends React.Component {
       const { packageDetail } = commodity
       const cache = JSON.parse(JSON.stringify(packageDetail[0]))
       form.setFieldsValue({
-        seckill_price: cache.seckill_price,
-        seckill_stock: cache.seckill_stock,
-        seckill_type: [cache.seckill_type],
-        seckill_open_time: new Date(cache.seckill_open_time * 1000),
-        seckill_close_time: new Date(cache.seckill_close_time * 1000),
+        // seckill_price: cache.seckill_price,
+        // seckill_stock: cache.seckill_stock,
+        // seckill_type: [cache.seckill_type],
+        // seckill_open_time: new Date(cache.seckill_open_time * 1000),
+        // seckill_close_time: new Date(cache.seckill_close_time * 1000),
         dhb_get_num: cache.dhb_get_num,
         score_get_num: cache.score_get_num,
         in_group: [cache.in_group],
@@ -110,13 +110,13 @@ class PackageDiscounts extends React.Component {
       const obj = {
         ...value,
         in_group: value.in_group[0],
-        seckill_type: value.seckill_type[0],
-        seckill_open_time: moment(value.seckill_open_time).format(
-          'YYYY-MM-DD HH:mm',
-        ),
-        seckill_close_time: moment(value.seckill_close_time).format(
-          'YYYY-MM-DD HH:mm',
-        ),
+        // seckill_type: value.seckill_type[0],
+        // seckill_open_time: moment(value.seckill_open_time).format(
+        //   'YYYY-MM-DD HH:mm',
+        // ),
+        // seckill_close_time: moment(value.seckill_close_time).format(
+        //   'YYYY-MM-DD HH:mm',
+        // ),
         give,
       }
       commodity
@@ -139,7 +139,7 @@ class PackageDiscounts extends React.Component {
       <React.Fragment>
         <NavBar title="优惠设置" goBack />
         <List>
-          <InputItem
+          {/* <InputItem
             {...getFieldProps('seckill_price', {
               rules: [{ required: false }],
             })}
@@ -207,7 +207,7 @@ class PackageDiscounts extends React.Component {
             mode="datetime"
           >
             <List.Item arrow="horizontal">结束时间</List.Item>
-          </DatePicker>
+          </DatePicker> */}
           {dhbOpen !== '0' || scoreOpen !== '0' ? (
             <Item>
               用户消费赠送比例
