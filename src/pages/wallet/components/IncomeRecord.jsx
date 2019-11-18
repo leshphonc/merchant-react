@@ -2,7 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  WhiteSpace, WingBlank, PullToRefresh, Card, Picker, DatePicker,
+  WhiteSpace,
+  WingBlank,
+  PullToRefresh,
+  Card,
+  Picker,
+  DatePicker,
 } from 'antd-mobile'
 import { FilterBox } from '@/styled'
 import moment from 'moment'
@@ -40,17 +45,22 @@ class IncomeRecord extends React.Component {
             storeValue: wallet.incomeStore[0].value,
           },
           () => {
-            const {
-              cateGoryValue, storeValue, beginTime, endTime,
-            } = this.state
-            if (!incomeList.length) wallet.fetchIncomeRecord(cateGoryValue, storeValue, beginTime, endTime)
+            const { cateGoryValue, storeValue, beginTime, endTime } = this.state
+            if (!incomeList.length)
+              wallet.fetchIncomeRecord(
+                cateGoryValue,
+                storeValue,
+                beginTime,
+                endTime,
+              )
           },
         )
       })
     })
 
     /* eslint react/no-find-dom-node: 0 */
-    const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 106.5
+    const hei =
+      height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 106.5
     this.setState({
       height: hei,
     })
@@ -82,7 +92,9 @@ class IncomeRecord extends React.Component {
             <div>余额：{item.now_mer_money}</div>
           </Card.Body>
           <WhiteSpace />
-          <Card.Footer content={moment(item.use_time * 1000).format('YYYY-MM-DD HH:mm:ss')} />
+          <Card.Footer
+            content={moment(item.use_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+          />
         </Card>
         <WhiteSpace />
       </React.Fragment>
@@ -153,11 +165,14 @@ class IncomeRecord extends React.Component {
 
   loadMore = async () => {
     const { wallet } = this.props
-    const {
-      cateGoryValue, storeValue, beginTime, endTime,
-    } = this.state
+    const { cateGoryValue, storeValue, beginTime, endTime } = this.state
     this.setState({ refreshing: true })
-    await wallet.fetchIncomeRecord(cateGoryValue, storeValue, beginTime, endTime)
+    await wallet.fetchIncomeRecord(
+      cateGoryValue,
+      storeValue,
+      beginTime,
+      endTime,
+    )
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
@@ -188,7 +203,10 @@ class IncomeRecord extends React.Component {
             >
               <div>
                 <span>{cateGory}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
@@ -203,7 +221,10 @@ class IncomeRecord extends React.Component {
             >
               <div>
                 <span>{store}</span>
-                <i className="iconfont" style={{ fontSize: 10, marginLeft: 5, color: '#999' }}>
+                <i
+                  className="iconfont"
+                  style={{ fontSize: 10, marginLeft: 5, color: '#999' }}
+                >
                   &#xe6f0;
                 </i>
               </div>
@@ -211,14 +232,28 @@ class IncomeRecord extends React.Component {
           </FilterBox>
           <WhiteSpace />
           <FilterBox>
-            <DatePicker mode="date" value={beginTime} onChange={val => this.changeStartTime(val)}>
-              <div>{beginTime ? moment(beginTime).format('YYYY-MM-DD') : '开始时间'}</div>
+            <DatePicker
+              mode="date"
+              value={beginTime}
+              onChange={val => this.changeStartTime(val)}
+            >
+              <div>
+                {beginTime
+                  ? moment(beginTime).format('YYYY-MM-DD')
+                  : '开始时间'}
+              </div>
             </DatePicker>
           </FilterBox>
           <span style={{ color: '#999' }}> - </span>
           <FilterBox>
-            <DatePicker mode="date" value={endTime} onChange={val => this.changeEndTime(val)}>
-              <div>{endTime ? moment(endTime).format('YYYY-MM-DD') : '结束时间'}</div>
+            <DatePicker
+              mode="date"
+              value={endTime}
+              onChange={val => this.changeEndTime(val)}
+            >
+              <div>
+                {endTime ? moment(endTime).format('YYYY-MM-DD') : '结束时间'}
+              </div>
             </DatePicker>
           </FilterBox>
         </WingBlank>

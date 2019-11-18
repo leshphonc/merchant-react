@@ -109,9 +109,9 @@ class ECommerceSpread extends React.Component {
               this.changeUserLevelsItem(val, index, 'spread_rate')
             }
             labelNumber={7}
-            placeholder=" 推广佣金比例"
+            placeholder=" 推广佣金比例1"
           >
-            推广佣金比例
+            推广佣金比例1
           </InputItem>
           {showThree === '1' && openUserSpread === '1' ? (
             <React.Fragment>

@@ -76,6 +76,7 @@ export const fetchIncomeCategoryList = () =>
 export const fetchIncomeStoreList = () =>
   axios.get('/appapi.php?c=Merchantapp&a=get_store', {
     params: {
+      show_all: 1,
       ticket: localStorage.getItem('ticket'),
     },
   })
