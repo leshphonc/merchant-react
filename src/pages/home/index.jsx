@@ -21,7 +21,7 @@ import {
 import moment from 'moment'
 import FlexBox from './styled'
 
-const ScreenWidth = document.documentElement.clientWidth
+// const ScreenWidth = document.documentElement.clientWidth
 
 const FilterData1 = [
   { label: '日', value: '1' },
@@ -521,10 +521,10 @@ class Home extends React.Component {
     }
 
     const width = window.screen.width
-    const ratio = indexData.wap_MerchantAd[0].cat_width_height_ratio
-    const widthRatio = ratio.split(':')[0] - 0
-    const heightRatio = ratio.split(':')[1] - 0
-    const height = (ScreenWidth * heightRatio) / widthRatio
+    // const ratio = indexData.wap_MerchantAd[0].cat_width_height_ratio
+    // const widthRatio = ratio.split(':')[0] - 0
+    // const heightRatio = ratio.split(':')[1] - 0
+    // const height = (ScreenWidth * heightRatio) / widthRatio
     const height2 = width / 4
     return (
       <Carousel autoplay infinite style={{ height: height2 }}>

@@ -1,25 +1,12 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  List,
-  InputItem,
-  Button,
-  Toast,
-  Picker,
-  DatePicker,
-  Flex,
-} from 'antd-mobile'
-import Tooltip from 'rc-tooltip'
+import { List, InputItem, Button, Toast, Picker, Flex } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
-import moment from 'moment'
 import { createForm } from 'rc-form'
 
 const { Item } = List
-const seckill = [
-  { label: '固定时间段', value: '0' },
-  { label: '每天的时间段', value: '1' },
-]
+
 @createForm()
 @inject('commodity')
 @observer

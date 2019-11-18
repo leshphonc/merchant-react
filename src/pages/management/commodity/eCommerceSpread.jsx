@@ -3,7 +3,7 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
 import { List, InputItem, WingBlank, Button, Toast, Picker } from 'antd-mobile'
-import Tooltip from 'rc-tooltip'
+// import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 
