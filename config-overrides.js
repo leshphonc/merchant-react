@@ -105,7 +105,6 @@ const addCustomize = () => config => {
       },
     })
   }
-  console.log(config)
   return config
 }
 

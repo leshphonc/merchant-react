@@ -30,11 +30,26 @@ class ECommerceDiscounts extends React.Component {
     this.state = {
       // userLevels: [],
       give: [],
+      score_name: '',
+      dhb_name: '',
     }
   }
 
   componentDidMount() {
     const { commodity, match, form } = this.props
+    const alias = JSON.parse(localStorage.getItem('alias'))
+    alias.forEach(item => {
+      if (item.name === 'score_name') {
+        this.setState({
+          score_name: item.value,
+        })
+      }
+      if (item.name === 'dhb_name') {
+        this.setState({
+          dhb_name: item.value,
+        })
+      }
+    })
     commodity.fetchCardGroupAllE()
     if (!match.params.goodid) return
     commodity.fetchGiftVoucherE()
@@ -140,7 +155,7 @@ class ECommerceDiscounts extends React.Component {
     const { match, commodity, form } = this.props
     const { getFieldProps } = form
     const { cardGroupAll, scoreOpen, dhbOpen } = commodity
-    const { give } = this.state
+    const { give, dhb_name, score_name } = this.state
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}优惠设置`} goBack />
@@ -223,8 +238,8 @@ class ECommerceDiscounts extends React.Component {
                     rules: [{ required: false }],
                   })}
                   labelNumber={7}
-                  extra="元宝"
-                  placeholder="请填写元宝数量"
+                  extra={dhb_name}
+                  placeholder={`请填写${dhb_name}数量`}
                 >
                   每消费1元赠送
                 </InputItem>
@@ -234,9 +249,9 @@ class ECommerceDiscounts extends React.Component {
                   {...getFieldProps('score_get_num', {
                     rules: [{ required: false }],
                   })}
-                  extra="金币"
+                  extra={score_name}
                   labelNumber={7}
-                  placeholder="请填写金币数量"
+                  placeholder={`请填写${score_name}数量`}
                 >
                   每消费1元赠送
                 </InputItem>
