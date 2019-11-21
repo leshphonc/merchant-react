@@ -124,6 +124,14 @@ class BasicInformationSotre {
     }
   }
 
+  @action
+  wxBindAPP = async id => {
+    const response = await services.wxBindAPP(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(true)
+    }
+  }
+
   constructor() {
     this.basicInfo = {}
     this.categoryOption = []

@@ -22,19 +22,21 @@ class ECommerceAdd extends React.Component {
     shopManager.fetchECommerceValues()
     // shopManager.fetchBusinessList(match.params.id)
     if (!match.params.id) return
-    shopManager.fetchStaffDetail(match.params.id, match.params.staffId).then(() => {
-      const { staffDetail } = shopManager
-      form.setFieldsValue({
-        name: staffDetail.name,
-        username: staffDetail.username,
-        password: '',
-        tel: staffDetail.tel,
-        // is_change: [staffDetail.is_change],
-        // business_id: [staffDetail.business_id],
-        type: [staffDetail.type],
-        // spread_rato: staffDetail.spread_rato,
+    shopManager
+      .fetchStaffDetail(match.params.id, match.params.staffId)
+      .then(() => {
+        const { staffDetail } = shopManager
+        form.setFieldsValue({
+          name: staffDetail.name,
+          username: staffDetail.username,
+          password: '',
+          tel: staffDetail.tel,
+          // is_change: [staffDetail.is_change],
+          // business_id: [staffDetail.business_id],
+          type: [staffDetail.type],
+          // spread_rato: staffDetail.spread_rato,
+        })
       })
-    })
   }
 
   submit = () => {
@@ -53,14 +55,20 @@ class ECommerceAdd extends React.Component {
       }
       if (match.params.id) {
         shopManager
-          .addECommerce({ ...obj, store_id: match.params.id, staff_id: match.params.staffId })
+          .addECommerce({
+            ...obj,
+            store_id: match.params.id,
+            staff_id: match.params.staffId,
+          })
           .then(res => {
             if (res) Toast.success('编辑成功', 1, () => history.goBack())
           })
       } else {
-        shopManager.modifyECommerce({ ...obj, store_id: value.store_id[0] }).then(res => {
-          if (res) Toast.success('新增成功', 1, () => history.goBack())
-        })
+        shopManager
+          .modifyECommerce({ ...obj, store_id: value.store_id[0] })
+          .then(res => {
+            if (res) Toast.success('新增成功', 1, () => history.goBack())
+          })
       }
     })
   }
@@ -111,7 +119,11 @@ class ECommerceAdd extends React.Component {
               账号
             </InputItem>
           )}
-          <InputItem {...getFieldProps('password')} placeholder="请填写密码" type="password">
+          <InputItem
+            {...getFieldProps('password')}
+            placeholder="请填写密码"
+            type="password"
+          >
             密码
           </InputItem>
           <InputItem

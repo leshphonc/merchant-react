@@ -73,7 +73,7 @@ class WalletStore {
   getUID = async id => {
     const response = await services.getUID(id)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
-      return Promise.resolve(response.data)
+      return Promise.resolve(response.data.result)
     }
   }
 

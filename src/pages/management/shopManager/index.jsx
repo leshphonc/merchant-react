@@ -180,7 +180,7 @@ class ShopManager extends React.Component {
                   销售报酬: {item.sale_money ? item.sale_money : 0}
                 </div>
               </Flex.Item>
-              <Flex.Item>
+              {/* <Flex.Item>
                 <div
                   style={{
                     overflow: 'hidden',
@@ -191,7 +191,7 @@ class ShopManager extends React.Component {
                 >
                   服务报酬: 1234
                 </div>
-              </Flex.Item>
+              </Flex.Item> */}
             </Flex>
             <WhiteSpace />
             <Flex>

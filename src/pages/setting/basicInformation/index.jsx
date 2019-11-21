@@ -63,9 +63,9 @@ class BasicInformation extends React.Component {
       }
     }
 
-    window['WxLogin'] = ({ openid }) => {
+    window['WxLogin'] = str => {
       const { basicInformation } = this.props
-      basicInformation.wxBind(openid).then(res2 => {
+      basicInformation.wxBindAPP(str.unionid).then(res2 => {
         if (res2) {
           Toast.success('绑定成功', 1, () => {
             basicInformation.fetchBasicInfo()

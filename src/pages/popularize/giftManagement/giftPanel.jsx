@@ -230,13 +230,15 @@ class GiftPanel extends React.Component {
         cat_id: value.cat_id[0],
         pick_in_store: value.pick_in_store ? '1' : '0',
         wap_pic: value.pic.map(item => item.url),
-        province_idss: value.cascade[0],
-        city_idss: value.cascade[1],
-        area_idss: value.cascade[2],
-        circle_idss: value.circle_idss[0],
-        market_idss: value.market_idss ? value.market_idss[0] : '',
         gift_content: this.editor.current.state.editor.txt.html(),
         store,
+      }
+      if (!value.pick_in_store) {
+        obj.province_idss = value.cascade[0]
+        obj.city_idss = value.cascade[1]
+        obj.area_idss = value.cascade[2]
+        obj.circle_idss = value.circle_idss[0]
+        obj.market_idss = value.market_idss ? value.market_idss[0] : ''
       }
       // console.log(value)
       // console.log(obj)

@@ -128,7 +128,7 @@ class eCommerceCategory extends React.Component {
     return (
       <>
         <NavBar
-          title="服务分类管理"
+          title="电商分类管理"
           goBack
           right={
             <Button
