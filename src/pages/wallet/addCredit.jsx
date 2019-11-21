@@ -52,7 +52,6 @@ class AddCredit extends React.Component {
         paymoney: money,
         uid: uidInfo.uid,
       }
-      alert(JSON.stringify(json))
       window._invokeAndroid(json)
     } else {
       await wallet.createOrder(money)
