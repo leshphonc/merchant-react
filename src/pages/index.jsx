@@ -1,5 +1,5 @@
 import React from 'react'
-import { TabBar, ActionSheet } from 'antd-mobile'
+import { TabBar } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 import { TabBarContainer, AddBtnBox, AddBtn } from '@/styled'
 import Home from '@/pages/home'

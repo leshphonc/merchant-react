@@ -23,8 +23,9 @@ class selfMention extends React.Component {
 
   componentDidMount() {
     const { selfManagement, form, match } = this.props
-    console.log(this.props)
-    selfManagement.fetchPickAddressDetail(match.params.id)
+    if (match.params.id) {
+      selfManagement.fetchPickAddressDetail(match.params.id)
+    }
     const cacheData = JSON.parse(sessionStorage.getItem('cacheData'))
     if (cacheData && Object.keys(cacheData).length) {
       if (cacheData.cascade) {
