@@ -44,6 +44,7 @@ class AddCredit extends React.Component {
       const userInfo = JSON.parse(localStorage.getItem('merchant_user'))
       const resData = await wallet.createOrderForApp(money)
       const uidInfo = await wallet.getUID(userInfo.mer_id)
+      alert(JSON.stringify(resData))
       const json = {
         action: 'WxPay',
         mer_id: userInfo.mer_id,
@@ -52,6 +53,7 @@ class AddCredit extends React.Component {
         paymoney: money,
         uid: uidInfo.uid,
       }
+      alert(JSON.stringify(json))
       window._invokeAndroid(json)
     } else {
       await wallet.createOrder(money)

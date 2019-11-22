@@ -140,7 +140,6 @@ class CouponCheck extends React.Component {
         scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
         success(res) {
           const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
-          // window.alert(result)
           const code = Utils.getUrlParam('code', result)
           if (code) {
             member.checkCouponCode(null, code, false).then(res2 => {

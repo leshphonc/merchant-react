@@ -53,6 +53,7 @@ class GiftPanel extends React.Component {
       }
       this.setState({
         asyncCascadeValue: cacheData.cascade,
+        store: cacheData.store,
       })
       if (cacheData.circle_idss) {
         giftManagement.fetchMarket(cacheData.circle_idss).then(() => {
@@ -63,6 +64,7 @@ class GiftPanel extends React.Component {
       }
       form.setFieldsValue({
         gift_name: cacheData.gift_name,
+        pick_in_store: cacheData.pick_in_store,
         pic: cacheData.pic,
         intro: cacheData.intro,
         invoice_content: cacheData.invoice_content,
@@ -442,6 +444,7 @@ class GiftPanel extends React.Component {
               onAddImageClick={e => {
                 const formData = form.getFieldsValue()
                 formData.des = this.editor.current.state.editor.txt.html()
+                formData.store = store
                 Utils.cacheData(formData)
                 history.push('/uploadMultipleImg/裁剪/pic/1')
                 e.preventDefault()

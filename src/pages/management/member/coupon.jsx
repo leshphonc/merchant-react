@@ -135,7 +135,7 @@ class Coupon extends React.Component {
                   type="primary"
                   size="small"
                   onClick={() => {
-                    const BUTTONS = ['启用', '禁止', 'Cancel']
+                    const BUTTONS = ['启用', '禁止', '取消']
                     ActionSheet.showActionSheetWithOptions(
                       {
                         options: BUTTONS,
