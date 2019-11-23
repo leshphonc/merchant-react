@@ -376,11 +376,12 @@ class ShopManager extends React.Component {
                 borderRadius: '5px',
               }}
               to="/"
-              onClick={() =>
-                (window.location.href =
+              onClick={() => {
+                sessionStorage.removeItem('session_storestaff_store_staff')
+                window.location.href =
                   window.location.origin +
-                  '/packapp/storestaff/login.html?back=index')
-              }
+                  '/packapp/storestaff/login.html?back=index'
+              }}
             >
               店员登陆
             </Link>
