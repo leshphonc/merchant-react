@@ -24,7 +24,6 @@ class ECommerceSpread extends React.Component {
     const { commodity, match, form } = this.props
     commodity.fetchUserLevel(match.params.id, match.params.goodid).then(() => {
       const { userLevels } = commodity
-      console.log(userLevels)
       userLevels.forEach(item => {
         item.level = item.id
       })
@@ -39,6 +38,8 @@ class ECommerceSpread extends React.Component {
         .then(() => {
           const { eCommerceDetail } = commodity
           form.setFieldsValue({
+            spread_sale: eCommerceDetail.spread_sale,
+            spread_rate: eCommerceDetail.spread_rate,
             level_set: [eCommerceDetail.level_set],
           })
           if (eCommerceDetail.spread.length) {
@@ -66,6 +67,7 @@ class ECommerceSpread extends React.Component {
       commodity
         .goodsSpread({
           ...obj,
+          store_id: match.params.id,
           goods_id: match.params.goodid,
         })
         .then(res => {
@@ -150,11 +152,54 @@ class ECommerceSpread extends React.Component {
     // const { spread } = this.state
     const levelSetValue = form.getFieldValue('level_set')
       ? form.getFieldValue('level_set')[0]
-      : '0'
+      : ''
     return (
       <React.Fragment>
         <NavBar title={`${match.params.str}推广分佣`} goBack />
         <List>
+          <InputItem
+            {...getFieldProps('spread_sale', {
+              rules: [{ required: true }],
+            })}
+            labelNumber={7}
+            placeholder="请填写佣金比例"
+          >
+            销售佣金比例
+            <Tooltip
+              trigger="click"
+              placement="topLeft"
+              overlay="用户分享商品链接后，其他用户点击链接购买该商品后，分享者将获得此佣金（百分比 0-100)"
+              onClick={e => {
+                e.stopPropagation()
+              }}
+            >
+              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                &#xe628;
+              </i>
+            </Tooltip>
+          </InputItem>
+
+          <InputItem
+            {...getFieldProps('spread_rate', {
+              rules: [{ required: false }],
+            })}
+            labelNumber={7}
+            placeholder="请填写佣金比例"
+          >
+            推广佣金比例
+            <Tooltip
+              trigger="click"
+              placement="topLeft"
+              overlay="用户分享网页后，点击网页的新用户将会被绑定为分享者的粉丝，该粉丝在商户产生消费时，分享者将获得此佣金 （百分比 0-100)"
+              onClick={e => {
+                e.stopPropagation()
+              }}
+            >
+              <i className="iconfont" style={{ marginLeft: 10, color: '#bbb' }}>
+                &#xe628;
+              </i>
+            </Tooltip>
+          </InputItem>
           <Picker {...getFieldProps('level_set')} data={levelSet} cols={1}>
             <List.Item arrow="horizontal">等级会员分佣设置</List.Item>
           </Picker>

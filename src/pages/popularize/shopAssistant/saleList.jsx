@@ -34,7 +34,7 @@ class ShopAssistant extends React.Component {
   componentDidMount() {
     const { shopAssistant, match } = this.props
     const { height } = this.state
-    shopAssistant.fetchSaleList(match.params.id)
+    shopAssistant.resetFetchSaleList(match.params.id)
     if (this.refresh.current) {
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
       this.setState({
@@ -49,7 +49,11 @@ class ShopAssistant extends React.Component {
     const { shopAssistant, match } = this.props
     const searchStartDate = moment(startdate).format('YYYY-MM-DD')
     const searchEndDate = moment(enddate).format('YYYY-MM-DD')
-    shopAssistant.fetchScanList(match.params.id, searchStartDate, searchEndDate)
+    shopAssistant.resetFetchSaleList(
+      match.params.id,
+      searchStartDate,
+      searchEndDate,
+    )
   }
 
   mapList = () => {
@@ -75,12 +79,30 @@ class ShopAssistant extends React.Component {
   }
 
   loadMore = async () => {
-    const { shopAssistant } = this.props
+    const { shopAssistant, match } = this.props
+    const { startdate, enddate } = this.state
     this.setState({ refreshing: true })
-    await shopAssistant.fetchSaleList()
+    await shopAssistant.resetFetchSaleList(
+      match.params.id,
+      moment(startdate).format('YYYY-MM-DD'),
+      moment(enddate).format('YYYY-MM-DD'),
+    )
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
+  }
+
+  today = async () => {
+    const { shopAssistant, match } = this.props
+    this.setState({
+      startdate: new Date(),
+      enddate: new Date(),
+    })
+    await shopAssistant.resetFetchSaleList(
+      match.params.id,
+      moment(new Date()).format('YYYY-MM-DD'),
+      moment(new Date()).format('YYYY-MM-DD'),
+    )
   }
 
   render() {
@@ -100,6 +122,7 @@ class ShopAssistant extends React.Component {
                 color: '#fff',
                 fontSize: '15px',
               }}
+              onClick={this.today}
             >
               今日推广
             </Flex.Item>
