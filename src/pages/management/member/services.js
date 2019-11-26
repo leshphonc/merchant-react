@@ -181,3 +181,20 @@ export const getMemberCardList = page =>
       ticket: localStorage.getItem('ticket'),
     },
   })
+
+export const createMemberCard = payload =>
+  axios.post('/appapi.php?c=MemberCard&a=addMember', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const readMemberCardBasicInfoDetail = () =>
+  axios.post('/appapi.php?c=MemberCard&a=showMemberCard', {
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const memberCardBasicInfo = payload =>
+  axios.post('/appapi.php?c=MemberCard&a=editMerberCard', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })

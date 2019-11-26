@@ -1,6 +1,15 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
-import { List, InputItem, Flex, Checkbox, WhiteSpace, Switch, Toast, Button } from 'antd-mobile'
+import {
+  List,
+  InputItem,
+  Flex,
+  Checkbox,
+  WhiteSpace,
+  Switch,
+  Toast,
+  Button,
+} from 'antd-mobile'
 import Tooltip from 'rc-tooltip'
 import { CustomizeList, ListTitle, ListContent } from '@/styled'
 import { createForm } from 'rc-form'
@@ -202,23 +211,6 @@ class eCommerceCategoryPanel extends React.Component {
               </CustomizeList>
             </List.Item>
           ) : null}
-          <InputItem
-            {...getFieldProps('discount', {
-              rules: [{ required: true }],
-            })}
-            placeholder="请输入产品折扣率"
-          >
-            折扣率
-            <Tooltip
-              trigger="click"
-              placement="topLeft"
-              overlay="分类下产品折扣率，请输入0～10之间的数字，支持一位小数。例：8.5 代表 85折，0或者10代表无折扣"
-            >
-              <i className="iconfont" style={{ marginLeft: 5, color: '#bbb' }}>
-                &#xe628;
-              </i>
-            </Tooltip>
-          </InputItem>
         </List>
         <Button
           type="primary"

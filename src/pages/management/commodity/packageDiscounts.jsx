@@ -1,25 +1,12 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import {
-  List,
-  InputItem,
-  Button,
-  Toast,
-  Picker,
-  DatePicker,
-  Flex,
-} from 'antd-mobile'
-import Tooltip from 'rc-tooltip'
+import { List, InputItem, Button, Toast, Picker, Flex } from 'antd-mobile'
 import 'rc-tooltip/assets/bootstrap.css'
-import moment from 'moment'
 import { createForm } from 'rc-form'
 
 const { Item } = List
-const seckill = [
-  { label: '固定时间段', value: '0' },
-  { label: '每天的时间段', value: '1' },
-]
+
 @createForm()
 @inject('commodity')
 @observer
@@ -28,11 +15,26 @@ class PackageDiscounts extends React.Component {
     super(props)
     this.state = {
       give: [],
+      score_name: '',
+      dhb_name: '',
     }
   }
 
   componentDidMount() {
     const { commodity, match, form } = this.props
+    const alias = JSON.parse(localStorage.getItem('alias'))
+    alias.forEach(item => {
+      if (item.name === 'score_name') {
+        this.setState({
+          score_name: item.value,
+        })
+      }
+      if (item.name === 'dhb_name') {
+        this.setState({
+          dhb_name: item.value,
+        })
+      }
+    })
     commodity.fetchCardGroupAllE()
     commodity.fetchGiftVoucherE()
     commodity.fetchscoreAndDhbE()
@@ -134,7 +136,7 @@ class PackageDiscounts extends React.Component {
     const { commodity, form } = this.props
     const { getFieldProps } = form
     const { cardGroupAll, scoreOpen, dhbOpen } = commodity
-    const { give } = this.state
+    const { give, dhb_name, score_name } = this.state
     return (
       <React.Fragment>
         <NavBar title="优惠设置" goBack />
@@ -217,8 +219,8 @@ class PackageDiscounts extends React.Component {
                     rules: [{ required: false }],
                   })}
                   labelNumber={7}
-                  extra="元宝"
-                  placeholder="请填写元宝数量"
+                  extra={dhb_name}
+                  placeholder={`请填写${dhb_name}数量`}
                 >
                   每消费1元赠送
                 </InputItem>
@@ -228,9 +230,9 @@ class PackageDiscounts extends React.Component {
                   {...getFieldProps('score_get_num', {
                     rules: [{ required: false }],
                   })}
-                  extra="金币"
+                  extra={score_name}
                   labelNumber={7}
-                  placeholder="请填写金币数量"
+                  placeholder={`请填写${score_name}数量`}
                 >
                   每消费1元赠送
                 </InputItem>

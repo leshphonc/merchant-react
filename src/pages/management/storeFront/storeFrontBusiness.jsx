@@ -61,7 +61,7 @@ class StoreFrontBusiness extends React.Component {
                     店铺优惠
                   </Button>
                 </Flex.Item>
-                <Flex.Item>
+                {/* <Flex.Item>
                   <Button
                     size="small"
                     type="primary"
@@ -73,7 +73,7 @@ class StoreFrontBusiness extends React.Component {
                   >
                     商品克隆
                   </Button>
-                </Flex.Item>
+                </Flex.Item> */}
               </Flex>
             </Card.Body>
           </Card>
@@ -122,7 +122,7 @@ class StoreFrontBusiness extends React.Component {
                     店铺优惠
                   </Button>
                 </Flex.Item>
-                <Flex.Item>
+                {/* <Flex.Item>
                   <Button
                     size="small"
                     type="primary"
@@ -134,7 +134,7 @@ class StoreFrontBusiness extends React.Component {
                   >
                     商品克隆
                   </Button>
-                </Flex.Item>
+                </Flex.Item> */}
               </Flex>
             </Card.Body>
           </Card>

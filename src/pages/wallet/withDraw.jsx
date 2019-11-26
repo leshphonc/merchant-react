@@ -1,7 +1,15 @@
 import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
-import { WhiteSpace, List, Picker, InputItem, TextareaItem, Button, Toast } from 'antd-mobile'
+import {
+  WhiteSpace,
+  List,
+  Picker,
+  InputItem,
+  TextareaItem,
+  Button,
+  Toast,
+} from 'antd-mobile'
 import UploadInvoice from './components/UploadInvoice'
 import { CustomizeList, ListTitle, ListContent } from '@/styled'
 
@@ -90,7 +98,14 @@ class WithDraw extends React.Component {
         return false
       }
     } else if (receiptValue === '0') {
-      if (!name || !amount || !cardUserName || !cardNumber || !bank || !invoice) {
+      if (
+        !name ||
+        !amount ||
+        !cardUserName ||
+        !cardNumber ||
+        !bank ||
+        !invoice
+      ) {
         Toast.info('请输入完整信息')
         return false
       }
@@ -152,9 +167,10 @@ class WithDraw extends React.Component {
                 value={name}
                 labelNumber={7}
                 placeholder="请输入提款人真实姓名"
-                onChange={value => this.setState({
-                  name: value,
-                })
+                onChange={value =>
+                  this.setState({
+                    name: value,
+                  })
                 }
               >
                 提款人真实姓名
@@ -163,9 +179,10 @@ class WithDraw extends React.Component {
                 value={amount}
                 labelNumber={7}
                 placeholder={`最低提现${wallet.minPrice}元`}
-                onChange={value => this.setState({
-                  amount: value,
-                })
+                onChange={value =>
+                  this.setState({
+                    amount: value,
+                  })
                 }
               >
                 提现金额
@@ -188,9 +205,10 @@ class WithDraw extends React.Component {
                     placeholder="此条提现记录的备注（选填）"
                     labelNumber={7}
                     count={100}
-                    onChange={value => this.setState({
-                      remark: value,
-                    })
+                    onChange={value =>
+                      this.setState({
+                        remark: value,
+                      })
                     }
                   />
                 </React.Fragment>
@@ -225,9 +243,10 @@ class WithDraw extends React.Component {
                   value={cardUserName}
                   labelNumber={7}
                   placeholder="请填写账户名称"
-                  onChange={value => this.setState({
-                    cardUserName: value,
-                  })
+                  onChange={value =>
+                    this.setState({
+                      cardUserName: value,
+                    })
                   }
                 >
                   账户名称
@@ -236,9 +255,10 @@ class WithDraw extends React.Component {
                   value={cardNumber}
                   labelNumber={7}
                   placeholder="请填写银行卡号"
-                  onChange={value => this.setState({
-                    cardNumber: value,
-                  })
+                  onChange={value =>
+                    this.setState({
+                      cardNumber: value,
+                    })
                   }
                 >
                   银行卡号
@@ -247,9 +267,10 @@ class WithDraw extends React.Component {
                   value={bank}
                   labelNumber={7}
                   placeholder="请填写开户行"
-                  onChange={value => this.setState({
-                    bank: value,
-                  })
+                  onChange={value =>
+                    this.setState({
+                      bank: value,
+                    })
                   }
                 >
                   开户行
@@ -264,7 +285,9 @@ class WithDraw extends React.Component {
                 >
                   <CustomizeList>
                     <ListTitle>发票</ListTitle>
-                    <ListContent>{invoice ? <img src={invoice} alt="" /> : null}</ListContent>
+                    <ListContent>
+                      {invoice ? <img src={invoice} alt="" /> : null}
+                    </ListContent>
                   </CustomizeList>
                 </List.Item>
                 <TextareaItem
@@ -274,9 +297,10 @@ class WithDraw extends React.Component {
                   placeholder="此条提现记录的备注（选填）"
                   labelNumber={7}
                   count={100}
-                  onChange={value => this.setState({
-                    remark: value,
-                  })
+                  onChange={value =>
+                    this.setState({
+                      remark: value,
+                    })
                   }
                 />
               </List>
@@ -296,10 +320,11 @@ class WithDraw extends React.Component {
           </React.Fragment>
         ) : (
           <UploadInvoice
-            callback={url => this.setState({
-              invoice: url,
-              showUpload: false,
-            })
+            callback={url =>
+              this.setState({
+                invoice: url,
+                showUpload: false,
+              })
             }
           />
         )}

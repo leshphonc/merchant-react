@@ -11,12 +11,16 @@ import {
   WingBlank,
   Card,
 } from 'antd-mobile'
+import moment from 'moment'
 import { ListItem, ItemTop } from './styled'
 import CardGroupPanel from './cardGroupPanel'
 import CardGroupUsers from './cardGroupUsers'
+import MemberCRU from './memberCRU'
 import ModifyCardGroupUsers from './modify/cardGroupUsers'
 import ExpensesRecord from './expensesRecord'
-import moment from 'moment'
+import MemberCardInfo from './memberCardInfo'
+import MemberCardBasicInfo from './memberCardBasicInfo'
+import MemberCardRecord from './memberCardRecord'
 
 @inject('member')
 @observer
@@ -25,7 +29,7 @@ class CardGroup extends React.Component {
     super(props)
     this.state = {
       refreshing: false,
-      cur: 1,
+      cur: 0,
       list: [],
       page: 1,
       height: document.documentElement.clientHeight - 90,
@@ -45,11 +49,15 @@ class CardGroup extends React.Component {
   }
 
   onValueChange = value => {
-    if (value === '领卡会员') {
+    if (value === '会员卡信息') {
+      this.setState({
+        cur: 0,
+      })
+    } else if (value === '领卡会员') {
       this.setState({
         cur: 1,
       })
-    } else {
+    } else if (value === '会员卡分组') {
       this.setState({
         cur: 2,
       })
@@ -147,6 +155,7 @@ class CardGroup extends React.Component {
   }
 
   mapList2 = () => {
+    const { history } = this.props
     const { list } = this.state
     console.log(list)
     return list.map(item => {
@@ -179,6 +188,21 @@ class CardGroup extends React.Component {
                 {moment(item.add_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
               </div>
             </Card.Body>
+            <Card.Footer
+              extra={
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() =>
+                    history.push(
+                      `/management/member/cardGroup/memberCardRecord/${item.id}`,
+                    )
+                  }
+                >
+                  会员卡充值记录
+                </Button>
+              }
+            />
           </Card>
           <WhiteSpace />
         </React.Fragment>
@@ -194,19 +218,31 @@ class CardGroup extends React.Component {
           title="会员卡分组"
           goBack
           right={
-            <Link
-              style={{ color: '#fff' }}
-              to="/management/member/cardGroup/cardGroupPanel/添加"
-            >
-              添加分组
-            </Link>
+            cur === 2 ? (
+              <Link
+                style={{ color: '#fff' }}
+                to="/management/member/cardGroup/cardGroupPanel/添加"
+              >
+                添加分组
+              </Link>
+            ) : cur === 1 ? (
+              <Link
+                style={{ color: '#fff' }}
+                to="/management/member/cardGroup/memberCRU/添加"
+              >
+                添加会员
+              </Link>
+            ) : (
+              ''
+            )
           }
         />
         <WhiteSpace />
         <WingBlank>
           <SegmentedControl
             onValueChange={this.onValueChange}
-            values={['领卡会员', '会员卡分组']}
+            selectedIndex={cur}
+            values={['会员卡信息', '领卡会员', '会员卡分组']}
           />
         </WingBlank>
         {cur === 2 ? (
@@ -225,7 +261,6 @@ class CardGroup extends React.Component {
             {this.mapList()}
           </PullToRefresh>
         ) : null}
-
         {cur === 1 ? (
           <PullToRefresh
             ref={this.refresh}
@@ -242,6 +277,7 @@ class CardGroup extends React.Component {
             {this.mapList2()}
           </PullToRefresh>
         ) : null}
+        {cur === 0 ? <MemberCardInfo /> : null}
       </React.Fragment>
     )
   }
@@ -253,6 +289,18 @@ export default () => (
     <Route
       path="/management/member/cardGroup/cardGroupPanel/:str/:id?"
       component={CardGroupPanel}
+    />
+    <Route
+      path="/management/member/cardGroup/memberCRU/:str"
+      component={MemberCRU}
+    />
+    <Route
+      path="/management/member/cardGroup/memberCardBasicInfo"
+      component={MemberCardBasicInfo}
+    />
+    <Route
+      path="/management/member/cardGroup/memberCardRecord/:id"
+      component={MemberCardRecord}
     />
     <Route
       path="/management/member/cardGroup/cardGroupUsers/:id"

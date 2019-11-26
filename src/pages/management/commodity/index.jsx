@@ -64,7 +64,7 @@ class Commodity extends React.Component {
             thumb={require('@/assets/image/wmgl.png')}
             arrow="horizontal"
             onClick={() => {
-              history.push('/management/commodity/takeAway')
+              history.push('/management/takeAway')
             }}
           >
             外卖

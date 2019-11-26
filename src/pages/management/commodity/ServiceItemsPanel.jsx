@@ -184,7 +184,7 @@ class ServiceItemsPanel extends React.Component {
             <Stepper
               style={{ width: '70%' }}
               showNumber
-              min={1}
+              min={0}
               onChange={val => {
                 const data = JSON.parse(JSON.stringify(projectData))
                 data[index].meal_num = val

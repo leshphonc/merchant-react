@@ -46,6 +46,18 @@ axios.interceptors.response.use(
   },
 )
 
+window._invokeAndroid = json => {
+  if (
+    navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') !== -1
+  ) {
+    window.android.invokeMethods(JSON.stringify(json))
+  } else if (
+    navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') !== -1
+  ) {
+    window.location.href = 'ios:' + JSON.stringify(json)
+  }
+}
+
 ReactDOM.render(<App />, document.getElementById('root'))
 
 // If you want your app to work offline and load faster, you can change

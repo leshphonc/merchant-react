@@ -40,26 +40,41 @@ class BasicInformation extends React.Component {
 
   componentDidMount() {
     const { basicInformation, common } = this.props
+    const ua = window.navigator.userAgent.toLowerCase()
     basicInformation.fetchCategory()
     basicInformation.fetchBasicInfo()
-    const code = Utils.getUrlParam('code')
-    if (code) {
-      common.fetchOpenId(code).then(res => {
-        if (res) {
-          basicInformation.wxBind(common.openid).then(res2 => {
-            if (res2) {
-              Toast.success('绑定成功', 1, () => {
-                basicInformation.fetchBasicInfo()
+    if (!(ua.match(/micromessenger/i) === 'micromessenger')) {
+      const code = Utils.getUrlParam('code')
+      if (code) {
+        common.fetchOpenId(code).then(res => {
+          if (res) {
+            basicInformation.wxBind(common.openid).then(res2 => {
+              if (res2) {
+                Toast.success('绑定成功', 1, () => {
+                  basicInformation.fetchBasicInfo()
+                  window.location.search = ''
+                })
+              } else {
                 window.location.search = ''
-              })
-            } else {
-              window.location.search = ''
-            }
+              }
+            })
+          }
+        })
+      }
+    }
+
+    window['WxLogin'] = str => {
+      const { basicInformation } = this.props
+      basicInformation.wxBindAPP(str.unionid).then(res2 => {
+        if (res2) {
+          Toast.success('绑定成功', 1, () => {
+            basicInformation.fetchBasicInfo()
+            window.location.search = ''
           })
+        } else {
+          window.location.search = ''
         }
       })
-      // const openid = sessionStorage.getItem('openid')
-      // basicInformation.wxBind(openid)
     }
   }
 
@@ -113,8 +128,14 @@ class BasicInformation extends React.Component {
     const { basicInformation, common } = this.props
     const { basicInfo } = basicInformation
     const ua = window.navigator.userAgent.toLowerCase()
-    /* eslint eqeqeq: 0 */
-    if (!(ua.match(/micromessenger/i) == 'micromessenger')) {
+    if (
+      navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') !==
+        -1 ||
+      navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') !== -1
+    ) {
+      const json = { callback: 'WxLogin', action: 'WxLogin' }
+      window._invokeAndroid(json)
+    } else if (!(ua.match(/micromessenger/i) === 'micromessenger')) {
       Toast.info('请在微信环境下进行绑定')
     } else if (!basicInfo.uid) {
       common.getWxCode()

@@ -85,10 +85,16 @@ class CropperImg extends React.Component {
           />
         ) : null}
         {files.length < 1 && !resultImgUrl ? (
-          <ImagePicker files={files} onChange={this.changeFile} selectable={files.length < 1} />
+          <ImagePicker
+            files={files}
+            onChange={this.changeFile}
+            selectable={files.length < 1}
+          />
         ) : null}
 
-        {resultImgUrl ? <img src={resultImgUrl} style={{ width: '100%' }} alt="" /> : null}
+        {resultImgUrl ? (
+          <img src={resultImgUrl} style={{ width: '100%' }} alt="" />
+        ) : null}
         {resultImgUrl ? (
           <Button
             type="primary"

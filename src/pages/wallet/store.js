@@ -70,6 +70,14 @@ class WalletStore {
   }
 
   @action
+  getUID = async id => {
+    const response = await services.getUID(id)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve(response.data.result)
+    }
+  }
+
+  @action
   createOrder = async money => {
     const response = await services.createOrder(money)
     if (response.data.errorCode === ErrorCode.SUCCESS) {
@@ -99,10 +107,23 @@ class WalletStore {
   }
 
   @action
+  createOrderForApp = async money => {
+    const response = await services.createOrder(money)
+    if (response.data.errorCode === ErrorCode.SUCCESS) {
+      return Promise.resolve({
+        order_id: response.data.result.order_id,
+        order_type: response.data.result.type,
+      })
+    }
+  }
+
+  @action
   fetchWithdrawRecord = async type => {
     let hasMore = true
     if (this.withdrawRecordListTotal !== null) {
-      hasMore = this.withdrawRecordListPage * this.withdrawRecordListSize < this.withdrawRecordListTotal
+      hasMore =
+        this.withdrawRecordListPage * this.withdrawRecordListSize <
+        this.withdrawRecordListTotal
       if (hasMore) {
         this.withdrawRecordListPage += 1
       }
@@ -121,10 +142,14 @@ class WalletStore {
           this.withdrawRecordListTotal = response.data.result.total - 0
         })
       } else {
-        const remainder = this.withdrawRecordListTotal % this.withdrawRecordListSize
+        const remainder =
+          this.withdrawRecordListTotal % this.withdrawRecordListSize
         if (remainder) {
           runInAction(() => {
-            this.withdrawRecordList.splice(this.withdrawRecordListTotal - remainder, remainder)
+            this.withdrawRecordList.splice(
+              this.withdrawRecordListTotal - remainder,
+              remainder,
+            )
             const arr = this.withdrawRecordList
             arr.push(...response.data.result.lists)
             this.withdrawRecordList = arr
@@ -149,7 +174,9 @@ class WalletStore {
   fetchAddCreditRecord = async () => {
     let hasMore = true
     if (this.addCreditListTotal !== null) {
-      hasMore = this.addCreditListPage * this.addCreditListSize < this.addCreditListTotal
+      hasMore =
+        this.addCreditListPage * this.addCreditListSize <
+        this.addCreditListTotal
       if (hasMore) {
         this.addCreditListPage += 1
       }
@@ -170,7 +197,10 @@ class WalletStore {
         const remainder = this.addCreditListTotal % this.addCreditListSize
         if (remainder) {
           runInAction(() => {
-            this.addCreditList.splice(this.addCreditListTotal - remainder, remainder)
+            this.addCreditList.splice(
+              this.addCreditListTotal - remainder,
+              remainder,
+            )
             const arr = this.addCreditList
             arr.push(...response.data.result.lists)
             this.addCreditList = arr
@@ -275,8 +305,12 @@ class WalletStore {
     const response = await services.fetchMinPrice()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        const min = response.data.result.find(item => item.name === 'min_withdraw_money')
-        const service = response.data.result.find(item => item.name === 'company_pay_mer_percent')
+        const min = response.data.result.find(
+          item => item.name === 'min_withdraw_money',
+        )
+        const service = response.data.result.find(
+          item => item.name === 'company_pay_mer_percent',
+        )
         this.minPrice = min ? min.value : 0
         this.serviceCharge = service ? service.value : 0
       })
@@ -291,7 +325,13 @@ class WalletStore {
     runInAction(() => {
       this.bankApsPage = this.bankApsPage - 0 + 1
     })
-    const response = await services.fetchBankAps(this.bankApsPage, bank, province, city, key)
+    const response = await services.fetchBankAps(
+      this.bankApsPage,
+      bank,
+      province,
+      city,
+      key,
+    )
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
         const arr = this.bankAps

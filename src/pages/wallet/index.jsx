@@ -29,7 +29,7 @@ class Wallet extends React.Component {
     const { wallet } = this.props
     wallet.getUserConfig().then(() => {
       const auth = wallet.userConfig.find(
-        item => item.name === 'open_user_spread' && item.value === '1',
+        item => item.name === 'pay_pingan_open' && item.value === '1',
       )
       this.setState({
         auth,

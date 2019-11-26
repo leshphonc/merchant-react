@@ -44,6 +44,16 @@ class RetailDetail extends React.Component {
       // 复制失败；
       console.log(e.action)
     })
+
+    window['eCommerceDetailCallback'] = code => {
+      order.scanCode(code).then(res2 => {
+        if (res2) {
+          Toast.success('确认消费成功')
+        } else {
+          Toast.fail('确认消费失败')
+        }
+      })
+    }
   }
 
   mapList = () => {
@@ -203,28 +213,37 @@ class RetailDetail extends React.Component {
 
   scanQRCode = () => {
     const { order, login } = this.props
-    window.wx.scanQRCode({
-      needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-      scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
-      success(res) {
-        const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
-        // window.alert(result)
-        order.scanCode(result).then(res2 => {
-          if (res2) {
-            Toast.success('确认消费成功')
-          } else {
-            Toast.fail('确认消费失败')
-          }
-        })
-      },
-      fail() {
-        login.wxConfigFun().then(res => {
-          if (res) {
-            this.scanQRCode()
-          }
-        })
-      },
-    })
+    if (
+      navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') !==
+        -1 ||
+      navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') !== -1
+    ) {
+      const json = { callback: 'eCommerceDetailCallback', action: 'ScanQRCode' }
+      window._invokeAndroid(json)
+    } else {
+      window.wx.scanQRCode({
+        needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+        scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+        success(res) {
+          const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
+          // window.alert(result)
+          order.scanCode(result).then(res2 => {
+            if (res2) {
+              Toast.success('确认消费成功')
+            } else {
+              Toast.fail('确认消费失败')
+            }
+          })
+        },
+        fail() {
+          login.wxConfigFun().then(res => {
+            if (res) {
+              this.scanQRCode()
+            }
+          })
+        },
+      })
+    }
   }
 
   // 确认消费

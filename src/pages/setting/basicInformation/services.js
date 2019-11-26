@@ -27,3 +27,11 @@ export const wxBind = openid =>
   axios.post(`/appapi.php?c=Merchantapp&a=bind&openid=${openid}`, {
     ticket: localStorage.getItem('ticket'),
   })
+
+export const wxBindAPP = id =>
+  axios.get(`/appapi.php?c=Merchantapp&a=bind_app`, {
+    params: {
+      union_id: id,
+      ticket: localStorage.getItem('ticket'),
+    },
+  })

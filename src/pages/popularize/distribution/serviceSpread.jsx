@@ -28,6 +28,7 @@ class ServiceSpread extends React.Component {
         commodity.fetchShowCommission().then(() => {
           const { levelList, showThree, openUserSpread } = commodity
           const { userLevels } = this.state
+          console.log(showThree)
           commodity.fetchSingleServiceDetail(match.params.id).then(() => {
             const { singleServiceDetail } = commodity
             const cache = JSON.parse(JSON.stringify(singleServiceDetail))

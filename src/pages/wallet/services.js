@@ -76,6 +76,7 @@ export const fetchIncomeCategoryList = () =>
 export const fetchIncomeStoreList = () =>
   axios.get('/appapi.php?c=Merchantapp&a=get_store', {
     params: {
+      show_all: 1,
       ticket: localStorage.getItem('ticket'),
     },
   })
@@ -172,5 +173,12 @@ export const fetchWithDrawRecord = page =>
 // 获取平安权限
 export const getUserConfig = () =>
   axios.post('/appapi.php?c=Merchantapp&a=get_config', {
+    ticket: localStorage.getItem('ticket'),
+  })
+
+// 获取UID
+export const getUID = id =>
+  axios.post('/appapi.php?c=Merchant&a=getMerchantDetail', {
+    mer_id: id,
     ticket: localStorage.getItem('ticket'),
   })

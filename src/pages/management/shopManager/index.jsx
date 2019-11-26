@@ -180,7 +180,7 @@ class ShopManager extends React.Component {
                   销售报酬: {item.sale_money ? item.sale_money : 0}
                 </div>
               </Flex.Item>
-              <Flex.Item>
+              {/* <Flex.Item>
                 <div
                   style={{
                     overflow: 'hidden',
@@ -191,7 +191,7 @@ class ShopManager extends React.Component {
                 >
                   服务报酬: 1234
                 </div>
-              </Flex.Item>
+              </Flex.Item> */}
             </Flex>
             <WhiteSpace />
             <Flex>
@@ -376,11 +376,12 @@ class ShopManager extends React.Component {
                 borderRadius: '5px',
               }}
               to="/"
-              onClick={() =>
-                (window.location.href =
+              onClick={() => {
+                sessionStorage.removeItem('session_storestaff_store_staff')
+                window.location.href =
                   window.location.origin +
-                  '/packapp/storestaff/login.html?back=index')
-              }
+                  '/packapp/storestaff/login.html?back=index'
+              }}
             >
               店员登陆
             </Link>

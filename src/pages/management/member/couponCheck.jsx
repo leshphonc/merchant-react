@@ -3,7 +3,14 @@ import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import NavBar from '@/common/NavBar'
 import {
-  WingBlank, WhiteSpace, Card, PullToRefresh, Flex, Button, Modal, Toast,
+  WingBlank,
+  WhiteSpace,
+  Card,
+  PullToRefresh,
+  Flex,
+  Button,
+  Modal,
+  Toast,
 } from 'antd-mobile'
 import Utils from '@/utils'
 import moment from 'moment'
@@ -33,6 +40,11 @@ class CouponCheck extends React.Component {
     this.setState({
       height: hei,
     })
+    window['couponCheckCallback'] = code => {
+      member.checkCouponCode(null, code, false).then(res2 => {
+        if (res2) Toast.success('核销成功')
+      })
+    }
   }
 
   mapList = () => {
@@ -54,7 +66,9 @@ class CouponCheck extends React.Component {
                 <div>用户手机：{item.phone || '暂无'}</div>
                 <WhiteSpace />
                 <div>
-                  领取时间：{moment(item.receive_time * 1000).format('YYYY-MM-DD') || '暂无'}
+                  领取时间：
+                  {moment(item.receive_time * 1000).format('YYYY-MM-DD') ||
+                    '暂无'}
                 </div>
               </Flex.Item>
               <Flex.Item>
@@ -80,9 +94,12 @@ class CouponCheck extends React.Component {
                       { text: '取消' },
                       {
                         text: '确定',
-                        onPress: code => member.checkCouponCode(item.id, code, true).then(res => {
-                          if (res) Toast.success('核销成功')
-                        }),
+                        onPress: code =>
+                          member
+                            .checkCouponCode(item.id, code, true)
+                            .then(res => {
+                              if (res) Toast.success('核销成功')
+                            }),
                       },
                     ])
                   }}
@@ -110,29 +127,37 @@ class CouponCheck extends React.Component {
 
   scanQRCode = () => {
     const { member, login } = this.props
-    window.wx.scanQRCode({
-      needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-      scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
-      success(res) {
-        const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
-        // window.alert(result)
-        const code = Utils.getUrlParam('code', result)
-        if (code) {
-          member.checkCouponCode(null, code, false).then(res2 => {
-            if (res2) Toast.success('核销成功')
-          })
-        } else {
-          Toast.info('未识别到code，无法核销')
-        }
-      },
-      fail() {
-        login.wxConfigFun().then(res => {
-          if (res) {
-            this.scanQRCode()
+    if (
+      navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') !==
+        -1 ||
+      navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') !== -1
+    ) {
+      const json = { callback: 'couponCheckCallback', action: 'ScanQRCode' }
+      window._invokeAndroid(json)
+    } else {
+      window.wx.scanQRCode({
+        needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+        scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+        success(res) {
+          const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
+          const code = Utils.getUrlParam('code', result)
+          if (code) {
+            member.checkCouponCode(null, code, false).then(res2 => {
+              if (res2) Toast.success('核销成功')
+            })
+          } else {
+            Toast.info('未识别到code，无法核销')
           }
-        })
-      },
-    })
+        },
+        fail() {
+          login.wxConfigFun().then(res => {
+            if (res) {
+              this.scanQRCode()
+            }
+          })
+        },
+      })
+    }
   }
 
   render() {

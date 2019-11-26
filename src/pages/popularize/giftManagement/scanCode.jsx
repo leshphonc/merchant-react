@@ -20,7 +20,7 @@ class ScanCode extends React.Component {
   }
 
   componentDidMount() {
-    const { giftManagement, match } = this.props
+    const { giftManagement, match, history } = this.props
     console.log(this.props)
     giftManagement.fetchGiftOrderDetail(match.params.orderId).then(() => {
       const { giftOrderDetail } = giftManagement
@@ -38,28 +38,51 @@ class ScanCode extends React.Component {
         giftPass: giftOrderDetail.gift_pass,
       })
     })
+    window['giftVerifyCallback'] = code => {
+      giftManagement
+        .fecthGiftArrayVerify(this.state.detail.order_id, code)
+        .then(res2 => {
+          if (res2) Toast.success('验证成功', 1, () => history.goBack())
+        })
+    }
+    window['checkCouponCodeCallback'] = code => {
+      giftManagement
+        .checkCouponCode(this.state.detail.order_id, code)
+        .then(res2 => {
+          if (res2) Toast.success('验证成功', 1, () => history.goBack())
+        })
+    }
   }
 
   verificBtn = orderId => {
     const { giftManagement, history, login } = this.props
-    window.wx.scanQRCode({
-      needResult: 1,
-      scanType: ['qrCode', 'barCode'],
-      success(res) {
-        giftManagement
-          .fecthGiftArrayVerify(orderId, res.resultStr)
-          .then(res2 => {
-            if (res2) Toast.success('验证成功', 1, () => history.goBack())
+    if (
+      navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') !==
+        -1 ||
+      navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') !== -1
+    ) {
+      const json = { callback: 'giftVerifyCallback', action: 'ScanQRCode' }
+      window._invokeAndroid(json)
+    } else {
+      window.wx.scanQRCode({
+        needResult: 1,
+        scanType: ['qrCode', 'barCode'],
+        success(res) {
+          giftManagement
+            .fecthGiftArrayVerify(orderId, res.resultStr)
+            .then(res2 => {
+              if (res2) Toast.success('验证成功', 1, () => history.goBack())
+            })
+        },
+        fail() {
+          login.wxConfigFun().then(res => {
+            if (res) {
+              this.verificBtn(orderId)
+            }
           })
-      },
-      fail() {
-        login.wxConfigFun().then(res => {
-          if (res) {
-            this.verificBtn(orderId)
-          }
-        })
-      },
-    })
+        },
+      })
+    }
   }
 
   giftPassList = passArr =>
@@ -96,22 +119,31 @@ class ScanCode extends React.Component {
 
   ver = id => {
     const { giftManagement, history, login } = this.props
-    window.wx.scanQRCode({
-      needResult: 1,
-      scanType: ['qrCode', 'barCode'],
-      success(res) {
-        giftManagement.checkCouponCode(id, res.resultStr).then(res2 => {
-          if (res2) Toast.success('验证成功', 1, () => history.goBack())
-        })
-      },
-      fail() {
-        login.wxConfigFun().then(res => {
-          if (res) {
-            this.ver(id)
-          }
-        })
-      },
-    })
+    if (
+      navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') !==
+        -1 ||
+      navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') !== -1
+    ) {
+      const json = { callback: 'checkCouponCodeCallback', action: 'ScanQRCode' }
+      window._invokeAndroid(json)
+    } else {
+      window.wx.scanQRCode({
+        needResult: 1,
+        scanType: ['qrCode', 'barCode'],
+        success(res) {
+          giftManagement.checkCouponCode(id, res.resultStr).then(res2 => {
+            if (res2) Toast.success('验证成功', 1, () => history.goBack())
+          })
+        },
+        fail() {
+          login.wxConfigFun().then(res => {
+            if (res) {
+              this.ver(id)
+            }
+          })
+        },
+      })
+    }
   }
 
   render() {

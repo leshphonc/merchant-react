@@ -3,7 +3,7 @@ import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
 import { List, InputItem, WingBlank, Button, Toast, Picker } from 'antd-mobile'
-import Tooltip from 'rc-tooltip'
+// import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 
@@ -111,9 +111,9 @@ class ECommerceSpread extends React.Component {
               this.changeUserLevelsItem(val, index, 'spread_rate')
             }
             labelNumber={7}
-            placeholder=" 推广佣金比例"
+            placeholder=" 推广佣金比例1"
           >
-            推广佣金比例
+            推广佣金比例1
           </InputItem>
           {showThree === '1' && openUserSpread === '1' ? (
             <React.Fragment>

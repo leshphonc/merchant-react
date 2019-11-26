@@ -4,7 +4,13 @@ import { Route, Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { observer, inject } from 'mobx-react'
 import {
-  Button, Flex, WingBlank, Card, WhiteSpace, SearchBar, PullToRefresh,
+  Button,
+  Flex,
+  WingBlank,
+  Card,
+  WhiteSpace,
+  SearchBar,
+  PullToRefresh,
 } from 'antd-mobile'
 import GiftPanel from './giftPanel'
 import OrdersGoods from './ordersGoods'
@@ -36,7 +42,8 @@ class GiftManagement extends React.Component {
     Utils.clearCacheData()
     if (this.refresh.current) {
       /* eslint react/no-find-dom-node: 0 */
-      const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
+      const hei =
+        height - ReactDOM.findDOMNode(this.refresh.current).offsetTop - 44
       this.setState({
         height: hei,
       })
@@ -80,7 +87,10 @@ class GiftManagement extends React.Component {
                   <Button
                     type="primary"
                     size="small"
-                    onClick={() => history.push(`/popularize/giftManagement/ordersGoods/${item.gift_id}`)
+                    onClick={() =>
+                      history.push(
+                        `/popularize/giftManagement/ordersGoods/${item.gift_id}`,
+                      )
                     }
                   >
                     商品订单
@@ -90,16 +100,21 @@ class GiftManagement extends React.Component {
                   <Button
                     type="primary"
                     size="small"
-                    onClick={() => history.push(
-                      `/popularize/giftManagement/giftPanel/修改/${item.gift_id}/${item.cat_fid}`,
-                    )
+                    onClick={() =>
+                      history.push(
+                        `/popularize/giftManagement/giftPanel/修改/${item.gift_id}/${item.cat_fid}`,
+                      )
                     }
                   >
                     编辑
                   </Button>
                 </Flex.Item>
                 <Flex.Item>
-                  <Button type="primary" size="small" onClick={() => this.detele(item.gift_id)}>
+                  <Button
+                    type="primary"
+                    size="small"
+                    onClick={() => this.detele(item.gift_id)}
+                  >
                     删除
                   </Button>
                 </Flex.Item>
@@ -132,7 +147,10 @@ class GiftManagement extends React.Component {
           title="礼品列表"
           goBack
           right={
-            <Link style={{ color: '#fff' }} to="/popularize/giftManagement/giftPanel/添加">
+            <Link
+              style={{ color: '#fff' }}
+              to="/popularize/giftManagement/giftPanel/添加"
+            >
               添加
             </Link>
           }
@@ -168,9 +186,21 @@ export default () => (
       path="/popularize/giftManagement/giftPanel/:str/:giftId?/:catFid?"
       component={GiftPanel}
     />
-    <Route path="/popularize/giftManagement/ordersGoods/:giftId?" component={OrdersGoods} />
-    <Route path="/popularize/giftManagement/scanCode/:orderId?" component={ScanCode} />
-    <Route path="/popularize/giftManagement/deliverGoods/:orderId?" component={DeliverGoods} />
-    <Route path="/popularize/giftManagement/orderDetails/:orderId?" component={OrderDetails} />
+    <Route
+      path="/popularize/giftManagement/ordersGoods/:giftId?"
+      component={OrdersGoods}
+    />
+    <Route
+      path="/popularize/giftManagement/scanCode/:orderId?"
+      component={ScanCode}
+    />
+    <Route
+      path="/popularize/giftManagement/deliverGoods/:orderId?"
+      component={DeliverGoods}
+    />
+    <Route
+      path="/popularize/giftManagement/orderDetails/:orderId?"
+      component={OrderDetails}
+    />
   </React.Fragment>
 )

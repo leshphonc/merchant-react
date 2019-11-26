@@ -459,7 +459,7 @@ export const fetchscoreAndDhbE = () =>
 
 // 三级分佣
 export const fetchShowCommission = () =>
-  axios.get('/appapi.php?c=SpaceMerchant&a=get_config', {
+  axios.get('/appapi.php?c=Merchantapp&a=get_config', {
     params: {
       ticket: localStorage.getItem('ticket'),
     },

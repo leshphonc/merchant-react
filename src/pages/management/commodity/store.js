@@ -832,7 +832,10 @@ class MastSotre {
     const response = await services.fetchShowCommission()
     if (response.data.errorCode === ErrorCode.SUCCESS) {
       runInAction(() => {
-        this.openUserSpread = response.data.result[0].value
+        const item = response.data.result.find(
+          item => item.name === 'open_user_spread',
+        )
+        this.openUserSpread = item ? item.value : '0'
       })
     }
   }

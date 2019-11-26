@@ -45,7 +45,6 @@ class ShopAssistant extends React.Component {
       searchStartDate,
       searchEndDate,
     )
-    this.setState({ selectValue: '', startdate: '', enddate: '' })
   }
 
   render() {

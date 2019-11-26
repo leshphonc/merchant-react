@@ -82,7 +82,7 @@ class ServiceItemsSelectSingle extends React.Component {
           day_num: before.day_num || 0,
           meal_num: before.meal_num || 1,
           type: 1,
-          img: item.pic || '',
+          img: item.list_pic || '',
         })
       }
     })
