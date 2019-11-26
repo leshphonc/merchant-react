@@ -60,19 +60,49 @@ class ShopAssistant extends React.Component {
     const { shopAssistant } = this.props
     const { saleList } = shopAssistant
     return saleList.map(item => (
-      <div style={{ background: '#fff' }}>
+      <div
+        style={{ background: '#fff', textAlign: 'center' }}
+        className="cLHlj"
+      >
         <List
           className="list"
           style={{ borderBottom: '1px solid #aaa', padding: '4px 0' }}
         >
-          <span className="pic" style={{ width: '16vw' }}>
-            {item.avatar ? <img src={item.avatar} alt="无" /> : null}
+          <span className="pic" style={{ width: '15vw' }}>
+            {item.avatar ? (
+              <img style={{ width: '15vw' }} src={item.avatar} alt="无" />
+            ) : null}
           </span>
-          <span style={{ width: '20vw' }}>{item.nickname || '暂无'}</span>
-          <span style={{ width: '28vw' }}>
-            {moment(item.spread_time * 1000).format('YYYY-MM-DD')}
+          <span
+            style={{
+              display: 'inline-block',
+              width: '20vw',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              lineHeight: '15vw',
+            }}
+          >
+            {item.nickname || '暂无'}
           </span>
-          <span style={{ width: '25vw' }}>{item.consum_money}</span>
+          <span
+            style={{
+              display: 'inline-block',
+              width: '28vw',
+              lineHeight: '15vw',
+            }}
+          >
+            {moment(item.settlement_time * 1000).format('YYYY-MM-DD')}
+          </span>
+          <span
+            style={{
+              display: 'inline-block',
+              width: '25vw',
+              lineHeight: '15vw',
+            }}
+          >
+            {item.order_money}
+          </span>
         </List>
       </div>
     ))
