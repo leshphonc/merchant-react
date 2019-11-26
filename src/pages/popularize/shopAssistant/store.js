@@ -107,6 +107,16 @@ class MastSotre {
   }
 
   @action
+  resetFetchSaleList = async (id, starttime, endtime) => {
+    runInAction(() => {
+      this.saleList = []
+      this.saleListPage = 1
+      this.saleListTotal = null
+    })
+    await this.fetchSaleList(id, starttime, endtime)
+  }
+
+  @action
   fetchSaleList = async (id, starttime, endtime) => {
     let hasMore = true
     if (this.saleListTotal !== null) {

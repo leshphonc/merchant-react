@@ -34,7 +34,7 @@ class ShopAssistant extends React.Component {
   componentDidMount() {
     const { shopAssistant, match } = this.props
     const { height } = this.state
-    shopAssistant.fetchSaleList(match.params.id)
+    shopAssistant.resetFetchSaleList(match.params.id)
     if (this.refresh.current) {
       const hei = height - ReactDOM.findDOMNode(this.refresh.current).offsetTop
       this.setState({
@@ -49,38 +49,90 @@ class ShopAssistant extends React.Component {
     const { shopAssistant, match } = this.props
     const searchStartDate = moment(startdate).format('YYYY-MM-DD')
     const searchEndDate = moment(enddate).format('YYYY-MM-DD')
-    shopAssistant.fetchScanList(match.params.id, searchStartDate, searchEndDate)
+    shopAssistant.resetFetchSaleList(
+      match.params.id,
+      searchStartDate,
+      searchEndDate,
+    )
   }
 
   mapList = () => {
     const { shopAssistant } = this.props
     const { saleList } = shopAssistant
     return saleList.map(item => (
-      <div style={{ background: '#fff' }}>
+      <div
+        style={{ background: '#fff', textAlign: 'center' }}
+        className="cLHlj"
+      >
         <List
           className="list"
           style={{ borderBottom: '1px solid #aaa', padding: '4px 0' }}
         >
-          <span className="pic" style={{ width: '16vw' }}>
-            {item.avatar ? <img src={item.avatar} alt="无" /> : null}
+          <span className="pic" style={{ width: '15vw' }}>
+            {item.avatar ? (
+              <img style={{ width: '15vw' }} src={item.avatar} alt="无" />
+            ) : null}
           </span>
-          <span style={{ width: '20vw' }}>{item.nickname || '暂无'}</span>
-          <span style={{ width: '28vw' }}>
-            {moment(item.spread_time * 1000).format('YYYY-MM-DD')}
+          <span
+            style={{
+              display: 'inline-block',
+              width: '20vw',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              lineHeight: '15vw',
+            }}
+          >
+            {item.nickname || '暂无'}
           </span>
-          <span style={{ width: '25vw' }}>{item.consum_money}</span>
+          <span
+            style={{
+              display: 'inline-block',
+              width: '28vw',
+              lineHeight: '15vw',
+            }}
+          >
+            {moment(item.settlement_time * 1000).format('YYYY-MM-DD')}
+          </span>
+          <span
+            style={{
+              display: 'inline-block',
+              width: '25vw',
+              lineHeight: '15vw',
+            }}
+          >
+            {item.order_money}
+          </span>
         </List>
       </div>
     ))
   }
 
   loadMore = async () => {
-    const { shopAssistant } = this.props
+    const { shopAssistant, match } = this.props
+    const { startdate, enddate } = this.state
     this.setState({ refreshing: true })
-    await shopAssistant.fetchSaleList()
+    await shopAssistant.resetFetchSaleList(
+      match.params.id,
+      moment(startdate).format('YYYY-MM-DD'),
+      moment(enddate).format('YYYY-MM-DD'),
+    )
     setTimeout(() => {
       this.setState({ refreshing: false })
     }, 100)
+  }
+
+  today = async () => {
+    const { shopAssistant, match } = this.props
+    this.setState({
+      startdate: new Date(),
+      enddate: new Date(),
+    })
+    await shopAssistant.resetFetchSaleList(
+      match.params.id,
+      moment(new Date()).format('YYYY-MM-DD'),
+      moment(new Date()).format('YYYY-MM-DD'),
+    )
   }
 
   render() {
@@ -100,6 +152,7 @@ class ShopAssistant extends React.Component {
                 color: '#fff',
                 fontSize: '15px',
               }}
+              onClick={this.today}
             >
               今日推广
             </Flex.Item>

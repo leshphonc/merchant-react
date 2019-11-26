@@ -29,10 +29,12 @@ export const fetchScanList = (page, size, id, starttime, endtime) =>
     },
   )
 
-export const fetchSaleList = (page, size, id) =>
+export const fetchSaleList = (page, size, id, starttime, endtime) =>
   axios.post(
     `/appapi.php?c=Merchantapp&a=spread_date_sale_list&page=${page}&size=${size}&id=${id}`,
     {
+      starttime,
+      endtime,
       ticket: localStorage.getItem('ticket'),
     },
   )
