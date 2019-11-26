@@ -20,7 +20,9 @@ import ModifyCardGroupUsers from './modify/cardGroupUsers'
 import ExpensesRecord from './expensesRecord'
 import MemberCardInfo from './memberCardInfo'
 import MemberCardBasicInfo from './memberCardBasicInfo'
+import MemberCardBalance from './memberCardBalance'
 import MemberCardRecord from './memberCardRecord'
+import MemberCardInWx from './memberCardInWx'
 
 @inject('member')
 @observer
@@ -297,6 +299,14 @@ export default () => (
     <Route
       path="/management/member/cardGroup/memberCardBasicInfo"
       component={MemberCardBasicInfo}
+    />
+    <Route
+      component={MemberCardInWx}
+      path="/management/member/cardGroup/memberCardInWx"
+    />
+    <Route
+      path="/management/member/cardGroup/memberCardBalance"
+      component={MemberCardBalance}
     />
     <Route
       path="/management/member/cardGroup/memberCardRecord/:id"

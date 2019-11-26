@@ -57,3 +57,11 @@ export const fetchMarket = id =>
       ticket: localStorage.getItem('ticket'),
     },
   })
+
+export const getStoreList = showALl =>
+  axios.get('/appapi.php?c=Merchantapp&a=get_store', {
+    params: {
+      show_all: showALl,
+      ticket: localStorage.getItem('ticket'),
+    },
+  })

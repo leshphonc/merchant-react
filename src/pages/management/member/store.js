@@ -805,6 +805,86 @@ class MemberStore {
       }
     })
   }
+
+  @action
+  updateCardBasicInfo = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.updateCardBasicInfo(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve()
+      }
+    })
+  }
+
+  @action
+  updateCardOtherInfo = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.updateCardOtherInfo(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve()
+      }
+    })
+  }
+
+  @action
+  updateCardWxInfo = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.updateCardWxInfo(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve()
+      }
+    })
+  }
+
+  @action
+  getMemberCardRecord = async (id, page = 1) => {
+    return new Promise(async resolve => {
+      const response = await services.getMemberCardRecord(id, page)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
+
+  @action
+  readCouponDetail = async id => {
+    return new Promise(async resolve => {
+      const response = await services.readCouponDetail(id)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
+
+  @action
+  updateCoupon = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.updateCoupon(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve()
+      }
+    })
+  }
+
+  @action
+  getColorList = async () => {
+    return new Promise(async resolve => {
+      const response = await services.getColorList()
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
+
+  @action
+  getCategoryList = async () => {
+    return new Promise(async resolve => {
+      const response = await services.getCategoryList()
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
 }
 
 export default new MemberStore()

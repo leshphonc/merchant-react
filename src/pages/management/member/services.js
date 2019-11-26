@@ -198,3 +198,51 @@ export const memberCardBasicInfo = payload =>
     ...payload,
     ticket: localStorage.getItem('ticket'),
   })
+
+export const updateCardBasicInfo = payload =>
+  axios.post('/appapi.php?c=MemberCard&a=editMerberCard', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const updateCardOtherInfo = payload =>
+  axios.post('/appapi.php?c=MemberCard&a=editMerberCardOther', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const updateCardWxInfo = payload =>
+  axios.post('/appapi.php?c=MemberCard&a=editMerberCardWx', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const getMemberCardRecord = (id, page) =>
+  axios.post('/appapi.php?c=Merchantapp&a=rechargeList', {
+    id,
+    page,
+    size: 10,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const readCouponDetail = id =>
+  axios.post('/appapi.php?c=Coupon&a=couponDetail', {
+    coupon_id: id,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const updateCoupon = payload =>
+  axios.post('/appapi.php?c=Coupon&a=couponEdit', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const getColorList = () =>
+  axios.post('/appapi.php?c=Coupon&a=getColorList', {
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const getCategoryList = () =>
+  axios.post('/appapi.php?c=Coupon&a=getCategoryList', {
+    ticket: localStorage.getItem('ticket'),
+  })

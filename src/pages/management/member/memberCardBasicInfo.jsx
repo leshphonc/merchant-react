@@ -11,17 +11,43 @@ import {
 import { createForm } from 'rc-form'
 import CropperImgModal from '@/common/UploadImg/CropperImgModal'
 import Tooltip from 'rc-tooltip'
+import { observer, inject } from 'mobx-react'
 
 let textColor = '#ffffff'
 @createForm()
+@inject('member')
+@observer
 class MemberCardBasicInfo extends React.Component {
   state = {
     logoOpen: false,
     diyOpen: false,
+    cardDetail: {},
   }
   componentDidMount() {
-    // const { member } = this.props
-    // member.readMemberCardBasicInfoDetail()
+    const { member, form } = this.props
+    member.readMemberCardBasicInfoDetail().then(res => {
+      const detail = res.card
+      form.setFieldsValue({
+        status: detail.status === '1',
+        logo: [{ url: detail.logo }],
+        background_img: detail.diybg ? false : true,
+        diybg: [{ url: detail.diybg }],
+        numbercolor: detail.numbercolor,
+        discount: detail.discount,
+        self_get: detail.self_get === '1',
+        is_physical_card: detail.is_physical_card === '1',
+        auto_get: detail.auto_get === '1',
+        auto_get_buy: detail.auto_get_buy === '1',
+        is_index: detail.is_index === '1',
+        posters: [{ url: detail.posters }],
+        auto_get_coupon: detail.auto_get_coupon === '1',
+        weixin_send: detail.weixin_send === '1',
+        recharge_des: detail.recharge_des,
+        score_des: detail.score_des,
+        info: detail.info,
+      })
+      console.log(res)
+    })
   }
 
   onClose = () => {
@@ -50,7 +76,23 @@ class MemberCardBasicInfo extends React.Component {
         Toast.info('请输入完整信息')
         return
       }
+      const keys = Object.keys(value)
+      keys.forEach(item => {
+        if (value[item] === false) {
+          value[item] = '0'
+        } else if (value[item] === true) {
+          value[item] = '1'
+        }
+      })
+      value.diybg = value.diybg[0].url
+      value.logo = value.logo[0].url
+      value.posters = value.posters[0].url
       console.log(value)
+      member.updateCardBasicInfo(value).then(() => {
+        Toast.success('操作成功', 1, () => {
+          history.goBack()
+        })
+      })
     })
   }
   render() {
@@ -314,7 +356,7 @@ class MemberCardBasicInfo extends React.Component {
         <List renderHeader="使用说明">
           <TextareaItem
             title="充值说明"
-            {...getFieldProps('rechanrge_des', {
+            {...getFieldProps('recharge_des', {
               rules: [{ required: true }],
             })}
             placeholder="请输入充值说明"

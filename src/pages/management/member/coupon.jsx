@@ -6,6 +6,7 @@ import { WhiteSpace, Button, PullToRefresh, ActionSheet } from 'antd-mobile'
 import NavBar from '@/common/NavBar'
 import moment from 'moment'
 import CouponCheck from './couponCheck'
+import CouponCRU from './couponCRU'
 import { ListItem, ItemTop, ItemBottom } from './styled'
 
 @inject('member')
@@ -76,6 +77,19 @@ class Coupon extends React.Component {
             <WhiteSpace />
             <div className="bottom-feature">
               <Button
+                style={{ marginRight: 5 }}
+                type="primary"
+                size="small"
+                onClick={() =>
+                  history.push(
+                    `/management/member/coupon/couponCRU/${item.coupon_id}`,
+                  )
+                }
+              >
+                编辑
+              </Button>
+              <Button
+                style={{ marginRight: 5 }}
                 type="primary"
                 size="small"
                 onClick={() => {
@@ -180,10 +194,23 @@ class Coupon extends React.Component {
   }
 
   render() {
+    const { history } = this.props
     const { height, refreshing } = this.state
     return (
       <React.Fragment>
-        <NavBar title="优惠券列表" goBack />
+        <NavBar
+          title="优惠券列表"
+          goBack
+          right={
+            <div
+              onClick={() =>
+                history.push('/management/member/coupon/couponCRU')
+              }
+            >
+              创建
+            </div>
+          }
+        />
         <PullToRefresh
           ref={this.refresh}
           refreshing={refreshing}
@@ -209,6 +236,10 @@ export default () => (
     <Route
       path="/management/member/coupon/couponCheck/:id"
       component={CouponCheck}
+    />
+    <Route
+      path="/management/member/coupon/couponCRU/:id?"
+      component={CouponCRU}
     />
   </React.Fragment>
 )

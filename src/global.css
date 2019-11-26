@@ -295,3 +295,11 @@ button {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+.font-red {
+  color: rgb(247, 97, 32);
+}
+
+.font-green {
+  color: rgb(43, 184, 170);
+}

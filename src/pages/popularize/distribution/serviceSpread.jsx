@@ -8,8 +8,8 @@ const levelSet = [{ label: '开启', value: '1' }, { label: '关闭', value: '0'
 const { Item } = List
 
 @createForm()
-@observer
 @inject('commodity')
+@observer
 class ServiceSpread extends React.Component {
   constructor(props) {
     super(props)

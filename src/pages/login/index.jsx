@@ -64,7 +64,7 @@ class Login extends React.Component {
           >
             管理中心
           </div>
-          <InputBox style={{ marginTop: 120 }}>
+          <InputBox style={{ marginTop: '20vw' }}>
             <i className="iconfont">&#xe640;</i>
             <InputItem
               value={account}

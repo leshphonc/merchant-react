@@ -203,6 +203,16 @@ class CommonStore {
       }
     }
   }
+
+  @action
+  getStoreList = showALl => {
+    return new Promise(async resolve => {
+      const response = await services.getStoreList(showALl)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
 }
 
 const stores = {
