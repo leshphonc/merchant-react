@@ -290,3 +290,8 @@ button {
 .am-picker-popup-wrap {
   z-index: 9999999;
 }
+.my-drawer {
+  position: relative;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}

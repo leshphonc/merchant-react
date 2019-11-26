@@ -59,8 +59,8 @@ class OressGoods extends React.Component {
               `${giftOrderDetail.status}` === '2'
                 ? '已完成'
                 : `${giftOrderDetail.paid}` === '1'
-                  ? '已支付'
-                  : '未支付'
+                ? '已支付'
+                : '未支付'
             }
             arrow="empty"
           >
@@ -73,7 +73,9 @@ class OressGoods extends React.Component {
             结算价
           </Item>
           <Item
-            extra={moment(giftOrderDetail.order_time * 1000).format('YYYY-MM-DD HH:mm')}
+            extra={moment(giftOrderDetail.order_time * 1000).format(
+              'YYYY-MM-DD HH:mm',
+            )}
             arrow="empty"
           >
             下单时间
@@ -110,10 +112,12 @@ class OressGoods extends React.Component {
             arrow="empty"
           >
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div>配送要求</div>
               <div>
-                配送要求
+                {giftOrderDetail.delivery_type
+                  ? delivery[giftOrderDetail.delivery_type].label
+                  : ''}
               </div>
-              <div>{giftOrderDetail.delivery_type ? delivery[giftOrderDetail.delivery_type].label : ''}</div>
             </div>
           </Item>
           <Item extra={giftOrderDetail.zipcode} arrow="empty">
@@ -121,9 +125,7 @@ class OressGoods extends React.Component {
           </Item>
           <Item arrow="empty">
             <div style={{ display: 'flex' }}>
-              <div>
-                收货地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              </div>
+              <div>收货地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
               <div style={{ whiteSpace: 'initial' }}>
                 {giftOrderDetail.adress}
               </div>

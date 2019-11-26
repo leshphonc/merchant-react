@@ -775,6 +775,36 @@ class MemberStore {
       }
     })
   }
+
+  @action
+  createMemberCard = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.createMemberCard(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve()
+      }
+    })
+  }
+
+  @action
+  readMemberCardBasicInfoDetail = async () => {
+    return new Promise(async resolve => {
+      const response = await services.readMemberCardBasicInfoDetail()
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
+
+  @action
+  memberCardBasicInfo = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.memberCardBasicInfo(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve()
+      }
+    })
+  }
 }
 
 export default new MemberStore()

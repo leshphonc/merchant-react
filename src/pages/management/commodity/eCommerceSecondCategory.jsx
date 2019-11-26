@@ -101,10 +101,6 @@ class ECommerceSecondCategory extends React.Component {
             </Flex>
           ) : null}
           <WhiteSpace />
-          <Flex style={{ color: '#666' }}>
-            <Flex.Item>折扣率：{item.sort_discount}</Flex.Item>
-          </Flex>
-          <WhiteSpace />
         </div>
         <WhiteSpace />
       </React.Fragment>

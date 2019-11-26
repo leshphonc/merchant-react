@@ -118,7 +118,7 @@ class Index extends React.Component {
                     </i>
                   </div>
                 </AddBtn>
-                <div className="text">进入店铺</div>
+                <div className="text">商家首页</div>
                 <div className="mask" />
               </AddBtnBox>
             }
