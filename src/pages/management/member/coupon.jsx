@@ -7,6 +7,7 @@ import NavBar from '@/common/NavBar'
 import moment from 'moment'
 import CouponCheck from './couponCheck'
 import CouponCRU from './couponCRU'
+import CouponDistribute from './couponDistribute'
 import { ListItem, ItemTop, ItemBottom } from './styled'
 
 @inject('member')
@@ -225,6 +226,30 @@ class Coupon extends React.Component {
           <WhiteSpace />
           {this.mapList()}
         </PullToRefresh>
+        <div
+          size="small"
+          type="primary"
+          onClick={() =>
+            history.push('/management/member/coupon/couponDistribute')
+          }
+          style={{
+            position: 'fixed',
+            bottom: 80,
+            right: 20,
+            width: 80,
+            height: 40,
+            background: '#07c160',
+            color: '#fff',
+            borderRadius: 40,
+            textAlign: 'center',
+            lineHeight: '40px',
+          }}
+        >
+          <i className="iconfont" style={{ marginRight: 5 }}>
+            &#xe70f;
+          </i>
+          派发
+        </div>
       </React.Fragment>
     )
   }
@@ -240,6 +265,10 @@ export default () => (
     <Route
       path="/management/member/coupon/couponCRU/:id?"
       component={CouponCRU}
+    />
+    <Route
+      path="/management/member/coupon/couponDistribute"
+      component={CouponDistribute}
     />
   </React.Fragment>
 )

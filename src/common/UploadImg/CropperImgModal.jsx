@@ -64,12 +64,20 @@ class CropperImgModal extends React.Component {
   render() {
     const { aspectratio, open, close } = this.props
     const { files, file, resultImgUrl } = this.state
+    console.log(resultImgUrl)
     return (
       <Modal
         style={{ height: '100vh' }}
         popup
         visible={open}
         animationType="slide-up"
+        afterClose={() => {
+          this.setState({
+            files: [],
+            file: null,
+            resultImgUrl: null,
+          })
+        }}
       >
         <React.Fragment>
           {file ? (

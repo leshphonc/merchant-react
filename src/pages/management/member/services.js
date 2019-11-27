@@ -252,3 +252,58 @@ export const getCategoryList = () =>
   axios.post('/appapi.php?c=Coupon&a=getCategoryList', {
     ticket: localStorage.getItem('ticket'),
   })
+
+export const getCateList = (store, id) =>
+  axios.post('/appapi.php?c=Coupon&a=getCateByCategory', {
+    store_id: store || [],
+    order_type: id,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const getGoodsList = (type, id) =>
+  axios.post('/appapi.php?c=Coupon&a=getGoodsCate', {
+    order_type: type,
+    order_cate: id,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const getCouponGroupList = id =>
+  axios.post('/appapi.php?c=Coupon&a=getCouponByGroup', {
+    card_group_id: id,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const getCouponDistribute = page =>
+  axios.post('/appapi.php?c=Coupon&a=send_history', {
+    page,
+    size: 10,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const searchUserList = val =>
+  axios.post('/appapi.php?c=Coupon&a=getUser', {
+    search_val: val,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const getUserList = () =>
+  axios.post('/appapi.php?c=Coupon&a=getGroupList', {
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const distributeCoupon = payload =>
+  axios.post('/appapi.php?c=Coupon&a=send', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const distributeCouponSingle = payload =>
+  axios.post('/appapi.php?c=Coupon&a=sendOne', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })
+
+export const allGroupCanDistributeCouponList = () =>
+  axios.post('/appapi.php?c=Coupon&a=sendAllCouponList', {
+    ticket: localStorage.getItem('ticket'),
+  })

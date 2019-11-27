@@ -895,6 +895,120 @@ class MemberStore {
       }
     })
   }
+
+  @action
+  getCateList = async (store, id) => {
+    return new Promise(async resolve => {
+      const response = await services.getCateList(store, id)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        if (response.data.result) {
+          const data = response.data.result.map(item => {
+            return { label: item.cat_name, value: item.cat_id }
+          })
+          resolve(data)
+        } else {
+          resolve([])
+        }
+      }
+    })
+  }
+
+  @action
+  getGoodsList = async (type, id) => {
+    return new Promise(async resolve => {
+      const response = await services.getGoodsList(type, id)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        if (response.data.result) {
+          const data = response.data.result.map(item => {
+            return { label: item.name, value: item.goods_id }
+          })
+          resolve(data)
+        } else {
+          resolve([])
+        }
+      }
+    })
+  }
+
+  @action
+  getCouponGroupList = async id => {
+    return new Promise(async resolve => {
+      const response = await services.getCouponGroupList(id)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
+
+  @action
+  getCouponDistribute = async (page = 1) => {
+    return new Promise(async resolve => {
+      const response = await services.getCouponDistribute(page)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
+
+  @action
+  searchUserList = async val => {
+    return new Promise(async resolve => {
+      const response = await services.searchUserList(val)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
+
+  @action
+  getUserList = async () => {
+    return new Promise(async resolve => {
+      const response = await services.getUserList()
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
+
+  @action
+  distributeCoupon = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.distributeCoupon(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve()
+      }
+    })
+  }
+
+  @action
+  distributeCouponSingle = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.distributeCouponSingle(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve()
+      }
+    })
+  }
+
+  @action
+  allGroupCanDistributeCouponList = async () => {
+    return new Promise(async resolve => {
+      const response = await services.allGroupCanDistributeCouponList()
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
+
+  @action
+  distributeAll = async () => {
+    return new Promise(async resolve => {
+      const response = await services.distributeCoupon()
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
 }
 
 export default new MemberStore()

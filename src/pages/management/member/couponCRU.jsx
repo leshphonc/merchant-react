@@ -39,7 +39,8 @@ class CouponCRU extends React.Component {
     platform: [],
     colorList: {},
     color: '',
-    cateIDColumns: [],
+    cateColumns: [],
+    goodsColumns: [],
     checkboxValue: [
       {
         label: '外卖服务',
@@ -59,6 +60,8 @@ class CouponCRU extends React.Component {
       },
     ],
     checkedValue: [],
+    graphicList: [],
+    curImg: '',
   }
 
   async componentDidMount() {
@@ -85,7 +88,37 @@ class CouponCRU extends React.Component {
           platform: detail.platform,
         })
       })
+    } else {
+      this.setState({
+        graphicList: [
+          {
+            image_url: '',
+            text: '',
+          },
+        ],
+      })
     }
+  }
+
+  getCateList = id => {
+    const { member } = this.props
+    const { store } = this.state
+    console.log(store)
+    member.getCateList(store, id).then(res => {
+      this.setState({
+        cateColumns: res,
+      })
+    })
+  }
+
+  getGoodsList = id => {
+    const { member, form } = this.props
+    console.log(form.getFieldValue('cate_name'))
+    member.getGoodsList(form.getFieldValue('cate_name')[0], id).then(res => {
+      this.setState({
+        goodsColumns: res,
+      })
+    })
   }
 
   mapStore = () => {
@@ -122,7 +155,7 @@ class CouponCRU extends React.Component {
         <RadioItem
           checked={color === colorList[i]}
           key={colorList[i]}
-          onChange={e => this.onChangeColor(e, colorList[i])}
+          onChange={e => this.onChangeColor(e, i)}
         >
           <div style={{ color: colorList[i] }}>{colorList[i]}</div>
         </RadioItem>
@@ -191,11 +224,34 @@ class CouponCRU extends React.Component {
   }
 
   cropperCover = data => {
-    console.log(data)
+    const { form } = this.props
+    this.setState({
+      coverOpen: false,
+    })
+    form.setFieldsValue({
+      icon_url_list: [
+        {
+          url: data,
+        },
+      ],
+    })
   }
 
   cropperGraphic = data => {
-    console.log(data)
+    const { form } = this.props
+    const { curImg, graphicList } = this.state
+    graphicList[curImg].image_url = data
+    this.setState({
+      graphicOpen: false,
+      graphicList: graphicList,
+    })
+    form.setFieldsValue({
+      [`image_url${curImg}`]: [
+        {
+          url: data,
+        },
+      ],
+    })
   }
 
   changeServiceType = type => {
@@ -216,14 +272,34 @@ class CouponCRU extends React.Component {
 
   // 刚刚粘锅来
   addImage = () => {
-    const { detail } = this.state
-    const obj = detail
-    obj.text_image_list.push({
+    const { graphicList } = this.state
+    const obj = graphicList
+    obj.push({
       image_url: '',
       text: '',
     })
     this.setState({
-      detail: obj,
+      graphicList: obj,
+    })
+  }
+
+  deleteImage = index => {
+    const { form } = this.props
+    const { graphicList } = this.state
+    const arr = graphicList
+    arr.splice(index, 1)
+    const obj = arr
+    this.setState({
+      graphicList: obj,
+    })
+    graphicList.forEach((item, index) => {
+      form.setFieldsValue({
+        [`image_url${index}`]: [
+          {
+            url: item.image_url,
+          },
+        ],
+      })
     })
   }
 
@@ -231,42 +307,43 @@ class CouponCRU extends React.Component {
   mapImage = () => {
     const { form } = this.props
     const { getFieldProps } = form
-    const { detail } = this.state
-    console.log(detail)
-    if (!detail.wx_param) return
-    return detail.wx_param.text_image_list.map((item, index) => {
+    const { graphicList } = this.state
+    console.log(graphicList)
+    return graphicList.map((item, index) => {
       return (
         <List
           renderHeader={
             <div>
               图文消息 {index + 1}
-              <Button
-                style={{
-                  display: 'inline-block',
-                  verticalAlign: 'sub',
-                  marginLeft: 10,
-                }}
-                size="small"
-                type="warning"
-                onClick={() => this.deleteImage(index)}
-              >
-                删除
-              </Button>
+              {graphicList.length > 1 ? (
+                <Button
+                  style={{
+                    display: 'inline-block',
+                    verticalAlign: 'sub',
+                    marginLeft: 10,
+                  }}
+                  size="small"
+                  type="warning"
+                  onClick={() => this.deleteImage(index)}
+                >
+                  删除
+                </Button>
+              ) : null}
             </div>
           }
-          key={index}
+          key={item.image_url ? item.image_url : index}
         >
           <List.Item>
             图文{index + 1}
             <ImagePicker
-              {...getFieldProps(`wx_image_url${index}`, {
+              {...getFieldProps(`image_url${index}`, {
                 rules: [{ required: true }],
                 initialValue: item.image_url ? [{ url: item.image_url }] : [],
                 valuePropName: 'files',
               })}
               selectable={
-                form.getFieldValue(`wx_image_url${index}`)
-                  ? form.getFieldValue(`wx_image_url${index}`).length < 1
+                form.getFieldValue(`image_url${index}`)
+                  ? form.getFieldValue(`image_url${index}`).length < 1
                   : false
               }
               onAddImageClick={e => {
@@ -279,10 +356,16 @@ class CouponCRU extends React.Component {
             />
           </List.Item>
           <TextareaItem
-            {...getFieldProps(`wx_text${index}`, {
+            {...getFieldProps(`text${index}`, {
               rules: [{ required: true }],
               initialValue: item.text,
             })}
+            onChange={val => {
+              graphicList[index].text = val
+              this.setState({
+                graphicList: graphicList,
+              })
+            }}
             title={`图文描述${index + 1}`}
             placeholder={`图文描述${index + 1}`}
             rows={3}
@@ -295,7 +378,7 @@ class CouponCRU extends React.Component {
 
   _submit = () => {
     const { form, member, history, match } = this.props
-    const { platform, store } = this.state
+    const { platform, store, graphicList, checkedValue, color } = this.state
     form.validateFields((error, value) => {
       console.log(value)
       if (error) {
@@ -315,10 +398,16 @@ class CouponCRU extends React.Component {
         method = 'updateCoupon'
         value.coupon_id = match.params.id
       }
+      if (value.sync_wx === '1' && color === '') {
+        Toast.info('请选择卡券颜色')
+        return
+      }
       value.img = value.img[0].url
       value.store_id = store
       value.user_level = value.user_level[0]
       value.cate_name = value.cate_name[0]
+      value.cate_id && (value.cate_id = value.cate_id[0])
+      value.goods_id && (value.goods_id = value.goods_id[0])
       value.status = value.status[0]
       value.auto_get = value.auto_get[0]
       value.platform = platform
@@ -326,6 +415,12 @@ class CouponCRU extends React.Component {
       value.end_time = moment(value.end_time).format('YYYY-MM-DD')
       value.effe_start_time = moment(value.effe_start_time).format('YYYY-MM-DD')
       value.effe_end_time = moment(value.effe_end_time).format('YYYY-MM-DD')
+      value.icon_url_list && (value.icon_url_list = value.icon_url_list[0].url)
+      if (value.sync_wx === '1') {
+        value.wx_image = graphicList
+        value.color = color
+        value.business_service = checkedValue
+      }
 
       member[method](value).then(() => {
         Toast.success('操作成功', 1, () => {
@@ -348,7 +443,9 @@ class CouponCRU extends React.Component {
       color,
       checkboxValue,
       platform,
-      cateIDColumns,
+      cateColumns,
+      goodsColumns,
+      graphicList,
     } = this.state
     const type = match.params.id ? '编辑' : '创建'
     const sync_wx = form.getFieldValue('sync_wx')
@@ -499,6 +596,10 @@ class CouponCRU extends React.Component {
             {...getFieldProps('cate_name', {
               rules: [{ required: true }],
               initialValue: detail.cate_name ? [detail.cate_name] : ['all'],
+              getValueFromEvent: val => {
+                this.getCateList(val[0])
+                return val
+              },
             })}
             data={[
               { label: '全品类通用', value: 'all' },
@@ -516,17 +617,37 @@ class CouponCRU extends React.Component {
           >
             <List.Item arrow="horizontal">使用类别</List.Item>
           </Picker>
-          <Picker
-            {...getFieldProps('cate_id', {
-              rules: [{ required: true }],
-              initialValue: detail.cate_name ? [detail.cate_name] : ['all'],
-            })}
-            data={cateIDColumns}
-            cols={1}
-            extra="请选择"
-          >
-            <List.Item arrow="horizontal">使用类别</List.Item>
-          </Picker>
+          {form.getFieldValue('cate_name') &&
+          form.getFieldValue('cate_name')[0] !== 'all' ? (
+            <Picker
+              {...getFieldProps('cate_id', {
+                initialValue: detail.cate_id ? [detail.cate_id] : [''],
+                getValueFromEvent: val => {
+                  this.getGoodsList(val[0])
+                  return val
+                },
+              })}
+              data={cateColumns}
+              cols={1}
+              extra="请选择"
+            >
+              <List.Item arrow="horizontal">使用类别</List.Item>
+            </Picker>
+          ) : null}
+
+          {form.getFieldValue('cate_id') && form.getFieldValue('cate_id')[0] ? (
+            <Picker
+              {...getFieldProps('goods_id', {
+                initialValue: detail.goods_id ? [detail.goods_id] : [''],
+              })}
+              data={goodsColumns}
+              cols={1}
+              extra="请选择"
+            >
+              <List.Item arrow="horizontal">使用类别</List.Item>
+            </Picker>
+          ) : null}
+
           <TextareaItem
             {...getFieldProps('des', {
               rules: [{ required: true }],
@@ -712,7 +833,7 @@ class CouponCRU extends React.Component {
                 >
                   卡券提示
                 </InputItem>
-                <InputItem
+                {/* <InputItem
                   {...getFieldProps('center_sub_title', {
                     rules: [{ required: true, max: 6 }],
                     initialValue: detail.center_sub_title,
@@ -765,7 +886,7 @@ class CouponCRU extends React.Component {
                   placeholder="6个汉字以内"
                 >
                   自定义链接
-                </InputItem>
+                </InputItem> */}
                 <List.Item>
                   封面图片
                   <ImagePicker
@@ -811,15 +932,17 @@ class CouponCRU extends React.Component {
                 <List renderHeader="卡券图文（图片大小1MB）">
                   <List.Item
                     extra={
-                      <div>
-                        <Button
-                          size="small"
-                          type="primary"
-                          onClick={this.addImage}
-                        >
-                          新增
-                        </Button>
-                      </div>
+                      graphicList.length < 3 ? (
+                        <div>
+                          <Button
+                            size="small"
+                            type="primary"
+                            onClick={this.addImage}
+                          >
+                            新增
+                          </Button>
+                        </div>
+                      ) : null
                     }
                   >
                     图文消息
@@ -832,6 +955,7 @@ class CouponCRU extends React.Component {
         ) : null}
 
         <CropperImgModal
+          ref={el => (this.cp1 = el)}
           open={imgOpen}
           aspectratio={1}
           cropper={this.cropper}

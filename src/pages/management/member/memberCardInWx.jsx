@@ -9,10 +9,14 @@ import {
   ImagePicker,
   Button,
   Toast,
+  Radio,
+  Modal,
+  Flex,
 } from 'antd-mobile'
 import CropperImgModal from '@/common/UploadImg/CropperImgModal'
 import { createForm } from 'rc-form'
 
+const { RadioItem } = Radio
 const { CheckboxItem } = Checkbox
 let textColor = '#ffffff'
 
@@ -25,6 +29,8 @@ class MemberCardInWx extends React.Component {
     detail: {},
     selected: [],
     curImg: '',
+    colorList: {},
+    color: '',
     checkboxValue: [
       {
         label: '外卖服务',
@@ -48,10 +54,17 @@ class MemberCardInWx extends React.Component {
     const { member, form } = this.props
     member.readMemberCardBasicInfoDetail().then(res => {
       const detail = res.card
+      const keys = Object.keys(res.color_list)
+      let wxColor = ''
+      keys.forEach(item => {
+        if (item === detail.wx_param.color) {
+          wxColor = res.color_list[item]
+        }
+      })
       form.setFieldsValue({
         wx_title: detail.wx_param.title,
         wx_notice: detail.wx_param.notice,
-        wx_color: detail.wx_param.color,
+        wx_color: wxColor,
         wx_prerogative: detail.wx_param.prerogative,
         wx_center_title: detail.wx_param.center_title,
         wx_center_sub_title: detail.wx_param.center_sub_title,
@@ -72,15 +85,42 @@ class MemberCardInWx extends React.Component {
       this.setState({
         selected: detail.wx_param.business_service,
         detail: res.card,
+        colorList: res.color_list,
+        color: detail.wx_param.color,
       })
+    })
+  }
+
+  mapColorList = () => {
+    const { colorList, color } = this.state
+    const keys = Object.keys(colorList)
+    return keys.map(i => {
+      return (
+        <RadioItem
+          checked={color === colorList[i]}
+          key={colorList[i]}
+          onChange={e => this.onChangeColor(e, i)}
+        >
+          <div style={{ color: colorList[i] }}>{colorList[i]}</div>
+        </RadioItem>
+      )
+    })
+  }
+
+  onChangeColor = (e, value) => {
+    this.setState({
+      color: value,
+      colorOpen: false,
     })
   }
 
   cropper = data => {
     const { form } = this.props
-    const { curImg } = this.state
+    const { curImg, detail } = this.state
+    detail.wx_param.text_image_list[curImg].image_url = data
     this.setState({
       imgOpen: false,
+      detail: detail,
     })
     form.setFieldsValue({
       [`wx_image_url${curImg}`]: [
@@ -95,7 +135,6 @@ class MemberCardInWx extends React.Component {
     const { form } = this.props
     const { getFieldProps } = form
     const { detail } = this.state
-    console.log(detail)
     if (!detail.wx_param) return
     return detail.wx_param.text_image_list.map((item, index) => {
       return (
@@ -146,6 +185,13 @@ class MemberCardInWx extends React.Component {
               rules: [{ required: true }],
               initialValue: item.text,
             })}
+            onChange={val => {
+              const list = detail.wx_param.text_image_list
+              list[index].text = val
+              this.setState({
+                detail: detail,
+              })
+            }}
             title={`图文描述${index + 1}`}
             placeholder={`图文描述${index + 1}`}
             rows={3}
@@ -208,6 +254,7 @@ class MemberCardInWx extends React.Component {
   }
 
   deleteImage = index => {
+    const { form } = this.props
     const { detail } = this.state
     const arr = detail.wx_param.text_image_list
     arr.splice(index, 1)
@@ -216,11 +263,32 @@ class MemberCardInWx extends React.Component {
     this.setState({
       detail: obj,
     })
+    detail.wx_param.text_image_list.forEach((item, index) => {
+      form.setFieldsValue({
+        [`wx_image_url${index}`]: [
+          {
+            url: item.image_url,
+          },
+        ],
+      })
+    })
+  }
+
+  getColor = value => {
+    const { colorList } = this.state
+    const keys = Object.keys(colorList)
+    let color = '#000'
+    keys.forEach(item => {
+      if (item === value) {
+        color = colorList[item]
+      }
+    })
+    return color
   }
 
   _submit = () => {
     const { form, member, history } = this.props
-    const { selected } = this.state
+    const { selected, color } = this.state
     form.validateFields((error, value) => {
       if (error) {
         Toast.info('请输入完整信息')
@@ -238,6 +306,7 @@ class MemberCardInWx extends React.Component {
         }
       })
       value.wx_business_service = selected
+      value.wx_color = color
       console.log(value)
       member.updateCardWxInfo(value).then(() => {
         Toast.success('操作成功', 1, () => {
@@ -249,7 +318,7 @@ class MemberCardInWx extends React.Component {
   render() {
     const { form } = this.props
     const { getFieldProps } = form
-    const { detail, imgOpen } = this.state
+    const { detail, imgOpen, colorOpen, color } = this.state
     return (
       <div>
         <NavBar
@@ -276,7 +345,7 @@ class MemberCardInWx extends React.Component {
           >
             会员卡提醒
           </InputItem>
-          <List.Item>
+          {/* <List.Item>
             会员卡颜色
             <input
               {...getFieldProps('wx_color', {
@@ -290,6 +359,17 @@ class MemberCardInWx extends React.Component {
               style={{ float: 'right' }}
               type="color"
             />
+          </List.Item> */}
+          <List.Item
+            arrow="horizontal"
+            extra={
+              <div style={{ color: this.getColor(color) }}>
+                {this.getColor(color)}
+              </div>
+            }
+            onClick={() => this.setState({ colorOpen: true })}
+          >
+            卡券颜色
           </List.Item>
           <TextareaItem
             {...getFieldProps('wx_prerogative', {
@@ -443,6 +523,23 @@ class MemberCardInWx extends React.Component {
           cropper={this.cropper}
           close={() => this.setState({ imgOpen: false })}
         />
+        <Modal
+          style={{ height: '100vh' }}
+          popup
+          visible={colorOpen}
+          animationType="slide-up"
+        >
+          <List style={{ marginBottom: 47 }}>{this.mapColorList()}</List>
+          <Flex
+            style={{ position: 'fixed', bottom: 0, width: '100%', zIndex: 10 }}
+          >
+            <Flex.Item>
+              <Button onClick={() => this.setState({ colorOpen: false })}>
+                关闭
+              </Button>
+            </Flex.Item>
+          </Flex>
+        </Modal>
       </div>
     )
   }
