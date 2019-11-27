@@ -857,6 +857,16 @@ class MemberStore {
   }
 
   @action
+  createCoupon = async payload => {
+    return new Promise(async resolve => {
+      const response = await services.createCoupon(payload)
+      if (response.data.errorCode === ErrorCode.SUCCESS) {
+        resolve(response.data.result)
+      }
+    })
+  }
+
+  @action
   updateCoupon = async payload => {
     return new Promise(async resolve => {
       const response = await services.updateCoupon(payload)

@@ -154,7 +154,7 @@ class Reserve extends React.Component {
                 size="small"
                 onClick={() =>
                   history.push(
-                    `/management/commodity/editSpread/appoint_id/${item.appoint_id}/`,
+                    `/management/commodity/editSpread/appoint_id/${item.appoint_id}`,
                   )
                 }
               >

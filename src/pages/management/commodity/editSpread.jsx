@@ -93,7 +93,7 @@ class EditSpread extends React.Component {
                   spread_sale:
                     appointDetail.appoint_list.spread[index].spread_sale,
                   spread_rate:
-                    appointDetail.appoint_list.spread[index].spread_sale,
+                    appointDetail.appoint_list.spread[index].spread_rate,
                   sub_spread_rate:
                     appointDetail.appoint_list.spread[index].sub_spread_rate,
                   third_spread_rate:

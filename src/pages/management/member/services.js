@@ -231,6 +231,12 @@ export const readCouponDetail = id =>
     ticket: localStorage.getItem('ticket'),
   })
 
+export const createCoupon = payload =>
+  axios.post('/appapi.php?c=Coupon&a=addCoupon', {
+    ...payload,
+    ticket: localStorage.getItem('ticket'),
+  })
+
 export const updateCoupon = payload =>
   axios.post('/appapi.php?c=Coupon&a=couponEdit', {
     ...payload,

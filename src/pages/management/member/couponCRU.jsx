@@ -18,6 +18,7 @@ import {
   DatePicker,
 } from 'antd-mobile'
 import CropperImgModal from '@/common/UploadImg/CropperImgModal'
+import moment from 'moment'
 
 const { RadioItem } = Radio
 const { CheckboxItem } = Checkbox
@@ -34,9 +35,11 @@ class CouponCRU extends React.Component {
     coverOpen: false,
     graphicOpen: false,
     storeList: [],
+    store: [],
     platform: [],
     colorList: {},
     color: '',
+    cateIDColumns: [],
     checkboxValue: [
       {
         label: '外卖服务',
@@ -78,18 +81,16 @@ class CouponCRU extends React.Component {
         const detail = res.coupon
         this.setState({
           detail: detail,
-          platform: detail.platform.split(','),
+          store: detail.store_id,
+          platform: detail.platform,
         })
       })
     }
   }
 
   mapStore = () => {
-    const { detail } = this.state
-    if (!detail.store_id) return
-    return detail.store_id.map(item => (
-      <div key={item}>{this.getStoreName(item)}</div>
-    ))
+    const { store } = this.state
+    return store.map(item => <div key={item}>{this.getStoreName(item)}</div>)
   }
 
   getStoreName = id => {
@@ -99,12 +100,11 @@ class CouponCRU extends React.Component {
   }
 
   mapStoreList = () => {
-    const { storeList, detail } = this.state
-    if (!detail.store_id) return
+    const { storeList, store } = this.state
     return storeList.map(i => {
       return (
         <CheckboxItem
-          checked={detail.store_id.indexOf(i.value) > -1}
+          checked={store.indexOf(i.value) > -1}
           key={i.value}
           onChange={e => this.onChange(e, i.value)}
         >
@@ -133,22 +133,22 @@ class CouponCRU extends React.Component {
   onChange = (e, value) => {
     console.log(e)
     console.log(value)
-    const { detail } = this.state
+    let { store } = this.state
     if (e.target.checked) {
-      const arr = [...new Set([...detail.store_id, value])]
-      detail.store_id = arr
+      const arr = [...new Set([...store, value])]
+      store = arr
       this.setState({
-        detail: detail,
+        store: store,
       })
     } else {
-      const index = detail.store_id.findIndex(item => item === value)
-      const arr = detail.store_id
+      const index = store.findIndex(item => item === value)
+      const arr = store
       if (index > -1) {
         arr.splice(index, 1)
       }
-      detail.store_id = arr
+      store = arr
       this.setState({
-        detail: detail,
+        store: store,
       })
     }
   }
@@ -295,7 +295,7 @@ class CouponCRU extends React.Component {
 
   _submit = () => {
     const { form, member, history, match } = this.props
-    const { selected } = this.state
+    const { platform, store } = this.state
     form.validateFields((error, value) => {
       console.log(value)
       if (error) {
@@ -315,6 +315,18 @@ class CouponCRU extends React.Component {
         method = 'updateCoupon'
         value.coupon_id = match.params.id
       }
+      value.img = value.img[0].url
+      value.store_id = store
+      value.user_level = value.user_level[0]
+      value.cate_name = value.cate_name[0]
+      value.status = value.status[0]
+      value.auto_get = value.auto_get[0]
+      value.platform = platform
+      value.start_time = moment(value.start_time).format('YYYY-MM-DD')
+      value.end_time = moment(value.end_time).format('YYYY-MM-DD')
+      value.effe_start_time = moment(value.effe_start_time).format('YYYY-MM-DD')
+      value.effe_end_time = moment(value.effe_end_time).format('YYYY-MM-DD')
+
       member[method](value).then(() => {
         Toast.success('操作成功', 1, () => {
           history.goBack()
@@ -336,13 +348,10 @@ class CouponCRU extends React.Component {
       color,
       checkboxValue,
       platform,
+      cateIDColumns,
     } = this.state
     const type = match.params.id ? '编辑' : '创建'
-    const auto_get = form.getFieldValue('auto_get')
-      ? form.getFieldValue('auto_get')[0]
-      : '0'
     const sync_wx = form.getFieldValue('sync_wx')
-    console.log(form.getFieldValue('icon_url_list'))
     return (
       <div>
         <NavBar
@@ -408,14 +417,15 @@ class CouponCRU extends React.Component {
             data={[
               { label: '不自动领取', value: '0' },
               { label: '领卡时自动领取', value: '1' },
-              { label: '单臂消费达到额度自动领取', value: '2' },
+              { label: '单笔消费达到额度自动领取', value: '2' },
             ]}
             cols={1}
             extra="请选择"
           >
             <List.Item arrow="horizontal">自动领取优惠券</List.Item>
           </Picker>
-          {auto_get === '0' ? (
+          {form.getFieldValue('auto_get') &&
+          form.getFieldValue('auto_get')[0] === '0' ? (
             <div>
               <List.Item
                 extra={
@@ -443,16 +453,19 @@ class CouponCRU extends React.Component {
               </List.Item>
             </div>
           ) : null}
+          {form.getFieldValue('auto_get') &&
+          form.getFieldValue('auto_get')[0] === '2' ? (
+            <InputItem
+              {...getFieldProps('auto_get_money_limit', {
+                rules: [{ required: true }],
+                initialValue: detail.auto_get_money_limit,
+              })}
+              placeholder="单笔消费到达此额度自动领取优惠券"
+            >
+              单笔消费额度
+            </InputItem>
+          ) : null}
 
-          <InputItem
-            {...getFieldProps('auto_get_money_limit', {
-              rules: [{ required: true }],
-              initialValue: detail.auto_get_money_limit,
-            })}
-            placeholder="单笔消费到达此额度自动领取优惠券"
-          >
-            单笔消费额度
-          </InputItem>
           <List.Item
             extra={
               <Switch
@@ -498,6 +511,17 @@ class CouponCRU extends React.Component {
               { label: '门店服务', value: 'door' },
               { label: '微信营销', value: 'wxapp' },
             ]}
+            cols={1}
+            extra="请选择"
+          >
+            <List.Item arrow="horizontal">使用类别</List.Item>
+          </Picker>
+          <Picker
+            {...getFieldProps('cate_id', {
+              rules: [{ required: true }],
+              initialValue: detail.cate_name ? [detail.cate_name] : ['all'],
+            })}
+            data={cateIDColumns}
             cols={1}
             extra="请选择"
           >
@@ -577,7 +601,7 @@ class CouponCRU extends React.Component {
             })}
             mode="date"
           >
-            <List.Item arrow="horizontal">开始时间</List.Item>
+            <List.Item arrow="horizontal">可领开始时间</List.Item>
           </DatePicker>
           <DatePicker
             {...getFieldProps('end_time', {
@@ -588,7 +612,7 @@ class CouponCRU extends React.Component {
             })}
             mode="date"
           >
-            <List.Item arrow="horizontal">结束时间</List.Item>
+            <List.Item arrow="horizontal">可领结束时间</List.Item>
           </DatePicker>
           <DatePicker
             {...getFieldProps('effe_start_time', {
@@ -599,7 +623,7 @@ class CouponCRU extends React.Component {
             })}
             mode="date"
           >
-            <List.Item arrow="horizontal">有效开始时间</List.Item>
+            <List.Item arrow="horizontal">使用开始时间</List.Item>
           </DatePicker>
           <DatePicker
             {...getFieldProps('effe_end_time', {
@@ -610,7 +634,7 @@ class CouponCRU extends React.Component {
             })}
             mode="date"
           >
-            <List.Item arrow="horizontal">有效结束时间</List.Item>
+            <List.Item arrow="horizontal">使用结束时间</List.Item>
           </DatePicker>
           <Picker
             {...getFieldProps('status', {
