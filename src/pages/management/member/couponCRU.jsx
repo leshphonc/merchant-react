@@ -527,6 +527,7 @@ class CouponCRU extends React.Component {
               <List.Item
                 extra={
                   <Switch
+                    disabled={match.params.id ? true : false}
                     {...getFieldProps('is_show', {
                       valuePropName: 'checked',
                       initialValue: detail.is_show === '1',
@@ -539,6 +540,7 @@ class CouponCRU extends React.Component {
               <List.Item
                 extra={
                   <Switch
+                    disabled={match.params.id ? true : false}
                     {...getFieldProps('is_free', {
                       valuePropName: 'checked',
                       initialValue: detail.is_free === '1',
@@ -576,6 +578,7 @@ class CouponCRU extends React.Component {
             只允许新用户领取
           </List.Item>
           <Picker
+            disabled={match.params.id ? true : false}
             {...getFieldProps('user_level', {
               rules: [{ required: true }],
               initialValue: detail.user_level ? [detail.user_level] : ['0'],
@@ -590,9 +593,10 @@ class CouponCRU extends React.Component {
             cols={1}
             extra="请选择"
           >
-            <List.Item arrow="horizontal">自动领取优惠券</List.Item>
+            <List.Item arrow="horizontal">会员等级</List.Item>
           </Picker>
           <Picker
+            disabled={match.params.id ? true : false}
             {...getFieldProps('cate_name', {
               rules: [{ required: true }],
               initialValue: detail.cate_name ? [detail.cate_name] : ['all'],
@@ -620,6 +624,7 @@ class CouponCRU extends React.Component {
           {form.getFieldValue('cate_name') &&
           form.getFieldValue('cate_name')[0] !== 'all' ? (
             <Picker
+              disabled={match.params.id ? true : false}
               {...getFieldProps('cate_id', {
                 initialValue: detail.cate_id ? [detail.cate_id] : [''],
                 getValueFromEvent: val => {
@@ -637,6 +642,7 @@ class CouponCRU extends React.Component {
 
           {form.getFieldValue('cate_id') && form.getFieldValue('cate_id')[0] ? (
             <Picker
+              disabled={match.params.id ? true : false}
               {...getFieldProps('goods_id', {
                 initialValue: detail.goods_id ? [detail.goods_id] : [''],
               })}
@@ -669,6 +675,7 @@ class CouponCRU extends React.Component {
             autoHeight
           />
           <InputItem
+            disabled={match.params.id ? true : false}
             {...getFieldProps('num', {
               rules: [{ required: true }],
               initialValue: detail.num,
@@ -678,6 +685,7 @@ class CouponCRU extends React.Component {
             数量
           </InputItem>
           <InputItem
+            disabled={match.params.id ? true : false}
             {...getFieldProps('limit', {
               rules: [{ required: true }],
               initialValue: detail.limit,
@@ -687,6 +695,7 @@ class CouponCRU extends React.Component {
             领取数量限制
           </InputItem>
           <InputItem
+            disabled={match.params.id ? true : false}
             {...getFieldProps('use_limit', {
               rules: [{ required: true }],
               initialValue: detail.use_limit,
@@ -696,6 +705,7 @@ class CouponCRU extends React.Component {
             使用数量限制
           </InputItem>
           <InputItem
+            disabled={match.params.id ? true : false}
             {...getFieldProps('discount', {
               rules: [{ required: true }],
               initialValue: detail.discount,
@@ -705,6 +715,7 @@ class CouponCRU extends React.Component {
             优惠金额
           </InputItem>
           <InputItem
+            disabled={match.params.id ? true : false}
             {...getFieldProps('order_money', {
               rules: [{ required: true }],
               initialValue: detail.order_money,
@@ -714,6 +725,7 @@ class CouponCRU extends React.Component {
             最小订单金额
           </InputItem>
           <DatePicker
+            disabled={match.params.id ? true : false}
             {...getFieldProps('start_time', {
               rules: [{ required: true }],
               initialValue: detail.start_time
@@ -725,6 +737,7 @@ class CouponCRU extends React.Component {
             <List.Item arrow="horizontal">可领开始时间</List.Item>
           </DatePicker>
           <DatePicker
+            disabled={match.params.id ? true : false}
             {...getFieldProps('end_time', {
               rules: [{ required: true }],
               initialValue: detail.end_time
@@ -736,6 +749,7 @@ class CouponCRU extends React.Component {
             <List.Item arrow="horizontal">可领结束时间</List.Item>
           </DatePicker>
           <DatePicker
+            disabled={match.params.id ? true : false}
             {...getFieldProps('effe_start_time', {
               rules: [{ required: true }],
               initialValue: detail.effe_start_time
@@ -747,6 +761,7 @@ class CouponCRU extends React.Component {
             <List.Item arrow="horizontal">使用开始时间</List.Item>
           </DatePicker>
           <DatePicker
+            disabled={match.params.id ? true : false}
             {...getFieldProps('effe_end_time', {
               rules: [{ required: true }],
               initialValue: detail.effe_end_time
@@ -774,18 +789,21 @@ class CouponCRU extends React.Component {
         </List>
         <List renderHeader="使用系统">
           <CheckboxItem
+            disabled={match.params.id ? true : false}
             checked={platform.indexOf('wap') > -1}
             onChange={() => this.onChangePlatForm('wap')}
           >
             移动网页
           </CheckboxItem>
           <CheckboxItem
+            disabled={match.params.id ? true : false}
             checked={platform.indexOf('app') > -1}
             onChange={() => this.onChangePlatForm('app')}
           >
             App
           </CheckboxItem>
           <CheckboxItem
+            disabled={match.params.id ? true : false}
             checked={platform.indexOf('weixin') > -1}
             onChange={() => this.onChangePlatForm('weixin')}
           >
