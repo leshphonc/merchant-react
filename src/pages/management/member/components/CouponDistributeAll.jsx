@@ -1,12 +1,5 @@
 import React from 'react'
-import {
-  List,
-  Checkbox,
-  WhiteSpace,
-  SearchBar,
-  Button,
-  Toast,
-} from 'antd-mobile'
+import { List, Checkbox, WhiteSpace, Button, Toast } from 'antd-mobile'
 import { observer, inject } from 'mobx-react'
 
 const { CheckboxItem } = Checkbox

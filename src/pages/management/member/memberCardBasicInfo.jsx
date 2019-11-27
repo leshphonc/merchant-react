@@ -20,8 +20,6 @@ let textColor = '#ffffff'
 class MemberCardBasicInfo extends React.Component {
   state = {
     logoOpen: false,
-    diyOpen: false,
-    cardDetail: {},
   }
   componentDidMount() {
     const { member, form } = this.props
@@ -98,7 +96,7 @@ class MemberCardBasicInfo extends React.Component {
   render() {
     const { form } = this.props
     const { getFieldProps } = form
-    const { logoOpen, diyOpen, bannerOpen } = this.state
+    const { logoOpen } = this.state
     const logo = form.getFieldValue('logo') ? form.getFieldValue('logo') : []
     const diybg = form.getFieldValue('diybg') ? form.getFieldValue('diybg') : []
     const posters = form.getFieldValue('posters')

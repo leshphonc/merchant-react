@@ -18,7 +18,6 @@ import { createForm } from 'rc-form'
 
 const { RadioItem } = Radio
 const { CheckboxItem } = Checkbox
-let textColor = '#ffffff'
 
 @createForm()
 @inject('member')

@@ -2,8 +2,16 @@ import React from 'react'
 import NavBar from '@/common/NavBar'
 import { observer, inject } from 'mobx-react'
 // import { Route } from 'react-router-dom'
-import { List, InputItem, WingBlank, Button, Toast, Picker } from 'antd-mobile'
-import Tooltip from 'rc-tooltip'
+import {
+  List,
+  InputItem,
+  WingBlank,
+  Button,
+  Toast,
+  Picker,
+  Switch,
+} from 'antd-mobile'
+// import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import { createForm } from 'rc-form'
 
@@ -17,10 +25,26 @@ class ECommerceSpread extends React.Component {
     super(props)
     this.state = {
       userLevels: [],
+      detail: {},
+      dhbName: '',
+      scoreName: '',
     }
   }
 
   componentDidMount() {
+    const alias = JSON.parse(localStorage.getItem('alias'))
+    alias.forEach(item => {
+      if (item.name === 'score_name') {
+        this.setState({
+          scoreName: item.value,
+        })
+      }
+      if (item.name === 'dhb_name') {
+        this.setState({
+          dhbName: item.value,
+        })
+      }
+    })
     const { commodity, match, form } = this.props
     commodity.fetchUserLevel(match.params.id, match.params.goodid).then(() => {
       const { userLevels } = commodity
@@ -37,6 +61,9 @@ class ECommerceSpread extends React.Component {
         .fetchECommerceDetail(match.params.id, match.params.goodid)
         .then(() => {
           const { eCommerceDetail } = commodity
+          this.setState({
+            detail: eCommerceDetail,
+          })
           form.setFieldsValue({
             spread_sale: eCommerceDetail.spread_sale,
             spread_rate: eCommerceDetail.spread_rate,
@@ -64,6 +91,8 @@ class ECommerceSpread extends React.Component {
         level_set: `${value.level_set[0]}`,
         spread: userLevels,
       }
+      obj.is_fx = obj.is_fx ? '1' : '0'
+      obj.fx_type = obj.fx_type[0]
       commodity
         .goodsSpread({
           ...obj,
@@ -150,6 +179,7 @@ class ECommerceSpread extends React.Component {
     const { match, form } = this.props
     const { getFieldProps } = form
     // const { spread } = this.state
+    const { detail, dhbName, scoreName } = this.state
     const levelSetValue = form.getFieldValue('level_set')
       ? form.getFieldValue('level_set')[0]
       : ''
@@ -157,7 +187,7 @@ class ECommerceSpread extends React.Component {
       <React.Fragment>
         <NavBar title={`${match.params.str}推广分佣`} goBack />
         <List>
-          <InputItem
+          {/* <InputItem
             {...getFieldProps('spread_sale', {
               rules: [{ required: true }],
             })}
@@ -199,7 +229,91 @@ class ECommerceSpread extends React.Component {
                 &#xe628;
               </i>
             </Tooltip>
-          </InputItem>
+          </InputItem> */}
+          <List.Item
+            extra={
+              <Switch
+                {...getFieldProps('is_fx', {
+                  valuePropName: 'checked',
+                  initialValue: detail.is_fx === '1',
+                })}
+              />
+            }
+          >
+            是否发布到分销市场
+          </List.Item>
+          {form.getFieldValue('is_fx') === true ? (
+            <div>
+              <Picker
+                {...getFieldProps('fx_type', {
+                  rules: [{ required: true }],
+                  initialValue: [detail.fx_type],
+                })}
+                data={[
+                  {
+                    label: '固定金额',
+                    value: '0',
+                  },
+                  {
+                    label: '售价百分比',
+                    value: '1',
+                  },
+                ]}
+                cols={1}
+              >
+                <List.Item arrow="horizontal">分润类型</List.Item>
+              </Picker>
+              <InputItem
+                {...getFieldProps('fx_money', {
+                  rules: [{ required: true }],
+                  initialValue: detail.fx_money,
+                })}
+                placeholder="分润金额"
+              >
+                分润金额
+              </InputItem>
+              <List renderHeader="购买者赠送">
+                <InputItem
+                  {...getFieldProps('fx_buyer_dhb', {
+                    rules: [{ required: true }],
+                    initialValue: detail.fx_buyer_dhb,
+                  })}
+                  placeholder={`请填写获得${dhbName}数量`}
+                >
+                  {dhbName}
+                </InputItem>
+                <InputItem
+                  {...getFieldProps('fx_buyer_score', {
+                    rules: [{ required: true }],
+                    initialValue: detail.fx_buyer_score,
+                  })}
+                  placeholder={`请填写获得${scoreName}数量`}
+                >
+                  {scoreName}
+                </InputItem>
+              </List>
+              <List renderHeader="销售者获得">
+                <InputItem
+                  {...getFieldProps('fx_seller_dhb', {
+                    rules: [{ required: true }],
+                    initialValue: detail.fx_seller_dhb,
+                  })}
+                  placeholder={`请填写获得${dhbName}数量`}
+                >
+                  {dhbName}
+                </InputItem>
+                <InputItem
+                  {...getFieldProps('fx_seller_score', {
+                    rules: [{ required: true }],
+                    initialValue: detail.fx_seller_score,
+                  })}
+                  placeholder={`请填写获得${scoreName}数量`}
+                >
+                  {scoreName}
+                </InputItem>
+              </List>
+            </div>
+          ) : null}
           <Picker {...getFieldProps('level_set')} data={levelSet} cols={1}>
             <List.Item arrow="horizontal">等级会员分佣设置</List.Item>
           </Picker>
