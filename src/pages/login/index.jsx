@@ -11,8 +11,15 @@ class Login extends React.Component {
     account: '',
     password: '',
   }
+  componentDidMount() {
+    const { history } = this.props
+    window['pushToPage'] = () => {
+      history.replace('/')
+    }
+  }
 
   invokeAndroid = json => {
+    Toast.success('我是ios', 2, null, false)
     if (
       navigator.userAgent.toLowerCase().indexOf('android_chengshang_app') !== -1
     ) {
@@ -20,6 +27,7 @@ class Login extends React.Component {
     } else if (
       navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') !== -1
     ) {
+      Toast.success('我是ios2', 2, null, false)
       window.location.href = 'ios:' + JSON.stringify(json)
     }
   }
@@ -38,7 +46,13 @@ class Login extends React.Component {
             BaseUrl: window.location.origin.split('.')[1],
           }
           this.invokeAndroid(json)
-          history.replace('/')
+          if (
+            navigator.userAgent.toLowerCase().indexOf('ios_chengshang_app') ===
+            -1
+          ) {
+            history.replace('/')
+          }
+
           Toast.success('欢迎回来', 2, null, false)
         }
       })
