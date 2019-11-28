@@ -126,7 +126,7 @@ class StoreFrontBusinessServiceList extends React.Component {
           }
         />
         <WhiteSpace />
-        <List>{this.mapList()}</List>
+        <List className="eqDiv">{this.mapList()}</List>
       </>
     )
   }

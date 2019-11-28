@@ -15,6 +15,11 @@ body {
   flex-basis: 46%;
 }
 
+.eqDiv .am-list-item .am-list-line .am-list-extra {
+  font-size: 14px;
+  flex-basis: 50%;
+}
+
 .am-list-item .am-list-line .am-list-brief {
   font-size: 13px;
 }
